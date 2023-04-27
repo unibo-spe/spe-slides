@@ -1,8 +1,8 @@
  
 +++
 
-title = "Introduction to Laboratory of Software Systems"
-description = "Description of the course"
+title = "Software Process Engineering"
+description = "Course Index"
 outputs = ["Reveal"]
 
 [reveal_hugo.custom_theme_options]

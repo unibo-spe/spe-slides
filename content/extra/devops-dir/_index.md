@@ -16,7 +16,7 @@ enableSourceMap = true
 
 +++
 
-# Laboratory of Software Systems
+# {{< course_name >}}
 
 ## Development and operations
 
