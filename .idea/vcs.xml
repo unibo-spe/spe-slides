@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/content/extra/pps-ci-introduction/PPS-ci-examples" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/content/extra/pps-ci-introduction/PPS-ci-examples/01-dependencies" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/shared-slides" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/shared-slides/PPS-ci-examples" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/shared-slides/PPS-ci-examples/01-dependencies" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/themes/reveal-hugo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/themes/reveal-hugo/static/reveal-js" vcs="Git" />
+  </component>
+</project>

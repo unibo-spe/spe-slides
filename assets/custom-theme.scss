@@ -1,0 +1,318 @@
+@import "reveal-js/dist/theme/template/mixins";
+@import "reveal-js/dist/theme/template/settings";
+
+
+// Include theme-specific fonts
+// Include theme-specific fonts
+
+// Sans-serif
+// @import url('reveal-js/lib/font/source-sans-pro/source-sans-pro.css');
+// @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Ubuntu');
+@import url('https://fonts.googleapis.com/css2?family=Signika+Negative');
+// @import url('https://fonts.googleapis.com/css2?family=Open+Sans');
+
+// Serif
+@import url('https://fonts.googleapis.com/css2?family=Cinzel');
+
+// Handwriting
+
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script');
+// @import url('https://fonts.googleapis.com/css2?family=Satisfy');
+// @import url('https://fonts.googleapis.com/css2?family=Hurricane');
+
+// Display
+// @import url('https://fonts.googleapis.com/css2?family=Fredoka+One');
+
+// Monospace
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono');
+// @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono');
+
+$backgroundColor: #fff;
+
+$mainColor: #000;
+$headingColor: #111;
+
+$mainFontSize: 2.3em;
+$mainFont: 'Signika Negative', 'Source Sans Pro', Helvetica, sans-serif;
+$headingFont: 'Signika Negative', 'Source Sans Pro', Helvetica, sans-serif;
+$headingLetterSpacing: normal;
+$headingFontWeight: 600;
+$linkColor: #0477b9;
+$linkColorHover: lighten( $linkColor, 25% );
+$selectionBackgroundColor: lighten( $linkColor, 25% );
+
+$heading1Size: 2.5em;
+$heading2Size: 1.6em;
+$heading3Size: 1.3em;
+$heading4Size: 1.0em;
+
+@import "reveal-js/dist/theme/template/theme";
+
+section.has-light-background {
+	&, h1, h2, h3, h4, h5, h6 {
+		color: #222;
+	}
+}
+
+.reveal strong,
+.reveal b {
+	font-weight: bold;
+	color: #9f0000
+}
+
+.reveal em {
+	font-style: italic;
+	color: #006900
+}
+
+.reveal section img {
+	border: 0em;
+	box-shadow: none;
+    max-width: 100%;
+    max-height: 730px;
+    height: auto;
+	object-fit: contain;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.reveal section img {
+	border: 0em;
+	box-shadow: none;
+}
+
+.reveal div .gist .hljs-ln {
+	color: black;
+	font-size: 60%;
+	line-height: 100%;
+}
+
+.reveal h2 {
+	color: navy;
+	text-transform: none;
+}
+
+.reveal h3 {
+	margin-top: .5em;
+	text-transform: none;
+}
+
+.reveal h4 {
+	margin: .5em 0px 0px 0px;
+}
+
+.reveal p {
+	margin: .2em 0 0 .2em;
+	text-align: justify;
+}
+
+.reveal ul {
+	display: block;
+	margin-left: 3vw;
+}
+
+.reveal li ul {
+	margin-left: 1vw;
+	list-style: none;
+}
+
+.reveal li ul li ul {
+	list-style: none;
+	content: '▶';
+}
+
+.reveal li li {
+	margin-left: 0.5em;
+	font-size: 90%;
+}
+
+.reveal ul li ul > li:before {
+	font-size: 75%;
+	line-height: 100%;
+	content: '▶';
+	position: relative;
+	right: 1em;
+}
+
+.reveal ol {
+	display: block;
+	margin: 0px 0px .5em 2vw;
+}
+
+.gist-it-gist .gist-file .gist-data pre, .gister-gist .gist-file .gist-data pre {
+	box-shadow: none !important;
+}
+
+.reveal code {
+	color: deeppink;
+	line-height: 100%;
+	font-weight: bold;
+	font-size: 100%;
+	font-family: "Inconsolata";
+}
+
+.reveal pre {
+	width: min-content;
+	max-width: 113%;
+	margin: 0em;
+	padding: 0em;
+	border-radius: .65em;
+	padding-left: .25em;
+	padding-right: .25em;
+	border: #000;
+	border-width: .5em;
+	box-shadow: 0.25em 0.25em 0.5em .01em #888888;
+}
+
+.reveal pre code {
+	max-width: 100%;
+	line-height: 100%;
+	font-size: .96em;
+	color: black;
+	max-height: none;
+	font-family: 'Inconsolata';
+	font-weight: normal;
+	margin: .1em;
+	// line-height: 1.2em;
+	// font-size: 1.5em;
+	// font-weight: normal;
+	padding-left: .3vw;
+	padding-right: .3vw;
+	padding-top: .25vw;
+	padding-bottom: .25vw;
+	border: #000000AA;
+	border-style: solid;
+	border-width: .1vw;
+	border-radius: .50vw;
+	// box-sizing: border-box;
+}
+
+.reveal div.highlight {
+	max-width: 1440px;
+	overflow-x: visible;
+	display: flex;
+	align-content: center;
+	// justify-content: flex-start;
+	// flex-direction: row;
+	justify-content: center;
+	margin: .3vw 0 .5vw 0;
+}
+
+.hljs {
+	background: rgba(255, 255, 255, 0.08) !important;
+	box-shadow: 0 0 3em 0.6em rgba(255, 255, 255, 0.2);
+}
+
+
+// Nice blockquote and cite
+
+.reveal blockquote {
+	width:90%;
+	margin:0.3em auto;
+	font-family: 'Dancing Script';
+	font-style: normal;
+	font-size: 1.2em;
+	color: #333333;
+	padding:0.1em 0.1em 0.1em 0.1em;
+	border-color: #039418;
+	border-style: solid;
+	border-width: 0.1em;
+	border-radius: 1em;
+	border-left:0.7em solid #039418 ;
+	line-height: 1.2em;
+	position: relative;
+	background:#FAFAFA;
+	text-align: center;
+}
+
+.reveal blockquote::before{
+	font-family:Arial;
+	content: "\201C";
+	color:#039418;
+	font-size: 4em;
+	position: absolute;
+	left: 0.05em;
+	top: 0.25em;
+}
+
+.reveal blockquote p::before{
+	content: "";
+	padding-left: 2em;
+}
+
+.reveal blockquote::after{
+	font-family:Arial;
+	content: "\201D";
+	color:#039418;
+	font-size: 4em;
+	position: absolute;
+	bottom: -0.2em;
+	right: 0.1em;
+}
+
+.reveal cite::before {
+	content: "— ";
+}
+
+.reveal cite {
+	display: block;
+	text-align: right;
+	padding-right: 10%;
+	padding-top: 0.5em;
+	font-weight: bolder;
+	font-family: 'Cinzel';
+	font-size: 0.7em;
+}
+
+// Mermaid graph resizing
+
+.mermaid svg {
+	max-width: 100% !important;
+	max-height: 43vh !important;
+	height: 20%;
+	width: 100vw;
+	transition: transform 0.3s ease;
+	border-width: 0.1em;
+	border-style: none;
+}
+
+// Mermaid flowcharts as git graphs
+
+.mermaid .cluster.repo > rect {
+	stroke-width: 0.2em !important;
+	fill: ghostwhite !important;
+	stroke: gray !important;
+}
+.mermaid .remote > path {
+	stroke-width: 0.2em !important;
+	fill: rgb(253, 189, 253) !important;
+	stroke: rgb(170, 0, 255) !important;
+}
+
+.mermaid .head > polygon {
+	fill:#ff7274 !important;
+	stroke:#aa1d1f !important;
+	stroke-width: 0.2em !important;
+}
+
+.mermaid .branch > rect {
+	stroke-width: 0.2em !important;
+	fill: greenyellow !important;
+	stroke: green !important;
+}
+
+.mermaid .commit > rect {
+	fill: white !important;
+	stroke:#333 !important;
+	stroke-width: 0.2em !important;
+}
+
+.mermaid .tag > polygon {
+	fill: cyan !important;
+	stroke: blue !important;
+	stroke-width: 0.2em !important;
+}
+
