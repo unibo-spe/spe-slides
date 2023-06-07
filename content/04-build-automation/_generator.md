@@ -1,4 +1,4 @@
- 
+
 +++
 
 title = "Build Automation"
@@ -41,7 +41,9 @@ enableSourceMap = true
 
 ---
 
-{{% slide content="build-automation.intro" %}}
+<!-- write-here "shared-slides/build-systems/build-systems-intro.md" -->
+
+<!-- end-write -->
 
 ---
 
@@ -275,10 +277,10 @@ tasks.register("helloWorld") {
     doLast { println("Hello, World!") }
 }
 
-tasks.getByName("helloWorld") { // let's find an existing task 
+tasks.getByName("helloWorld") { // let's find an existing task
     doFirst { // Similar to doLast, but adds operations in head
         println("Configured later, executed first.")
-    }  
+    }
 }
 ```
 
@@ -306,7 +308,7 @@ Any `open class` implementing [`org.gradle.api.Task`](https://docs.gradle.org/cu
 import org.gradle.internal.jvm.Jvm // Jvm is part of the Gradle API
 tasks.register<Exec>("printJavaVersion") { // Do you Recognize this? inline function with reified type!
     // Configuration action is of type T.() -> Unit, in this case Exec.T() -> Unit
-    val javaExecutable = Jvm.current().javaExecutable.absolutePath 
+    val javaExecutable = Jvm.current().javaExecutable.absolutePath
     commandLine( // this is a method of class org.gradle.api.Exec
         javaExecutable, "-version"
     )
@@ -364,7 +366,7 @@ Build logic:
 ```gradle
 import org.gradle.internal.jvm.Jvm
 tasks.register<Exec>("compileJava") {
-    val sources = findSources() // 
+    val sources = findSources() //
     if (sources.isNotEmpty())  { // If the folder exists and there are files
         val javacExecutable = Jvm.current().javacExecutable.absolutePath // Use the current JVM's javac
         commandLine(
@@ -1050,10 +1052,9 @@ General approach to a *new* build automation problem:
 * Build a *pipeline*
 * Implement them Providing a *clean API*
 
-**Encapsulate**: confine imperative logic, make it an *implementation detail*
+**Encapsulate**: confine imperative logic, make it an *implementation detail*<!-- write-here "shared-slides/build-systems/build-systems-intro.md" -->
 
-**Adorn**: provide expressive, easy, immedate access to the API via *DSL*!
-
+<!-- end-write -->
 *Not very different than what's usually done in (good) software development*
 
 ---
@@ -1302,7 +1303,7 @@ class GreetingPlugin : Plugin<Project> {
 
 * Extensions are created via a `Project` object
 * The `Plugin` configures the project as needed for the tasks and the extension to work
-* Plugins can forcibly *apply* other plugins 
+* Plugins can forcibly *apply* other plugins
     * e.g., the Kotlin plugin applies the `java-library` plugin behind the scenes
 * Plugins can *react* to the application of other plugins
     * e.g., enable additional features or provide compatibility
@@ -1423,7 +1424,7 @@ class PluginTest : FreeSpec({
             }
         }
 
-    } 
+    }
 })
 ```
 
@@ -1889,7 +1890,7 @@ plugins {
 
 Adds the following tasks:
 * `ktlintApplyToIdea`, `ktlintApplyToIdeaGlobally` -- Change the IntelliJ Idea configuration to adhere to the rules
-* `ktlintCheck`, `ktlintKotlinScriptCheck`, `ktlint<SourceSetName>SourceSetCheck`, -- Apply rules and report errors 
+* `ktlintCheck`, `ktlintKotlinScriptCheck`, `ktlint<SourceSetName>SourceSetCheck`, -- Apply rules and report errors
 * `ktlintFormat`, `ktlintKotlinScriptFormat`, `ktlint<SourceSetName>SourceSetFormat` -- Lint code automatically
 
 ---
@@ -2052,8 +2053,8 @@ Requires some manual configuration:
 * Configuration of the signature
 
 If a publication `pubName` is created for a repository `RepoName`, then these tasks get created:
-* `publish<PubName>PublicationTo<RepoName>Repository` 
-* `publish<PubName>PublicationToMavenLocal` 
+* `publish<PubName>PublicationTo<RepoName>Repository`
+* `publish<PubName>PublicationToMavenLocal`
 
 
 ---
