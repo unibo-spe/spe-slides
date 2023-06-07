@@ -1,4 +1,4 @@
- 
+
 +++
 
 title = "DevOps in a nutshell"
@@ -38,7 +38,7 @@ enableSourceMap = true
   * Delicate balance between *chaotic organization* and *excessive bureaucracy*
   * The larger the team, the more control is usually needed more control is usually needed
   * Sparse teams and localized teams have different requisites
-* Project progress is marked also by progress **version control system** 
+* Project progress is marked also by progress **version control system**
 * Select a *branching model* model that matches the organization
   * possibly, a *forking model* for certain kinds of organization
 * **Standardize** the development environment
@@ -171,7 +171,7 @@ The **changes** that will be saved next
 * Defines attributes for path names
 * Can enforce the correct line ending
 * Can provide ways to diff binary file (by conversion to text, needs configuration)
-* Example: 
+* Example:
 
 ```
 * text=auto eol=lf
@@ -337,56 +337,19 @@ Discussed in **{{< course_name >}}**
 
 ---
 
-# Documenting projects using GitHub
+<!-- write-here "shared-slides/ci/ghpages.md" -->
 
-Documentation of a project is **part of the project**
-
-* **Documentation** must stay in the same repository of the project
-* However, it should be *accessible to non-developers*
-
-Meet GitHub Pages
-
-* GitHub provides an *automated* way to publish *webpages from **Markdown*** text
-* Markdown is a *human readable markup language*, [easy to learn](https://learnxinyminutes.com/docs/markdown/)
-  * These slides are written in Markdown
-  * (generation is a bit richer, but just to make the point)
-* Supports *Jekyll* (a Ruby framework for static website generation) out of the box
-  * We will not discuss it today
-  * But maybe in LSS...
+<!-- end-write -->
 
 ---
 
-## Setting up a GitHub Pages website
-
-Two possibilities:
-1. Select a branch to host the pages
-    * Create an orphan branch with `git checkout --orphan <branchname>`
-    * Write your website, one Markdown per page
-    * Push the new branch
-1. Use a `docs/` folder in a root of some branch
-    * Could be `master` or any other branch
+# Build systems and dependency management
 
 ---
 
-## Setting up a GitHub Pages website
+<!-- write-here "shared-slides/build-systems/build-systems-intro.md" -->
 
-Once done, enable GitHub pages on the repository settings:
-
-{{< image src="gh-pages.png" >}}
-
----
-
-## GitHub Pages URLs
-
-* Repository web-pages are available at `https://<username>.github.io/<reponame>`
-* User web-pages are available at `https://<username>.github.io/`
-  * They are generated from a repository named `<username>.github.io`
-* Organization web-pages are available at `https://<organization>.github.io/`
-  * They are generated from a repository named `<organization>.github.io`
-
----
-
-{{% slide content="build-automation.intro" %}}
+<!-- end-write -->
 
 ---
 
@@ -562,7 +525,7 @@ A paradigmatic example of a hybrid automator:
     |   +-- kotlin
     |   +-- resources # Resources go here
     |   \-- scala
-    \-- test # Test sources are separated, different dependencies        
+    \-- test # Test sources are separated, different dependencies
         +-- java # Same structure as main
         +-- kotlin
         +-- resources # Resources go here
