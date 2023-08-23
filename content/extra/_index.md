@@ -1,7 +1,7 @@
- 
+
 +++
 
-title = "Extra goodies of LSS"
+title = "Extra goodies of SPE"
 description = "Extra goodies"
 outputs = ["Reveal"]
 

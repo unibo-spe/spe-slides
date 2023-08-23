@@ -1138,7 +1138,7 @@ A very simple plugin that greets the user
 
 ```kotlin
 plugins {
-    id("it.unibo.lss.greetings")
+    id("it.unibo.spe.greetings")
 }
 greetings {
     greetWith { "Ciao da" }
@@ -1200,11 +1200,11 @@ Gradle expects the plugin entry point (the class implementing the `Plugin` inter
 
 The name is usually a "reverse url", similarly to Java packages.
 <br>
-e.g., `it.unibo.lss.greetings`
+e.g., `it.unibo.spe.greetings`
 
 The file content is just a pointer to the class implementing `Plugin`, in our case:
 ```properties
-implementation-class=it.unibo.lss.firstplugin.GreetingPlugin
+implementation-class=it.unibo.spe.firstplugin.GreetingPlugin
 ```
 
 ---
@@ -1443,7 +1443,7 @@ val runner = GradleRunner.create()
 runner.task(":someExistingTask")?.outcome shouldBe TaskOutcome.SUCCESS
 runner.output shouldContain "Hello from Gradle"
 ```
-Final result in the [attached code](https://github.com/DanySK/Course-Laboratory-of-Software-Systems/blob/master/code/automation/10-greetings-plugin/src/test/kotlin/PluginTest.kt)!
+Final result in the [attached code](https://github.com/unibo-spe/spe-slides/blob/master/code/automation/10-greetings-plugin/src/test/kotlin/PluginTest.kt)!
 
 ---
 
@@ -1507,7 +1507,7 @@ Catalogs can be declared in:
 * the `build.gradle.kts` file (they are API, of course)
 * a [TOML](https://github.com/toml-lang/toml) configuration file (default: `gradle/libs.versions.toml`)
 
-{{< github repo="Template-for-Gradle-Plugins" path="gradle/libs.versions.toml" >}}
+{{< github owner="DanySK" repo="Template-for-Gradle-Plugins" path="gradle/libs.versions.toml" >}}
 
 * Gradle auto-generates *type-safe accessors* for the definitions
 
@@ -1515,9 +1515,9 @@ Catalogs can be declared in:
 
 ## Using the default catalog
 
-{{< github repo="Template-for-Gradle-Plugins" path="build.gradle.kts" from=6 to=16 >}}
+{{< github owner="DanySK" repo="Template-for-Gradle-Plugins" path="build.gradle.kts" from=6 to=16 >}}
 
-{{< github repo="Template-for-Gradle-Plugins" path="build.gradle.kts" from=44 to=52 >}}
+{{< github owner="DanySK" repo="Template-for-Gradle-Plugins" path="build.gradle.kts" from=44 to=52 >}}
 
 ---
 
@@ -1615,7 +1615,7 @@ yet manual classpath modification is not the way we want to run our plugin
 We want something like:
 ```groovy
 plugins {
-    id("it.unibo.lss.greetings") version "0.1.0"
+    id("it.unibo.spe.greetings") version "0.1.0"
 }
 ```
 To do so, we need to ship our plugin to the [Gradle plugin portal](https://plugins.gradle.org/)
@@ -1742,9 +1742,9 @@ plugins {
 ```
 ```kotlin
 pluginBundle { // These settings are set for the whole plugin bundle
-    website = "https://danysk.github.io/Course-Laboratory-of-Software-Systems/"
-    vcsUrl = "https://github.com/DanySK/Course-Laboratory-of-Software-Systems"
-    tags = listOf("example", "greetings", "lss", "unibo")
+    website = "https://unibo-spe.github.io/"
+    vcsUrl = "https://github.com/unibo-spe/"
+    tags = listOf("example", "greetings", "spe", "unibo")
 }
 ```
 ```kotlin
@@ -1752,9 +1752,9 @@ gradlePlugin {
     plugins {
         create("") { // One entry per plugin
             id = "${project.group}.${project.name}"
-            displayName = "LSS Greeting plugin"
-            description = "Example plugin for the LSS course"
-            implementationClass = "it.unibo.lss.firstplugin.GreetingPlugin"
+            displayName = "SPE Greeting plugin"
+            description = "Example plugin for the SPE course"
+            implementationClass = "it.unibo.spe.firstplugin.GreetingPlugin"
         }
     }
 }
@@ -1791,15 +1791,15 @@ gradle.publish.secret=YOUR_SECRET
 ```plain
 ❯ ./gradlew publishPlugins
 > Task :publishPlugins
-Publishing plugin it.unibo.lss2020.greetings-plugin version 0.1.0-archeo+ea6b9d7
+Publishing plugin it.unibo.spe.greetings-plugin version 0.1.0-archeo+ea6b9d7
 Publishing artifact build/libs/greetings-plugin-0.1.0-archeo+ea6b9d7.jar
 Publishing artifact build/libs/greetings-plugin-0.1.0-archeo+ea6b9d7-sources.jar
 Publishing artifact build/libs/greetings-plugin-0.1.0-archeo+ea6b9d7-javadoc.jar
 Publishing artifact build/publish-generated-resources/pom.xml
-Activating plugin it.unibo.lss2020.greetings-plugin version 0.1.0-archeo+ea6b9d7
+Activating plugin it.unibo.spe.greetings-plugin version 0.1.0-archeo+ea6b9d7
 ```
 
-[The result is a published plugin](https://plugins.gradle.org/plugin/it.unibo.lss2020.greetings-plugin)
+[The result is a published plugin](https://plugins.gradle.org/plugin/it.unibo.spe.greetings-plugin)
 
 ---
 
@@ -2115,8 +2115,8 @@ I produced a plugin that pre-configures `maven-publish` to point to Maven Centra
 
 ## Preconfigured Central publication
 
-{{< github repo="publish-on-central" path="build.gradle.kts" from=20 to=24 >}}
-{{< github repo="publish-on-central" path="build.gradle.kts" from=79 to=103 >}}
+{{< github owner="DanySK" repo="publish-on-central" path="build.gradle.kts" from=20 to=24 >}}
+{{< github owner="DanySK" repo="publish-on-central" path="build.gradle.kts" from=79 to=103 >}}
 
 ---
 
@@ -2172,4 +2172,4 @@ Example scans:
 
 In `settings.gradle.kts`:
 
-{{< github repo="Template-for-Gradle-Plugins" path="settings.gradle.kts" from=6 to=12 >}}
+{{< github owner="DanySK" repo="Template-for-Gradle-Plugins" path="settings.gradle.kts" from=6 to=12 >}}

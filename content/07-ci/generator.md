@@ -176,7 +176,7 @@ runs:
 
 The action is contained in its metadata descriptor `action.yml`root, e.g.:
 
-{{< github repo="action-checkout" path="action.yml" >}}
+{{< github owner="DanySK" repo="action-checkout" path="action.yml" >}}
 
 From: [https://github.com/DanySK/action-checkout](https://github.com/DanySK/action-checkout)
 

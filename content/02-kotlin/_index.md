@@ -1,4 +1,4 @@
- 
+
 +++
 
 title = "Kotlin (for Scala developers)"
@@ -26,7 +26,7 @@ enableSourceMap = true
 
 # Why Kotlin
 
-JetBrains-made modern programming language 
+JetBrains-made modern programming language
 * Focused on "practical use" (whatever that means)
 
 Gaining momentum since Google adopted is as *official Android language*
@@ -139,7 +139,7 @@ fun main(arguments: Array<String>) = println("Hello World") // Valid entry point
 ```kotlin
 fun main(arguments: Array<String>) {
     println("Hello World") // Return type is Unit, no need to return
-} 
+}
 ```
 
 ---
@@ -439,8 +439,8 @@ Imports go at the top of file, no locally scoped imports as in Scala
 
 
 ```kotlin
-package it.unibo.lss.experiments
-import it.unibo.lss.ddd.Entity // Available as Entity locally
+package it.unibo.spe.experiments
+import it.unibo.spe.ddd.Entity // Available as Entity locally
 import org.company.someproduct.Entity as SomeProductEntity // name aliasing
 ```
 
@@ -959,7 +959,7 @@ object A // Same file and same name identify a companion
 In Kotlin
 ```kotlin
 class A {
-    companion object // Companions are inner to classes 
+    companion object // Companions are inner to classes
 }
 A // refers to A.Companion
 object A // This is an independent object
@@ -988,7 +988,7 @@ Simpler than Scala, more coherent than Java
 ```kotlin
 class Visibility internal constructor( // constructor is required to apply visibility restrictionss
     private val id: Int // Same as Scala
-) { 
+) {
     protected var state = 0
         private set // visibility restriction for properties in get/set methods
 }
@@ -1633,7 +1633,7 @@ janesJson // Does it change? {{<comment_frag "{name=Janet Smitherson, birthYear=
 
 # Kotlin 201 -- Advanced OOP
 
-## Custom delegates 
+## Custom delegates
 
 A valid delegate for a `val` is a `class` with a method:
 ```kotlin
@@ -1664,7 +1664,7 @@ and is similar to Smalltalk / Ceylon / Xtend / Ruby as well
 val myLambda = {
     println("Hey I'm computing")
 }
-fun whatsMyReturnType() = { 
+fun whatsMyReturnType() = {
     "A string"
 }
 myLambda.invoke() // Java-style invocation
@@ -1830,14 +1830,14 @@ Inside extension functions, the *receiver* of the method is overridden
 <br/>
 Any type, including nullables, can be extended
 <br/>
-`object`s and `companion`s can be extended as well 
+`object`s and `companion`s can be extended as well
 
 **IMPORTANT**: calls to extension methods are resolved *statically*.
 <br/>
 Namely, *the receiver type is determined at compile time*.
 
 **IMPORTANT/2**: Extensions cannot shadow members,
-*members always take priority* 
+*members always take priority*
 
 ---
 
@@ -1893,8 +1893,8 @@ mutableListOf<String>().configure {
 ## Extension members and implicit receivers
 
 When extensions are defined as members, there are multiple *implicit recevers*:
-1. **dispatch receiver**: the `object` or instance of the `class` in which the extension is declared 
-2. **extension receiver** the instance of the *receiver type* of the extension is called 
+1. **dispatch receiver**: the `object` or instance of the `class` in which the extension is declared
+2. **extension receiver** the instance of the *receiver type* of the extension is called
 
 *Extension receivers have priority*, dispatch receivers access requires the *qualified `this`* syntax
 <br/>
@@ -1930,7 +1930,7 @@ object Batman { // Batman is the dispatch receiver
 }
 // Extension members are actual members! They require a receiver!
 String.intro.withBatman() // error: unresolved reference: intro
-fun <T, R> insideTheScopeOf(receiver: T, method: T.() -> R): R = receiver.method() 
+fun <T, R> insideTheScopeOf(receiver: T, method: T.() -> R): R = receiver.method()
 insideTheScopeOf(Batman) { // inside this function, Batman is the dispatch receiver!
     String.intro.withBatman() // OK!
 }

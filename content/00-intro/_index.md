@@ -1,7 +1,7 @@
- 
+
 +++
 
-title = "Introduction to Laboratory of Software Systems"
+title = "Introduction to Software Process Engineering"
 description = "Description of the course"
 outputs = ["Reveal"]
 
@@ -55,7 +55,7 @@ targetPath = "css/custom-theme.css"
 
 Slides will be produced with a *rolling release* model.
 
-## Books 
+## Books
 
 No mandatory books, but there are both:
 * Recommended readings
@@ -110,8 +110,8 @@ Changes will be published on the forum
     * Including *continuous integration* and delivery
 * Can be a **joint effort** with other courses
   * We care about the *domain modeling* and the application of *DevOps techniques*
-  * You can pick a project of another course, apply them there, and it is fine for LSS
-* Can be a project created for LSS alone
+  * You can pick a project of another course, apply them there, and it is fine for SPE
+* Can be a project created for SPE alone
   * If you are short on ideas, we can help :)
 
 ---

@@ -32,7 +32,7 @@ enableSourceMap = true
 
 ## *Workflow organization*
 
-#### Lightweight processes and shared responsibility 
+#### Lightweight processes and shared responsibility
 
 * Participants should have clear roles
 * Lifecycle phases should be mapped into the workflow
@@ -188,8 +188,8 @@ $\Rightarrow$
 * [CI/CD pipeline](https://travis-ci.org/github/AlchemistSimulator/Alchemist)
 * [(Build) Infrastructure as code](https://github.com/AlchemistSimulator/Alchemist/blob/develop/.travis.yml)
 
-[**These slides are in CI/CD as well!**](https://github.com/DanySK/Course-Laboratory-of-Software-Systems)
-* [This is the latest build](https://travis-ci.com/github/DanySK/Course-Laboratory-of-Software-Systems)
+[**These slides are in CI/CD as well!**](https://github.com/unibo-spe/spe-slides)
+* [This is the latest build](https://github.com/unibo-spe/spe-slides/actions)
 
 ---
 
@@ -217,7 +217,7 @@ $\Rightarrow$
 ## *Automation*
 
 * Software lifecycle organization and build automation
-  * From *source* to *tested and deployable* in one command 
+  * From *source* to *tested and deployable* in one command
   * [Gradle](https://gradle.org/) is the house speciality
     * Basics
     * Build organization
@@ -232,7 +232,7 @@ $\Rightarrow$
 
 # DevOps for DIR
 
-## *Continuous Integration / Deployment / Delivery* 
+## *Continuous Integration / Deployment / Delivery*
 
 * Adding **CI** to existing projects
   * Needs a *committment to* the *DevOps* philosophy

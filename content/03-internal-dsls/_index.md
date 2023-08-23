@@ -1,8 +1,8 @@
- 
+
 +++
 
-title = "Introduction to Laboratory of Software Systems"
-description = "Description of the course"
+title = "Internal DSLs in Kotlin"
+description = "Software Process Engineering"
 outputs = ["Reveal"]
 
 [reveal_hugo]
@@ -299,7 +299,7 @@ class Head : AbstractTag("head") {
     fun title(configuration: Title.() -> Unit = { }) = registerElement(Title().apply(configuration))
 }
 abstract class TagWithText(name: String, vararg attributes: Attribute) : AbstractTag(name, *attributes) {
-    // Scoping via member extensions! 
+    // Scoping via member extensions!
     operator fun String.unaryMinus() = registerElement(Text(this)) // Syntax for writing plain text
 }
 class Title : TagWithText("title")
