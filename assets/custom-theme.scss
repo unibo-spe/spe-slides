@@ -67,6 +67,27 @@ section.has-light-background {
 	color: #006900
 }
 
+.multiCol {
+	display: table;
+	table-layout: fixed; // don't fudge depending on content
+	width: 100%;
+	text-align: left; // matter of taste, makes imho sense
+
+	.col {
+		display: table-cell;
+		vertical-align: top;
+		width: 50%;
+		margin: auto;
+		padding: 2% 0 5% 5%; // some vertical, and between columns
+
+		&:first-of-type {
+			padding-left: 0;
+		}
+
+		// there's nothing before col1
+	}
+}
+
 .reveal section img {
 	border: 0em;
 	box-shadow: none;
