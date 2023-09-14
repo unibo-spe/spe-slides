@@ -1,0 +1,36 @@
+left to right direction
+
+interface IOrderManagementService
+{
+    + void PerformOrder(IOrder order);
+}
+
+interface IOrder
+{
+    + IOrderID Id { get; }
+    + ICustomer Customer { get; set;  }
+    + DateTime Timestamp { get; set;  }
+    + IDictionary<IProduct, ulong> Amounts { get; set; }
+}
+
+interface IOrderID
+
+interface ICustomer
+
+interface IProduct
+
+interface IOrderStore
+
+IOrder "1" *-- "1" IOrderID
+IOrder "1" *-- "1" ICustomer
+IOrder "1" *-- "N" IProduct
+IOrderStore "1" *-- "N" IOrder
+
+IOrderManagementService ..> IOrder: handles
+IOrderManagementService ..> IOrderStore: updates
+
+note bottom of IOrderStore: repository
+note top of IOrder: entity
+note right of IOrderID: value object
+note right of IProduct: entity
+note right of ICustomer: entity

@@ -1,0 +1,14 @@
+interface ICustomerID {
+    + object Value { get; }
+}
+
+interface ITaxCode {
+    + string Code { get; }
+}
+
+interface IVatNumber {
+    + uint Number { get; }
+}
+
+IVatNumber --|> ICustomerID
+ITaxCode --|> ICustomerID

@@ -1,0 +1,5 @@
+interface ICustomer {
+    + ICustomerID Id { get; }
+    + string Name { get; **set;** }
+    + string Email { get; **set;** }
+}

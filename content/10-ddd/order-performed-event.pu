@@ -1,0 +1,33 @@
+left to right direction
+
+interface IOrderManagementService
+{
+    + void PerformOrder(IOrder order)
+    ..
+    + **event** Action<IOrderEventArgs> //OnOrderPerformed//
+}
+
+interface IOrderEventArgs
+{
+    + IOrderID Id { get; }
+    + ICustomerID Customer { get; }
+    + DateTime **Timestamp** { get; }
+    + IDictionary<IProductID, ulong> Amounts { get; }
+}
+
+interface IOrderID
+
+interface ICustomer
+
+interface IProduct
+
+IOrderEventArgs "1" *-- "1" IOrderID
+IOrderEventArgs "1" *-- "1" ICustomerID
+IOrderEventArgs "1" *-- "N" IProductID
+
+IOrderEventArgs .. IOrderManagementService
+
+' note top of IOrderEventArgs: domain event
+' note right of IOrderID: value object
+' note right of IProductID: value object
+' note right of ICustomerID: value object

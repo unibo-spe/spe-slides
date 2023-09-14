@@ -14,9 +14,12 @@ targetPath = "css/custom-theme.css"
 
 [Danilo Pianini --- `danilo.pianini@unibo.it`](mailto:danilo.pianini@unibo.it)
 
+[Giovanni Ciatto --- `giovanni.ciatto@unibo.it`](mailto:giovanni.ciatto@unibo.it)
+
 ### Index of the course
 
 * [Introduction to the course](00-intro)
+* [Domain Driven Design](10-ddd)
 * [The DevOps philosophy](01-devops-intro)
 * [Kotlin for Scala developers](02-kotlin)
   * [Internal DSLs construction](03-internal-dsls)

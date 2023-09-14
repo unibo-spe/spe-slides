@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="192.56918mm"
+   height="182.84467mm"
+   viewBox="0 0 192.56918 182.84467"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   sodipodi:docname="layered-architecture.svg">
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient838-6-6">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="0"
+         id="stop834" />
+      <stop
+         style="stop-color:#aaccff;stop-opacity:1"
+         offset="1"
+         id="stop836" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient838-6-6"
+       id="radialGradient840"
+       cx="43.858295"
+       cy="141.5024"
+       fx="43.858295"
+       fy="141.5024"
+       r="21.90975"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-228.53135,59.37893)" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.61382576"
+     inkscape:cx="797.1933"
+     inkscape:cy="393.0284"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:snap-bbox="true"
+     inkscape:snap-object-midpoints="true"
+     inkscape:snap-center="true"
+     inkscape:snap-global="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1084"
+     inkscape:window-x="1440"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:lockguides="true"
+     showguides="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Livello 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(228.53135,-59.37893)">
+    <path
+       transform="rotate(61.192097,-132.33887,145.99513)"
+       id="path857"
+       style="fill:#aaaaff;fill-opacity:1;stroke:#000000;stroke-width:0.49999997;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       sodipodi:type="arc"
+       sodipodi:cx="-132.65251"
+       sodipodi:cy="145.59727"
+       sodipodi:rx="96.445152"
+       sodipodi:ry="96.445152"
+       sodipodi:start="0"
+       sodipodi:end="1.0369966"
+       d="m -36.207359,145.59727 a 96.445152,96.445152 0 0 1 -47.373076,83.0277 l -49.072075,-83.0277 z" />
+    <g
+       transform="rotate(133.12513,-132.33887,145.99513)"
+       inkscape:transform-center-y="24.768226"
+       inkscape:transform-center-x="47.717791"
+       id="g892">
+      <path
+         d="m -36.207359,145.59727 a 96.445152,96.445152 0 0 1 -47.373076,83.0277 l -49.072075,-83.0277 z"
+         sodipodi:end="1.0369966"
+         sodipodi:start="0"
+         sodipodi:ry="96.445152"
+         sodipodi:rx="96.445152"
+         sodipodi:cy="145.59727"
+         sodipodi:cx="-132.65251"
+         sodipodi:type="arc"
+         style="fill:#37c8ab;fill-opacity:1;stroke:#000000;stroke-width:0.49999997;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+         id="path886" />
+      <text
+         id="text890"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;direction:rtl;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+         xml:space="preserve"><textPath
+           id="textPath888"
+           startOffset="100%"
+           xlink:href="#circle842"
+           style="font-size:12.69999981px">Messages</textPath></text>
+    </g>
+    <g
+       id="g865"
+       inkscape:transform-center-x="1.1180992"
+       inkscape:transform-center-y="47.756035"
+       transform="rotate(61.192098,-132.33887,145.99513)" />
+    <g
+       id="g884"
+       inkscape:transform-center-x="-47.481404"
+       inkscape:transform-center-y="23.757732"
+       transform="rotate(-13.272001,-131.91824,145.71276)">
+      <path
+         inkscape:transform-center-y="41.631997"
+         inkscape:transform-center-x="-48.213746"
+         d="m -36.207359,145.59727 a 96.445152,96.445152 0 0 1 -47.373076,83.0277 l -49.072075,-83.0277 z"
+         sodipodi:end="1.0369966"
+         sodipodi:start="0"
+         sodipodi:ry="96.445152"
+         sodipodi:rx="96.445152"
+         sodipodi:cy="145.59727"
+         sodipodi:cx="-132.65251"
+         sodipodi:type="arc"
+         style="fill:#ff5555;fill-opacity:1;stroke:#000000;stroke-width:0.49999997;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+         id="circle948" />
+      <text
+         id="text846"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;direction:rtl;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+         xml:space="preserve"><textPath
+           id="textPath848"
+           startOffset="100%"
+           xlink:href="#circle842"><tspan
+   id="tspan844"
+   style="font-size:12.69999981px;stroke-width:0.26458332">Storage</tspan></textPath></text>
+    </g>
+    <circle
+       style="fill:#ffcc00;fill-opacity:1;stroke:#000000;stroke-width:0.49999997;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       id="circle936"
+       cx="-132.65251"
+       cy="145.59727"
+       r="72.306923" />
+    <circle
+       r="51.617012"
+       cy="145.59727"
+       cx="-132.65251"
+       id="circle871"
+       style="fill:#8dd35f;fill-opacity:1;stroke:#000000;stroke-width:0.49999997;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0" />
+    <circle
+       style="fill:url(#radialGradient840);fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path815"
+       cx="-132.65251"
+       cy="145.59727"
+       r="25.970148" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="-151.29991"
+       y="150.17978"
+       id="text819"><tspan
+         sodipodi:role="line"
+         id="tspan817"
+         x="-151.29991"
+         y="150.17978"
+         style="font-size:12.69999981px;stroke-width:0.26458332">Domain</tspan></text>
+    <g
+       id="g934"
+       inkscape:transform-center-x="0.52819785"
+       inkscape:transform-center-y="-2.7974693"
+       transform="matrix(-0.73455571,-0.50652446,0.50652446,-0.73455571,-303.63848,185.30866)"
+       style="stroke:none;stroke-width:1.12074161">
+      <text
+         id="text819-2"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.29652956"
+         xml:space="preserve"><textPath
+           style="font-size:14.23341942px;letter-spacing:0px;word-spacing:0px;stroke:none;stroke-width:0.29652956"
+           id="textPath928"
+           xlink:href="#circle926">Application</textPath></text>
+      <circle
+         r="39.116859"
+         cy="145.59727"
+         cx="-132.65251"
+         id="circle926"
+         style="fill:none;fill-opacity:1;stroke:none;stroke-width:0.5603708;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0" />
+    </g>
+    <g
+       style="stroke:none;stroke-width:0.66322494"
+       transform="matrix(-0.88771554,-1.2187592,1.2187592,-0.88771554,-427.50707,113.58497)"
+       inkscape:transform-center-y="-4.8671269"
+       inkscape:transform-center-x="-0.35115565"
+       id="g946">
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.8071022px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.17547826"
+         id="text942"><textPath
+           xlink:href="#circle926"
+           id="textPath940"
+           style="font-size:8.42295647px;letter-spacing:0px;word-spacing:0px;stroke:none;stroke-width:0.17547826">Presentation</textPath></text>
+      <circle
+         style="fill:none;fill-opacity:1;stroke:none;stroke-width:0.33161247;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+         id="circle944"
+         cx="-132.65251"
+         cy="145.59727"
+         r="39.116859" />
+    </g>
+    <circle
+       r="86.100197"
+       cy="-179.56296"
+       cx="-80.719681"
+       id="circle842"
+       style="fill:none;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       transform="matrix(0.95023276,0.31154085,0.31154085,-0.95023276,0,0)" />
+    <text
+       transform="rotate(61.192097,-132.33887,145.99513)"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;direction:rtl;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       id="text863"><textPath
+         xlink:href="#circle842"
+         startOffset="100%"
+         id="textPath861"
+         style="font-size:12.69999981px">ReST API</textPath></text>
+  </g>
+</svg>
