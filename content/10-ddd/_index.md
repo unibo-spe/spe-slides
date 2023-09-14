@@ -192,6 +192,8 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ---
 
+{{% section %}}
+
 ## Conceptual Workflow
 
 1. Identify the domain
@@ -223,3 +225,216 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ---
 
+## Example of context map
+
+![Context map](./context-map.jpg)
+
+{{% /section %}}
+
+---
+
+## Towards building blocks
+
+{{< multicol >}}
+{{% col %}}
+Domain
+
+- Concept
+    + instance
+{{% /col %}}
+{{% col %}}
+$\xrightarrow{modelling}$
+{{% /col %}}
+{{% col %}}
+Model
+
+- Type
+    + object
+{{% /col %}}
+{{< /multicol >}}
+
+- Each _concept_ from each **context** shall become a _type_ in the **model**
+    + type $\approx$ class, interface, structure, ADT, etc.
+        * depends on what the programming language has to offer
+
+- Use _building blocks_ as __archetypes__
+    + let them guide and constrain your design
+
+---
+
+## Workflow
+
+(continued)
+
+7. Chose the most adequate building block for each concept
+    - depending on the nature of the concept
+    - ... or the properties of its instances
+
+8. The building block dictates how to design the type corresponding to the concept
+    - objects in OOP are shaped by types
+
+9. The choice of building block may lead to the identification of other concepts / models
+    - e.g. entities may need value objects as identifiers
+    - e.g. entities may need repositories to be stored
+    - e.g. entities may need factories to be created
+    - e.g. aggregates may be composed by entities or value objects
+
+---
+
+{{% section %}}
+
+## Building blocks (overview)
+
+- __Entity__: objects with an identifier
+
+- __Value Object__: objects without identity
+
+- __Aggregate Root__: compound objects
+
+- __Domain Event__: objects modelling relevant event (notifications)
+
+- __Service__ objects: providing stateless functionalities
+
+- __Repository__: objects providing storage facilities
+
+- __Factory__: objects creating other objects
+
+---
+
+## Entities vs. Value Objects
+
+### Genus-differentia definition:
+- _genus_: both can be used to model __elementary__ concepts
+- _differentia_: entities have an explicit __identity__, value objects are __interchangeable__
+
+<br>
+
+### Quick modelling examples
+
+#### Classroom
+
+- Seats in classroom may be modelled as value-objects
+
+- Attendees of a class may be modelled as entities
+
+#### Seats on a plane
+
+- Numbered seats $\rightarrow$ entities
+
+- otherwise $\rightarrow$ value objects
+
+---
+
+## Entities vs. Value Objects (practicals)
+
+### Constraints of Value Objects
+
+- Identified by their attributes
+    + equality compares attributes alone
+- Must be stateless $\Rightarrow$ require an immutable design
+    + read-only properties
+    + lack of state-changing methods
+- May be implemented as 
+    - structures in .NET
+    - data classes in Kotlin, Scala, Python
+    - records in Java
+- Must implement `equals()` and `hashCode()` on JVM
+    + implementation must compare the objects' attributes
+
+
+---
+
+## Entities vs. Value Objects (practicals)
+
+### Constraints of Entities
+
+- They have an inherent identity, which never changes during their lifespan
+    + common modelling: __identifier attribute__, of some value type
+    + equality compares identity
+- Can be stateful $\Rightarrow$ may have a mutable design
+    + modifiable properties
+    + state-changing methods
+- May be implemented via classes in most languages
+- Must implement `equals()` and `hashCode()` on JVM
+    + implementation must compare (at least) the objects' identifiers
+
+---
+
+## Entities vs. Value Objects (example)
+
+### Example of Entity
+
+{{< plantuml >}}
+interface Customer {
+    + CustomerID getID()
+    + String getName()
+    + void **setName**(name: String)
+    + String getEmail()
+    + void **setEmail**(email: String)
+}
+note left: Entity
+
+interface CustomerID {
+    + Object getValue()
+}
+note right: Value Object
+
+interface TaxCode {
+    + String getValue()
+}
+note left: Value Object
+
+interface VatNumber {
+    + long getValue()
+}
+note right: Value Object
+
+VatNumber -d-|> CustomerID
+TaxCode -d-|> CustomerID
+
+Customer *-r- CustomerID
+{{< /plantuml >}}
+
+---
+
+## Aggregate Root
+
+### Definition
+
+- A composite object, aggregating related entities/value objects
+
+- It ensures the consistency of the objects it contains
+
+- It mediates the usage of the composing objects from the outside
+    + acting as a façade
+
+- Outside objects should avoid holding references to composing objects
+
+---
+
+## Aggregate Root (practicals)
+
+### Constraints of Aggregates
+
+- They are usually _compound_ entities
+
+- They can be or exploit _collections_ to contain composing items
+    + they may leverage on the [composite pattern](https://en.wikipedia.org/wiki/Composite_pattern)
+
+- May be better implemented as classes in most programming languages
+
+- Must implement `equals()` and `hashCode()` on JVM
+    + implementation may take composing items into account
+
+- Components of an aggregate should _not_ hold **references** to components of _other_ aggregates
+    + that's why they are called aggregate _roots_
+
+    ![Aggregate roots should not hold references to other aggregates' components](./aggregate-references.png)
+
+---
+
+## Aggregate Root (example)
+
+![Two aggregates with inter-dependencies](./aggregate-root.png)
+
+{{% /section %}}
