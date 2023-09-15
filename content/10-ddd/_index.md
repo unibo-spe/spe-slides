@@ -673,8 +673,6 @@ OrderID -d[hidden]- Customer
 
 - actually, only the event notification/description is reified to a type
 
-- event sources & listeners shall be identified too
-
 ![Concept of domain events](./domain-events.png)
 
 ---
@@ -686,7 +684,7 @@ OrderID -d[hidden]- Customer
 - Record changes concerning the domain
 
 ### Remarks
-- Strong relation with the observer pattern (i.e. publish-subscribe) 
+- Strong relation with the [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) (i.e. publish-subscribe) 
 - Strong relation with the event sourcing approach (described later) 
 - Strong relation with the CQRS pattern (described later)
 
@@ -694,7 +692,19 @@ OrderID -d[hidden]- Customer
 
 ## Domain Events (constraints)
 
-TBD
+- They are usually time-stamped value objects
+
+- May be implemented as data-classes or records
+
+- They represent a relevant variation in the domain
+    + e.g. a change in the state of some entity / repository
+
+- Event sources & listeners shall be identified too
+    + who is generating the event?
+    + who is consuming the event?
+
+- Infrastructural components may be devoted to propagate events across contexts
+    + e.g. a message broker, a message queue, etc.
 
 ---
 
