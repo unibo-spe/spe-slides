@@ -1723,6 +1723,7 @@ function plantumlImage(format, content) {
 }
 
 function handlePlantumlFigure(element) {
+    if (!element.classList.contains("plantuml")) return;
     var attributes = ' ';
     ["width", "height", "style", "alt"].forEach(attribute => {
         if (element.hasAttribute(attribute)) {
@@ -1730,7 +1731,11 @@ function handlePlantumlFigure(element) {
             element.removeAttribute(attribute);
         }
     });
-    element.innerHTML = '<img' + attributes + 'src="' + plantumlImage("svg", element.innerText) + '">';
+    var plantumlSource = element.innerText;
+    var plantumlUrl = plantumlImage("svg", plantumlSource);
+    element.innerHTML = '<img' + attributes + 'src="' + plantumlUrl + '">';
+    element.classList.remove("plantuml");
+    console.log(`Converting PlantUML source to URL:\n\telement id: ${element.id}\n\tsource: ${escape(plantumlSource)}\n\tURL: ${plantumlUrl}`);
 }
 
 function handlePlantumlFigureByID(id) {
