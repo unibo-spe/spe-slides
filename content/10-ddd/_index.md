@@ -362,8 +362,6 @@ Model
 
 ## Entities vs. Value Objects (example)
 
-### Example of Entity
-
 {{< plantuml >}}
 interface Customer {
     + CustomerID getID()
@@ -436,5 +434,75 @@ Customer *-r- CustomerID
 ## Aggregate Root (example)
 
 ![Two aggregates with inter-dependencies](./aggregate-root.png)
+
+---
+
+## Factories
+
+### Definition
+
+- Objects aimed at creating other objects, in order to:
+    + encapsulate the creation logic for complex objects
+        * making it evolvable, interchangeable, replaceable
+    + ease the enforcement of invariants
+    + support dynamic selection of the most adequate implementation
+
+<br>
+
+![Concept of factory](./factories.png)
+
+### Remarks
+
+- DDD’s notion of factory is quite wide
+    + DDD's Factories $\supset$ GOF's Factories $\cup$ Builders $\cup$ ...
+
+---
+
+## Factories (practicals)
+
+### Constraints of Factories
+
+- They are usually identityless and stateless objects
+    + recall the [abstract factory pattern](https://en.wikipedia.org/wiki/Abstract_factory_pattern)
+
+- May be implemented as classes in most OOP languages
+
+- Provide methods to instantiate entities or value objects
+
+- Usually they require no mutable field/property
+
+- No need to implement `equals()` and `hashCode()` on JVM
+
+---
+
+## Factories (example)
+
+{{< plantuml >}}
+interface CustomerID
+
+interface TaxCode
+
+interface VatNumber
+
+interface Customer
+
+Customer "1" *-- "1" CustomerID
+
+VatNumber -u-|> CustomerID
+TaxCode -u-|> CustomerID
+
+interface CustomerFactory {
+    + VatNumber computeVatNumber(String name, String surname, Date birthDate, String birthPlace)
+    --
+    + Customer newCustomerPerson(TaxCode code, String fullName, string email)
+    + Customer newCustomerPerson(String name, String surname, Date birthDate, String birthPlace, String email)
+    --
+    + Customer newCustomerCompany(VatNumber code, String fullName, String email)
+}
+
+CustomerFactory -r-> VatNumber: creates
+CustomerFactory -u-> Customer: creates
+{{< /plantuml >}}
+
 
 {{% /section %}}
