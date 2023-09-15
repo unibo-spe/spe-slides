@@ -303,9 +303,9 @@ Model
 
 ## Entities vs. Value Objects
 
-### Genus-differentia definition:
-- _genus_: both can be used to model __elementary__ concepts
-- _differentia_: entities have an explicit __identity__, value objects are __interchangeable__
+> Genus-differentia definition:
+> - _genus_: both can be used to model __elementary__ concepts
+> - _differentia_: entities have an explicit __identity__, value objects are __interchangeable__
 
 <br>
 
@@ -325,9 +325,9 @@ Model
 
 ---
 
-## Entities vs. Value Objects (practicals)
+## Entities vs. Value Objects (constraints)
 
-### Constraints of Value Objects
+### Value Objects
 
 - Identified by their attributes
     + equality compares attributes alone
@@ -341,12 +341,11 @@ Model
 - Must implement `equals()` and `hashCode()` on JVM
     + implementation must compare the objects' attributes
 
-
 ---
 
-## Entities vs. Value Objects (practicals)
+## Entities vs. Value Objects (constraints)
 
-### Constraints of Entities
+### Entities
 
 - They have an inherent identity, which never changes during their lifespan
     + common modelling: __identifier attribute__, of some value type
@@ -410,9 +409,7 @@ Customer *-r- CustomerID
 
 ---
 
-## Aggregate Root (practicals)
-
-### Constraints of Aggregates
+## Aggregate Root (constraints)
 
 - They are usually _compound_ entities
 
@@ -437,19 +434,26 @@ Customer *-r- CustomerID
 
 ---
 
-## Factories
+## Factories (definition)
 
-### Definition
-
-- Objects aimed at creating other objects, in order to:
-    + encapsulate the creation logic for complex objects
-        * making it evolvable, interchangeable, replaceable
-    + ease the enforcement of invariants
-    + support dynamic selection of the most adequate implementation
+> Objects aimed at __creating__ other objects
 
 <br>
 
 ![Concept of factory](./factories.png)
+
+---
+
+## Factories (details)
+
+### Purpose
+
++ Factories encapsulate the creation logic for complex objects
+    * making it evolvable, interchangeable, replaceable
+
++ They ease the enforcement of invariants
+
++ They support dynamic selection of the most adequate implementation
 
 ### Remarks
 
@@ -458,9 +462,7 @@ Customer *-r- CustomerID
 
 ---
 
-## Factories (practicals)
-
-### Constraints of Factories
+## Factories (constraints)
 
 - They are usually identityless and stateless objects
     + recall the [abstract factory pattern](https://en.wikipedia.org/wiki/Abstract_factory_pattern)
@@ -504,5 +506,232 @@ CustomerFactory -r-> VatNumber: creates
 CustomerFactory -u-> Customer: creates
 {{< /plantuml >}}
 
+--- 
+
+## Repositories (definition)
+
+> Objects mediating the persistent storage/retrieval of other objects
+
+![Concept of repositories](./repositories.png)
+
+---
+
+## Repositories (details)
+
+### Purpose
+
+- Hiding (i.e. be backed by) some database technology 
+- Realising an object-relational mapping (ORM)
+- Storing / retrieving aggregate roots as wholes
+- Supporting CRUD operations on aggregate roots
+    - Create, Read, Update, Delete
+
+### Remarks
+
+- They may exploit factories for information retrieval
+- If properly engineered, avoids lock-in effect for DB technologies 
+- Design & implementation may require thinking about:
+    - the architecture, the infrastructure, the expected load, etc.
+
+---
+
+## Repositories (constraints)
+
+- They are usually identity-less, stateful, and composed objects 
+    + state may consist of the stored objects
+    + state may consist of DB connections
+
+- May be implemented as classes in most OOP languages
+
+- Provide methods to
+    + add, remove, update aggregate root entities 
+    + select and return one or more entity, possibly in a lazy way
+        * this should return `Iterable` or some `Collection` on JVM 
+
+- Non-trivial implementations should take care of
+    + enforcing consistency, in spite of concurrent access I support complex transactions
+
+---
+
+## Repositories (example)
+
+{{< plantuml >}}
+interface CustomerID 
+
+interface Customer
+
+Customer "1" *-u- "1" CustomerID
+
+interface CustomerRegistry {
+    + Iterable<Customer> getAllCustomers()
+    ..
+    + Customer findCustomerById(CustomerID id)
+    + Iterable<Customer> findCustomerByName(string name)
+    + Iterable<Customer> findCustomerByEmail(string email)
+    ..
+    + void addNewCustomer(Customer customer)
+    + void updateCustomer(Customer customer)
+    + void removeCustomer(Customer customer)
+}
+
+CustomerRegistry "1" o--> "N" Customer: contains
+CustomerRegistry --> CustomerID: exploits
+{{< /plantuml >}}
+
+---
+
+## Services
+
+> Functional objects encapsulating the business logic of the software (commonly stateless & identity-less),
+> e.g. operations spanning through several entities, objects, aggregates, etc.
+
+### Purpose
+- Reifying control-related aspects of the software
+- Wiring aggregates, entities, and value objects together 
+- Exposing coarse-grained functionalities to the users
+- Providing a façade for the domain
+- Make the business logic evolvable, interchangeable, replaceable
+
+### Remarks
+
+- Services may be exposed via ReSTful API
+- Should be designed keeping current uses cases into account
+    + entities/objects should support future use cases, too
+
+---
+
+## Services (constraints)
+
+- They are usually identity-less, stateless objects 
+
+- May be implemented as classes in OOP languages
+    + or bare functions in functional languages
+
+- Commonly provide procedures to do business-related stuff 
+    + e.g. a particular operation
+        * concerning some particular aggregate root 
+        * which does not support it directly 
+        * because the operation is use-case specific
+    + e.g. proxying an external service
+    + e.g. a complex operation involving aggregates, repositories, factories, etc.
+
+- Non-trivial implementations should take care of
+    + supporting concurrent access to the service’s facilities 
+    + exposing domain events to the external world
+
+--- 
+
+## Services (example)
+
+{{< plantuml >}}
+interface OrderManagementService {
+    + void performOrder(Order order)
+}
+
+interface Order {
+    + OrderID getId()
+    + Customer getCustomer()
+    + void setCustomer(Customer customer)
+    + Date getTimestamp()
+    + void setTimestamp(Date timestamp)
+    + Map<Product, long> Amounts getAmounts()
+}
+
+interface OrderID
+
+interface Customer
+
+interface Product
+
+interface OrderStore
+
+Order "1" *-r- "1" OrderID
+Order "1" *-d- "1" Customer
+Order "1" *-u- "N" Product
+OrderStore "1" *-- "N" Order
+
+OrderManagementService ..> Order: handles
+OrderManagementService ..> OrderStore: updates
+
+note bottom of OrderStore: repository
+note top of Order: entity
+note right of OrderID: value object
+note right of Product: entity
+note right of Customer: entity
+note top of OrderManagementService: service
+
+OrderID -u[hidden]- Product
+OrderID -d[hidden]- Customer 
+
+{{< /plantuml >}}
+
+---
+
+## Domain Events (definition)
+
+> A value-like object capturing some domain-related event (i.e. a relevant variation)
+
+- actually, only the event notification/description is reified to a type
+
+- event sources & listeners shall be identified too
+
+![Concept of domain events](./domain-events.png)
+
+---
+
+## Domain Events (details)
+
+### Purpose
+- Propagate changes among portions of the domain model 
+- Record changes concerning the domain
+
+### Remarks
+- Strong relation with the observer pattern (i.e. publish-subscribe) 
+- Strong relation with the event sourcing approach (described later) 
+- Strong relation with the CQRS pattern (described later)
+
+---
+
+## Domain Events (constraints)
+
+TBD
+
+---
+
+## Domain Events (example)
+
+{{< plantuml >}}
+interface OrderManagementService {
+    + void performOrder(Order order)
+    ..
+    + void **notifyOrderPerformed**(OrderEventArgs event)
+}
+
+interface OrderEventArgs {
+    + OrderID getID()
+    + CustomerID getCustomer()
+    + Date **getTimestamp**()
+    + Dictionary<ProductID, long> getAmounts()
+}
+
+interface OrderID
+
+interface CustomerID
+
+interface ProductID
+
+OrderEventArgs "1" *-u- "1" OrderID
+OrderEventArgs "1" *-r- "1" CustomerID
+OrderEventArgs "1" *-d- "N" ProductID
+
+OrderEventArgs .. OrderManagementService
+
+
+note left of OrderEventArgs: domain event
+note left of OrderID: value object
+note left of ProductID: value object
+note right of CustomerID: value object
+note right of OrderManagementService: service
+{{< /plantuml >}}
 
 {{% /section %}}
