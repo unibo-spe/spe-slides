@@ -10,6 +10,12 @@ enableSourceMap = true
 
 +++
 
+<style>
+.reveal blockquote {
+    font-family: 'Georgia';
+}
+</style>
+
 # Domain Driven Design  
 
 
@@ -73,7 +79,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ---
 
-# About Domain-Driven Design
+#  Main notions of DDD
 
 ---
 
@@ -129,7 +135,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 {{% section %}}
 
-## Main notions (overview)
+## Overview of main notions 
 
 - __Domain__: the reference area of knowledge
 
@@ -141,7 +147,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ---
 
-## Main notions (_Domain_)
+## The _Domain_
 
 > A well established sphere of knowledge, influence or activity
 
@@ -149,7 +155,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ---
 
-## Main notions (_Context_)
+## _Contexts_
 
 > A portion of the domain:
 > - relying on a sub-set of the concepts of the domain
@@ -159,13 +165,13 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 --- 
 
-## Main notions (Domain _vs._ Context)
+## Domain _vs._ Context
 
 ![Domain and context](./domain.png)
 
 ---
 
-## Main notions (Domain _Model_)
+## The domain _Model_
 
 > Set of __software__ abstractions mapping relevant _concepts_ of the domain
 
@@ -173,7 +179,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ---
 
-## Main notions (_Ubiquitous Language_)
+## The _Ubiquitous Language_
 
 > - A _language_ structured around the domain model
 >   + _used by all people_ involved into the domain
@@ -230,6 +236,10 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 ![Context map](./context-map.jpg)
 
 {{% /section %}}
+
+---
+
+# DDD Building Blocks
 
 ---
 
@@ -298,6 +308,12 @@ Model
 - __Repository__: objects providing storage facilities
 
 - __Factory__: objects creating other objects
+
+--- 
+
+## Building blocks (concept)
+
+![Building blocks graphical overview](./building-blocks.png)
 
 ---
 
@@ -736,7 +752,6 @@ OrderEventArgs "1" *-d- "N" ProductID
 
 OrderEventArgs .. OrderManagementService
 
-
 note left of OrderEventArgs: domain event
 note left of OrderID: value object
 note left of ProductID: value object
@@ -745,3 +760,197 @@ note right of OrderManagementService: service
 {{< /plantuml >}}
 
 {{% /section %}}
+
+--- 
+
+# DDD Patterns
+
+---
+
+## Towards DDD patterns
+
+### Further notions involving __contexts__
+
+- __Bounded Context__: enforce a model’s boundaries & make them explicit
+
+- __Context Map__: providing a global view on the domain and its contexts
+
+---
+
+## Actual definitions
+
+### Bounded Context
+
+> The explicit boundary of a software model, from a
+> - technical (e.g., dependencies among classes/interfaces)
+> - physical (e.g., common database, common facilities)
+> - organizational (e.g. people maintaining/using the code)
+>
+> perspective
+
+<br>
+
+### Context Map
+
+> A map of all the contexts in a domain and their boundaries
+> - and their points of contact
+>   + e.g. their dependencies, homonyms, false friends, etc.
+> - providing the whole picture of the domain
+
+---
+
+## Example of bounded context map
+
+![Context map](./bounded-contexts.png)
+
+---
+
+## Bounded Contexts & Context Maps (best practices)
+
+- Clearly identify & represent boundaries among contexts
+
+- Avoid responsibility diffusion over a single context
+    + one responsible person / team for each context
+
+- Avoid changing the model for problems arising outside the context
+    + rather, extend the domain by creating new contexts
+
+- Enforce context’s cohesion via automated unit and integration testing
+    + to be (re)executed as frequently as possible
+
+---
+
+## Model integrity problem
+
+### How to preserve the integrity of the model?
+
+- As the domain evolves, the software model should evolve with it
+    + in order to maintain the coupling
+
+- Yet, the domain rarely changes as a whole
+    + more commonly, it changes in a context-specific way
+
+- Contexts-are bounded, but not isolated
+    + so are models, which may depend on each other
+
+- Changes to a context, and its model may propagate to other context / models
+
+> Domain / model changes are critical and should be done carefully
+
+---
+
+## Model integrity patterns
+
+- __Shared kernel__: sharing a common model among contexts
+- __Customer--supplier__: the consumer model's team requests changes in the supplier model
+- __Conformist__: one model's team reacts to changes of some model they depend on
+- __Anti-corruption layer__: a model's team isolates itself from another model
+
+### Purposes
+
+- _Preserve_ the integrity of the model w.r.t. the domain
+
+- _Minimise_ the potential _impact_ / _reach_ of changes
+    + each context should be as independent as possible
+    + each change affect as few contexts as possible
+
+--- 
+
+## Model integrity patterns (background, pt. 1)
+
+![Context maps concept](./context-map.jpg)
+
+- Context maps highlight relations among contexts
+    + yet, not all relations are equal, nor symmetric
+
+--- 
+
+## Model integrity patterns (background, pt. 2)
+
+![Upstream and downstream roles](./provider-consumer.jpg)
+
+Each relation among 2 contexts usually involves 2 ends/roles:
+- __upstream__ end, i.e. the one _providing_ functionalities
+- __downstream__ end, i.e. the one _consuming_ functionalities
+    + the downstream _depends_ upon the upstream, but _not_ vice versa
+
+<br>
+
+__Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
+- several strategies may be employed, depending on
+    + mutual _trust_* among teams
+    + ease of _communication_/cooperation among teams
+    + technical / organizational / administrative / legal _constraints_
+
+<br><br>
+
+*trust $\approx$ willingness to collaborate + seek for stability
+
+---
+
+## Shared Kernel
+
+![Shared kernel concept](./shared-kernel.jpg)
+
+- Best when: multiple contexts _share_ the same team / organization / product
+
+- Key idea: _factorise_ common portions of the model into a shared kernel
+
+- Upstream and downstream _collaborate_ in designing / developing / maintaining the model
+    + they are _peers_
+
+- Keeping the kernel as _small_ as possible is fundamental
+
+---
+
+## Customer--Supplier
+
+![Customer--supplier concept](./customer-supplier.jpg)
+
+- Best when: 
+    + multiple teams
+    + mutual trust 
+    + good communication
+
+- Key idea:
+    + upstream acts as supplier, downstream acts as customer
+    + both sides collaborate to maximise integration among their models
+        * and interoperability among their SW
+
+- Customers may ask for features, suppliers will do their best
+
+- Suppliers shall warn before changing their model
+
+---
+
+## Conformist
+
+![Conformist concept](./conformist.jpg)
+
+- Best when: 
+    + multiple teams
+    + poor communication / different pace
+    + some trust
+
+- Key idea: downstream must conform to the upstream, reactively
+    + adapting their model accordingly
+    + whenever the upstream's one changes
+
+---
+
+## Anti-corruption layer
+
+![Anti-corruption layer concept](./anti-corruption-layer.jpg)
+
+- Best when: 
+    + multiple teams
+    + poor communication 
+    + poor trust
+
+ - If upstream cannot be trusted, and interaction is pointless...
+    + e.g. legacy code, poorly maintained library, etc.
+
+- ... downstream must defend from unexpected / unanticipated change
+
+- The upstream's model is then reverse engineered & __adapted__
+    + e.g. often, repository types are anti-corruption layers for DB technologies
