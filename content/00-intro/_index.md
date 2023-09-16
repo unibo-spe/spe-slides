@@ -22,17 +22,17 @@ targetPath = "css/custom-theme.css"
   * email: [`danilo.pianini@unibo.it`](mailto:danilo.pianini@unibo.it)
   * homepage: [`https://www.unibo.it/sitoweb/danilo.pianini/en`](https://www.unibo.it/sitoweb/danilo.pianini/en)
 
-### Angelo Croatti
-  * email: [`a.croatti@unibo.it`](mailto:a.croatti@unibo.it)
-  * homepage: [`https://www.unibo.it/sitoweb/a.croatti/en`](https://www.unibo.it/sitoweb/a.croatti/en)
+### Giovanni Ciatto
+  * email: [`giovanni.ciatto@unibo.it`](mailto:giovanni.ciatto@unibo.it)
+  * homepage: [`https://www.unibo.it/sitoweb/giovanni.ciatto/en`](https://www.unibo.it/sitoweb/giovanni.ciatto/en)
 
 ---
 
 # Contacts
 
-#### Prioritize the forum [`https://virtuale.unibo.it/mod/forum/view.php?id=970526`](https://virtuale.unibo.it/mod/forum/view.php?id=970526):
+#### Prioritize the forum [`https://virtuale.unibo.it/`](https://virtuale.unibo.it/mod/forum/view.php?id=TBD):
   * All technical question
-  * Any other non personal question
+  * Any other non-personal question
 
 <p>
 
@@ -43,7 +43,7 @@ targetPath = "css/custom-theme.css"
 
 #### Office hours
 * Danilo Pianini $\Rightarrow$ check [the teacher webpage](https://www.unibo.it/sitoweb/danilo.pianini/en)
-* Angelo Croatti $\Rightarrow$ check [the teacher webpage](https://www.unibo.it/sitoweb/a.croatti)
+* Giovanni Ciatto $\Rightarrow$ check [the teacher webpage](https://www.unibo.it/sitoweb/giovanni.ciatto/en)
 
 ---
 
@@ -61,7 +61,7 @@ No mandatory books, but there are both:
 * Recommended readings
 * Additional useful books
 
-On [the course webpage](https://www.unibo.it/it/didattica/insegnamenti/insegnamento/2022/412677)
+On [the course webpage]({{< teaching_page >}})
 
 ---
 
@@ -69,10 +69,10 @@ On [the course webpage](https://www.unibo.it/it/didattica/insegnamenti/insegname
 
 Lectures in lab with immediate hands-on.
 
-## Timetable
+## [Timetable]({{< teaching_page >}}/orariolezioni)
 
-* **Wednesday 13:00--16:00** --- Lab 3.3 --- Usually with Pianini
-* **Friday 14:00--17:00** --- Lab 3.3 --- Usually with Croatti
+* **Thursday 9:00--11:00** (2h) --- Lab 3.1
+* **Friday 11:00--14:00** (3h) --- Lab 4.2
 
 Changes will be published on the forum
 
@@ -80,10 +80,11 @@ Changes will be published on the forum
 
 # Goals
 
-1. Design systems top-down, from the **domain**
+1. Learn how to design software systems, following a *domain*-, *model*-, and/or *test*-driven approach
 2. Zero-overhead from *domain definition* to *executable code*
 3. *Agile* development practices, *DevOps* philosophy
 4. *High automation* + *technical excellence*
+5. Understand analogies and differences among *programming platforms*
 
 ---
 
@@ -103,14 +104,20 @@ Changes will be published on the forum
 # Exam
 
 ### **Discussion** of a **group project**
+
 * Must feature:
   * *Domain-driven* design
   * Clear development process and *DevOps* practices
   * Full-scale *automation*
     * Including *continuous integration* and delivery
+  * Deploy automation via *containerization* and/or *orchestration*
+  * Technically involve _2+ platforms_
+    * e.g., JVM, NodeJS, Python, C, C++, Rust, Go, etc.
+
 * Can be a **joint effort** with other courses
   * We care about the *domain modeling* and the application of *DevOps techniques*
   * You can pick a project of another course, apply them there, and it is fine for SPE
+
 * Can be a project created for SPE alone
   * If you are short on ideas, we can help :)
 
@@ -154,5 +161,5 @@ The container can be converted into a WSL2 Linux distribution.
 The PCs are equipped with the WSL2 image
 
 * There should be a link on the Desktop
-* Double-clicking it should pop up a zsh shell
+* Double-clicking it should pop up a `zsh` shell
   * Wait for the first terminal to show before starting others
