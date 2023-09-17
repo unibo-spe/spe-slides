@@ -954,3 +954,211 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 - The upstream's model is then reverse engineered & __adapted__
     + e.g. often, repository types are anti-corruption layers for DB technologies
+
+--- 
+
+# Layered Architecture
+
+---
+
+## Layered Architecture (disclaimer)
+
+- DDD does not enforce a particular architecture
+
+- Any is fine as long the model is integer
+
+- Layered architectures are well suited to preserve models' integrity
+
+- Here we focus on the __hexagonal architecture__, a particular case of layered architecture
+    + well suited to DDD
+
+---
+
+## Hexagonal architecture (concept)
+
+![Hexagonal architecture concept](./layered-architecture.svg)
+
+- outer layers depend on innermost ones
+    + the vice versa is not true
+
+---
+
+## Hexagonal architecture (explanation)
+
+1. __Domain layer__: contains the domain model (entities, values, events, aggregates, etc.)
+    - must support a wide range of applications
+    - has no dependency from any other layer
+
+2. __Application layer__: contains services providing business logic
+    - supports a particular use case via services
+    - depends on the domain layer
+
+3. __Presentation layer__: provides conversion facilities to/from representation formats
+    - e.g. JSON, BSON, XML, YAML, XDR, Avro, HTML, etc.
+        + depends on the domain layer (and, possibly, on the application layer)
+
+4. __Storage layer__: supports persistent storage/retrieval of domain data
+    - this is where repositories are implemented
+    - may involve some DB technology
+    - depends on the domain layer (and, possibly, on the presentation layer)
+
+5. __Interface layers__ (e.g. ReST API, MOM, View): let external entities access the software
+    - via a GUI, or via some remote interface such as HTTP
+
+---
+
+## Enforcing the architecture in the code
+
+- Layering may be enforced in the code
+
+- By mapping layers into modules
+    + module $\approx$ packaging unit
+        * e.g. Gradle sub-projects, Maven modules, .NET assemblies, etc.
+    + each module having its own build dependencies
+
+{{< plantuml >}}
+top to bottom direction
+
+component ":domain" as domain
+component ":application" as application
+component ":presentation" as presentation
+component "third-party serialization library" as gson
+component "third-party DB client library" as db
+component ":storage" as storage
+component ":web-api" as server
+component ":message-queue" as mq 
+component ":command-line" as cli
+component product
+
+domain <|-- application
+application <|-- presentation
+presentation <|-- server
+presentation <|-- mq
+application <|-- storage
+presentation -r-|> gson
+presentation <|-- cli
+db <|-l- storage  
+product -u-|> server
+product -u-|> storage
+product -u-|> mq    
+{{< /plantuml >}}
+
+---
+
+# Advanced aspects of DDD
+
+---
+
+## Event sourcing (preliminaries)
+
+- Whenever there is a _mutable_ entity ...
+- ... whose state evolution over time must be tracked ...
+- ... state transitions can be memorised in 2 ways:
+    + one may track the __current state__
+    + or the __flow__ of __variations__
+
+![Flow vs. state representation](./state-vs-flow.svg)
+
+---
+
+## Event sourcing
+
+> A pattern where _domain events_ are reified into _time-stamped data_ and the whole _evolution_ of a system is persistently _stored_
+
+- perfect match with DDD as domain events are first-class citizens
+
+---
+
+## Event sourcing (pros & cons)
+
+### Benefits
+
+- Historical data can be analysed, to serve several purposes
+    + e.g. predictive maintenance, optimization, analyse & anticipate faults
+
+- Past situations can be replayed
+    + e.g. which improves debugging, enables measurements
+
+- Enables complex event detection & reaction
+
+- Enables CQRS (described later)
+
+### Limitations
+
+- A lot of data is generated and must be stored, which costs _space_
+- Reconstructing the (current) state costs _time_
+
+--- 
+
+## Command--Query Responsibility Segregation (__CQRS__)
+
+- Advanced pattern for building _highly-scalable_ applications
+
+- It leverages upon _event sourcing_ and _layered architecture_...
+
+- ... to deliver **reactive**, **eventual-consistent** solutions where:
+    + contexts boundaries can be easily enforced
+    + single responsibility principle is applied extensively
+
+---
+
+## CQRS definition
+
+> __Split__ the _domain_ and _application_ layers to _segregate_ __read/write__ responsibilities
+
+- __Read__ model (a.k.a. _view_ or _query_ model)
+    + accepts queries aimed at __observing__ the state of the system
+
+- __Write__ model (a.k.a. _command_ model)
+    + accepts commands aimed at __altering__ the state of the system
+
+---
+
+## CQRS concept
+
+![CQRS concept](./cqrs.png)
+
+---
+
+## CQRS workflow (writing)
+
+Whenever users are willing to _perform an action_ into the system:
+1. they create a __command__ and forward it to the __write model__
+  - i.e. an object describing a _variation_ to be applied to some domain aspect
+
+<br>
+
+2. the command is possibly _validated_ & __stored__ onto some database
+  - an ad-hoc __database__ is available in the model for storing commands
+
+
+---
+
+## CQRS workflow (reading)
+
+Whenever users are willing to _inspect/observe the system_ at time $t$:
+1. they perform a __query__ on the __read model__
+    - asking for the state of the system _at time $t$_
+    - e.g. $t$ $\equiv$ now
+
+<br>
+
+2. commands up to time $t$ are assumed to be __reified__ when reading
+    - a __snapshot__ of the system state _at time $t$_ is returned to users
+
+---
+
+## CQRS -- When are commands reified?
+
+> __Reification__: is the process of computing the state of the system at time $t$ by applying of commands recorded up to time $t$
+<br>
+
+- If queries and commands are stored on different databases
+    + reification implies updating the query database
+    + the query database should be __read-efficient__
+    + the commands database should be __write-efficient__
+
+- Several, non-mutually-exclusive strategies:
+    + __eager__: commands are reified as soon as they are received
+    + __pull__: commands are reified upon reading queries
+    + __push__: commands are reified in background, periodically
