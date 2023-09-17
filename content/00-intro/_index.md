@@ -30,20 +30,30 @@ targetPath = "css/custom-theme.css"
 
 # Contacts
 
-#### Prioritize the forum [`https://virtuale.unibo.it/`](https://virtuale.unibo.it/mod/forum/view.php?id=TBD):
+#### Prioritize the forum 
+#### [`https://virtuale.unibo.it/mod/forum/view.php?id=1342533`](https://virtuale.unibo.it/mod/forum/view.php?id=1342533)
   * All technical question
   * Any other non-personal question
 
 <p>
 
 #### When using the email
-  * Include *both* teachers, *always*
+  * Include *both* teachers, **always**
 
 <p>
 
 #### Office hours
 * Danilo Pianini $\Rightarrow$ check [the teacher webpage](https://www.unibo.it/sitoweb/danilo.pianini/en)
 * Giovanni Ciatto $\Rightarrow$ check [the teacher webpage](https://www.unibo.it/sitoweb/giovanni.ciatto/en)
+
+---
+
+# Pages of the course
+
+- [Virtual Learning Environment ("Virtuale")](https://virtuale.unibo.it/course/view.php?id=50031)
+  + please enroll if you didn't already
+
+- [These slides](https://unibo-spe.github.io)
 
 ---
 
