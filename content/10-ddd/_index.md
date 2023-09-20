@@ -525,10 +525,10 @@ TaxCode -u-|> CustomerID
 
 interface CustomerFactory {
     + VatNumber computeVatNumber(String name, String surname, Date birthDate, String birthPlace)
-    --
+    ..
     + Customer newCustomerPerson(TaxCode code, String fullName, string email)
     + Customer newCustomerPerson(String name, String surname, Date birthDate, String birthPlace, String email)
-    --
+    ..
     + Customer newCustomerCompany(VatNumber code, String fullName, String email)
 }
 
@@ -709,18 +709,18 @@ OrderID -d[hidden]- Customer
 
 ## Domain Events (details)
 
-### Purpose
+### Purpose
 - Propagate changes among portions of the domain model 
 - Record changes concerning the domain
 
-### Remarks
+### Remarks
 - Strong relation with the [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) (i.e. publish-subscribe) 
 - Strong relation with the event sourcing approach (described later) 
 - Strong relation with the CQRS pattern (described later)
 
 ---
 
-## Domain Events (constraints)
+## Domain Events (constraints)
 
 - They are usually time-stamped value objects
 
@@ -793,21 +793,20 @@ note right of OrderManagementService: service
 
 ## Actual definitions
 
-### Bounded Context
+### Context Boundary
 
-> The explicit boundary of a software model, from a
-> - technical (e.g., dependencies among classes/interfaces)
-> - physical (e.g., common database, common facilities)
-> - organizational (e.g. people maintaining/using the code)
->
-> perspective
+> The _boundary_ of a context and its software model should be __explicit__.
+> This is helpful from several perspectives:
+> - technical (e.g., __dependencies__ among classes/interfaces)
+> - physical (e.g., common database, __common facilities__)
+> - organizational (e.g. __people/teams__ maintaining/using the code)
 
 <br>
 
 ### Context Map
 
-> A map of all the contexts in a domain and their boundaries
-> - and their points of contact
+> A __map__ of _all_ the __contexts__ in a domain and their __boundaries__
+> - and their __points of contact__
 >   + e.g. their dependencies, homonyms, false friends, etc.
 > - providing the whole picture of the domain
 
@@ -821,15 +820,15 @@ note right of OrderManagementService: service
 
 ## Bounded Contexts & Context Maps (best practices)
 
-- Clearly identify & represent boundaries among contexts
+- Clearly _identify & represent__ *boundaries* among contexts
 
-- Avoid responsibility diffusion over a single context
+- *Avoid* __responsibility diffusion__ over a single context
     + one responsible person / team for each context
 
-- Avoid changing the model for problems arising outside the context
+- *Avoid changes* in the model for __problems__ arising __outside__ the context
     + rather, extend the domain by creating new contexts
 
-- Enforce context’s cohesion via automated unit and integration testing
+- Enforce context’s __cohesion__ via automated unit and integration __testing__
     + to be (re)executed as frequently as possible
 
 ---
@@ -838,18 +837,18 @@ note right of OrderManagementService: service
 
 ### How to preserve the integrity of the model?
 
-- As the domain evolves, the software model should evolve with it
+- As the __domain evolves__, the software _model should evolve_ with it
     + in order to maintain the coupling
 
 - Yet, the domain rarely changes as a whole
-    + more commonly, it changes in a context-specific way
+    + more commonly, it changes in a __context-specific__ way
 
-- Contexts-are bounded, but not isolated
-    + so are models, which may depend on each other
+- Contexts-are bounded, but __not isolated__
+    + so are models, which may _depend_ on each other
 
-- Changes to a context, and its model may propagate to other context / models
+- Changes to a context, and its model may __propagate__ to other context / models
 
-> Domain / model changes are critical and should be done carefully
+> Domain / model __changes are critical__ and should be done carefully
 
 ---
 
@@ -875,7 +874,7 @@ note right of OrderManagementService: service
 ![Context maps concept](./context-map.jpg)
 
 - Context maps highlight relations among contexts
-    + yet, not all relations are equal, nor symmetric
+    + yet, _not_ __all relations are equal__, nor symmetric
 
 --- 
 
@@ -906,14 +905,14 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ![Shared kernel concept](./shared-kernel.jpg)
 
-- Best when: multiple contexts _share_ the same team / organization / product
+- Best when: multiple contexts _share_ the __same team__ / organization / product
 
-- Key idea: _factorise_ common portions of the model into a shared kernel
+- Key idea: __factorise__ common portions of the model into a shared kernel
 
-- Upstream and downstream _collaborate_ in designing / developing / maintaining the model
+- Upstream and downstream __collaborate__ in designing / developing / maintaining the model
     + they are _peers_
 
-- Keeping the kernel as _small_ as possible is fundamental
+- Keeping the __kernel__ as __small__ as possible is fundamental
 
 ---
 
@@ -923,17 +922,17 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 - Best when: 
     + multiple teams
-    + mutual trust 
+    + __mutual trust__ 
     + good communication
 
 - Key idea:
-    + upstream acts as supplier, downstream acts as customer
-    + both sides collaborate to maximise integration among their models
-        * and interoperability among their SW
+    + __upstream__ acts as _supplier_, __downstream__ acts as _customer_
+    + both sides collaborate to __maximise integration__ among their models
+        * and interoperability among their software
 
-- Customers may ask for features, suppliers will do their best
+- Customers may _ask_ for features, suppliers will do their best to __provide__ them
 
-- Suppliers shall warn before changing their model
+- Suppliers shall __warn__ before changing their model
 
 ---
 
@@ -1249,3 +1248,21 @@ A simple domain keeping track of: _customers_, _products_, and _orders_.
 
 - It must be possible to compute the actual total price of an order
     * in a particular moment, using a particular currency
+
+---
+
+## Exercise -- Simple Store (pt. 4)
+
+### TO-DO
+
+1. Read informal domain description
+2. Identify the main domain concepts composing the ubiquitous language
+3. Model the domain as Java types (classes or interfaces)
+    - the model should include entities, value objects, repositories, factories, and services
+4. Structure the Java types according to some module structure compliant with hexagonal architecture
+5. Sketch tests and, then, implementation for at least one
+    - entity
+    - value object 
+    - factory
+    - repository
+    - value object
