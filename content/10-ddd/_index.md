@@ -39,17 +39,17 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ## Why a structured design process?
 
-- You know programming, in many programming languages
+- You know programming, in many _programming languages_
 
-- You know about object-oriented programming and design patterns
+- You know about object-oriented programming and _design patterns_
 
-- You know about software architectures and design principles
+- You know about _software architectures_ and _design principles_
 
-- You know about software engineering best practices
+- You know about _software engineering_ best practices
 
 <br>
 
-*What's the __criterion__ to choose __if__ and __when__ to adopt languages / patterns / architectures / principles / practices?*
+> What's the __criterion__ to choose __if__ and __when__ to adopt languages / patterns / architectures / principles / practices?
 
 ---
 
@@ -66,11 +66,15 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 - Here we present __domain-driven design__ (DDD)
     + one of many approaches to software design
 
+<br>
+
 - It consists of principles, best practices, and patterns leading design
     + unified under a common _philosophy_
     + focus is on the _design workflow_, other than the result
 
-- We prefer it over alternatives for several reasons:
+<br>
+
+- Major benefits:
     + it stresses _adherence_ to the problem at hand
     + it focuses on delivering a _business-tailored_ model
         * and, therefore, a business-tailored solution
@@ -88,12 +92,16 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 ## What is the domain?
 
 - Definition of __domain__:
-    + a well established sphere of knowledge, influence or activity
-    + the subject area to which the user applies the software
+    + a well-established _sphere of knowledge_, influence or activity
+    + the _subject area_ to which the user applies the software
+
+<br>
 
 - Remarks:
-    + focus is on how users and experts perceive the domain
-    + focus is not on how developers perceive the domain
+    + focus is on how __users and experts perceive the domain__
+    + focus is __not__ on how __developers__ perceive the domain
+
+<br>
 
 - Examples of domains and the contexts composing them
     + some university (department, faculty, HR, etc.)
@@ -105,23 +113,26 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ## DDD Philosophy (pt. 1)
 
-- Software will represent a solution to a problem in some business domain
-    + it should be modelled & implemented to match that domain
+- _Software_ will represent a _solution_ to a _problem_ in some __business domain__
+    + it should be _modelled_ & _implemented_ to match that domain
         * i.e. modelling should elicit the key aspects of a domain, possibly by interacting with experts
+        * i.e. design and implementation should _mirror_ the domain
 
 - Words do not have meaning per se, but rather w.r.t. a domain
-    + i.e. the same word may have different meanings in different domains
+    + i.e. the _same word_ may have _different meanings_ in different domains
     + each domain comes with a particular language characterising it
-        * SW components (interfaces, classes, etc.) should be named after that language
-    + interaction with experts is essential to identify a domain’s language
+        * _software components_ (interfaces, classes, etc.) should be _named after_ that language
+    + _interaction with experts_ is essential to identify a domain’s language
 
 ---
 
 ## DDD Philosophy (pt. 2)
 
-- SW should stick to the domain, at any moment
+- Software should stick to the domain, at any moment
     + archiecture and implementation should favour adherence to the domain
         * in spite of their evolution / modification
+
+<br>
 
 - Functionalities, structure, and UX should mirror the domain too
     - using the libraries should be natural for developers
@@ -141,7 +152,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 - __Context__: a portion of the domain
 
-- __Model__: a reification of the domain in SW
+- __Model__: a reification of the domain in software
 
 - __Ubiquitous Language__: language used by domain experts and mirrored by the model
 
@@ -157,9 +168,10 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ## _Contexts_
 
-> A portion of the domain:
+> A _portion_ of the domain with a clear _boundary_:
 > - relying on a sub-set of the concepts of the domain
 > - where words/names have a unique, precise meaning
+> - clearly distinguishable from other contexts
 
 - e.g. departments, divisions, complex numbers, etc.
 
@@ -192,7 +204,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 - commonly reified into a __glossary__ of terms
 
-- commonly used to name software components
+- __used to name software components__
 
 {{% /section %}}
 
@@ -202,21 +214,20 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ## Conceptual Workflow
 
-1. Identify the domain
+1. Identify the __domain__, give a name to it
 
-2. Identify the main contexts within the domain
+2. Identify the __main contexts__ within the domain, giving them names
     -  possibly, by interacting with experts
 
-3. Identify the actual meaning of commonly used words within the domain
+3. Identify the actual meaning of __relevant words__ from the domain, and track them into a __glossary__
     - possibly, by interacting with experts
     
     - _without assuming you already know the meaning of words_
         + i.e. do __not__ rely on (your) __common sense__
 
-    - keep in mind that the meaning of word may vary among contexts
-        + this is not just a glossary, but also
-            * idiomatic or domain-specific expressions
-            * procedures, events, etc.
+    - keep in mind that the meaning of words may vary among contexts
+        + __homonyms__: similar names, different meanings
+        + __synonyms__: different names, similar meanings 
 
 4. Adhere to the language, use it, make it yours
     - especially when talking about the domain / model / software
@@ -263,9 +274,12 @@ Model
 {{% /col %}}
 {{< /multicol >}}
 
+
 - Each _concept_ from each **context** shall become a _type_ in the **model**
     + type $\approx$ class, interface, structure, ADT, etc.
         * depends on what the programming language has to offer
+
+<br>
 
 - Use _building blocks_ as __archetypes__
     + let them guide and constrain your design
@@ -276,14 +290,14 @@ Model
 
 (continued)
 
-7. Chose the most adequate building block for each concept
+7. _Chose_ the most adequate __building block__ for each concept
     - depending on the nature of the concept
     - ... or the properties of its instances
 
-8. The building block dictates how to design the type corresponding to the concept
+8. The building block dictates how to __design the type__ corresponding to the concept
     - objects in OOP are shaped by types
 
-9. The choice of building block may lead to the identification of other concepts / models
+9. The choice of building block may lead to the identification of __other concepts / models__
     - e.g. entities may need value objects as identifiers
     - e.g. entities may need repositories to be stored
     - e.g. entities may need factories to be created
@@ -361,7 +375,7 @@ Model
 
 ## Entities vs. Value Objects (constraints)
 
-### Entities
+### Entities
 
 - They have an inherent identity, which never changes during their lifespan
     + common modelling: __identifier attribute__, of some value type
@@ -1162,3 +1176,76 @@ Whenever users are willing to _inspect/observe the system_ at time $t$:
     + __eager__: commands are reified as soon as they are received
     + __pull__: commands are reified upon reading queries
     + __push__: commands are reified in background, periodically
+
+---
+
+# Exercises
+
+---
+
+## Exercise -- Simple Store (pt. 1)
+
+A simple domain keeping track of: _customers_, _products_, and _orders_.
+
+### Customers
+
+- Customers can either be companies or persons
+
+- Companies are identified by a VAT number
+
+- Persons are identified by tax codes
+
+- In any case a name and email are recorded for each customer
+
+- Both the name and email may vary over time
+
+### Products
+
+- Products are identified by name and type/category
+
+- They have a nominal price, expressed using some currency
+
+- The availability of each product is tracked as well
+
+- Both the price and the available quantity may vary over time
+
+---
+
+## Exercise -- Simple Store (pt. 2)
+
+### Money and exchange rates
+
+- Money is represented by a decimal value and a currency
+
+- Currencies are represented by a name, a symbol and an acronym
+    - e.g. Euro, EUR, €
+    - e.g. USA Dollar, USD, $
+
+- Exchange rates keep track of the conversion rate
+    + from a source currency
+    + to a destination currency
+    + in a particular moment
+
+- Information about exchange rates can be attained from the Internet
+
+- We can compute the price of each product, in any currency, at any moment
+
+---
+
+## Exercise -- Simple Store (pt. 3)
+
+### Orders
+
+- Orders are identified by a serial number
+
+- They keep track of the many products ordered by a customer
+    * and the amount of copies ordered for each product
+
+- Also, orders keep track of when they have been performed
+
+- All such information may be modified before the order is delivered
+
+- When a new order is registered, many actions should be performed in reaction
+
+- It must be possible to compute the actual total price of an order
+    * in a particular moment, using a particular currency
