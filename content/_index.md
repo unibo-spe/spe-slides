@@ -20,6 +20,7 @@ targetPath = "css/custom-theme.css"
 
 * [Introduction to the course](00-intro)
 * [Domain Driven Design](10-ddd)
+* [Model Driven Development](11-mdd)
 * [The DevOps philosophy](01-devops-intro)
 * [Kotlin for Scala developers](02-kotlin)
   * [Internal DSLs construction](03-internal-dsls)
@@ -27,9 +28,11 @@ targetPath = "css/custom-theme.css"
 * Sharing
   * [Software versioning](05-version-selection)
   * [Software licensing](06-licenses)
+* [Containerization and Orchestration](09-containerization)
 * [Continuous integration/delivery/deployment](07-ci)
 * [Advanced version control](08-advanced-git)
-* [Containerization](09-containerization)
+* [Multi-platform programming](12-multiplatform)
+* [Performance engineering](13-performance-engineering)
 
 ---
 
