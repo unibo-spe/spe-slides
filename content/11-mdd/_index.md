@@ -78,8 +78,6 @@ cf. <https://www.omg.org/ocup-2/documents/Meta-ModelingAndtheMOF.pdf>
 - When you model a domain (e.g. with DDD) you are always exploiting some __meta-model__
     + whether you are aware of it or not
 
-> Is UML the only choice? Are there other relevant meta-models?
-
 ---
 
 ## Model-driven whatever
@@ -511,10 +509,59 @@ tasks {
 
 ---
 
-# MDD in Practice with Xtext
+# MDD in Practice 
+
+---
+
+## Tools for MDD
+
+- Eclipse's [Xtext](https://eclipse.dev/Xtext/) widespread tool for MDD
+
+- JetBrains' [MPS](https://www.jetbrains.com/mps/) main competitor of Xtext
+
+- [Langium](https://langium.org) clone of Xtext, but based on TypeScript
+
+### Other relevant tools for language engineering
+
+- [ANTLR](https://www.antlr.org/) only parser generation for Java, JS, Python, .Net, C++
+
+- [Language Server Protocol](https://microsoft.github.io/language-server-protocol/overviews/lsp/overview/) (LSP) 
+
+---
+
+## Key idea behind LSP
+
+![LSP concept](./lsp.png)
+
+- de-facto standard protocol among IDEs 
+
+- providing various IDE-like capabilities as-a-service
+
+- making it easier to support multiple IDEs for the same language
+
+- must-have feature for any MDD tool we may consider for our DSL
 
 ---
 
 ## About Xtext
 
-TBD
+- A framework for MDD and in particular domain-specific languages
+
+- Xtext provides a language for definining languages...
+
+- ... which is also a meta-modelling language
+
+- Meta-modelling and DSL definition are done simultaneously
+
+- It automatically generates the full language infrastructure, including 
+    + model interfaces / classes ([EMF](https://eclipse.dev/modeling/emf/) compliant)
+    + parser
+    + validator (with pluggable rules)
+    + transpiler stub
+    + scoping (with pluggable rules)
+    + IDE support via LSP
+    + syntax colouring
+    + etc.
+    + test stubs
+    
+- Exercises and examples about MDD will be based on Xtext
