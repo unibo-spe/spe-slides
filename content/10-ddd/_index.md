@@ -1029,7 +1029,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
         * e.g. Gradle sub-projects, Maven modules, .NET assemblies, etc.
     + each module having its own build dependencies
 
-{{< plantuml >}}
+{{< plantuml width="70%">}}
 top to bottom direction
 
 component ":domain" as domain
@@ -1182,7 +1182,9 @@ Whenever users are willing to _inspect/observe the system_ at time $t$:
 
 ---
 
-## Exercise -- Simple Store (pt. 1)
+{{% section %}}
+
+## Exercise 1 -- Simple Store (pt. 1)
 
 A simple domain keeping track of: _customers_, _products_, and _orders_.
 
@@ -1210,7 +1212,7 @@ A simple domain keeping track of: _customers_, _products_, and _orders_.
 
 ---
 
-## Exercise -- Simple Store (pt. 2)
+## Exercise 1 -- Simple Store (pt. 2)
 
 ### Money and exchange rates
 
@@ -1231,7 +1233,7 @@ A simple domain keeping track of: _customers_, _products_, and _orders_.
 
 ---
 
-## Exercise -- Simple Store (pt. 3)
+## Exercise 1 -- Simple Store (pt. 3)
 
 ### Orders
 
@@ -1251,18 +1253,84 @@ A simple domain keeping track of: _customers_, _products_, and _orders_.
 
 ---
 
-## Exercise -- Simple Store (pt. 4)
+## Exercise 1 -- Simple Store (pt. 4)
 
 ### TO-DO
 
-1. Read informal domain description
-2. Identify the main domain concepts composing the ubiquitous language
-3. Model the domain as Java types (classes or interfaces)
+1. __Read__ informal domain description
+2. __Identify__ the main __domain concepts__ composing the ubiquitous language
+3. __Model__ the domain as __Java types__ (classes or _interfaces_)
     - the model should include entities, value objects, repositories, factories, and services
-4. Structure the Java types according to some module structure compliant with hexagonal architecture
-5. Sketch tests and, then, implementation for at least one
+4. __Structure__ the Java types according to some module structure compliant with __hexagonal architecture__
+    - i.e. put code into either the `domain` or `application` modules
+5. Sketch _tests_ and, then, implementation for at least one
     - entity
     - value object 
     - factory
     - repository
     - value object
+
+{{% /section %}}
+
+---
+
+{{% section %}}
+
+## Exercise 2 -- Trivial CQRS (pt. 1)
+
+- Very simple repository type: the `Counter`
+- It contains 1 `long` number, initially set to `0`
+- The value may be read or changed arbitrarily
+- Whenever the value changes, a new domain event is published, of type `Variation`
+- However, the repository only memorises the _current_ value of the counter
+
+--- 
+
+## Exercise 2 -- Trivial CQRS (pt. 2)
+
+### TO-DO 
+
+1. Switch the design towards __event sourcing__, by memorising variations instead of snapshots.
+2. Implement the __CQRS pattern__ by splitting the repository into 2 parts:
+  - a __write-model__ for storing variations
+  - a __read-model__ for retrieving a snapshot of the counter's value in a given moment
+
+<br>
+
+In practice:
+1. provide __implementations__ for the `CounterReader` and `CounterWriter` interfaces
+2. optionally, _test_ those implementations
+
+{{% /section %}}
+
+---
+
+{{% section %}}
+
+## Exercise 3 -- Anti corruption layer (pt. 1)
+
+- Very simple domain: `Table`s
+    + i.e. 2-D containers of `Row`s...
+    + ... where each row contains one or more `String` values
+
+- Functionalities for __CSV__ _import/export_ are missing and need to be implemented via _third-party libraries_
+    + [Apache Commons CSV](https://commons.apache.org/proper/commons-csv/)
+        * Guide here: <https://www.baeldung.com/apache-commons-csv>
+    + [OpenCSV](http://opencsv.sourceforge.net/)
+        * Guide here: <https://www.baeldung.com/opencsv>
+
+---
+
+## Exercise 3 -- Anti corruption layer (pt. 2)
+
+### TO-DO
+
+1. Extend the model of our domain with new __interfaces__ supporting __CSV parsing / writing functionalities__
+2. Design the interfaces so that they are __agnostic__ of the third-party libraries
+    - without corrupting the domain model with library-specific types
+3. Provide __implementations__ for the interfaces, using __one of the two__ libraries
+4. Sketch _tests_ for the implementations
+5. Provide __implementations__ for the interfaces, using __the other__ library
+6. Use the same tests as above to prove the two implementations work _the same way_
+
+{{% /section %}}

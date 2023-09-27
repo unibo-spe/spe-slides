@@ -4,3 +4,4 @@ _gen/
 .hugo_build.lock
 *.pdf
 *.hprof
+.DS_Store
