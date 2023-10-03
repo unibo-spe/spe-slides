@@ -598,7 +598,7 @@ tasks {
 2. We will then add __scoping__ and __validation__ rules to the DSL, via the Xtext framework
 
 3. The next step is designing and implementing the __execution engine__ for the DSL
-    + we shall exploit Java's [`ScheduledExecutorService`s](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ScheduledExecutorService.html) for this purpose
+    + we shall exploit Java's [`ScheduledExecutorService`s](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ScheduledExecutorService.html) for this purpose
 
 4. Finally, we will create a __code generator__ creating Java code from the DSL
 
@@ -753,42 +753,42 @@ generate sheduler "http://www.unibo.it/spe/mdd/sheduler/Sheduler"
 TaskPoolSet: pools+=TaskPool+ ;
 
 TaskPool: 'pool' name=ID? '{' tasks+=Task+ '}' ;
-	
+    
 Task:
-	'schedule' ('task' name=ID)? '{'
-		'command' command=STRING
-		('entry' 'point' entrypoint=STRING)?
-		(
-			'in' relative=RelativeTime |
-			'at' absolute=AbsoluteTime |
-			'before' before=[Task] |            // square brackets denote references to other model elements
-			'after' after=[Task] 
-		)
-		('repeat' 'every' period=RelativeTime)?
-	'}'
+    'schedule' ('task' name=ID)? '{'
+        'command' command=STRING
+        ('entry' 'point' entrypoint=STRING)?
+        (
+            'in' relative=RelativeTime |
+            'at' absolute=AbsoluteTime |
+            'before' before=[Task] |            // square brackets denote references to other model elements
+            'after' after=[Task] 
+        )
+        ('repeat' 'every' period=RelativeTime)?
+    '}'
 ;
 
 AbsoluteTime: date=Date time=ClockTime ;
-	
+    
 Date: year=INT '/' month=INT '/' day=INT;
 
 ClockTime: hour=INT ':' minute=INT (':' second=INT (':' millisecond=INT (':' nanosecond=INT)?)?)? ;
-	
+    
 RelativeTime: timeSpans += TimeSpan (('and' | ',' | '+') timeSpans += TimeSpan)* ;
 
 TimeSpan: duration=INT unit=(TimeUnit|LongTimeUnit);
 
 enum TimeUnit: NANOSECONDS = 'ns' | MILLISECONDS = 'ms' | SECONDS = 's' | MINUTES = 'm' | HOURS = 'h' | DAYS = 'd' | WEEKS = 'w' | 	YEARS = 'y' ;
-	
+    
 enum LongTimeUnit returns TimeUnit: 
-	NANOSECONDS = 'nanoseconds' | 
-	MILLISECONDS = 'milliseconds' |
-	SECONDS = 'seconds' |
-	MINUTES = 'minutes' | 
-	HOURS = 'hours' |
-	DAYS = 'days' |
-	WEEKS = 'weeks' |
-	YEARS = 'years' ;
+    NANOSECONDS = 'nanoseconds' | 
+    MILLISECONDS = 'milliseconds' |
+    SECONDS = 'seconds' |
+    MINUTES = 'minutes' | 
+    HOURS = 'hours' |
+    DAYS = 'days' |
+    WEEKS = 'weeks' |
+    YEARS = 'years' ;
 ```
 
 ---
@@ -1055,6 +1055,240 @@ Documentation here: <https://www.eclipse.org/Xtext/documentation/303_runtime_con
 
 ---
 
-## Code generation
+## Giving semantics to the language
 
-> This will be the content of the next lecture!
+- Two approaches:
+    * __interpretation__: the DSL is interpreted by some __execution engine__
+    * __translation__: the DSL is translated into some _executable code_, leveraging on the API of some __execution engine__
+
+- Both approaches require the definition of an __execution engine__
+    * i.e. a library providing the __functionalities__ of the DSL
+
+---
+
+## Focus on the execution engine
+
+1. Is there functionality in the JDK which supports the __scheduling__ of tasks in the future?
+    - if _yes_: let's use it! _otherwise_, let's look for some _third-party library_, or _implement_ it ourselves
+    - luckily, we may use [`ScheduledExecutorService`s](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ScheduledExecutorService.html) !
+
+2. Same question for the __execution__ of custom __commands__ via some _shell_?
+    - luckily, we may use [`ProcessBuilder`s](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ProcessBuilder.html)!
+
+3. Design insights:
+    1. we may define some _custom_ notion of `ShedulerTask` encapsulating:
+        + the _command_ to be executed
+        + optionally, the _shell_ to be used
+        + the initial _delay_
+        + optionally, the _period_
+        + optionally, the tasks to be executed _before/after_
+        + the functionalities for __executing__ the command via `ProcessBuilder`s
+    2. we may define some custom notion of `ShedulerRuntime`
+        + leveraging on the `ScheduledExecutorService` API...
+        + ... to schedule the `ShedulerTask`s for execution
+
+---
+
+## Example: the `ShedulerRuntime` and `ShedulerTask` classes
+
+{{% multicol %}}
+{{% col %}}
+```java
+public class ShedulerRuntime {
+    private final ScheduledExecutorService delegate;
+
+    public ShedulerRuntime(ScheduledExecutorService delegate) {
+        this.delegate = Objects.requireNonNull(delegate);
+    }
+
+    public void schedule(SheduleTask task) {
+        if (task.isPeriodic()) {
+            delegate.scheduleWithFixedDelay(
+                task.asRunnable(), 
+                task.getDelay().toMillis(), 
+                task.getPeriod().toMillis(), 
+                TimeUnit.MILLISECONDS
+            );
+        } else {
+            delegate.schedule(
+                task.asRunnable(), 
+                task.getDelay().toMillis(), 
+                TimeUnit.MILLISECONDS
+            );
+        }
+    }
+}
+```
+{{% /col %}}
+{{% col %}}
+```java
+public class ShedulerTask {
+    private ShedulerTask(String name, String command, String entrypoint, Duration delay) { /*...*/ }
+
+    public String getName() { /*...*/ }
+    public String getCommand() { /*...*/ }
+    public String getEntrypoint() { /*...*/ }
+    public Duration getPeriod() { /*...*/ }
+    public boolean isPeriodic() { /*...*/ }
+    public SheduleTask setPeriod(Duration period) { /*...*/ }
+    public Duration getDelay() { /*...*/ }
+
+    public Process executeAsync() throws IOException { 
+        return new ProcessBuilder(entrypoint, command).inheritIO().start(); 
+    }
+
+    public Runnable asRunnable() {
+        return () -> {
+            try {
+                executeAsync();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
+    }
+
+
+    public static SheduleTask in(String name, String command, String entrypoint, Duration delay) { /*...*/ }
+    public static SheduleTask in(String command, String entrypoint, Duration delay) { /*...*/ }
+
+    public static SheduleTask at(String name, String command, String entrypoint, LocalDateTime dateTime) { /*...*/ }
+    public static SheduleTask at(String command, String entrypoint, LocalDateTime dateTime) { /*...*/ }
+}
+```
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+### Usage example:
+
+{{% multicol %}}
+{{% col %}}
+```java
+public static void main(String[] args) {
+    ShedulerRuntime runtime = new ShedulerRuntime(Executors.newScheduledThreadPool(1));
+    pool_myPool(runtime);
+    pool_otherPool(runtime);
+}
+    
+private static void pool_myPool(ShedulerRuntime runtime) {
+    ShedulerTask task0 = ShedulerTask.in("greetFrequently", "echo hello", "/bin/sh -c", Duration.parse("PT5M"));
+    task0.setPeriodic(Duration.parse("PT1H"));
+    ShedulerTask task1 = ShedulerTask.at("greetOnce", "echo hello", "/bin/bash -c", LocalDateTime.parse("2030-10-11T12:13"));
+}
+
+private static void pool_otherPool(ShedulerRuntime runtime) {
+    ShedulerTask task0 = ShedulerTask.in("shutdownAfter1Day", "sudo shutdown now", "/bin/zsh -c", Duration.parse("PT24H"));
+}
+```
+{{% /col %}}
+{{% col %}}
+```
+pool myPool {
+    schedule task greetFrequently {
+        command "echo hello"
+        entry point "/bin/sh -c"
+        in 5 minutes
+        repeat every 1 hours
+    }
+    schedule task greetOnce {
+        command "echo hello"
+        entry point "/bin/bash -c"
+        at 2030/10/11 12:13
+    }
+}
+pool otherPool {
+    schedule task shutdownAfter1Day {
+        command "sudo shutdown now"
+        entry point "/bin/zsh -c"
+        in 1 days
+    }
+}
+```
+{{% /col %}}
+{{% /multicol %}} 
+
+---
+
+## Exercise 3: write a code generator for the `Sheduler` DSL
+
+- The code generator should output code having a structure similar to the one shown in the previous slide
+
+- The `ShedulerRuntime` and `ShedulerTask` classes may be generated as they are in the example
+
+- The key part is generating the _main_, where components are assembled together
+
+```java
+public class ShedulerGenerator extends AbstractShedulerGenerator {
+    @Override
+    public void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
+        File inputFile = new File(resource.getURI().toFileString());
+        TaskPoolSet taskPools = (TaskPoolSet) resource.getContents().get(0);
+        String inputFileName = inputFile.getName().split("\\.")[0];
+
+        fsa.generateFile("ShedulerRuntime.java", "CODE HERE");
+        fsa.generateFile("ShedulerTask.java", "CODE HERE");
+        fsa.generateFile("ShedulerSystem_" + inputFileName + ".java", "CODE HERE");
+    }
+}
+```
+
+---
+
+## Exercise 4: write an interpreter for the `Sheduler` DSL
+
+- No code generation, just a `main` 
+    1. parsing the DSL 
+    2. and converting each `Task` into a `ShedulerTask`
+    3. and running each task via some `ShedulerRuntime`
+
+- The `ShedulerRuntime` and `ShedulerTask` classes should be part of the runtime
+
+- The key part is writing the `main`:
+
+```java
+public class ShedulerInterpreter {
+    public static void main(String[] args) {
+        if (args.length == 0) {
+            System.err.println("Aborting: no path to .shed file provided!");
+            return;
+        }
+        Injector injector = new ShedulerStandaloneSetup().createInjectorAndDoEMFRegistration();
+        ShedulerInterpreter interpreter = injector.getInstance(ShedulerInterpreter.class);
+        interpreter.runFile(args[0]);
+    }
+
+    @Inject private Provider<ResourceSet> resourceSetProvider;
+    @Inject private IResourceValidator validator;
+
+    protected void runFile(String string) {
+        // Load the resource
+        ResourceSet set = resourceSetProvider.get();
+        Resource resource = set.getResource(URI.createFileURI(string), true);
+
+        TaskPoolSet taskPools = (TaskPoolSet) resource.getContents().get(0);
+        ShedulerRuntime runtime = new ShedulerRuntime(Executors.newScheduledThreadPool(1));
+        for (TaskPool pool : taskPools.getPools()) {
+            for (Task task : pool.getTasks()) {
+                runtime.schedule(toShedulerTask(task));
+            }
+        }
+    }
+
+    private ShedulerTask toShedulerTask(Task task) {
+        // TODO
+    }
+}
+```
+
+---
+
+## Exercise 5: support for task dependencies
+
+- Add support for __task dependencies__ (before/after) to the _execution engine_
+    * the _parser_ already supports that
+    * the _execution engine_ requires some _refactoring_
+
+- Update the __code generator__ accordingly
+
+- Update the __interpreter__ accordingly
