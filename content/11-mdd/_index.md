@@ -1174,11 +1174,14 @@ public static void main(String[] args) {
 private static void pool_myPool(ShedulerRuntime runtime) {
     ShedulerTask task0 = ShedulerTask.in("greetFrequently", "echo hello", "/bin/sh -c", Duration.parse("PT5M"));
     task0.setPeriodic(Duration.parse("PT1H"));
+    runtime.schedule(task0);
     ShedulerTask task1 = ShedulerTask.at("greetOnce", "echo hello", "/bin/bash -c", LocalDateTime.parse("2030-10-11T12:13"));
+    runtime.schedule(task1);
 }
 
 private static void pool_otherPool(ShedulerRuntime runtime) {
     ShedulerTask task0 = ShedulerTask.in("shutdownAfter1Day", "sudo shutdown now", "/bin/zsh -c", Duration.parse("PT24H"));
+    runtime.schedule(task0);
 }
 ```
 {{% /col %}}
