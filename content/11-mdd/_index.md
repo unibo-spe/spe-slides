@@ -1148,11 +1148,11 @@ public class ShedulerTask {
     }
 
 
-    public static SheduleTask in(String name, String command, String entrypoint, Duration delay) { /*...*/ }
-    public static SheduleTask in(String command, String entrypoint, Duration delay) { /*...*/ }
+    public static ShedulerTask in(String name, String command, String entrypoint, Duration delay) { /*...*/ }
+    public static ShedulerTask in(String command, String entrypoint, Duration delay) { /*...*/ }
 
-    public static SheduleTask at(String name, String command, String entrypoint, LocalDateTime dateTime) { /*...*/ }
-    public static SheduleTask at(String command, String entrypoint, LocalDateTime dateTime) { /*...*/ }
+    public static ShedulerTask at(String name, String command, String entrypoint, LocalDateTime dateTime) { /*...*/ }
+    public static ShedulerTask at(String command, String entrypoint, LocalDateTime dateTime) { /*...*/ }
 }
 ```
 {{% /col %}}
