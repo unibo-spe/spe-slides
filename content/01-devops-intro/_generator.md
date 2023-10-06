@@ -1,4 +1,4 @@
- 
+
 +++
 
 title = "Development + Operations"
@@ -26,5 +26,13 @@ enableSourceMap = true
 ---
 
 <!-- write-here "shared-slides/devops/real-world-case.md" -->
+
+<!-- end-write -->
+
+---
+
+# Development + Operations
+
+<!-- write-here "reusable/header.md" -->
 
 <!-- end-write -->
