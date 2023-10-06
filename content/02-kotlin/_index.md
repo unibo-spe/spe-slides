@@ -1906,8 +1906,9 @@ object Batman { // the Batman object is the dispatch receiver
     val String.Companion.intro get() = generateSequence { Double.NaN } // String.Companion is extension receiver
         .take(10)
         .joinToString(separator = "")
-    fun String.withBatman() = "$this ${this@Batman.name}!" // Qualified this access to the dispatch receiver
+    fun String.withBatman() = "$this ${ this@Batman.name }!" // Qualified this access to the dispatch receiver
 }
+
 ```
 
 ---
@@ -1926,7 +1927,7 @@ object Batman { // Batman is the dispatch receiver
     val String.Companion.intro get() = generateSequence { Double.NaN } // String is extension receiver
         .take(10)
         .joinToString(separator = "")
-    fun String.withBatman() = "$this ${this@Batman.name}!" // Qualified this access to the dispatch receiver
+    fun String.withBatman() = "$this ${ this@Batman.name }!" // Qualified this access to the dispatch receiver
 }
 // Extension members are actual members! They require a receiver!
 String.intro.withBatman() // error: unresolved reference: intro
@@ -2054,3 +2055,11 @@ A lot of language details have been left out of this guide, non complete list:
 * coroutines
 * interoperatibility with Java
 * `inline class`es
+
+---
+
+
+# Kotlin
+## *(for Scala developers)*
+
+{{% import path="reusable/header.md" %}}
