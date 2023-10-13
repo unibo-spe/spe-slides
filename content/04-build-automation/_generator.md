@@ -838,6 +838,7 @@ Let's begin our operation of isolation of imperativity by refactoring our hierar
 
 ```mermaid
 classDiagram
+    direction LR
     Exec <|-- JavaTask
     JavaTask <|-- JavaCompile
     JavaTask <|-- JavaExecute
