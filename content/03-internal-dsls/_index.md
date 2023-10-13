@@ -415,3 +415,9 @@ But you must be *explicitly willing* to access an outer receiver
     * Member extensions to control scope
     * Reuse by inheritance
     * Receiver "leakage" via annotations
+
+---
+
+# Internal Domain-Specific Languages In Kotlin
+
+{{% import path="reusable/header.md" %}}
