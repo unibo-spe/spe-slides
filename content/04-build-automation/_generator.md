@@ -1053,9 +1053,10 @@ General approach to a *new* build automation problem:
 * Build a *pipeline*
 * Implement them Providing a *clean API*
 
-**Encapsulate**: confine imperative logic, make it an *implementation detail*<!-- write-here "shared-slides/build-systems/build-systems-intro.md" -->
+**Encapsulate**: confine imperative logic, make it an *implementation detail*
 
-<!-- end-write -->
+**Adorn**: provide a DSL that makes the library *easy and intuitive*
+
 *Not very different than what's usually done in (good) software development*
 
 ---
