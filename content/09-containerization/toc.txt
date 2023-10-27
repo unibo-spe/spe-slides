@@ -1,16 +1,44 @@
 ## Motivation and context
 
 - General need: govern the deployment of software systems onto some infrastructure
-    + software system -> multiple interacting software components (processes), each one having its runtime requirements
+    + software system -> multiple interacting software components (processes), each one having its computational requirements
     + infrastructure -> the available hardware and software substratum (one or more machines)
     + deployment -> orderly instantiation of the software components, while optimising hardware exploitation
 
-- Need for multi-tenancy (i.e. sharing) on hardware resources
-- Need for isolation
-- Need to formalize / control / reproduce the runtime environment of applications
-- Need to automate deployment of applications into production / testing environments
+## Execution context of a software
 
-## Background and nomenclature
+### Type of tasks
+
+long-lived vs. short-lived
+
+### Requirements
+
+hw, os, runtime, libraries, storage, networking
+
+## Need for encapsulation
+
+Why can't we simply install and configure bare metal machines?
+
+- Need for multi-tenancy (i.e. sharing) on computational resources
+    + one may have several machines and be willing to decouple applications from machines
+    + different software components may have incompatible hw / software requirements
+
+- Need for isolation
+    + a common requirement in multi-tenant approaches
+    + preventing spurious interactions among different tenants
+
+- Need to formalize / control / reproduce the computational environment of applications
+    + formalisation is a pre-requisite for automation
+    + automation enables control and scale
+
+- Need to automate deployment of applications into production / testing environments
+    + this is the immediate benefit for engineers
+
+- Need for flexibility (in re-deployment), and scalability
+    + effort minimisation for application startup or transfer
+
+
+## How to achieve encapsulation
 
 - VM and VMH
     + IaaS
@@ -18,3 +46,48 @@
 - Containers and containers engines
     + orchestration
 
+- Why containers?
+    + more fine-grained
+    + more modularity
+    + more flexibility
+    + more scalability
+
+## Main abstractions
+
+### Encapsulation / modularization
+
+- Container
+- Image
+- Volume
+- Network
+
+### Orchestration 
+
+- Service
+- Stack
+- Secrets
+- Config
+- Node
+
+### Syntaxes
+
+- Dockerfile for encapsulation
+
+- Compose for orchestration
+
+### Engines / tools
+
+- Base, Compose, Swarm
+
+## Exercises on containers
+
+1. Create an image encapsulating an non-trivial application 
+
+2. Docker compose for testing
+
+3. Creating a multi-node swarm
+    + with Portainer
+
+4. Deploying a multi-tier (WS+db, e.g. Wordpress)
+
+5. Deploying a Jupyter environment on swarm 
