@@ -1,0 +1,20 @@
+## Motivation and context
+
+- General need: govern the deployment of software systems onto some infrastructure
+    + software system -> multiple interacting software components (processes), each one having its runtime requirements
+    + infrastructure -> the available hardware and software substratum (one or more machines)
+    + deployment -> orderly instantiation of the software components, while optimising hardware exploitation
+
+- Need for multi-tenancy (i.e. sharing) on hardware resources
+- Need for isolation
+- Need to formalize / control / reproduce the runtime environment of applications
+- Need to automate deployment of applications into production / testing environments
+
+## Background and nomenclature
+
+- VM and VMH
+    + IaaS
+
+- Containers and containers engines
+    + orchestration
+
