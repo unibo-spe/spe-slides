@@ -16,7 +16,7 @@ enableSourceMap = true
 }
 </style>
 
-# Containerization: Basics and CI
+# Containerisation and Orchestration
 
 {{% import path="reusable/header-gc.md" %}}
 
@@ -126,12 +126,12 @@ Regardless of their life-span, computational tasks may require __computational r
 
 ---
 
-## The need for encapsulation
+## The need for encapsulation (pt. 1)
 
 <!-- > __Encapsulation__ is the __hiding__ of the __implementation details__ of a __component__ from its __clients__.
 > Encapsulated components have a clear __interface__ which is the only way to interact with them. -->
 
-> Why can't we simply configure bare metal machines to host our tasks?
+> Why can't we simply configure bare-metal machines to host our tasks?
 
 - Need for __multi-tenancy__ (i.e. sharing) on computational resources
     1. one may have _$N$ machines_ and _$M$ applications_...
@@ -152,16 +152,84 @@ Regardless of their life-span, computational tasks may require __computational r
 - Need for __flexibility__ (in _re-deployment_), and __scalability__
     + _effort minimisation_ for application __startup__ or __transfer__
 
+---
+
+## The need for encapsulation (pt. 2)
+
+Some abstraction is needed to encapsulate applications, and their computational environment, into a single unit 
+
+> __Encapsulation__ is the __hiding__ of the __implementation details__ of a __component__ from its __clients__.
+> Encapsulated components have a clear __interface__ which is the only way to interact with them. 
 
 ---
 
-### Old material below
+## How to achieve encapsulation? (pt. 1)
+
+* __Virtual machines__ (VM) on top of VM _hypervisors_ (VMH)
+
+* __Containers__ on top of container _engines_ (CE)
+
+---
+
+## How to achieve encapsulation? (pt. 2)
+
+### Virtual machines and hypervisors
+
+- VMH run on/as the OS of a bare-metal machine, abstracting HW and SW peculiarities away
+    * VM have virtualised HW and SW resources, different from the host's ones
+
+- VMH may instantiate multiple VM on the same machine
+    * partitioning actual resources ahead of time
+
+- each VM runs its own OS, and may host multiple applications
+    * in the eyes of the user, the VM is undistinguishable from a bare-metal machine
+
+- VM may be paused, snapshot (into file), resumed, and possibly migrated
+    * snapshots are files containing the whole file-system of the VM
+
+- VM are coarse grained encapsulation units
+    * they are heavy-weight (GBs)
+    * they are slow to start, run, migrate, snapshot
+    * VM commonly encapsulate multiple application-level components
+        + database, server, plus all their runtimes and libraries, etc.
+
+- Many industry-ready technologies:
+    * VMWare, VirtualBox, KVM, Xen, Hyper-V, QEMU, Proxmox, etc.
+
+---
+
+## How to achieve encapsulation? (pt. 3)
+
+### Containers and container engines (CE)
+
+- CE run on/as the OS of a bare-metal/virtual machine, abstracting the runtime, storage, and network environment away
+    + the CPU, memory, OS kernel, drivers, and hardware are __not virtualised__
+
+- one may instantiate multiple containers on the same machine
+    + sharing the actual resources dynamically (overbooking support)
+
+- each container shares the OS kernel of the host, yet having its own runtime(s), storage, and network facilities
+    + in the eyes of the user, the container is a process running on top of a minimal OS
+
+- each container is instance of an image, i.e. a read-only template containing deployment instructions 
+    + differences w.r.t. that image constitute the state of the container
+        * these can be snapshot into file of minimal size
+
+- containers are fine-grained encapsulation units
+    + they are light-weight (MBs)
+    + they are fast to start, run, snapshot
+    + they are commonly used to encapsulate single application-level components
+        * e.g. a database instance, a web-server instance, etc.
+        * the final application should consist of several, inter-communicating containers
+
+- Many industry-ready technologies:
+    + Docker, LXC, LXD, Podman, etc.
 
 ---
 
 <!-- this file includes generated content. Do not edit. Edit content/09-containerization/_generator.md, instead. -->
 
-## Bare metal vs. VMs vs. Containers
+## Bare-metal vs. VMs vs. Containers
 
 {{< gravizo >}}
 digraph structs {
@@ -204,19 +272,7 @@ App3 [fillcolor=red, width=0.95, pos="1.025,2.3!"]
 }
 {{< /gravizo >}}
 
-Runtime **isolation** without operating system **replication**
-
----
-
-## Why containers?
-
-![](https://raw.githubusercontent.com/DanySK/shared-slides/6824b93d3d52b841386a744f57953a73ccb67378/containerization/works-on-my-machine.jpeg)
-
----
-
-## Why containers?
-
-![](https://raw.githubusercontent.com/DanySK/shared-slides/6824b93d3d52b841386a744f57953a73ccb67378/containerization/docker-born.jpeg)
+Containers provide **runtime isolation** _without_ operating **system replication**
 
 ---
 
@@ -229,6 +285,66 @@ Runtime **isolation** without operating system **replication**
 ## Closer to confined processes
 
 ![](https://raw.githubusercontent.com/DanySK/shared-slides/6824b93d3d52b841386a744f57953a73ccb67378/containerization/chroot.jpeg)
+
+---
+
+## Scaling up to the cluster level
+
+> __Cluster__ $:=$ a set of _similarly configured_ __machines__ (a.k.a. __nodes__) __interconnected__ via a __network__ in order to let users exploit their __joint__ computational power
+
+- Users may want to deploy their applications on the cluster
+    + by means of a single access point
+        + e.g. a Web dashboard, or a CLI
+
+- Deployment shall allocate tasks on the cluster in an efficient way
+    + meeting the tasks' computational requirements
+    + balancing the load among the nodes
+    + matching requirements on actual capabilities of nodes
+
+- Infrastructure-as-a-service (IaaS) cloud technologies support deploying tasks on clusters, as VM
+    + e.g. OpenStack, VSphere, etc.
+
+- Container orchestrator support deploying tasks on clusters, as containers
+    + e.g. Kubernetes, Docker Swarm, etc.
+
+---
+
+## Why containers?
+
+{{< multicol >}}
+{{% col %}}
+![](https://raw.githubusercontent.com/DanySK/shared-slides/6824b93d3d52b841386a744f57953a73ccb67378/containerization/works-on-my-machine.jpeg)
+{{% /col %}}
+{{% col %}}
+![](https://raw.githubusercontent.com/DanySK/shared-slides/6824b93d3d52b841386a744f57953a73ccb67378/containerization/docker-born.jpeg)
+{{% /col %}}
+{{< /multicol >}}
+
+- more fine-grained encapsulation (than VM)
+- faster to start, stop, snapshot, migrate (w.r.t. VM)
+- more modular, more scalable (than VM)
+- useful for dev-ops, and CI/CD
+- most-likely, it's the future of cloud computing
+
+---
+
+## Containerisation vs. Orchestration
+
+- __Containerisation__ $:=$ the process of _encapsulating_ an application into a _container_
+
+- __Orchestration__ $:=$ the process of _deploying_ one or more container onto _one or more_ machines
+
+- __Containerisation__ is a _pre-requisite_ for __orchestration__
+
+- Two syntaxes involved:
+    + one to _containerise_ (i.e. create container images)
+    + one to _orchestrate_ (i.e. deploy containers)
+
+---
+
+## Main abstractions
+
+TBD
 
 ---
 
