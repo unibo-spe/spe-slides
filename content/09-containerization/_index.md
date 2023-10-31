@@ -309,7 +309,7 @@ Containers provide **runtime isolation** _without_ operating **system replicatio
 
 ---
 
-## Why containers?
+## Why containers? (pt. 1)
 
 {{< multicol >}}
 {{% col %}}
@@ -319,6 +319,10 @@ Containers provide **runtime isolation** _without_ operating **system replicatio
 ![](https://raw.githubusercontent.com/DanySK/shared-slides/6824b93d3d52b841386a744f57953a73ccb67378/containerization/docker-born.jpeg)
 {{% /col %}}
 {{< /multicol >}}
+
+---
+
+## Why containers? (pt. 2)
 
 - more fine-grained encapsulation (than VM)
 - faster to start, stop, snapshot, migrate (w.r.t. VM)
@@ -344,71 +348,89 @@ Containers provide **runtime isolation** _without_ operating **system replicatio
 
 ## Main abstractions
 
-TBD
+### Encapsulation level
+
+- __Container__: a sandbox for running a process and its computational environment
+- __Image__: a template for creating containers
+- __Layer__: a single, cacheable, step in the creation of an image
+- __Host__: the machine hosting the containers 
+- __Registry__: a repository of images (possibly external w.r.t. the host)
+- __Network__: a virtual network for connecting containers (among each others and with the host)
+- __Volume__: a bridge for letting containers share data with the host
+- __Engine__ (a.k.a. __daemon__): the software running on the host, managing containers, images, volumes, layers, and networks
+
+### Orchestration level
+
+- __Cluster__: a set of machines, joint together by the same container orchestrator 
+- __Node__: a machine in the cluster (each one acting as a host, and running the container engine)
+- __Service__: a set of replicas of the same container
+- __Stack__: a set of inter-related services
+- __Secret__: encrypted information to be made available on containers
 
 ---
 
-## Docker
+## About technologies
 
-Docker is a containerization platform
+__Docker__: the most famous container technology, actually consisting of several components
+- __Docker Engine__: the container engine managing containers and images, locally
+- __Docker CLI__: the command line interface for Docker Engine (this is what you use)
+- __Docker Desktop__: a GUI for Docker Engine, mostly for inspection purposes
+- __Docker Hub__: the default registry for Docker images, available online
+- __Docker Compose__: a tool for orchestrating containers on a single machine
+- __Docker Swarm__: a tool for orchestrating containers on a cluster of machines
 
-*Standard de-facto* in industry
-
-**Base concepts**
-- *Image*
-    * a *read-only template* with instructions for creating a Docker container
-    * images can get built upon other images
-    * images are made of a stack of *layers*
-- *Container*
-    * a *runnable instance* of an image
-    * namely, a "writable layer" atop an image
-- *Service*
-    * A software component in charge of running one or multiple containers
+![](./architecture.svg)
 
 ---
 
-## Docker architecture
+## Configure Docker locally
 
-- *Registry*: repository of images
-- *Daemon*: service pulling images from registries and instancing containers
-- *Client*: interface towards the daemon
-
-![](https://raw.githubusercontent.com/DanySK/shared-slides/6824b93d3d52b841386a744f57953a73ccb67378/containerization/architecture.svg)
+1. Install Docker
+    + https://docs.docker.com/engine/install/
+    + most commonly available on package managers
+2. \[Linux only\] Add your user to the `docker` group
+    + `sudo usermod -aG docker $USER`
+    + log out and log in again
+3. Enable and start the Docker service 
+    + on most Linux distributions `sudo systemctl enable docker; sudo systemctl start docker`
+    + on MacOS and Windows, start the Docker Desktop application
+4. Test your installation
+    + `docker run hello-world`
+5. Explore admissible sub-commands with `docker --help`
+    + general command structure `docker <resource> <command> <options> <args>`
+        * sometimes, when it's obvious, `<resource>` can be omitted
 
 ---
 
-## Running docker containers
+## Running containers
 
-1. Install docker
-2. Add your user to the `docker` group
-3. Enable the docker service (on most Linux distributions `systemctl start docker`)
-4. Pull an image: `docker pull adoptopenjdk`
-5. Run a container! `docker run adoptopenjdk`
+1. Pull an image: `docker pull adoptopenjdk`
+2. Run a container! `docker run adoptopenjdk`
 
-Every container provides a *default command*, running without options runs such default in a *non-interactive* terminal.
+Every image provides a *default command*, running without options runs such default in a *non-interactive* terminal.
 
 Running in interactive mode can be achieved with the `-i` option
 
-Running a custom command can be achieved with writing the command after the image name
+Running a custom command *inside the container* can be achieved with writing the command after the image name
 * e.g., `docker run -i adoptopenjdk bash`
 * parameters for the custom command can follow
-* use the `t` option to run in a *pseudo-tty*
+* use the `t` option to run in a *pseudo-tty* (always use it whenever you use `-i`)
 * use the `--rm` to remove the container after use
 
 ---
 
 ## Interaction with the outside world
 
-A docker container runs *in isolation*.
+A docker container runs *in isolation*, w.r.t. the host and other containers.
 
 Environment variables, network ports, and file system folders are **not** shared.
 
-Sharing must be explicit and requires options to be specified
+Sharing must be explicit and requires options to be specified after `docker run`:
 
 * Passing environment variables: `-e <name>=<value>`
 * Mounting volumes: `-v <host>:<guest>:<options>`
-    * `<host>` is the path on the host system
-    * `<guest>` is the location where it will be mounted on the guest
+    * `<host>` is the path (or volume name) on the host system
+    * `<guest>` is the location where it will be mounted on the container
     * `<options>` can be optionally specified as mount options (e.g., `rw`, `ro`)
 * Publishing ports: `-p <host>:<guest>`
     * `<host>` is the port on the host system
@@ -430,9 +452,9 @@ The subcommand `image` allows for running maintenance tasks, e.g.
 
 ---
 
-## Creating docker images
+## Creating Docker images
 
-Docker images are written in a *Dockerfile*
+Docker images are written in a `Dockerfile`
 
 Every command inside a Dockerfile generates a new *layer*
 
@@ -448,16 +470,59 @@ Changes to a layer do not invalidate previous layers
 
 ```dockerfile
 # Pulls an image from docker hub with this name. Alternatively, "scratch" can be used for an empty container
-FROM manjarolinux/base 
+FROM alpine:latest
 # Runs a command
-RUN pacman -Sy --noconfirm gnupg archlinux-keyring manjaro-keyring
-# Copies a file from the local folder into the image
-COPY makepkg.conf /etc/makepkg.conf
+RUN apk update; apk add nodejs npm
+# Copies a file/directory from the host into the image
+COPY path/to/my/nodejs/project /my-project
+# Sets the working directory
+WORKDIR /my-project
+# Runs a command
+RUN npm install
 # Adds a new environment variable
-ENV GEM_HOME=/rubygems/bin
+ENV SERVICE_PORT=8080
+# Exposes a port
+EXPOSE 8080
 # Configures the default command to execute
-CMD bash
+CMD node index.js
 ```
+
+to be built by means of the command: `docker build -t PATH`
+- `PATH` is the host path containing the `Dockerfile`
+
+---
+
+## Layers and caching (pt. 1)
+
+Every line in a `Dockerfile` generates a new layer:
+
+![](./layers-1.png)
+
+A layer is a *diff* w.r.t. the previous one
+
+In other words, Docker keeps track of what information is added to the image at each step
+
+---
+
+## Layers and caching (pt. 2)
+
+When a `Dockerfile` is built, Docker checks whether the layer has already been built in the recent past
+
+If so, it reuses the cached layer, and skips the execution of the corresponding command
+
+![](./layers-2.png)
+
+---
+
+## Layers and caching (pt. 3)
+
+When the container is run, the images layers are `read-only`, and the container has a `read-write` layer on top of them
+
+![](./rw-layer.png)
+
+So, when a container is stopped, the read-write layer is discarded, and the image layers are kept
+
+In this way, the _space occupied_ by the container is _minimal_
 
 ---
 
@@ -470,14 +535,14 @@ The easiest way to do so is assigning tags at *build time* with the `-t` options
 The option can be repeated multiple times to make multiple tags
 
 ```bash
-docker build -t "myImage:latest" -t "myImage:0.1.0"
+docker build -t "myImage:latest" -t "myImage:0.1.0" PATH
 ```
 
 `latest` is usually used to identify the most recent version of some image
 
 ---
 
-## Publishing docker images
+## Publishing Docker images
 
 Images get published in *registries*
 
@@ -493,7 +558,7 @@ Once done, publication is performed via `push`:
 
 ---
 
-## Building docker images in CI
+## Building Docker images in CI
 
 Of course, as any other software, *custom docker images should get built in CI*
 
@@ -501,4 +566,19 @@ Several integrators use containers as build environments: it is possible to *bui
 
 More in general, there is *no inherent limit to nesting containers*
 
+For instance:
+* you may run DIND (Docker-in-Docker) via: `docker run --privileged --rm -it docker:dind`
+* you may use the Docker CLI in a container: `docker run -it --rm docker:cli`
+
+---
+
+## Volumes
+
+TBD
+
+---
+
+### Networks
+
+TBD
 
