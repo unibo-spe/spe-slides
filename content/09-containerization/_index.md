@@ -400,6 +400,11 @@ __Docker__: the most famous container technology, actually consisting of several
     + general command structure `docker <resource> <command> <options> <args>`
         * sometimes, when it's obvious, `<resource>` can be omitted
 
+<br/>
+
+> Subsequent examples work on Linux, but they should work on any platform
+> + provided that a `bash` or `zsh` shell is available
+
 ---
 
 ## Running containers
@@ -1121,3 +1126,192 @@ Let's create a non-trivial scenario with 2 container attached to the same networ
     CONTAINER ID   IMAGE        COMMAND                  CREATED         STATUS         PORTS                                       NAMES
     f034da93c476   my-service   "/bin/sh -c 'npm run…"   4 seconds ago   Up 3 seconds   0.0.0.0:8888->8080/tcp, :::8888->8080/tcp   bold_booth
     ```
+
+---
+
+# Orchestration
+
+---
+
+## Do we need orchestration?
+
+> Operating containers manually is error prone and low-level
+
+- Docker Compose lets you increase the __abstraction level__ on the __single machine__
+
+- Starting from a __user-provided specification__ of a __stack__...
+    + i.e. a set of containers, their images, their environment, their dependencies
+
+- ... Docker Compose can:
+    + __orderly start__ the containers up
+    + while _creating_ all required _networks_ and _volumes_
+    + and __gracefully shut__ them __down__ upon need
+
+- The only thing the user must do is: creating a `docker-compose.yml` file
+    + a [YAML](https://yaml.org/) file describing the stack
+    + following the [official specification](https://docs.docker.com/compose/compose-file/)
+
+---
+
+## Docker Compose syntax by example (pt. 1)
+
+{{< figure src="./compose-example.png" width="50%" >}}
+
+The example application is composed of the following parts:
+
+- 2 services, backed by Docker images: `webapp` and `database`
+- 1 secret (HTTPS certificate), injected into the frontend
+- 1 secret (DB credentials), injected into both services
+- 1 configuration (HTTP), injected into the frontend
+- 1 persistent volume, attached to the backend
+- 2 networks
+
+---
+
+## Docker Compose syntax by example (pt. 2)
+
+
+{{< multicol >}}
+{{% col %}}
+```yaml
+version: 3.9                    # version of the specification
+
+services:                       # section defining services composing the stack
+  frontend:                     # name of the first service (frontend)
+    image: example/webapp       # image to use for the first service
+    depends_on:                 # section for def
+       - backend                # this should be started AFTER the backend service is healthy
+    environment:                # section for environment variables
+      SERVICE_PORT: 8043        # env var dictating the port the service will listen on
+      DB_HOST: backend          # env variable dictating the hostname of the backend service 
+                                # (equal to the service name)
+      DB_PORT: 3306             # env variable dictating the port the backend service will listen on
+    ports:                      # section for ports to be exposed / mapped on the host
+      - "443:8043"              # exposing port 8043 of the container as port 443 of the host
+    networks:                   # section for networks to be attached to
+      - front-tier              # attaching the service to the front-tier network (referenced by name)
+      - back-tier               # attaching the service to the back-tier network (referenced by name)
+    # configs are files to be copied in the service' container, without needing to create a new image
+    configs:                    # section for configuration files to be injected in the container
+      - source: httpd-config    # reference to the configuration file (by name)
+        target: /etc/httpd.conf # path on the container where the config file will be mounted as read-only
+    # secrets are reified as read-only files in /run/secrets/<secret_name>
+    secrets:                    # section for secrets to be injected in the service' container
+      - server-certificate      # reference to the secret (by name)
+      - db-credentials          # reference to the secret (by name)
+    
+      # assumption: image example/webapp is programmed to look in /run/secrets/<secret_name> 
+      # and load the secrets therein contained
+
+  backend:                      # name of the second service (backend)
+    image: example/database     # image to use for the second service
+    # this is a command to be run inside the service to check whether it is healthy
+    healthcheck:
+      test: ["CMD", "command", "which", "should", "fail", "if", "db not healthy"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    volumes:                    # section for volumes to be attached to the container
+      - db-data:/etc/data       # the volume db-data (reference by name) will be mounted 
+                                # as read-write in /etc/data
+    networks:
+      - back-tier               # attaching the service to the back-tier network (referenced by name)
+    secrets:
+      - db-credentials          # reference to the secret (by name)
+```
+{{% /col %}}
+{{% col %}}
+```yaml
+volumes:                   # section for volumes to be created in the stack
+  db-data:                 # name of the volume, to be referenced by services
+    driver_opts:
+      type: "none"
+      o: "bind"            # this volume is a bind mount
+      device: "/path/to/db/data/on/the/host"
+
+configs:                   # section for configuration files to be created in the stack
+  httpd-config:            # name of the configuration file, to be referenced by services
+    file: path/to/http/configuration/file/on/the/host
+
+secrets:                   # section for secrets to be created in the stack
+  server-certificate:      # name of the secret, to be referenced by services
+    file: path/to/certificate/file/on/the/host
+  db-credentials:          # name of the secret, to be referenced by services
+    external: true         # this secret is not created by the stack, but it is expected to be created by the user
+    name: my-db-creds      # name of the secret, as created by the user 
+
+networks:
+  # The presence of these objects is sufficient to define them
+  front-tier: {}
+  back-tier: {}
+```
+{{% /col %}}
+{{< /multicol >}}
+
+---
+
+## Docker Compose commands
+
+- See all possibilities with `docker compose --help`
+
+- `docker compose up` starts the stack
+    + if the stack is not present, it is created
+    + if the stack is already present, it is updated
+    + if the stack is already present, and it is up-to-date, nothing happens
+    + interesting optional flags (see all with `--help`)
+        * `-d` (_detached mode_): run containers in the background
+        * `--wait` wait for services to be running or healthy (implies detached mode)
+
+- `docker compose down` stops the stack
+    + if the stack is not present, nothing happens
+    + if the stack is present, it is stopped
+    + interesting optional flags (see all with `--help`)
+        * `--remove-orphans` remove containers for services not defined in the Compose file (e.g. residuals from previous versions)
+        * `-v` remove named volumes declared in the "volumes" section of the Compose file and anonymous volumes attached to containers
+
+> All commands assume a `docker-compose.yml` file is present in the __current working directory__
+
+---
+
+## Working example
+
+```yaml
+version: "3.9"
+    
+services:
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: always
+    networks:
+      - back-tier
+    environment:
+      MYSQL_ROOT_PASSWORD: "..Password1.."
+      MYSQL_DATABASE: wordpress_db
+      MYSQL_USER: wordpress_user
+      MYSQL_PASSWORD: ",,Password2,,"
+    
+  wordpress:
+    depends_on:
+      - mysql
+    image: wordpress:latest
+    volumes:
+      - wordpress_data:/var/www/html
+    ports:
+      - "8000:80"
+    restart: always
+    networks:
+      - back-tier
+    environment:
+      WORDPRESS_DB_HOST: mysql:3306
+      WORDPRESS_DB_USER: wordpress_user
+      WORDPRESS_DB_PASSWORD: ",,Password2,,"
+      WORDPRESS_DB_NAME: wordpress_db
+volumes:
+  mysql_data: {}
+  wordpress_data: {}
+networks:
+  back-tier: {}
+```
