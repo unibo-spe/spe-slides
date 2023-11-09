@@ -2175,3 +2175,9 @@ Example scans:
 In `settings.gradle.kts`:
 
 {{< github owner="DanySK" repo="Template-for-Gradle-Plugins" path="settings.gradle.kts" from=6 to=12 >}}
+
+---
+
+# Build Automation
+
+{{% import path="reusable/header.md" %}}
