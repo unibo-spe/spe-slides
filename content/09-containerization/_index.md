@@ -1251,6 +1251,214 @@ networks:
 
 ---
 
+## Orchestration-level notions (pt. 1)
+
+### Stacks
+
+A __stack__ is a set of _inter-related_ services, networks, volumes, secrets, configs
+- all of which are defined in a single `docker-compose.yml` file
+- all of which are created / deleted / updated / started / stopped __together__
+
+### Services
+
+From [Docker Compose documentation](https://docs.docker.com/compose/compose-file/05-services/):
+- a __service__ is an _abstract definition_ of a computing resource within an _application_ which can be __scaled__ or __replaced__ independently from other components
+- they are backed by a _set of_ __containers__, run by the orchestrator according to __replication requirements__ and __placement constraints__
+- they are backed by containers, hence they are defined by an __image__ and set of __runtime arguments__
+    + all containers within a service are _identically_ created with these arguments
+- they are declared in the `services` section of the `docker-compose.yml` file
+    + for each service, _attributes_ may be spiecified, _overriding_ the default behaviour of the image
+    + further attributes may be specified to declare _dependencies_ on other services, volumes, networks, and so on
+        * these must be declared in the same `docker-compose.yml` file
+
+---
+
+## Orchestration-level notions (pt. 2)
+
+### Configs
+
+From [Docker Compose documentation](https://docs.docker.com/compose/compose-file/08-configs/):
+- __configs__ are _files_ containing _configuration data_ that can be _injected_ into services upon instantiation
+- they allow users to configure their services' behaviour _without_ the need to __(re)build a (new) image__
+- they are _read-only_ files, mounted into services' containers, similarly to _read-only_ __volumes__
+- they are declared in the `configs` section of the `docker-compose.yml` file
+- one config may either be created __stack-wise__ out of a __local file__ from the _host_...
+    ```yaml
+    configs:
+        config_name:
+            file: /path/to/config/on/the/host
+    ```
+- ... or it can be __manually created__ by means of the `docker config create [OPTIONS] NAME PATH|-` command
+    + in this case they can be referenced in several `docker-compose.yml` files:
+        ```yaml
+        configs:
+            config_name:
+                external: true
+                name: "the name used when creating the config"
+                # this may be different than config_name
+        ```
+
+- in any case, the config's mount point should be specified at the service level:
+    ```yaml
+    services:
+        my-service:
+            ...
+            configs:
+                - source: config_name # reference to the configs section (by YAML name)
+                  target: /path/to/config/on/the/container
+    ```
+
+---
+
+## Orchestration-level notions (pt. 3)
+
+### Secrets
+
+From [Docker Compose documentation](https://docs.docker.com/compose/compose-file/09-secrets/):
+- __secrets__ are configs containing sensitive data that should be _kept secret_
+- put it simply, Docker makes it harder to inspect the content of secrets both on the host
+- one secret may be either be created __stack-wise__ out of a __local file__ or an __environment variable__ from the _host_...
+    ```yaml
+    secrets:                                            secrets:
+        secret_name:                                        secret_name:
+            file: "/path/to/secret/on/the/host"                 environment: "NAME_OF_THE_VARIABLE_ON_THE_HOST"
+    ```
+- ... or it can be __manually created__ by means of the `docker secret create [OPTIONS] NAME PATH|-` command
+    + in this case they can be referenced in several `docker-compose.yml` files:
+        ```yaml
+        secrets:
+            secret_name:
+                external: true
+                name: "the name used when creating the secret"
+                # this may be different than secret_name
+        ```
+
+- in any case, the secret's mount point should be specified at the service level:
+    ```yaml
+    services:
+        my-service:
+            ...
+            secrets:
+                # short syntax, mounted on /run/secrets/<secret_name>
+                - secret_name # reference to the secrets section (by YAML name)
+                # long syntax
+                - source: secret_name # reference to the secrets section (by YAML name)
+                    target: /path/to/secret/on/the/container
+    ```
+
+---
+
+## Orchestration-level notions (pt. 4)
+
+### About secrets and configs
+
+Important remark:
+- in the eyes of the container, secrets and configs are just _read-only files_ mounted on some `PATH`
+- the containerised application is responsible for reading the secrets / configs from the mounted `PATH`
+- when __using__ _somebody else's image_, you may _expect_ the image to be programmed to read secrets / configs from __customisable paths__
+- when __creating__ your own image, you _should_ make the application able to read secrets / configs from __customisable paths__
+    + e.g. via environment variables
+
+---
+
+## Orchestration-level notions (pt. 5)
+
+### Volumes
+
+From [Docker Compose documentation](https://docs.docker.com/compose/compose-file/07-volumes/):
+- volumes in compose are no different than the ones we have already discussed
+- they are declared in the `volumes` section of the `docker-compose.yml` file
+- one volume may be created __stack-wise__ out of a __local folder__ from the _host_...
+    ```yaml
+    volumes:
+        volume_name:
+            driver: local
+            driver_opts:
+                type: "none"
+                o: "bind"
+                device: "/path/to/folder/on/the/host"
+    ```
+- ... or maybe some remote folder exposed by some [NFS](https://en.wikipedia.org/wiki/Network_File_System) service on the network
+    ```yaml
+    volumes:
+        volume_name:
+            driver: local
+            driver_opts:
+                type: "nfs"
+                # meaning of options: https://wiki.archlinux.org/title/NFS#Mount_using_/etc/fstab
+                o: "addr=NFS_SERVER_ADDRESS,nolock,soft,rw" # cf. nfs
+                device: ":/path/on/the/nfs/server/"
+
+---
+
+## Orchestration-level notions (pt. 6)
+
+### Volumes (cont'd)
+
+- ... or it can be __manually created__ by means of the `docker volume create [OPTIONS] NAME` command
+    + in this case they can be referenced in several `docker-compose.yml` files:
+        ```yaml
+        volumes:
+            volume_name:
+                external: true
+                name: "the name used when creating the volume"
+                # this may be different than volume_name
+        ```
+
+- in any case, the volume's mount point should be specified at the service level:
+    ```yaml
+    services:
+        my-service:
+            ...
+            volumes:
+                - type: volume
+                  source: volume_name # reference to the volumes section (by YAML name)
+                  target: /path/to/folder/on/the/container
+                # alternatively, one may define a service-specific bind mount on the fly
+                - type: bind
+                  source: /path/to/folder/on/the/host
+                  target: /path/to/folder/on/the/container
+    ```
+
+---
+
+## Orchestration-level notions (pt. 7)
+
+### Networks
+
+From [Docker Compose documentation](https://docs.docker.com/compose/compose-file/06-networks/):
+- networks in compose are no different than the ones we have already discussed
+- they are declared in the `networks` section of the `docker-compose.yml` file
+- one network may be created __stack-wise__ out of a __local folder__ from the _host_...
+    ```yaml
+    networks:
+        network_name:
+            driver: overlay # default choice in swarm
+            driver_opts: 
+                # many options, covering many advanced use cases for network engineering
+    ```
+
+- ... or it can be __manually created__ by means of the `docker network create [OPTIONS] NAME` command
+    + in this case they can be referenced in several `docker-compose.yml` files:
+        ```yaml
+        networks:
+            network_name:
+                external: true
+                name: "the name used when creating the network"
+                # this may be different than network_name
+        ```
+
+- in any case, the network's mount point should be specified at the service level:
+    ```yaml
+    services:
+        my-service:
+            ...
+            networks:
+                - network_name # reference to the networks section (by YAML name)
+    ```
+
+---
+
 ## Docker Compose commands
 
 - See all possibilities with `docker compose --help`
