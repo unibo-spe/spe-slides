@@ -1482,16 +1482,20 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
 
 ---
 
-## Working example
+## Working example (pt. 1)
+
+{{< multicol >}}
+{{% col %}}
 
 ```yaml
 version: "3.9"
     
 services:
-  mysql:
-    image: mysql:5.7
+  db:
+    image: mariadb:latest
+    command: '--default-authentication-plugin=mysql_native_password'
     volumes:
-      - mysql_data:/var/lib/mysql
+      - db_data:/var/lib/mysql
     restart: always
     networks:
       - back-tier
@@ -1500,10 +1504,17 @@ services:
       MYSQL_DATABASE: wordpress_db
       MYSQL_USER: wordpress_user
       MYSQL_PASSWORD: ",,Password2,,"
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--su-mysql", "--connect", "--innodb_initialized" ]
+      start_period: 1m
+      start_interval: 10s
+      interval: 1m
+      timeout: 5s
+      retries: 3
     
   wordpress:
     depends_on:
-      - mysql
+      - db
     image: wordpress:latest
     volumes:
       - wordpress_data:/var/www/html
@@ -1513,13 +1524,150 @@ services:
     networks:
       - back-tier
     environment:
-      WORDPRESS_DB_HOST: mysql:3306
+      WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_USER: wordpress_user
       WORDPRESS_DB_PASSWORD: ",,Password2,,"
       WORDPRESS_DB_NAME: wordpress_db
 volumes:
-  mysql_data: {}
+  db_data: {}
   wordpress_data: {}
 networks:
   back-tier: {}
 ```
+{{% /col %}}
+{{% col %}}
+> __Beware__: this is unsafe as passwords are in clear text!
+
+<br/>
+
+### TODO
+
+1. Copy-paste this code in a file named `your-dir/docker-compose.yml` 
+
+2. `cd your-dir`
+
+3. `docker compose up` and then inspect the logs
+
+
+5. open your browser and browse to <http://localhost:8000>
+
+6. `docker ps` and have a look to the running containers
+    + and `docker network ls` 
+    + and `docker volume ls`
+
+7. Press `Ctrl+C` to stop the stack
+
+8. `docker compose down --volumes` to delete the stack
+
+
+{{% /col %}}
+{{< /multicol >}}
+
+---
+
+## Working example (pt. 2)
+
+- Example of `docker compose up` logs:
+    ```
+    docker compose up
+    [+] Building 0.0s (0/0) docker:default
+    [+] Running 5/5
+    ✔ Network your-dir_back-tier        Created  0.1s 
+    ✔ Volume "your-dir_wordpress_data"  Created  0.1s 
+    ✔ Volume "your-dir_db_data"         Created  0.0s 
+    ✔ Container your-dir-db-1           Created  0.8s 
+    ✔ Container your-dir-wordpress-1    Created  0.9s 
+    Attaching to db-1, wordpress-1
+    db-1         | 2023-11-23 14:24:57+00:00 [Note] [Entrypoint]: Entrypoint script for MariaDB Server 1:11.2.2+maria~ubu2204 started.
+    db-1         | 2023-11-23 14:24:57+00:00 [Note] [Entrypoint]: Switching to dedicated user 'mysql'
+    db-1         | 2023-11-23 14:24:57+00:00 [Note] [Entrypoint]: Entrypoint script for MariaDB Server 1:11.2.2+maria~ubu2204 started.
+    db-1         | 2023-11-23 14:24:57+00:00 [Note] [Entrypoint]: Initializing database files
+    wordpress-1  | WordPress not found in /var/www/html - copying now...
+    wordpress-1  | Complete! WordPress has been successfully copied to /var/www/html
+    wordpress-1  | No 'wp-config.php' found in /var/www/html, but 'WORDPRESS_...' variables supplied; copying 'wp-config-docker.php' (WORDPRESS_DB_HOST WORDPRESS_DB_NAME WORDPRESS_DB_PASSWORD WORDPRESS_DB_USER)
+    wordpress-1  | AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.22.0.3. Set the 'ServerName' directive globally to suppress this message
+    wordpress-1  | AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.22.0.3. Set the 'ServerName' directive globally to suppress this message
+    wordpress-1  | [Thu Nov 23 14:24:58.289485 2023] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.56 (Debian) PHP/8.0.30 configured -- resuming normal operations
+    wordpress-1  | [Thu Nov 23 14:24:58.289516 2023] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+    db-1         | 2023-11-23 14:24:58 0 [Warning] 'default-authentication-plugin' is MySQL 5.6 / 5.7 compatible option. To be implemented in later versions.
+    ...
+    ```
+
+    + notice that the outputs of the two containers are interleaved
+
+- Example of `docker ps` logs:
+    ```
+    CONTAINER ID   IMAGE              COMMAND                  CREATED         STATUS                   PORTS                                   NAMES
+    4691a9641135   wordpress:latest   "docker-entrypoint.s…"   9 minutes ago   Up 9 minutes             0.0.0.0:8000->80/tcp, :::8000->80/tcp   your-dir-wordpress-1
+    314feb9d42ab   mariadb:latest     "docker-entrypoint.s…"   9 minutes ago   Up 9 minutes (healthy)   3306/tcp                                your-dir-db-1
+    ```
+
+- Example of `docker network ls` logs:
+    ```
+    NETWORK ID     NAME                 DRIVER    SCOPE
+    b304d1ae5404   bridge               bridge    local
+    1bb39315ff98   host                 host      local
+    03c8700dee6a   none                 null      local
+    470d81d26296   your-dir_back-tier   bridge    local
+    ```
+
+---
+
+## Working example (pt. 3)
+
+{{< multicol >}}
+{{% col %}}
+
+### Let's make the stack more secure
+
+1. Let's create a file containing the DB root password, say `db-root-password.txt`:
+    * `echo -n "..Password1.." > your-dir/db-root-password.txt`
+
+2. Let's create a file containing the DB user password, say `db-password.txt`:
+    * `echo -n ",,Password2,," > your-dir/db-password.txt`
+
+3. Let's edit the stack as described on the right
+
+{{% /col %}}
+{{% col %}}
+
+```yaml
+version: "3.9"
+    
+services:
+  db:
+    ...
+    environment:
+      ...
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+    ...    
+    secrets:
+      - db_root_password
+      - db_password
+    
+  wordpress:
+    ...
+    environment:
+      ...
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_password
+    ...
+    secrets:
+      - db_password
+
+volumes:
+  db_data: {}
+  wordpress_data: {}
+
+networks:
+  back-tier: {}
+
+secrets:
+  db_password:
+    file: db_password.txt
+  db_root_password:
+    file: db_root_password.txt
+```
+
+{{% /col %}}
+{{< /multicol >}}
