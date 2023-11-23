@@ -1671,3 +1671,197 @@ secrets:
 
 {{% /col %}}
 {{< /multicol >}}
+
+---
+
+## Docker Compose for testing
+
+- Docker Compose is also useful for software __testing__
+
+- E.g. whenever the system under test relied on some infrastructural component
+    * e.g. a database, a message broker, a cache, etc.
+
+- Usual workflow for testing:
+    1. __start__ the component
+    2. __run__ the system under test
+    3. __stop__ the component
+
+- Docker Compose may be coupled with some __test framework__ of choice to __automate__ the process
+
+---
+
+## Example: Docker Compose for testing + JUnit (pt. 1)
+
+### Domain model
+
+{{< plantuml >}}
+interface Customer {
+    + id: CustomerID
+    + firstName: String 
+    + lastName: String
+    + birthDate: LocalDate
+    ...
+    + name: String
+    + isPerson: Boolean
+    + isCompany: Boolean
+}
+note bottom: Entity
+
+interface CustomerID {
+    + value: Any
+}
+note right: Value Object
+
+interface TaxCode {
+    + value: String
+}
+note left: Value Object
+
+interface VatNumber {
+    + value: Long
+}
+note right: Value Object
+
+VatNumber -d-|> CustomerID
+TaxCode -d-|> CustomerID
+
+Customer *-r- CustomerID
+
+interface CustomerRepository {
+    + findById(id: CustomerID): Iterable<Customer>
+    + findByName(name: String): Iterable<Customer>
+    + add(customer: Customer)
+    + update(oldId: CustomerID, customer: Customer)
+    + remove(id: CustomerID)
+}
+note left: Repository
+
+CustomerRepository o-r- Customer
+
+{{< /plantuml >}}
+
+---
+
+## Example: Docker Compose for testing + JUnit (pt. 2)
+
+### Implementation details
+
+{{< plantuml >}}
+
+interface CustomerRepository {
+    + findById(id: CustomerID): Iterable<Customer>
+    + findByName(name: String): Iterable<Customer>
+    + add(customer: Customer)
+    + update(oldId: CustomerID, customer: Customer)
+    + remove(id: CustomerID)
+}
+
+class SqlCustomerRepository {
+    - connections: ConnectionFactory
+    - tableName: String
+    + createTable(replaceIfPresent: Boolean = false)
+}
+
+SqlCustomerRepository --|> CustomerRepository
+
+package "db" {
+    interface ConnectionFactory {
+        + connect(): Connection
+    }
+    interface MariaDB {
+        + database: String
+        + username: String
+        + password: String
+        + host: String
+        + port: Int
+    }
+    class MariaDBConnection
+    MariaDBConnection --|> MariaDB
+    MariaDBConnectionFactory --|> ConnectionFactory
+    MariaDBConnectionFactory ..> MariaDBConnection: creates
+}
+
+SqlCustomerRepository .r.> MariaDBConnectionFactory: uses
+
+package "java sql" {
+    interface Connection
+    ConnectionFactory ..> Connection: creates
+    MariaDBConnection --|> Connection
+}
+
+{{< /plantuml >}}
+
+---
+
+## Example: Docker Compose for testing + JUnit (pt. 3)
+
+{{< multicol >}}
+{{% col %}}
+```kotlin
+class TestMariaDBCustomerRepository {
+
+    companion object {
+        @BeforeClass @JvmStatic fun setUpMariaDb() { TODO("start MariaDB via Docker Compose") }
+        @AfterClass @JvmStatic fun tearDownMariaDb() { TODO("stop MariaDB via Docker Compose") }
+    }
+
+    private val connectionFactory = MariaDBConnectionFactory(DATABASE, USER, PASSWORD, HOST, PORT)
+    private lateinit var repository: SqlCustomerRepository
+
+    @Before
+    fun createFreshTable() {
+        repository = SqlCustomerRepository(connectionFactory, TABLE)
+        repository.createTable(replaceIfPresent = true)
+    }
+
+    private val taxCode = TaxCode("CTTGNN92D07D468M")
+    private val person = Customer.person(taxCode, "Giovanni", "Ciatto", LocalDate.of(1992, 4, 7))
+    private val person2 = person.clone(birthDate = LocalDate.of(1992, 4, 8), id = TaxCode("CTTGNN92D08D468M"))
+    private val vatNumber = VatNumber(12345678987L)
+    private val company = Customer.company(vatNumber, "ACME", "Inc.", LocalDate.of(1920, 1, 1))
+
+    @Test
+    fun complexTestWhichShouldActuallyBeDecomposedInSmallerTests() {
+        assertEquals(
+            expected = emptyList(),
+            actual = repository.findById(taxCode),
+        )
+        assertEquals(
+            expected = emptyList(),
+            actual = repository.findById(vatNumber),
+        )
+        repository.add(person)
+        repository.add(company)
+        assertEquals(
+            expected = listOf(person),
+            actual = repository.findById(taxCode),
+        )
+        assertEquals(
+            expected = listOf(company),
+            actual = repository.findById(vatNumber),
+        )
+        repository.remove(vatNumber)
+        repository.update(taxCode, person2)
+    }
+}
+```
+
+{{% /col %}}
+{{% col %}}
+- Unit thest for the `SqlCustomerRepository` class
+
+- Requires an instance of MariaDB to be tested
+
+- Let's use Docker Compose to start / stop MariaDB
+
+- Try to complete the implementation of the `setUpMariaDb` and `tearDownMariaDb` methods
+    + use Java's `ProcessBuilder`s to call `docker compose` commands
+
+- Template for Docker Compose files available among test resources
+    + [`docker-compose.yml.template`](https://github.com/unibo-spe/docker-compose-testing/blob/exercise/src/test/resources/it/unibo/spe/compose/docker-compose.yml.template)
+        * does it require edits? why?
+
+- Code for the exercise:
+    * https://github.com/unibo-spe/docker-compose-testing
+{{% /col %}}
+{{< /multicol >}}
