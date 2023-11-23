@@ -1131,6 +1131,8 @@ Let's create a non-trivial scenario with 2 container attached to the same networ
 
 # Orchestration
 
+## With Docker Compose
+
 ---
 
 ## Do we need orchestration?
@@ -1865,3 +1867,204 @@ class TestMariaDBCustomerRepository {
     * https://github.com/unibo-spe/docker-compose-testing
 {{% /col %}}
 {{< /multicol >}}
+
+---
+
+# Orchestration
+
+## With Docker Swarm
+
+---
+
+## Building the cluster (theory)
+
+- In a Docker Swarm cluster, there are two kinds of nodes:
+    + __manager__ nodes, who coordinate the cluster by means of the [RAFT consensus protocol](https://docs.docker.com/engine/swarm/raft/)
+        * they may also act as worker nodes
+    + __worker__ nodes, who simply run containers
+
+<br/>
+
+- To set up a cluster, one must:
+    1. __initialise__ Swarm mode on _one node of choice_
+        + that will become the first __manager__ node
+    2. optionally, let other nodes __join__ the cluster as worker nodes
+    3. optionally, __elevate__ some worker nodes to manager nodes
+        + this operation can _only_ be done by a client connected to some _manager_ node
+        + it is better to __multiple__ manager nodes for redundancy
+        + it is better to have an __odd__ number of manager nodes
+            * e.g. 3, 5, 7, etc.
+
+---
+
+## Building the cluster (practice)
+
+1. On one node running the Docker deamon (say, the teacher's machine), initialise Swarm mode as follows:
+    * `docker swarm init`
+    * this will output a command to be run on other nodes to join the cluster:
+        ```
+        Swarm initialized: current node (<NODE_ID>) is now a manager.
+
+        To add a worker to this swarm, run the following command:
+
+            docker swarm join --token <SECRET_TOKEN> <NODE_ADDRESS>:2377
+
+        To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+        ```
+
+2. On other nodes running the Docker daemon (say students' machines), initialise Swarm mode as follows:
+    * `docker swarm join --token <SECRET_TOKEN> <NODE_ADDRESS>:2377`
+        + where `SECRET_TOKEN` and `NODE_ADDRESS` are the ones provided by the `docker swarm init` command above
+
+3. On the master node, one may inspect the node composition of the cluster via `docker node ls`
+    ```
+    ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+    4q3q3q3q3q3q3q3q3q3q3q3q3q *  node-1              Ready               Active              Leader              24.0.7
+    5q4q4q4q4q4q4q4q4q4q4q4q4q    node-2              Ready               Active                                  24.0.7
+    6q5q5q5q5q5q5q5q5q5q5q5q5q    node-3              Ready               Active                                  24.0.7
+    ```
+
+4. The master node may __promote__ other nodes to manager nodes via `docker node promote <NODE_ID>`...
+    * and it may __demote__ manager nodes to worker nodes via `docker node demote <NODE_ID>`
+    * it also may __remove__ nodes from the cluster via `docker node rm <NODE_ID>`
+
+6. Whenever done with this lecture, one may leave the Swarm via `docker swarm leave --force`
+    + _recall to do this after the lecture_, otherwise you won't be able to use Swarm at home!
+
+---
+
+## Stacks on Swarms
+
+- One may deploy a stack on a Swarm cluster via `docker stack deploy -c <COMPOSE_FILE_PATH> <STACK_NAME>`
+    + where `COMPOSE_FILE_PATH` is the path to a `.yml` file following the Docker Compose syntax
+    + and `STACK_NAME` is the name of the stack to be deployed
+
+- The command must be run on a client connected to some __manager__ node
+    + try to run it on a _worker_ node and see what happens
+    + try to run it on a _manager_ node when _50% of the nodes are down_ and see what happens
+
+- Other operations one may do on stacks (via a master node):
+    + `docker stack ls` to list stacks
+    + `docker stack ps <STACK_NAME>` to list containers in a stack
+    + `docker stack services <STACK_NAME>` to list services in a stack
+    + `docker stack rm <STACK_NAME>` to remove a stack
+
+- Semantics of stack _deployment_ on Swarms is __different than Docker Compose__:
+    + different services may be __allocated__ on different nodes
+    + services may be __replicated__ on different nodes
+    + networks must rely on the `overlay` driver, to support inter-node communication among containers
+
+---
+
+## Stack Deploy Example: [Portainer](https://www.portainer.io/)
+
+{{< multicol >}}
+{{% col %}}
+```yaml
+version: '3.2'
+
+services:
+  agent:
+    image: portainer/agent:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+    networks:
+      - agents_network
+    deploy:
+      mode: global # i.e., one (and only one) replica per node
+
+  webservice:
+    image: portainer/portainer-ce:latest
+    command: -H tcp://tasks.agent:9001 --tlsskipverify
+    ports:
+      - "443:9443"
+      - "9000:9000"
+      - "8000:8000"
+    volumes:
+      - portainer_data:/data
+    networks:
+      - agents_network
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: 
+          - node.role == manager
+
+networks:
+  agents_network:
+    driver: overlay
+    attachable: true
+
+volumes:
+  portainer_data:
+```
+{{% /col %}}
+{{% col %}}
+- Portainer is a Web-based dashboard for cluster administration
+    * it works with both Docker Swarm and Kubernetes
+
+- It is composed of two services:
+    * `webservice`, the actual dashboard
+    * `agent`, a service running on each node, which exposes the Docker API to the `webservice` service
+
+<br/>
+
+1. Let's save the code on the left in a file named `portainer.yml`
+
+2. Let's deploy the stack via `docker stack deploy -c portainer.yml portainer`
+
+3. Let's then browse to <https://localhost> on some master node
+{{% /col %}}
+{{< /multicol >}}
+
+---
+
+## Portainer's Initial Configuration
+
+{{< figure src="./portainer-setup.png" width="50%" >}}
+
+let's use `software-process-engineering` as password for the `admin` user
+
+---
+
+## Portainer's Home Page
+
+Upon login, one is presented with the _home page_, asking you to select one __enviroment__
++ __environments__ are clusters (one Portainer instance may manage multiple clusters)
+
+{{< figure src="./portainer-hello.png" width="50%" >}}
+
+---
+
+## Portainer's Dashboard
+
+Upon environment selection, one is presented with the _dashboard_, showing the __status of the cluster__
+
+{{< figure src="./portainer-dashboard.png" width="50%" >}}
+
+--- 
+
+## Things to notice via Portainer
+
+After selecting the only environment available, one may observe:
+- which and how many __nodes__ compose the cluster (_Dashboard_ section)
+    + you may use the _cluster visualiser_ to spot your machien in the cluster
+        * (assuming that you managed to join the cluster)
+
+- which __stacks__ are running on the cluster (_Services_ section)
+    + you may observe that the `portainer` stack is running
+
+- which __services__ are running on the cluster (_Services_ section)
+    + you may observe that the `portainer` stack is composed of two services: `agent` and `webservice`
+
+- which __containers__ are running on the cluster (_Containers_ section)
+    + you may observe that the `portainer_agent` service is composed by _one container per node_
+    + you may observe that the `portainer_webservice` service is composed by _one container_ which is _running on some master node_
+
+- which __volumes__ are present on the cluster (_Volumes_ section)
+    + you may observe that the `portainer_portainer_data` volume is present _on the same master node_ of `portainer_webservice`
+
+- which __networks__ are present on the cluster (_Networks_ section)
+    + you may observe that the `portainer_agents_network` network is present, using the `overlay` driver
