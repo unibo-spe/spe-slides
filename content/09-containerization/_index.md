@@ -1933,6 +1933,57 @@ class TestMariaDBCustomerRepository {
 
 ---
 
+## Building the cluster (troubleshooting)
+
+### Things that may go wrong
+
+1. There may be a firewall blocking the communication among nodes
+    * e.g. Windows Defender, the lab's firewall, your home router's firewall, etc.
+    * you may notice the presence of a firewall by the fact that `docker swarm join` hangs or fails with a timeout
+        - in lack of a firewall, the command should succeed or fail almost immediately
+    * troubleshouting:
+        1. identify which and how many firewalls are in place
+        2. ensure that the firewall allows communication for [Docker Swarm ports](https://docs.docker.com/engine/swarm/swarm-tutorial/#open-protocols-and-ports-between-the-hosts)
+            + commonly: `2377/tcp`, `7946/tcp`, `7946/udp`, `4789/udp`
+
+2. You use Docker on _Windows or Mac_, hence the Docker daemon runs on a _virtual machine_
+    * in this chase the IP of the virtual machine is different than the IP of your machine
+    * the `NODE_ADDRESS` in `docker swarm join --token <SECRET_TOKEN> <NODE_ADDRESS>:2377` returned by `docker swarm init` is the IP of the virtual machine
+    * troubleshouting:
+        1. find the actual IP of your machine (e.g. `ipconfig` on Windows, `ifconfig` on Mac), let's call it `ACTUAL_IP`
+        2. configure your host to redirect Swarm traffic received by `ACTUAL_IP` towards `NODE_ADDRESS`
+            + for all ports listed above (`2377`, `7946`, `4789`)
+        3. let other nodes use `ACTUAL_IP` insteaf of `NODE_ADDRESS` in `docker swarm join` when joining the cluster
+
+---
+
+## Troubleshouting example on Windows
+
+### Opening ports on Windows Defender
+
+On an administrator Powershell, run the following commands:
+```powershell
+netsh advfirewall firewall add rule name="Docker Swarm Intra-manager" dir=in action=allow protocol=TCP localport=2377
+netsh advfirewall firewall add rule name="Docker Swarm Overlay Network Discovery TCP" dir=in action=allow protocol=TCP localport=7946
+netsh advfirewall firewall add rule name="Docker Swarm Overlay Network Discovery UDP" dir=in action=allow protocol=UDP localport=7946
+netsh advfirewall firewall add rule name="Docker Swarm Overlay Network Traffic" dir=in action=allow protocol=UDP localport=4789
+```
+
+- this operation should be done on all nodes of the cluster running on Windows
+
+### Forwarding ports on Windows
+
+On an administrator Powershell, run the following commands:
+```powershell
+netsh interface portproxy add v4tov4 listenport=2377 listenaddress=$ACTUAL_IP connectport=2377 connectaddress=$NODE_ADDRESS
+netsh interface portproxy add v4tov4 listenport=7946 listenaddress=$ACTUAL_IP connectport=7946 connectaddress=$NODE_ADDRESS
+netsh interface portproxy add v4tov4 listenport=4789 listenaddress=$ACTUAL_IP connectport=4789 connectaddress=$NODE_ADDRESS
+``` 
+
+- this operation should be done on the very first master node of the cluster, if it's running on Windows
+
+---
+
 ## Stacks on Swarms
 
 - One may deploy a stack on a Swarm cluster via `docker stack deploy -c <COMPOSE_FILE_PATH> <STACK_NAME>`
