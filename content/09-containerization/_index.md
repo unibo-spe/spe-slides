@@ -2119,3 +2119,230 @@ After selecting the only environment available, one may observe:
 
 - which __networks__ are present on the cluster (_Networks_ section)
     + you may observe that the `portainer_agents_network` network is present, using the `overlay` driver
+
+---
+
+## Labelling nodes
+
+> Nodes may be __labelled__ with `key=value` pairs
+
+- Labels may be used to __mark nodes__ with respect to their __properties__
+    + e.g. hardware / software __capabilities__
+        * e.g. `capabilities.cpu=yes`
+        * e.g. `capabilities.web=yes`
+        * e.g. `capabilities.storage=yes`
+
+- This can be done _programmatically_....
+    + e.g. via `docker node update --label-add KEY=VALUE NODE_ID`
+
+- ... or via __Portainer__:
+
+    {{< figure src="./portainer-node-labels.png" width="50%" >}}
+
+- labels can be used to set _placement_ __constraints__ or __preferences__ for services:
+    * placement _constraints_: one service can only be deployed onto nodes with given labels
+    * placement _preferences_: one service's _replicas_ will be _spreaded_ among nodes with given labels
+
+---
+ 
+## Example of placement constraints
+
+{{< multicol >}}
+{{% col %}}
+```yaml
+version: "3.9"
+    
+services:
+  db:
+    image: mariadb:latest
+    ...
+    deploy:
+      placement:
+        constraints: 
+          - node.labels.capabilities.storage==yes
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    ports:
+      - "8889:80"
+    ...
+    deploy:
+      placement:
+        constraints: 
+          - node.labels.capabilities.web==yes
+volumes:
+  db_data: {}
+  wordpress_data: {}
+networks:
+  back-tier: {}
+```
+{{% /col %}}
+{{% col %}}
+- Let's define a stack for Wordpress, with __placement constraints__
+    + `db` service on a node with _storage_ capabilities
+    + `wordpress` service on a node with _web_ capabilities
+
+- On the `starwai` cluster:
+    - node `storage1.stairwai.ce.almaai.unibo.it` has _storage_ capabilities
+    - node `inference2.stairwai.ce.almaai.unibo.it` has _web_ capabilities
+
+- The deployment is as follows:
+    ![Deployment with labels](./portainer-wordpress-services.png)
+{{% /col %}}
+{{< /multicol >}}
+
+---
+
+## Exposing ports on the Swarm
+
+When a service _exposes a port_, and that's deployed on a _Swarm_:
+
+- the service is exposed on __all master nodes__ in the Swarm
+
+- so, the `wordpress` service above could be visited from several URL:
+    + http://storage1.stairwai.ce.almaai.unibo.it:8889
+    + http://inference1.stairwai.ce.almaai.unibo.it:8889
+    + http://inference4.stairwai.ce.almaai.unibo.it:8889
+
+- ... as well as from the node which is actually hosting the service:
+    + http://inference2.stairwai.ce.almaai.unibo.it:8889
+
+---
+
+## Service replication
+
+- Services may be __replicated__ for the sake scalability / load-balancing / fault-tolerance, etc.
+
+- Two types of services:
+    + `global`: replicated _exactly_ __once per node__
+    + `replicated`: replicated `N` times (with `N=1` by _default_)
+
+- General case:
+    ```yaml
+    services:
+      service-name:
+        ...
+        deploy:
+          mode: replicated
+          replicas: N                  # this should be a number!
+          placement:
+            constraints: 
+              - node.role == manager
+              - node.labels.mylabel=myvalue
+            preferences:
+              - spread: node.labels.mylabel
+            max_replicas_per_node: M      # this should be a number!
+    ```
+
+- How to read it:
+    + `N` replicas of the service will be deployed
+    + each one will be deployed on a __manager node__ having the `mylabel` label set to `myvalue`
+    + replicas will be evenly _spreaded_ among the admissible nodes, possibly _evenly_
+    + no more of `M` replicas will be put on the same node
+
+---
+ 
+## Example of placement preferences
+
+{{< multicol >}}
+{{% col %}}
+```yaml
+version: "3.9"
+    
+services:
+  ws:
+    image: pikalab/hitcounter:latest
+    ports:
+      - "8890:8080"
+    deploy:
+      replicas: 10
+      placement:
+        constraints: 
+          - node.labels.capabilities.cpu==yes
+        preferences:
+          - spread: node.labels.capabilities.cpu
+```
+
+</br>
+
+2. Try to query it multiple times:
+    ```bash
+    while true; do                                                                                                                                                                     INT ✘ 
+        curl http://clusters.almaai.unibo.it:8890; 
+        echo 
+        sleep 1
+    done
+    ```
+
+    expected outcome:
+
+    ```
+    [9a6f89a39f8fd379@a3838ab6a606:8080] Hit 1 times
+    [26c39b9f3d7f0cab@4ad25c3e148c:8080] Hit 1 times
+    [97945332d20e71ed@969586109dee:8080] Hit 1 times
+    [3b3256852103312a@5d3479044fac:8080] Hit 2 times
+    [49e75aaae823c1e4@36e31b946486:8080] Hit 2 times
+    [497583c21d17ad58@7c10a84858f3:8080] Hit 2 times
+    [cf82689c910dfdf3@8aaa34535824:8080] Hit 2 times
+    [9a456666c413f4a4@5ba876916f68:8080] Hit 2 times
+    [41cadc9e0d7b0225@6cf54f65cda6:8080] Hit 2 times
+    [84dbbff08ac91e74@4006352af1e0:8080] Hit 2 times
+    [9a6f89a39f8fd379@a3838ab6a606:8080] Hit 2 times
+    [26c39b9f3d7f0cab@4ad25c3e148c:8080] Hit 2 times
+    [97945332d20e71ed@969586109dee:8080] Hit 2 times
+    [3b3256852103312a@5d3479044fac:8080] Hit 3 times
+    [49e75aaae823c1e4@36e31b946486:8080] Hit 3 times
+    ...
+    ```
+{{% /col %}}
+{{% col %}}
+1. Serval replicas of the same service are created:
+    
+    ![Deployment with replicas](./portainer-replicated-service.png)
+
+</br>
+
+3. Requests will be forwarded to replicas in a __non-deterministc__ fashion
+{{% /col %}}
+{{< /multicol >}}
+
+---
+
+## Docker Swarm and Volumes
+
+{{< multicol >}}
+{{% col %}}
+```yaml
+version: "3.9"
+    
+services:
+  simulation:
+    image: pikalab/fakesim:latest
+    restart: on-failure
+    deploy:
+      replicas: 3
+      placement:
+        constraints: 
+          - node.labels.capabilities.cpu==yes
+        max_replicas_per_node: 1
+    volumes:
+      - type: volume
+        source: shared_volume
+        target: /data
+volumes:
+    shared_volume: {}
+```
+{{% /col %}}
+{{% col %}}
+1. Several replicas of the simulation are created...
+    
+    ![Deployment with replicas](./portainer-fake-simulation.png)
+
+
+2. ... as well as several volumes!
+
+
+> Volumes are __always local__ w.r.t. the node the current container is deployed onto
+{{% /col %}}
+{{< /multicol >}}
