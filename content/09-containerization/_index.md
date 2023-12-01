@@ -2313,6 +2313,10 @@ services:
 
 {{< multicol >}}
 {{% col %}}
+> Volumes are __always local__ w.r.t. the node the current container is deployed onto
+
+</br>
+
 ```yaml
 version: "3.9"
     
@@ -2342,7 +2346,12 @@ volumes:
 
 2. ... as well as several volumes!
 
+    ![Deployment with replicas](./portainer-fake-simulation-volumes.png)
 
-> Volumes are __always local__ w.r.t. the node the current container is deployed onto
+    - one per replica, on the same node of the replica
+
+3. How to share data?
+
+
 {{% /col %}}
 {{< /multicol >}}
