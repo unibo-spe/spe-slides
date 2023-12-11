@@ -74,15 +74,8 @@ __So, why Docker Swarm is not enough?__
 
 Docker Swarm is built to manage microservices, so it does not fit properly for large production deployments at scale.
 
+
 <!-- {{% fragment %}}
-2. Services can only scale after a manual intervention.
-{{% /fragment %}}
-
-{{% fragment %}}
-3. 
-{{% /fragment %}}
-
-{{% fragment %}}
 4. Simpler, and not configurable, access control based on TLS.
 {{% /fragment %}} -->
 
@@ -177,10 +170,26 @@ And the list goes on...
 {{% col %}}
 
 ### Docker Swarm
+- `Services` can scale their replica number,
+  - but only after a manual intervention.
+
+- The cluster can grow its capacity, 
+  - after the manual addition of another node.
 
 {{% /col %}} {{% col %}}
 
 ### Kubernetes
+- Can scale up and down the replicas of a resource,
+  - both automatically and after a manual intervention,
+  - the automatic scaling can be configured to be based on observed metrics (i.e. the usage of the CPU/Memory). 
+- The cluster can grow its capacity, 
+  - *automatically* and after a manual intervention.
+  - supported only when running on [some](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler#faqdocumentation) cloud providers.
+
+<br>
+
+- __Replicas and metrics are managed by resource objects too__
+
 
 {{% /col %}}
 {{% /multicol %}}
