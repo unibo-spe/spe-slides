@@ -213,5 +213,92 @@ And the list goes on...
 
 ---
 
+Pods are not directly managed by the user, but through by a higher-level object called `Deployment`.
 
+## Deployment
 
+---
+
+## ReplicaSet
+
+- Managed directly by a deployment object
+
+---
+
+Deployments are not the only road:
+- Job
+- CronJob
+- StatefulSet
+- DaemonSet
+
+---
+
+## Service
+
+Connected to pods using labels *selectors*.
+
+Same as docker swarm, they expose the Pods to the outside world.
+
+---
+
+## Access Control
+
+Service Account 
+- RBAC management over a namespace
+- used to configure the client tool kubectl
+
+Some rbac configuration pre-existing in the kubernetes instance, others can be created custom.
+The control can be defined over a single resource type.
+
+---
+
+# In practice
+
+---
+
+## Installation of Kubernetes
+
+- Several tools support the installation of a *production-ready Kubernetes cluster*, because is a **complex** process
+  - [kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/)
+  - [kubespray](https://kubernetes.io/docs/setup/production-environment/tools/kubespray/)
+  - [kops](https://kubernetes.io/docs/setup/production-environment/tools/kops/)
+  - [k3s](https://k3s.io/)
+  - etc.
+
+- For testing purposes, Kubernetes can be installed on a single machine using [minikube](https://minikube.sigs.k8s.io/docs/start/)
+  - single-node Kubernetes cluster 
+  - works on Windows, Linux and macOS
+  - runs inside a VM/container, on your choice
+  - not suitable for production environments
+  - comes with a set of built-in plugins to be installed, for example: 
+    - Metrics Server
+    - Kubernetes Dashboard
+    - and others, we'll see them later
+
+---
+
+## Minikube
+
+```bash
+minikube start
+```
+
+```bash
+😄  minikube v1.32.0 on Arch 23.1.0
+🆕  Kubernetes 1.28.3 is now available. If you would like to upgrade, specify: --kubernetes-version=v1.28.3
+✨  Using the virtualbox driver based on existing profile
+👍  Starting control plane node minikube in cluster minikube
+🔄  Restarting existing virtualbox VM for "minikube" ...
+❗  Image was not built for the current minikube version. To resolve this you can delete and recreate your minikube cluster using the latest images. Expected minikube version: v1.30.1 -> Actual minikube version: v1.32.0
+🐳  Preparing Kubernetes v1.26.3 on Docker 20.10.23 ...
+    ▪ kubelet.housekeeping-interval=10s
+🔗  Configuring bridge CNI (Container Networking Interface) ...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+    ▪ Using image registry.k8s.io/metrics-server/metrics-server:v0.6.4
+🔎  Verifying Kubernetes components...
+🌟  Enabled addons: storage-provisioner, metrics-server, default-storageclass
+❗  /usr/bin/kubectl is version 1.28.4, which may have incompatibilities with Kubernetes 1.26.3.
+    ▪ Want kubectl v1.26.3? Try 'minikube kubectl -- get pods -A'
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+
+```
