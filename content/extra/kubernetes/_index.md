@@ -56,10 +56,7 @@ it provides the software necessary to successfully build and deploy *reliable* a
 - Broader range of object to create, and manage, the production environment
 - Automatic scaling (up and down)
 - Built-in monitoring
-- Great integration with third-party tools
 - Security
-- Resource usage management
-
 
 ---
 
@@ -73,11 +70,6 @@ Containers represent a declarative way to package and run applications, giving a
 __So, why Docker Swarm is not enough?__
 
 Docker Swarm is built to manage microservices, so it does not fit properly for large production deployments at scale.
-
-
-<!-- {{% fragment %}}
-4. Simpler, and not configurable, access control based on TLS.
-{{% /fragment %}} -->
 
 ---
 
@@ -198,18 +190,321 @@ And the list goes on...
 
 ## Built-in monitoring
 
+{{% multicol %}}
+{{% col %}}
+
+### Docker Swarm
+- Monitoring is performed using third-party tools, 
+  - such as *Prometheus*, *Grafana*, etc.
+
+{{% /col %}} {{% col %}}
+
+### Kubernetes
+- A basic monitoring is provided built-in with the cluster,
+  - is necessary to install the `Metrics Server` plugin to enable the monitoring,
+  - this comprehends the usage of the *CPU* and *Memory* of the cluster nodes and containers
+- The monitoring can be extended using third-party tools,
+  - such as *Prometheus*, *Grafana*, etc.
+
+{{% /col %}}
+{{% /multicol %}}
 
 ---
 
-## Great integration with third-party tools
+## Metrics in Kubernetes
+<br>
+<img src="hpa2.png" width=60% />
 
 ---
 
 ## Security
 
+{{% multicol %}}
+{{% col %}}
+
+### Docker Swarm
+- Simple access control based on TLS, 
+  - requires the direct access to a cluster node, and,
+  - it is not configurable for the single use case.
+- For a better access control is necessary to use a third-party management dashboard,
+  - i.e. *Portainer*, etc.
+
+{{% /col %}} {{% col %}}
+
+### Kubernetes
+- Fine grained access control based on RBAC,
+  - configurable for the single use case
+
+- Resources management is performed using the `kubectl` tool,
+  - it connects remotely to a cluster => no need to access a cluster node
+  - it is configured with specific user credentials
+    - with a RBAC authorization
+    - using access tokens, connects using TLS
+
+- Cluster resources can be split logically into *namespaces*
+  - resources not visible between namespaces
+  - each one have its own RBAC configuration
+  - each one is assigned to a different team
+
+{{% /col %}}
+{{% /multicol %}}
+
 ---
 
-## Resource usage management
+## Kubernetes architecture
+
+<img src="cluster_overview.png" />
+
+---
+
+## Kubernetes objects: Pods
+
+{{% multicol %}}
+{{% col %}}
+
+<img src="cluster_overview.png" class="align-middle" />
+<div class="overlay">
+   <div class="transparent-circle-5"></div>
+</div>
+
+{{% /col %}}{{% col %}}
+
+### Kubernetes smallest deployable unit.
+- Runs one (or more) containers
+  - this allow to deploy toghether two different containers that are symbiotic between themself
+    - for example, a web server container and the git synchronizer one that keeps it updated 
+    - this is not the case of a web server and its database, which can be deployed in two different nodess
+
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+## Kubernetes objects: Pods
+
+{{% multicol %}}
+{{% col %}}
+
+<img src="cluster_overview.png" class="align-middle" />
+<div class="overlay">
+   <div class="transparent-circle-5"></div>
+</div>
+
+{{% /col %}}{{% col %}}
+
+- Containers running in the same Pod share:
+  - network namespace (ports),
+  - IP address,
+  - host name,
+  - storage (volumes), 
+  - inter-process communication (IPC),
+  - Process identifiers (PIDs).
+
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+## Kubernetes objects: Pods
+
+<div class="custom">
+
+{{% highlight yaml %}}
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-world
+spec:
+  containers:
+    - name: hello
+      image: busybox:latest
+      command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 3600']
+      restartPolicy: OnFailure
+      imagePullPolicy: IfNotPresent
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+      ports:
+        - containerPort: 80
+          protocol: TCP
+
+
+{{% /highlight %}}
+
+</div> 
+
+---
+
+## Kubernetes objects: Pods
+
+<div class="custom">
+
+{{% highlight yaml %}}
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-world
+spec:
+  containers:
+    - name: hello
+      image: busybox:latest
+      command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 3600']
+      restartPolicy: OnFailure
+      imagePullPolicy: IfNotPresent
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+      ports:
+        - containerPort: 80
+          protocol: TCP
+
+
+{{% /highlight %}}
+
+</div> 
+<div class="overlay">
+   <div class="restart-policy"></div>
+</div>
+
+---
+
+## Kubernetes objects: Pods
+
+<div class="custom">
+
+{{% highlight yaml %}}
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-world
+spec:
+  containers:
+    - name: hello
+      image: busybox:latest
+      command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 3600']
+      restartPolicy: OnFailure
+      imagePullPolicy: IfNotPresent
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+      ports:
+        - containerPort: 80
+          protocol: TCP
+
+{{% /highlight %}}
+
+</div> 
+<div class="overlay">
+   <div class="image-pull-policy"></div>
+</div>
+
+---
+
+## Kubernetes objects: Pods
+
+<div class="custom">
+
+{{% highlight yaml %}}
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-world
+spec:
+  containers:
+    - name: hello
+      image: busybox:latest
+      command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 3600']
+      restartPolicy: OnFailure
+      imagePullPolicy: IfNotPresent
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+      ports:
+        - containerPort: 80
+          protocol: TCP
+
+{{% /highlight %}}
+
+</div> 
+<div class="overlay">
+   <div class="resources"></div>
+</div>
+
+---
+
+## Kubernetes objects: Pods
+
+<div class="custom">
+
+{{% highlight yaml %}}
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-world
+spec:
+  containers:
+    - name: hello
+      image: busybox:latest
+      command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 3600']
+      restartPolicy: OnFailure
+      imagePullPolicy: IfNotPresent
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+      ports:
+        - containerPort: 80
+          protocol: TCP
+
+{{% /highlight %}}
+
+</div> 
+<div class="overlay">
+   <div class="ports"></div>
+</div>
+
+---
+
+## Kubernetes objects: Services
+
+{{% multicol %}}
+{{% col %}}
+
+<img src="cluster_overview.png" class="align-middle" />
+<div class="overlay">
+   <div class="transparent-circle-5"></div>
+</div>
+
+{{% /col %}}{{% col %}}
+
+- 
+
+{{% /col %}}
+{{% /multicol %}}
 
 ---
 
