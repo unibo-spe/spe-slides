@@ -345,19 +345,6 @@ section.has-light-background {
 	right: 0;
   }
 
-.transparent-circle-5 {
-	position: absolute;
-	top: 140px;
-	left: 24%;
-	z-index: 2;	
-	border: solid 10px;
-	border-radius: 100%;
-	height: 300px;
-	width: 350px;
-	color: darkred;
-	font-weight: bolder;
-}
-
 .custom > .highlight {
 	width: 100% !important;
 	max-width: 100% !important;
@@ -365,35 +352,35 @@ section.has-light-background {
 
 .restart-policy {
 	position: absolute;
-	top: 270px;
-	left: 35%;
+	top: 316px;
+	left: 30%;
 	z-index: 2;	
 	box-shadow: 0 0 0 2000px rgba(0, 0, 0, 0.8);
 	height: 25px;
-	width: 300px;
+	width: 350px;
 	color: darkred;
 	font-weight: bolder;
 }
 
 .image-pull-policy {
 	position: absolute;
-	top: 290px;
-	left: 35%;
+	top: 342px;
+	left: 30%;
 	z-index: 2;	
 	box-shadow: 0 0 0 2000px rgba(0, 0, 0, 0.8);
 	height: 25px;
-	width: 300px;
+	width: 400px;
 	color: darkred;
 	font-weight: bolder;
 }
 
 .resources {
 	position: absolute;
-	top: 310px;
-	left: 35%;
+	top: 365px;
+	left: 30%;
 	z-index: 2;	
 	box-shadow: 0 0 0 2000px rgba(0, 0, 0, 0.8);
-	height: 140px;
+	height: 180px;
 	width: 300px;
 	color: darkred;
 	font-weight: bolder;
@@ -401,12 +388,48 @@ section.has-light-background {
 
 .ports {
 	position: absolute;
-	top: 440px;
-	left: 35%;
+	top: 535px;
+	left: 30%;
 	z-index: 2;	
 	box-shadow: 0 0 0 2000px rgba(0, 0, 0, 0.8);
 	height: 80px;
-	width: 300px;
+	width: 320px;
+	color: darkred;
+	font-weight: bolder;
+}
+
+.config-cluster{
+	position: absolute;
+	top: 130px;
+	left: 25%;
+	z-index: 2;	
+	border: solid 10px;
+	height: 250px;
+	width: 800px;
+	color: darkred;
+	font-weight: bolder;
+}
+
+.config-user {
+	position: absolute;
+	top: 740px;
+	left: 23%;
+	z-index: 2;	
+	border: solid 10px;
+	height: 160px;
+	width: 1050px;
+	color: darkred;
+	font-weight: bolder;
+}
+
+.config-context{
+	position: absolute;
+	top: 570px;
+	left: 25%;
+	z-index: 2;	
+	border: solid 10px;
+	height: 320px;
+	width: 800px;
 	color: darkred;
 	font-weight: bolder;
 }

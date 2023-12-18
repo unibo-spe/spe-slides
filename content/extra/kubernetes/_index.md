@@ -16,6 +16,31 @@ enableSourceMap = true
 
 +++
 
+<style>
+.reveal blockquote {
+    font-family: 'Georgia';
+    text-align: center;
+    font-size: 0.8em; 
+    font-style: italic;
+    padding: 30px;
+}
+
+.reveal blockquote p{
+	content: "";
+  text-align: center;
+}
+
+.reveal pre code {
+  font-size: 1.2em;
+}
+
+.center{
+	text-align: center;
+}
+
+
+</style>
+
 # {{< course_name >}}
 
 ## Intoduction to Kubernetes
@@ -120,35 +145,39 @@ __This command is valid for every existing resource in the Kubernetes ecosystem_
 
 ### An example of existing Kubernetes resources types
 
+<div class="custom">
+
+```bash
+NAME                              SHORTNAMES   API VERSION                            NAMESPACED   KIND                   
+namespaces                        ns           v1                                     false        Namespace              
+nodes                             no           v1                                     false        Node                   
+persistentvolumeclaims            pvc          v1                                     true         PersistentVolumeClaim  
+persistentvolumes                 pv           v1                                     false        PersistentVolume       
+pods                              po           v1                                     true         Pod                    
+podtemplates                                   v1                                     true         PodTemplate            
+replicationcontrollers            rc           v1                                     true         ReplicationController  
+resourcequotas                    quota        v1                                     true         ResourceQuota          
+secrets                                        v1                                     true         Secret                 
+serviceaccounts                   sa           v1                                     true         ServiceAccount         
+services                          svc          v1                                     true         Service                
+apiservices                                    apiregistration.k8s.io/v1              false        APIService             
+replicasets                       rs           apps/v1                                true         ReplicaSet             
+deployments                       deploy       apps/v1                                true         Deployment             
+statefulsets                      sts          apps/v1                                true         StatefulSet            
+horizontalpodautoscalers          hpa          autoscaling/v2                         true         HorizontalPodAutoscaler
+cronjobs                          cj           batch/v1                               true         CronJob                
+jobs                                           batch/v1                               true         Job                    
+nodes                                          metrics.k8s.io/v1beta1                 false        NodeMetrics            
+pods                                           metrics.k8s.io/v1beta1                 true         PodMetrics             
+clusterrolebindings                            rbac.authorization.k8s.io/v1           false        ClusterRoleBinding
+clusterroles                                   rbac.authorization.k8s.io/v1           false        ClusterRole 
+rolebindings                                   rbac.authorization.k8s.io/v1           true         RoleBinding 
+roles                                          rbac.authorization.k8s.io/v1           true         Role        
+storageclasses                    sc           storage.k8s.io/v1                      false        StorageClass
+volumeattachments                              storage.k8s.io/v1                      false        VolumeAttachment
 ```
-NAME                              SHORTNAMES   API VERSION                            NAMESPACED   KIND                             VERBS                                                     
-namespaces                        ns           v1                                     false        Namespace                        create,delete,get,list,patch,update,watch                 
-nodes                             no           v1                                     false        Node                             create,delete,deletecollection,get,list,patch,update,watch
-persistentvolumeclaims            pvc          v1                                     true         PersistentVolumeClaim            create,delete,deletecollection,get,list,patch,update,watch
-persistentvolumes                 pv           v1                                     false        PersistentVolume                 create,delete,deletecollection,get,list,patch,update,watch
-pods                              po           v1                                     true         Pod                              create,delete,deletecollection,get,list,patch,update,watch
-podtemplates                                   v1                                     true         PodTemplate                      create,delete,deletecollection,get,list,patch,update,watch
-replicationcontrollers            rc           v1                                     true         ReplicationController            create,delete,deletecollection,get,list,patch,update,watch
-resourcequotas                    quota        v1                                     true         ResourceQuota                    create,delete,deletecollection,get,list,patch,update,watch
-secrets                                        v1                                     true         Secret                           create,delete,deletecollection,get,list,patch,update,watch
-serviceaccounts                   sa           v1                                     true         ServiceAccount                   create,delete,deletecollection,get,list,patch,update,watch
-services                          svc          v1                                     true         Service                          create,delete,deletecollection,get,list,patch,update,watch
-apiservices                                    apiregistration.k8s.io/v1              false        APIService                       create,delete,deletecollection,get,list,patch,update,watch
-replicasets                       rs           apps/v1                                true         ReplicaSet                       create,delete,deletecollection,get,list,patch,update,watch
-deployments                       deploy       apps/v1                                true         Deployment                       create,delete,deletecollection,get,list,patch,update,watch
-statefulsets                      sts          apps/v1                                true         StatefulSet                      create,delete,deletecollection,get,list,patch,update,watch
-horizontalpodautoscalers          hpa          autoscaling/v2                         true         HorizontalPodAutoscaler          create,delete,deletecollection,get,list,patch,update,watch
-cronjobs                          cj           batch/v1                               true         CronJob                          create,delete,deletecollection,get,list,patch,update,watch
-jobs                                           batch/v1                               true         Job                              create,delete,deletecollection,get,list,patch,update,watch
-nodes                                          metrics.k8s.io/v1beta1                 false        NodeMetrics                      get,list
-pods                                           metrics.k8s.io/v1beta1                 true         PodMetrics                       get,list
-clusterrolebindings                            rbac.authorization.k8s.io/v1           false        ClusterRoleBinding               create,delete,deletecollection,get,list,patch,update,watch
-clusterroles                                   rbac.authorization.k8s.io/v1           false        ClusterRole                      create,delete,deletecollection,get,list,patch,update,watch
-rolebindings                                   rbac.authorization.k8s.io/v1           true         RoleBinding                      create,delete,deletecollection,get,list,patch,update,watch
-roles                                          rbac.authorization.k8s.io/v1           true         Role                             create,delete,deletecollection,get,list,patch,update,watch
-storageclasses                    sc           storage.k8s.io/v1                      false        StorageClass                     create,delete,deletecollection,get,list,patch,update,watch
-volumeattachments                              storage.k8s.io/v1                      false        VolumeAttachment                 create,delete,deletecollection,get,list,patch,update,watch
-```
+
+</div>
 
 <br>
 
@@ -262,12 +291,12 @@ And the list goes on...
 {{% multicol %}}
 {{% col %}}
 
-<img src="cluster_overview.png" class="align-middle" />
-<div class="overlay">
-   <div class="transparent-circle-5"></div>
-</div>
+<img src="drawing-1.svg" class="align-middle" />
 
 {{% /col %}}{{% col %}}
+
+<br>
+<br>
 
 ### Kubernetes smallest deployable unit.
 - Runs one (or more) containers
@@ -285,12 +314,12 @@ And the list goes on...
 {{% multicol %}}
 {{% col %}}
 
-<img src="cluster_overview.png" class="align-middle" />
-<div class="overlay">
-   <div class="transparent-circle-5"></div>
-</div>
+<img src="drawing-1.svg" class="align-middle" />
 
 {{% /col %}}{{% col %}}
+
+<br>
+<br>
 
 - Containers running in the same Pod share:
   - network namespace (ports),
@@ -452,6 +481,10 @@ spec:
 
 ---
 
+## Explain metrics
+
+---
+
 ## Kubernetes objects: Pods
 
 <div class="custom">
@@ -494,10 +527,7 @@ spec:
 {{% multicol %}}
 {{% col %}}
 
-<img src="cluster_overview.png" class="align-middle" />
-<div class="overlay">
-   <div class="transparent-circle-5"></div>
-</div>
+<img src="drawing-1.svg" class="align-middle" />
 
 {{% /col %}}{{% col %}}
 
@@ -563,7 +593,7 @@ The control can be defined over a single resource type.
 - For testing purposes, Kubernetes can be installed on a single machine using [minikube](https://minikube.sigs.k8s.io/docs/start/)
   - single-node Kubernetes cluster 
   - works on Windows, Linux and macOS
-  - runs inside a VM/container, on your choice
+  - runs inside a VM, a container, or on the bare-metal, on your choice
   - not suitable for production environments
   - comes with a set of built-in plugins to be installed, for example: 
     - Metrics Server
@@ -574,26 +604,499 @@ The control can be defined over a single resource type.
 
 ## Minikube
 
-```bash
-minikube start
-```
+<div class="custom">
+
+
+{{% highlight bash %}}
+
+minikube start --driver='virtualbox' --extra-config=kubelet.housekeeping-interval=10s
+
+{{% /highlight %}}
+
+</div>
+
+<br>
+
+<blockquote>
+
+The driver specifies where to install the kubernetes infrastructure, in this case inside a virtual machine managed by VirtualBox 
+
+(that is pre-installed on the machine).
+
+Admissible values are: `virtualbox`, `kvm2`, `qemu2`, `vmware`, `docker`, `none`, `ssh`, `podman`. Default is `auto-detect`
+
+</blockquote>
+
+<blockquote>
+
+The `--extra-config` param is used to configure Kubernetes' `kubelet` during the initial startup.
+
+The flag `kubelet.housekeeping-interval` specifies the frequency at which the kubelet evaluates eviction thresholds, 
+
+we need it to execute correctly the example provided in the next slides.
+
+</blockquote>
+
+---
+
+## Minikube
+
+
+<div class="custom">
 
 ```bash
+$ minikube start
+
 😄  minikube v1.32.0 on Arch 23.1.0
-🆕  Kubernetes 1.28.3 is now available. If you would like to upgrade, specify: --kubernetes-version=v1.28.3
 ✨  Using the virtualbox driver based on existing profile
 👍  Starting control plane node minikube in cluster minikube
 🔄  Restarting existing virtualbox VM for "minikube" ...
-❗  Image was not built for the current minikube version. To resolve this you can delete and recreate your minikube cluster using the latest images. Expected minikube version: v1.30.1 -> Actual minikube version: v1.32.0
-🐳  Preparing Kubernetes v1.26.3 on Docker 20.10.23 ...
-    ▪ kubelet.housekeeping-interval=10s
+🐳  Preparing Kubernetes v1.28.3 on Docker 24.0.7 ...
+    ▪️ kubelet.housekeeping-interval=10s
 🔗  Configuring bridge CNI (Container Networking Interface) ...
-    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
-    ▪ Using image registry.k8s.io/metrics-server/metrics-server:v0.6.4
+    ▪️ Using image gcr.io/k8s-minikube/storage-provisioner:v5
 🔎  Verifying Kubernetes components...
-🌟  Enabled addons: storage-provisioner, metrics-server, default-storageclass
-❗  /usr/bin/kubectl is version 1.28.4, which may have incompatibilities with Kubernetes 1.26.3.
-    ▪ Want kubectl v1.26.3? Try 'minikube kubectl -- get pods -A'
+🌟  Enabled addons: storage-provisioner, default-storageclass
 🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
-
 ```
+
+</div>
+
+### What happened? 
+
+- Now you have a virtual machine running on VirtualBox, and hosting a Kubernetes cluster.
+  - You can look for it using the VirtualBox GUI
+- Minikube configured your `kubectl` environment
+  - **But you don't have `kubectl` installed yet!**
+
+---
+
+## Minikube
+
+<div class="center">
+Useful commands: 
+</div>
+
+<br>
+
+| Command | Description |
+| --- | --- |
+| `minikube start` | Start the cluster |
+| `minikube stop` | Stop the cluster |
+| `minikube delete` | Delete the cluster |
+| `minikube status` | Show the status of the cluster |
+| `minikube dashboard` | Expose the builtin dashboard in localhost |
+| `minikube addons list/enable/disable` | Lists/Enables/Disables available plugins into the cluster |
+
+---
+
+## Kubectl
+
+The Kubernetes command-line tool, `kubectl`, allows you to run commands against Kubernetes clusters.
+
+- You can install it following the official [guide](https://kubernetes.io/docs/tasks/tools/#kubectl).
+
+After a successful installation, you can verify that kubectl is correctly connected to our minikube cluster
+
+<br>
+<div class="custom">
+
+```bash
+$ kubectl cluster-info
+
+Kubernetes control plane is running at https://192.168.59.101:8443
+CoreDNS is running at https://192.168.59.101:8443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+```
+
+</div>
+
+<br>
+
+<b class="center">
+A different output means that the cluster is not configured correctly
+</b>
+
+---
+
+## Kubectl
+
+<div class="center">
+How can <code>kubectl</code> connect to the cluster? 
+<br>
+Let's look into the <code>~/.kube/config</code> file, or also use <code>kubectl config view</code>.
+<br>
+The output is something like this:
+</div>
+<div class="custom">
+
+```bash
+$ kubectl config view
+
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /home/anitvam/.minikube/ca.crt
+    extensions:
+    - extension:
+        last-update: Mon, 18 Dec 2023 12:59:17 CET
+        provider: minikube.sigs.k8s.io
+        version: v1.32.0
+      name: cluster_info
+    server: https://192.168.59.101:8443
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    extensions:
+    - extension:
+        last-update: Mon, 18 Dec 2023 12:59:17 CET
+        provider: minikube.sigs.k8s.io
+        version: v1.32.0
+      name: context_info
+    namespace: default
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    client-certificate: /home/anitvam/.minikube/profiles/minikube/client.crt
+    client-key: /home/anitvam/.minikube/profiles/minikube/client.key
+```
+
+</div>
+
+---
+
+## Kubectl config: available clusters
+
+<div class="custom">
+
+```bash
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /home/anitvam/.minikube/ca.crt
+    extensions:
+    - extension:
+        last-update: Mon, 18 Dec 2023 12:59:17 CET
+        provider: minikube.sigs.k8s.io
+        version: v1.32.0
+      name: cluster_info
+    server: https://192.168.59.101:8443
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    extensions:
+    - extension:
+        last-update: Mon, 18 Dec 2023 12:59:17 CET
+        provider: minikube.sigs.k8s.io
+        version: v1.32.0
+      name: context_info
+    namespace: default
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    client-certificate: /home/anitvam/.minikube/profiles/minikube/client.crt
+    client-key: /home/anitvam/.minikube/profiles/minikube/client.key
+```
+
+</div>
+<div class="overlay">
+   <div class="config-cluster"></div>
+</div>
+
+---
+
+## Kubectl config: user certificates
+
+<div class="custom">
+
+```bash
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /home/anitvam/.minikube/ca.crt
+    extensions:
+    - extension:
+        last-update: Mon, 18 Dec 2023 12:59:17 CET
+        provider: minikube.sigs.k8s.io
+        version: v1.32.0
+      name: cluster_info
+    server: https://192.168.59.101:8443
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    extensions:
+    - extension:
+        last-update: Mon, 18 Dec 2023 12:59:17 CET
+        provider: minikube.sigs.k8s.io
+        version: v1.32.0
+      name: context_info
+    namespace: default
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    client-certificate: /home/anitvam/.minikube/profiles/minikube/client.crt
+    client-key: /home/anitvam/.minikube/profiles/minikube/client.key
+```
+
+</div>
+<div class="overlay">
+   <div class="config-user"></div>
+</div>
+
+---
+
+## Kubectl config: contexts
+
+- Contexts declare the user to use to connect to a specific cluster.
+- You can define multiple contexts to connect to clusters.
+- You can connect to a single context at a time, 
+  - and switch between them using the `kubectl config use-context` command.
+<div class="custom">
+
+```bash
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /home/anitvam/.minikube/ca.crt
+    extensions:
+    - extension:
+        last-update: Mon, 18 Dec 2023 12:59:17 CET
+        provider: minikube.sigs.k8s.io
+        version: v1.32.0
+      name: cluster_info
+    server: https://192.168.59.101:8443
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    extensions:
+    - extension:
+        last-update: Mon, 18 Dec 2023 12:59:17 CET
+        provider: minikube.sigs.k8s.io
+        version: v1.32.0
+      name: context_info
+    namespace: default
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    client-certificate: /home/anitvam/.minikube/profiles/minikube/client.crt
+    client-key: /home/anitvam/.minikube/profiles/minikube/client.key
+```
+
+</div>
+<div class="overlay">
+   <div class="config-context"></div>
+</div>
+
+---
+
+## Let's test the Kubernetes autoscaling
+
+First of all, we need to enable the `metrics-server`, which is disabled by default
+  - we can enable it using the `minikube addons enable metrics-server` command
+  - we can verify that it is correctly installed using the `kubectl top nodes` command
+  - we need it to observe the CPU and Memory usage of the Pods in the cluster
+
+<br>
+<div class="center">
+
+>Until the command <code>kubectl top</code> does not work properly, the metrics server is not enabled yet.<br>The operation may take a while.
+
+</div>
+
+---
+
+## Let's test the Kubernetes autoscaling
+
+Now we can deploy our first Application
+  - it's a simple php web server that answer "OK!" to every request
+
+
+<br>
+<div class="center">
+<b>What kubernetes objects should we use to deploy it?</b>
+</div>
+
+---
+
+## Let's test the Kubernetes autoscaling
+
+<div class="center">
+Two objects: A <code>Deployment</code> and a <code>Service</code>
+</div>
+
+{{< multicol >}}
+{{% col %}}
+
+<div class="custom">
+
+```bash
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-apache
+spec:
+  selector:
+    matchLabels:
+      run: php-apache
+  template:
+    metadata:
+      labels:
+        run: php-apache
+    spec:
+      containers:
+      - name: php-apache
+        image: registry.k8s.io/hpa-example
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
+```
+</div>
+
+{{% /col %}}
+{{% col %}}
+
+<div class="custom">
+
+```bash
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-apache
+  labels:
+    run: php-apache
+spec:
+  ports:
+  - port: 80
+  selector:
+    run: php-apache
+```
+
+</div>
+
+{{% /col %}}
+{{< /multicol >}}
+
+
+{{% fragment %}}
+
+<div class="center">
+They can both be deployed using the <code>kubectl create -f &#60;file&#62;</code> command.
+</div>
+<div class="custom">
+
+```bash
+kubectl apply -f https://k8s.io/examples/application/php-apache.yaml
+```
+</div>
+
+{{% /fragment %}}
+
+---
+
+## Let's test the Kubernetes autoscaling
+
+<div class="center">
+We need to create an <code>Horizontal Pod Autoscaler</code>
+</div>
+
+<div class="custom">
+
+```bash
+kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10
+```
+</div>
+
+<br>
+
+<div class="center">
+It observes the CPU usage of the Pods and scales them <em>up</em> and <em>down</em> to maintain an <em>average CPU usage</em> of each Pod of <em>50%</em>. <br> 
+The minimum number of replicas that can be deployed is <em>1</em>, and the maximum is <em>10</em>.
+</div>
+
+---
+
+## Let's test the Kubernetes autoscaling
+
+Now, we have to simulate a huge workload
+  - for doing that we can use a Pod that continuously sends requests to the web server
+  - `kubectl run` allows to create a Pod on the fly
+
+<div class="custom">
+
+```bash
+kubectl run -it load-generator --rm --image=busybox:latest -- /bin/sh -c "while sleep 0.01; do wget -q -O - http://php-apache; done"
+```
+</div>
+
+<br>
+<br>
+
+<div class="center">
+We can observe the current <code>Horizontal Pod Autoscaler</code> status <br>
+using the <code>kubectl get hpa php-apache --watch</code> command.
+</div>
+
+---
+
+## Let's test the Kubernetes autoscaling
+
+<div class="center">
+What we see:
+</div>
+
+<div class="custom">
+
+```bash
+$ kubectl get hpa php-apache --watch                                                                                                   
+
+NAME         REFERENCE               TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+php-apache   Deployment/php-apache   0%/50%    1         10        1          10m
+php-apache   Deployment/php-apache   129%/50%   1         10        1          11m
+php-apache   Deployment/php-apache   129%/50%   1         10        3          11m
+php-apache   Deployment/php-apache   138%/50%   1         10        3          12m
+php-apache   Deployment/php-apache   85%/50%    1         10        3          13m
+php-apache   Deployment/php-apache   85%/50%    1         10        6          13m
+php-apache   Deployment/php-apache   65%/50%    1         10        6          14m
+php-apache   Deployment/php-apache   51%/50%    1         10        6          15m
+php-apache   Deployment/php-apache   11%/50%    1         10        6          16m
+php-apache   Deployment/php-apache   0%/50%     1         10        6          17m
+php-apache   Deployment/php-apache   0%/50%     1         10        6          20m
+php-apache   Deployment/php-apache   0%/50%     1         10        2          21m
+php-apache   Deployment/php-apache   0%/50%     1         10        2          21m
+php-apache   Deployment/php-apache   0%/50%     1         10        1          22m
+```
+
+</div>
+
+---
+
+
