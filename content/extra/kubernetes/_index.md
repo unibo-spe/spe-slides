@@ -522,6 +522,100 @@ spec:
 
 ---
 
+## Kubernetes objects: Deployment
+{{% multicol %}}
+{{% col %}}
+<div class="custom">
+
+```bash
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80               
+```
+</div>
+{{% /col %}}{{% col %}}
+
+<br>
+<br>
+
+
+`Pods` are not directly managed by the user, but through by a higher-level object called `Deployment`.
+- They exist to manage the release of a new version of the application
+- Avoid downtime during the update process of a Pod
+- Entity that ties together a `ReplicaSets` and `Pods`
+
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+## Kubernetes objects: Deployment
+{{% multicol %}}
+{{% col %}}
+<div class="custom">
+
+```bash
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80               
+```
+</div>
+{{% /col %}}{{% col %}}
+
+<br>
+<br>
+
+
+The connection between the `Deployment` and the `Pods` is done using the `selector` field
+ - they are unique labels that identify the `Pods` that the `Deployment` will manage
+
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+## Kubernetes objects: ReplicaSet
+
+- Managed directly by a deployment object
+
+---
+
 ## Kubernetes objects: Services
 
 {{% multicol %}}
@@ -531,24 +625,20 @@ spec:
 
 {{% /col %}}{{% col %}}
 
-- 
+<br>
+<br>
+
+Service discovery in Kubernetes starts with the *Service* object. 
+
 
 {{% /col %}}
 {{% /multicol %}}
 
 ---
 
-Pods are not directly managed by the user, but through by a higher-level object called `Deployment`.
 
-## Deployment
 
----
 
-## ReplicaSet
-
-- Managed directly by a deployment object
-
----
 
 Deployments are not the only road:
 - Job
@@ -563,6 +653,10 @@ Deployments are not the only road:
 Connected to pods using labels *selectors*.
 
 Same as docker swarm, they expose the Pods to the outside world.
+
+---
+
+## Namespace
 
 ---
 
@@ -1009,7 +1103,7 @@ spec:
 {{% fragment %}}
 
 <div class="center">
-They can both be deployed using the <code>kubectl create -f &#60;file&#62;</code> command.
+They can both be deployed using the <code>kubectl apply -f &#60;file&#62;</code> command.
 </div>
 <div class="custom">
 
@@ -1048,7 +1142,7 @@ The minimum number of replicas that can be deployed is <em>1</em>, and the maxim
 
 Now, we have to simulate a huge workload
   - for doing that we can use a Pod that continuously sends requests to the web server
-  - `kubectl run` allows to create a Pod on the fly
+  - `kubectl run` allows to create a Pod on-the-fly
 
 <div class="custom">
 
@@ -1070,17 +1164,19 @@ using the <code>kubectl get hpa php-apache --watch</code> command.
 ## Let's test the Kubernetes autoscaling
 
 <div class="center">
-What we see:
+What we get (waiting a few minutes) is something like this:
 </div>
+
+<br>
 
 <div class="custom">
 
 ```bash
-$ kubectl get hpa php-apache --watch                                                                                                   
+$ kubectl get hpa php-apache --watch  
 
-NAME         REFERENCE               TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
-php-apache   Deployment/php-apache   0%/50%    1         10        1          10m
-php-apache   Deployment/php-apache   129%/50%   1         10        1          11m
+NAME         REFERENCE               TARGETS    MINPODS   MAXPODS   REPLICAS   AGE
+php-apache   Deployment/php-apache   0%/50%     1         10        1          10m
+php-apache   Deployment/php-apache   129%/50%   1         10        1          11m     
 php-apache   Deployment/php-apache   129%/50%   1         10        3          11m
 php-apache   Deployment/php-apache   138%/50%   1         10        3          12m
 php-apache   Deployment/php-apache   85%/50%    1         10        3          13m
