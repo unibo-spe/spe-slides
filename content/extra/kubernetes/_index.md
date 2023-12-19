@@ -64,7 +64,7 @@ Kubernetes has grown to be on of the largest and most popular *open source* proj
 ## Long story short
 
 Built for *distributed systems* suitable for *cloud developers* of all scales, 
-it provides the software necessary to successfully build and deploy *reliable* and *scalable* software systems.
+it is meant to support *reliable* and *scalable* software systems.
 
 {{% fragment %}}
 - __Reliability__: Services cannot fail, they must maintain *availability* even during software rollouts
