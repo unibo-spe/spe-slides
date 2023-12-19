@@ -726,11 +726,11 @@ As nodes are removed from the cluster, those Pods are garbage collected.
 ## Access Control
 
 Enforced through the `Service Account` resource object
-  - represents a distinct identity in the cluster
-  - each one of them is *bound* to a specific `Namespace`
-  - permit to access the API server
-  - grants permissions following the *RBAC* mechanism
-  - can be used to configure the authentication within `kubectl`
+- represents a distinct identity in the cluster
+- each one of them is *bound* to a specific `Namespace`
+- grants access to the API server
+- grants permissions through the *RBAC* mechanism
+- can be used to configure the authentication within `kubectl`
 
 ---
 
