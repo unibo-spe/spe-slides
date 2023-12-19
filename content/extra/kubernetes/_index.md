@@ -94,7 +94,7 @@ Containers represent a declarative way to package and run applications, giving a
 
 __So, why Docker Swarm is not enough?__
 
-Docker Swarm is built to manage microservices, so it does not fit properly for large production deployments at scale.
+Docker Swarm is not meant to support large production deployments at scale.
 
 ---
 
