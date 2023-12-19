@@ -109,16 +109,12 @@ Docker Swarm is not meant to support large production deployments at scale.
   - it requires docker primitives to be used to manage the environment.
 - the only way to manage the environment is through the `docker-compose.yml` file.
 
-<br>
-<br>
-<br>
+### Example with a Docker Stack: 
 
-
-Example with a Docker Stack: 
 ```
 docker stack deploy -c docker-compose.yml <stack_name>
 ```
-__[!!!] Docker primitives are required to build the environment__
+__Docker primitives required to build the environment__
 
 
 
@@ -130,13 +126,13 @@ __[!!!] Docker primitives are required to build the environment__
   - external declarative tool, named `kubectl`, to manage the environment.
 - it can be configured to work upon different container runtimes, such as *Docker*, *containerd*, *CRI-O*, etc.
 
-<br>
 
-[Spoiler] Example with a Kubernetes Deployment: 
+### Example with a Kubernetes Deployment: 
+
 ```
 kubectl create -f configuration-file.yaml
 ```
-__This command is valid for every existing resource in the Kubernetes ecosystem__
+__Command valid for every resource in the Kubernetes ecosystem__
 
 {{% /col %}}
 {{% /multicol %}}
