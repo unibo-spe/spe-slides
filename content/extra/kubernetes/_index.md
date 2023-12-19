@@ -1093,10 +1093,7 @@ Now we can deploy our first Application
   - it's a simple php web server that answer "OK!" to every request
 
 
-<br>
-<div class="center">
-<b>What kubernetes objects should we use to deploy it?</b>
-</div>
+#### **What kubernetes objects should we use to deploy it?**
 
 ---
 
