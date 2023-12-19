@@ -481,7 +481,23 @@ spec:
 
 ---
 
-## Explain metrics
+## Metrics in Kubernetes
+
+{{% multicol %}}{{% col %}}
+
+> **CPU** resources are expressed in *millicpu* units. <br>
+  A millicpu, or millicore, is equivalent to 1/1000th of a CPU core. <br>
+  `0.1 = 10% = 100m`
+
+{{% /col %}}{{% col %}}
+
+> **Memory** resources are measured in bytes. <br>
+  You can express memory as a plain integer or with quantity suffixes, for example E, P, T, G, M, k. <br> 
+  You can also use the power-of-two equivalents, such as Ei, Pi, Ti, Gi, Mi, Ki. <br>
+  `128974848 = 129e6 = 129M = 123Mi`
+
+{{% /col %}}
+{{% /multicol %}}
 
 ---
 
@@ -556,7 +572,6 @@ spec:
 <br>
 <br>
 
-
 `Pods` are not directly managed by the user, but through by a higher-level object called `Deployment`.
 - They exist to manage the release of a new version of the application
 - Avoid downtime during the update process of a Pod
@@ -601,7 +616,6 @@ spec:
 <br>
 <br>
 
-
 The connection between the `Deployment` and the `Pods` is done using the `selector` field
  - they are unique labels that identify the `Pods` that the `Deployment` will manage
 
@@ -612,7 +626,25 @@ The connection between the `Deployment` and the `Pods` is done using the `select
 
 ## Kubernetes objects: ReplicaSet
 
-- Managed directly by a deployment object
+They are the objects that manage the `Pod` number
+ - they usually are not managed directly by the user, but through a `Deployment`
+ - they let to scale the number of `Pods` up and down
+
+
+<br>
+<br>
+
+<div class="center">
+Since a <code>Deployment</code> object manages a <code>ReplicaSet</code> one, users can scale dynamically the <code>Pod</code>'s number using:
+</div>
+
+<div class="custom">
+
+```bash
+kubectl scale deployment <name> --replicas=<number>
+```
+
+</div>
 
 ---
 
@@ -629,45 +661,76 @@ The connection between the `Deployment` and the `Pods` is done using the `select
 <br>
 
 Service discovery in Kubernetes starts with the *Service* object. 
+  - They are the entry-point for the application
+  - They redirect requests to the Pods in the cluster nodes
+    - Don't forget that Pods are ephemeral, so they can be moved between nodes, and their IP address can change
+  - They group Pods in a network
+    - meaning that Services know which Pods are replicas
 
+<br>
+
+**How do they work?**
+They exploit the labels selectors.
 
 {{% /col %}}
 {{% /multicol %}}
 
 ---
 
+## Kubernetes objects: Services
 
+<div class="center">
+There are three main types of Services:
+</div>
 
+<br>
 
-
-Deployments are not the only road:
-- Job
-- CronJob
-- StatefulSet
-- DaemonSet
-
----
-
-## Service
-
-Connected to pods using labels *selectors*.
-
-Same as docker swarm, they expose the Pods to the outside world.
+| Name | Description |
+| --- | --- |
+| `ClusterIP` | Exposes the Service on a cluster-internal IP, only reachable <br> from within the cluster. This is the *default* value. |
+| `NodePort` | Exposes the Service on each Node’s IP at a static port. |
+| `LoadBalancer` | Exposes the server externally using a load balancer. <br> This type of Service is not offered directly from Kubernetes.  |
 
 ---
 
-## Namespace
+`Deployments` are not the only road:
+
+{{% multicol %}}
+{{% col %}}
+## Job 
+Object that runs short-lived, one-off tasks.
+Useful to for things to do once, and then stop, for example a database migration.
+
+{{% /col %}}{{% col %}}
+## CronJob
+CronJob is meant for performing regular scheduled actions such as backups, report generation, and so on.
+{{% /col %}}
+{{% /multicol %}}
+
+{{% multicol %}}
+{{% col %}}
+## StatefulSet
+Like a Deployment, a StatefulSet manages Pods that are based on an identical container spec. 
+Unlike a Deployment, a StatefulSet maintains a sticky identity for each of its Pods. 
+These pods are created from the same spec, but are not interchangeable: each has a persistent identifier that it maintains across any rescheduling.
+{{% /col %}}{{% col %}}
+## DaemonSet
+A DaemonSet ensures that all (or some) Nodes run a copy of a Pod. 
+As nodes are added to the cluster, Pods are added to them.
+As nodes are removed from the cluster, those Pods are garbage collected. 
+{{% /col %}}
+{{% /multicol %}}
 
 ---
 
 ## Access Control
 
-Service Account 
-- RBAC management over a namespace
-- used to configure the client tool kubectl
-
-Some rbac configuration pre-existing in the kubernetes instance, others can be created custom.
-The control can be defined over a single resource type.
+Enforced through the `Service Account` resource object
+  - represents a distinct identity in the cluster
+  - each one of them is *bound* to a specific `Namespace`
+  - permit to access the API server
+  - grants permissions following the *RBAC* mechanism
+  - can be used to configure the authentication within `kubectl`
 
 ---
 

@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="0.64294884"
-     inkscape:cx="163.31004"
-     inkscape:cy="458.82344"
+     inkscape:zoom="0.90926697"
+     inkscape:cx="407.47109"
+     inkscape:cy="401.42226"
      inkscape:window-width="1920"
      inkscape:window-height="1052"
      inkscape:window-x="1920"
@@ -79,12 +79,12 @@
      id="layer1"
      transform="translate(-81.817314,-26.921153)">
     <rect
-       style="fill:none;stroke:#000000;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       style="fill:none;stroke:#000000;stroke-width:1.65176;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
        id="rect1"
-       width="195.25668"
-       height="99.061272"
-       x="141.34375"
-       y="33.733627"
+       width="208.20364"
+       height="99.009506"
+       x="141.36963"
+       y="33.75951"
        rx="0"
        ry="0" />
     <rect
@@ -92,20 +92,20 @@
        id="rect4-8-8"
        width="74.000526"
        height="19.389172"
-       x="248.84627"
+       x="259.95874"
        y="107.14972"
        rx="7.6688428"
        ry="7.218544" />
     <text
        xml:space="preserve"
        style="font-size:9.87777px;line-height:8.59999px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;letter-spacing:1.08215px;text-anchor:middle;fill:none;fill-opacity:1;stroke:#669f22;stroke-width:1.169;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
-       x="285.0759"
+       x="296.18857"
        y="119.1101"
        id="text5-7-9"><tspan
          sodipodi:role="line"
          id="tspan5-9-7"
          style="letter-spacing:1.08215px;stroke:#669f22;stroke-width:1.169;stroke-dasharray:none;stroke-opacity:1"
-         x="285.61697"
+         x="296.72964"
          y="119.1101">Pod 2</tspan></text>
     <rect
        style="fill:none;stroke:#3a4288;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.407;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
@@ -121,17 +121,17 @@
        id="rect1-2-7"
        width="87.233055"
        height="174.43135"
-       x="242.8804"
+       x="253.99275"
        y="53.071487"
        rx="0"
        ry="0" />
     <rect
-       style="fill:none;stroke:#000000;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       style="fill:none;stroke:#000000;stroke-width:1.64494;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
        id="rect1-5"
-       width="195.25668"
-       height="99.486748"
-       x="141.69913"
-       y="139.11552"
+       width="206.47314"
+       height="99.441811"
+       x="141.7216"
+       y="139.138"
        rx="0"
        ry="0" />
     <text
@@ -186,25 +186,36 @@
     <text
        xml:space="preserve"
        style="font-size:9.87777px;line-height:8.6px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;text-anchor:middle;fill:#669f22;fill-opacity:1;stroke:none;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.40701;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
-       x="285.92465"
+       x="297.03732"
        y="49.303017"
        id="text3-0-1"><tspan
          sodipodi:role="line"
          style="line-height:8.6px;fill:#669f22;fill-opacity:1;stroke-width:1.469"
-         x="285.92465"
+         x="297.03732"
          y="49.303017"
          id="tspan6">Namespace 2</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:9.87777px;line-height:8.6px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;text-anchor:middle;fill:#669f22;fill-opacity:1;stroke:none;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.40701;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
-       x="286.27664"
+       x="297.38931"
        y="72.19368"
        id="text3-0-1-8"><tspan
          sodipodi:role="line"
          style="line-height:8.6px;fill:#669f22;fill-opacity:1;stroke-width:1.469"
-         x="286.27664"
+         x="297.38931"
          y="72.19368"
          id="tspan6-8">Service 2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.6px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;text-anchor:middle;fill:#669f22;fill-opacity:1;stroke:none;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.40701;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="298.21274"
+       y="204.32349"
+       id="text3-0-1-8-1"><tspan
+         sodipodi:role="line"
+         style="line-height:8.6px;fill:#669f22;fill-opacity:1;stroke-width:1.469"
+         x="298.21274"
+         y="204.32349"
+         id="tspan6-8-8">Deployment 2</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:9.87777px;line-height:8.6px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;text-anchor:middle;fill:#3a4288;fill-opacity:1;stroke:none;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.40701;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
@@ -215,7 +226,18 @@
          style="line-height:8.6px;fill:#3a4288;fill-opacity:1;stroke-width:1.469"
          x="195.75731"
          y="179.34488"
-         id="tspan6-8-2-7">Service 1</tspan></text>
+         id="tspan6-8-2-7">Deployment 1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.6px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;text-anchor:middle;fill:#3a4288;fill-opacity:1;stroke:none;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.40701;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="196.3746"
+       y="196.11441"
+       id="text3-0-1-8-9-1-1"><tspan
+         sodipodi:role="line"
+         style="line-height:8.6px;fill:#3a4288;fill-opacity:1;stroke-width:1.469"
+         x="196.3746"
+         y="196.11441"
+         id="tspan6-8-2-7-2">Service 1</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:9.87777px;line-height:8.6px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.40701;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
@@ -306,60 +328,60 @@
        id="rect4-8-3"
        width="74.000526"
        height="19.389172"
-       x="249.01128"
+       x="260.12375"
        y="81.251709"
        rx="7.6688428"
        ry="7.218544" />
     <text
        xml:space="preserve"
        style="font-size:9.87777px;line-height:8.59999px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;letter-spacing:1.08215px;text-anchor:middle;fill:none;fill-opacity:1;stroke:#669f22;stroke-width:1.169;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
-       x="285.24091"
+       x="296.35358"
        y="93.212097"
        id="text5-7-7"><tspan
          sodipodi:role="line"
          id="tspan5-9-5"
          style="letter-spacing:1.08215px;stroke:#669f22;stroke-width:1.169;stroke-dasharray:none;stroke-opacity:1"
-         x="285.78198"
+         x="296.89465"
          y="93.212097">Pod 2</tspan></text>
     <rect
        style="fill:none;fill-opacity:1;stroke:#669f22;stroke-width:1.92825;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
        id="rect4-8-2"
        width="74.000526"
        height="19.389172"
-       x="249.45676"
+       x="260.56924"
        y="147.72746"
        rx="7.6688428"
        ry="7.218544" />
     <text
        xml:space="preserve"
        style="font-size:9.87777px;line-height:8.59999px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;letter-spacing:1.08215px;text-anchor:middle;fill:none;fill-opacity:1;stroke:#669f22;stroke-width:1.169;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
-       x="285.68637"
+       x="296.79904"
        y="159.68785"
        id="text5-7-93"><tspan
          sodipodi:role="line"
          id="tspan5-9-1"
          style="letter-spacing:1.08215px;stroke:#669f22;stroke-width:1.169;stroke-dasharray:none;stroke-opacity:1"
-         x="286.22745"
+         x="297.34012"
          y="159.68785">Pod 2</tspan></text>
     <rect
        style="fill:none;fill-opacity:1;stroke:#669f22;stroke-width:1.92825;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
        id="rect4-8-84"
        width="74.000526"
        height="19.389172"
-       x="248.96223"
+       x="260.07471"
        y="174.04126"
        rx="7.6688428"
        ry="7.218544" />
     <text
        xml:space="preserve"
        style="font-size:9.87777px;line-height:8.59999px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;letter-spacing:1.08215px;text-anchor:middle;fill:none;fill-opacity:1;stroke:#669f22;stroke-width:1.169;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
-       x="285.19186"
+       x="296.30453"
        y="186.00165"
        id="text5-7-5"><tspan
          sodipodi:role="line"
          id="tspan5-9-0"
          style="letter-spacing:1.08215px;stroke:#669f22;stroke-width:1.169;stroke-dasharray:none;stroke-opacity:1"
-         x="285.73294"
+         x="296.84561"
          y="186.00165">Pod 2</tspan></text>
     <text
        xml:space="preserve"
@@ -393,16 +415,25 @@
            id="tspan8" /></text>
     </g>
     <rect
-       style="fill:none;fill-opacity:1;stroke:#669f22;stroke-width:0.712725;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       style="fill:none;fill-opacity:1;stroke:#669f22;stroke-width:0.768448;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
        id="rect8"
-       width="79.341972"
-       height="135.3454"
-       x="246.76567"
-       y="63.657051"
-       rx="7.6688423"
-       ry="7.2185445" />
+       width="83.624748"
+       height="149.27864"
+       x="255.7691"
+       y="61.447376"
+       rx="8.0827951"
+       ry="7.9616637" />
     <rect
-       style="fill:none;fill-opacity:1;stroke:#3a4288;stroke-width:0.982704;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.894118;paint-order:stroke fill markers"
+       style="fill:none;fill-opacity:1;stroke:#669f22;stroke-width:0.701316;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.701316, 2.10395;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect8-6"
+       width="79.353378"
+       height="131.02792"
+       x="257.99014"
+       y="76.700989"
+       rx="7.6699448"
+       ry="6.9882755" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#3a4288;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.7,2.09999994;stroke-dashoffset:0;stroke-opacity:0.894118;paint-order:stroke fill markers"
        id="rect8-5"
        width="79.071991"
        height="125.97486"
@@ -410,9 +441,18 @@
        y="58.967304"
        rx="7.6688423"
        ry="7.2185445" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#3a4288;stroke-width:1.08019;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.894118;paint-order:stroke fill markers"
+       id="rect8-5-3"
+       width="83.155991"
+       height="144.73425"
+       x="153.49562"
+       y="56.628445"
+       rx="8.0649319"
+       ry="8.2934866" />
     <path
        style="fill:none;fill-opacity:1;stroke:#3a4288;stroke-width:0.904999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.894118;marker-end:url(#ArrowTriangleStylized);paint-order:stroke fill markers"
-       d="m 123.95437,203.52764 c 16.65983,-8.47634 23.29727,-26.41773 47.16534,-27.87882"
+       d="m 123.95437,203.52764 c 16.65983,-8.47634 24.21122,-10.03485 48.07929,-11.49594"
        id="path8"
        sodipodi:nodetypes="cc" />
     <g
@@ -461,8 +501,8 @@
          sodipodi:nodetypes="cccc" />
     </g>
     <path
-       style="fill:none;fill-opacity:1;stroke:#669f22;stroke-width:0.904999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#marker12);paint-order:stroke fill markers"
-       d="M 361.46514,91.00492 C 344.71494,84.072996 342.77334,65.761718 312.37023,68.311955"
+       style="fill:none;fill-opacity:1;stroke:#669f22;stroke-width:0.776995;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#marker12);paint-order:stroke fill markers"
+       d="M 365.32959,87.254259 C 350.87845,81.331661 349.20335,65.686605 322.97324,67.865513"
        id="path11"
        sodipodi:nodetypes="cc" />
   </g>
