@@ -1025,7 +1025,7 @@ users:
   - and switch between them using the `kubectl config use-context` command.
 <div class="custom">
 
-```bash
+```yaml
 apiVersion: v1
 clusters:
 - cluster:
