@@ -75,7 +75,7 @@ it is meant to support *reliable* and *scalable* software systems.
 
 ---
 
-## Key freatures
+## Key features
 - Immutability
 - Everything is a declarative configuration object
 - Broader range of object to create, and manage, the production environment
@@ -1250,5 +1250,3 @@ php-apache   Deployment/php-apache   0%/50%     1         10        1          2
 </div>
 
 ---
-
-
