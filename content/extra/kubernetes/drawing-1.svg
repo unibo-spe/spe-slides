@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="312.21286mm"
+   height="216.88649mm"
+   viewBox="0 0 312.21286 216.88648"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
+   sodipodi:docname="drawing-1.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.90926697"
+     inkscape:cx="407.47109"
+     inkscape:cy="401.42226"
+     inkscape:window-width="1920"
+     inkscape:window-height="1052"
+     inkscape:window-x="1920"
+     inkscape:window-y="60"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <marker
+       style="overflow:visible"
+       id="marker12"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Stylized triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="m 6,0 c -3,1 -7,3 -9,5 0,0 0,-4 2,-5 -2,-1 -2,-5 -2,-5 2,2 6,4 9,5 z"
+         id="path12" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="ArrowTriangleStylized"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Stylized triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="m 6,0 c -3,1 -7,3 -9,5 0,0 0,-4 2,-5 -2,-1 -2,-5 -2,-5 2,2 6,4 9,5 z"
+         id="path4" />
+    </marker>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-81.817314,-26.921153)">
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:1.65176;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect1"
+       width="208.20364"
+       height="99.009506"
+       x="141.36963"
+       y="33.75951"
+       rx="0"
+       ry="0" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#669f22;stroke-width:1.92825;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect4-8-8"
+       width="74.000526"
+       height="19.389172"
+       x="259.95874"
+       y="107.14972"
+       rx="7.6688428"
+       ry="7.218544" />
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.59999px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;letter-spacing:1.08215px;text-anchor:middle;fill:none;fill-opacity:1;stroke:#669f22;stroke-width:1.169;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="296.18857"
+       y="119.1101"
+       id="text5-7-9"><tspan
+         sodipodi:role="line"
+         id="tspan5-9-7"
+         style="letter-spacing:1.08215px;stroke:#669f22;stroke-width:1.169;stroke-dasharray:none;stroke-opacity:1"
+         x="296.72964"
+         y="119.1101">Pod 2</tspan></text>
+    <rect
+       style="fill:none;stroke:#3a4288;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.407;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect1-2"
+       width="87.233055"
+       height="174.29251"
+       x="150.87352"
+       y="53.319336"
+       rx="0"
+       ry="0" />
+    <rect
+       style="fill:none;stroke:#669f22;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.407;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect1-2-7"
+       width="87.233055"
+       height="174.43135"
+       x="253.99275"
+       y="53.071487"
+       rx="0"
+       ry="0" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:1.64494;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect1-5"
+       width="206.47314"
+       height="99.441811"
+       x="141.7216"
+       y="139.138"
+       rx="0"
+       ry="0" />
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:4.99999px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.40701;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="109.01488"
+       y="25.070995"
+       id="text2"><tspan
+         sodipodi:role="line"
+         id="tspan2"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.469"
+         x="109.01488"
+         y="25.070995" /></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.6px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.40701;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="112.00026"
+       y="39.190163"
+       id="text3"><tspan
+         sodipodi:role="line"
+         id="tspan3"
+         style="line-height:8.6px;stroke-width:1.469"
+         x="112.00026"
+         y="39.190163">Kubernetes</tspan><tspan
+         sodipodi:role="line"
+         style="line-height:8.6px;stroke-width:1.469"
+         x="112.00026"
+         y="47.790161"
+         id="tspan4">Node 1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.6px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;text-anchor:middle;fill:#3a4288;fill-opacity:1;stroke:none;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.40701;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="194.67256"
+       y="49.253567"
+       id="text3-0"><tspan
+         sodipodi:role="line"
+         style="line-height:8.6px;fill:#3a4288;fill-opacity:1;stroke-width:1.469"
+         x="194.67256"
+         y="49.253567"
+         id="tspan4-3">Namespace 1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.6px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;text-anchor:middle;fill:#3a4288;fill-opacity:1;stroke:none;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.40701;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="197.61"
+       y="97.272324"
+       id="text3-0-2"><tspan
+         sodipodi:role="line"
+         style="line-height:8.6px;fill:#3a4288;fill-opacity:1;stroke-width:1.469"
+         x="197.61"
+         y="97.272324"
+         id="tspan4-3-5">Container 1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.6px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;text-anchor:middle;fill:#669f22;fill-opacity:1;stroke:none;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.40701;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="297.03732"
+       y="49.303017"
+       id="text3-0-1"><tspan
+         sodipodi:role="line"
+         style="line-height:8.6px;fill:#669f22;fill-opacity:1;stroke-width:1.469"
+         x="297.03732"
+         y="49.303017"
+         id="tspan6">Namespace 2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.6px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;text-anchor:middle;fill:#669f22;fill-opacity:1;stroke:none;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.40701;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="297.38931"
+       y="72.19368"
+       id="text3-0-1-8"><tspan
+         sodipodi:role="line"
+         style="line-height:8.6px;fill:#669f22;fill-opacity:1;stroke-width:1.469"
+         x="297.38931"
+         y="72.19368"
+         id="tspan6-8">Service 2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.6px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;text-anchor:middle;fill:#669f22;fill-opacity:1;stroke:none;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.40701;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="298.21274"
+       y="204.32349"
+       id="text3-0-1-8-1"><tspan
+         sodipodi:role="line"
+         style="line-height:8.6px;fill:#669f22;fill-opacity:1;stroke-width:1.469"
+         x="298.21274"
+         y="204.32349"
+         id="tspan6-8-8">Deployment 2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.6px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;text-anchor:middle;fill:#3a4288;fill-opacity:1;stroke:none;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.40701;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="195.75731"
+       y="179.34488"
+       id="text3-0-1-8-9-1"><tspan
+         sodipodi:role="line"
+         style="line-height:8.6px;fill:#3a4288;fill-opacity:1;stroke-width:1.469"
+         x="195.75731"
+         y="179.34488"
+         id="tspan6-8-2-7">Deployment 1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.6px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;text-anchor:middle;fill:#3a4288;fill-opacity:1;stroke:none;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.40701;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="196.3746"
+       y="196.11441"
+       id="text3-0-1-8-9-1-1"><tspan
+         sodipodi:role="line"
+         style="line-height:8.6px;fill:#3a4288;fill-opacity:1;stroke-width:1.469"
+         x="196.3746"
+         y="196.11441"
+         id="tspan6-8-2-7-2">Service 1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.6px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.40701;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="112.71842"
+       y="145.11813"
+       id="text3-6"><tspan
+         sodipodi:role="line"
+         id="tspan3-0"
+         style="line-height:8.6px;stroke-width:1.469"
+         x="112.71842"
+         y="145.11813">Kubernetes</tspan><tspan
+         sodipodi:role="line"
+         style="line-height:8.6px;stroke-width:1.469"
+         x="112.71842"
+         y="153.71814"
+         id="tspan4-6">Node 2</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#3a4288;stroke-width:1.92825;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect4"
+       width="74.000526"
+       height="64.337341"
+       x="158.68848"
+       y="61.975666"
+       rx="7.6688428"
+       ry="7.218544" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#3a4288;stroke-width:0.904555;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect4-6"
+       width="66.067688"
+       height="15.858137"
+       x="162.52939"
+       y="106.04247"
+       rx="7.6688428"
+       ry="7.218544" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#3a4288;stroke-width:0.905;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect4-6-3"
+       width="66.067688"
+       height="15.858137"
+       x="162.85083"
+       y="87.397278"
+       rx="7.6688428"
+       ry="7.218544" />
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.59999px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;letter-spacing:1.08215px;text-anchor:middle;fill:none;fill-opacity:1;stroke:#3a4288;stroke-width:1.169;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="195.12892"
+       y="74.492493"
+       id="text5"><tspan
+         sodipodi:role="line"
+         id="tspan5"
+         style="letter-spacing:1.08215px;stroke-width:1.169;stroke-dasharray:none"
+         x="195.67"
+         y="74.492493">Pod 1</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#3a4288;stroke-width:1.92825;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect4-8"
+       width="74.000526"
+       height="19.389172"
+       x="158.16754"
+       y="147.50621"
+       rx="7.6688428"
+       ry="7.218544" />
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.59999px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;letter-spacing:1.08215px;text-anchor:middle;fill:none;fill-opacity:1;stroke:#3a4288;stroke-width:1.169;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="194.39717"
+       y="159.4666"
+       id="text5-7"><tspan
+         sodipodi:role="line"
+         id="tspan5-9"
+         style="letter-spacing:1.08215px;stroke-width:1.169;stroke-dasharray:none"
+         x="194.93825"
+         y="159.4666">Pod 1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.59999px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;letter-spacing:1.08215px;text-anchor:middle;fill:none;fill-opacity:1;stroke:#3a4288;stroke-width:1.169;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="110.99657"
+       y="219.22479"
+       id="text5-7-6"><tspan
+         sodipodi:role="line"
+         id="tspan5-9-10"
+         style="letter-spacing:1.08215px;stroke-width:1.169;stroke-dasharray:none"
+         x="111.53764"
+         y="219.22479">User 1</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#669f22;stroke-width:1.92825;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect4-8-3"
+       width="74.000526"
+       height="19.389172"
+       x="260.12375"
+       y="81.251709"
+       rx="7.6688428"
+       ry="7.218544" />
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.59999px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;letter-spacing:1.08215px;text-anchor:middle;fill:none;fill-opacity:1;stroke:#669f22;stroke-width:1.169;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="296.35358"
+       y="93.212097"
+       id="text5-7-7"><tspan
+         sodipodi:role="line"
+         id="tspan5-9-5"
+         style="letter-spacing:1.08215px;stroke:#669f22;stroke-width:1.169;stroke-dasharray:none;stroke-opacity:1"
+         x="296.89465"
+         y="93.212097">Pod 2</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#669f22;stroke-width:1.92825;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect4-8-2"
+       width="74.000526"
+       height="19.389172"
+       x="260.56924"
+       y="147.72746"
+       rx="7.6688428"
+       ry="7.218544" />
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.59999px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;letter-spacing:1.08215px;text-anchor:middle;fill:none;fill-opacity:1;stroke:#669f22;stroke-width:1.169;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="296.79904"
+       y="159.68785"
+       id="text5-7-93"><tspan
+         sodipodi:role="line"
+         id="tspan5-9-1"
+         style="letter-spacing:1.08215px;stroke:#669f22;stroke-width:1.169;stroke-dasharray:none;stroke-opacity:1"
+         x="297.34012"
+         y="159.68785">Pod 2</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#669f22;stroke-width:1.92825;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect4-8-84"
+       width="74.000526"
+       height="19.389172"
+       x="260.07471"
+       y="174.04126"
+       rx="7.6688428"
+       ry="7.218544" />
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.59999px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;letter-spacing:1.08215px;text-anchor:middle;fill:none;fill-opacity:1;stroke:#669f22;stroke-width:1.169;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="296.30453"
+       y="186.00165"
+       id="text5-7-5"><tspan
+         sodipodi:role="line"
+         id="tspan5-9-0"
+         style="letter-spacing:1.08215px;stroke:#669f22;stroke-width:1.169;stroke-dasharray:none;stroke-opacity:1"
+         x="296.84561"
+         y="186.00165">Pod 2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.59999px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;letter-spacing:1.08215px;text-anchor:middle;fill:#669f22;fill-opacity:1;stroke:#669f22;stroke-width:1.169;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="206.53333"
+       y="115.35571"
+       id="text7"><tspan
+         sodipodi:role="line"
+         id="tspan7"
+         style="stroke-width:1.169"
+         x="206.53333"
+         y="115.35571" /></text>
+    <g
+       id="g1"
+       transform="translate(2.6822131,66.931889)">
+      <text
+         xml:space="preserve"
+         style="font-size:9.87777px;line-height:8.6px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;text-anchor:middle;fill:#3a4288;fill-opacity:1;stroke:none;stroke-width:1.469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1.469, 4.40701;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+         x="194.67256"
+         y="49.253567"
+         id="text3-0-4"><tspan
+           sodipodi:role="line"
+           style="line-height:8.6px;fill:#3a4288;fill-opacity:1;stroke-width:1.469"
+           x="194.67256"
+           y="49.253567"
+           id="tspan4-3-3">Container 2</tspan><tspan
+           sodipodi:role="line"
+           style="line-height:8.6px;fill:#3a4288;fill-opacity:1;stroke-width:1.469"
+           x="194.67256"
+           y="57.853565"
+           id="tspan8" /></text>
+    </g>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#669f22;stroke-width:0.768448;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect8"
+       width="83.624748"
+       height="149.27864"
+       x="255.7691"
+       y="61.447376"
+       rx="8.0827951"
+       ry="7.9616637" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#669f22;stroke-width:0.701316;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.701316, 2.10395;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect8-6"
+       width="79.353378"
+       height="131.02792"
+       x="257.99014"
+       y="76.700989"
+       rx="7.6699448"
+       ry="6.9882755" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#3a4288;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.7,2.09999994;stroke-dashoffset:0;stroke-opacity:0.894118;paint-order:stroke fill markers"
+       id="rect8-5"
+       width="79.071991"
+       height="125.97486"
+       x="156.0643"
+       y="58.967304"
+       rx="7.6688423"
+       ry="7.2185445" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#3a4288;stroke-width:1.08019;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.894118;paint-order:stroke fill markers"
+       id="rect8-5-3"
+       width="83.155991"
+       height="144.73425"
+       x="153.49562"
+       y="56.628445"
+       rx="8.0649319"
+       ry="8.2934866" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#3a4288;stroke-width:0.904999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.894118;marker-end:url(#ArrowTriangleStylized);paint-order:stroke fill markers"
+       d="m 123.95437,203.52764 c 16.65983,-8.47634 24.21122,-10.03485 48.07929,-11.49594"
+       id="path8"
+       sodipodi:nodetypes="cc" />
+    <g
+       id="g10"
+       transform="matrix(0.82025191,0,0,0.81102938,67.162633,56.337616)"
+       style="stroke-width:1.22605">
+      <ellipse
+         style="fill:#3a4288;fill-opacity:1;stroke:#3a4288;stroke-width:1.10957;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.894118;paint-order:stroke fill markers"
+         id="path9"
+         cx="53.440475"
+         cy="170.92874"
+         rx="6.5910687"
+         ry="6.1007395" />
+      <path
+         style="fill:#3a4288;fill-opacity:1;stroke:#3a4288;stroke-width:1.10957;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.894118;paint-order:stroke fill markers"
+         d="m 40.540966,190.02383 25.642861,-0.47784 c -3.469328,-6.50215 -0.928113,-11.70336 -13.574726,-15.74535 -8.206268,3.11955 -10.874451,9.26813 -12.068135,16.22319 z"
+         id="path10"
+         sodipodi:nodetypes="cccc" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:9.87777px;line-height:8.59999px;font-family:Akaash;-inkscape-font-specification:Akaash;text-align:center;letter-spacing:1.08215px;text-anchor:middle;fill:#669f22;fill-opacity:1;stroke:#669f22;stroke-width:1.169;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       x="375.16156"
+       y="108.71485"
+       id="text5-7-6-4"><tspan
+         sodipodi:role="line"
+         id="tspan5-9-10-9"
+         style="letter-spacing:1.08215px;fill:#669f22;fill-opacity:1;stroke:#669f22;stroke-width:1.169;stroke-dasharray:none;stroke-opacity:1"
+         x="375.70264"
+         y="108.71485">User 2</tspan></text>
+    <g
+       id="g10-0"
+       transform="matrix(0.82025191,0,0,0.81102938,331.32761,-54.172334)"
+       style="fill:#669f22;fill-opacity:1;stroke:#669f22;stroke-width:1.22605;stroke-opacity:1">
+      <ellipse
+         style="fill:#669f22;fill-opacity:1;stroke:#669f22;stroke-width:1.10957;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+         id="path9-9"
+         cx="53.440475"
+         cy="170.92874"
+         rx="6.5910687"
+         ry="6.1007395" />
+      <path
+         style="fill:#669f22;fill-opacity:1;stroke:#669f22;stroke-width:1.10957;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+         d="m 40.540966,190.02383 25.642861,-0.47784 c -3.469328,-6.50215 -0.928113,-11.70336 -13.574726,-15.74535 -8.206268,3.11955 -10.874451,9.26813 -12.068135,16.22319 z"
+         id="path10-1"
+         sodipodi:nodetypes="cccc" />
+    </g>
+    <path
+       style="fill:none;fill-opacity:1;stroke:#669f22;stroke-width:0.776995;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#marker12);paint-order:stroke fill markers"
+       d="M 365.32959,87.254259 C 350.87845,81.331661 349.20335,65.686605 322.97324,67.865513"
+       id="path11"
+       sodipodi:nodetypes="cc" />
+  </g>
+</svg>
