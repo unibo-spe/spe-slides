@@ -1,6 +1,6 @@
 {{- $here := $.Page.File | path.Dir -}}
 {{ $path := .Get "path" | default "README.md" | printf "%s/%s" ($here) -}}
-{{- $content := readFile $path | htmlUnescape -}}
+{{- $content := safeHTML (readFile $path) -}}
 {{- $content := split $content "\n" -}}
 {{- $start := .Get "from" | default "1" | int | add -1 }}
 {{- $end := .Get "to" | default (len $content) | int }}
@@ -19,7 +19,7 @@
         )
     ) -}}
 ```{{- $language }}
-{{ $content }}
+{{ $content | htmlUnescape }}
 ```
 {{- else -}}
 {{- $content -}}

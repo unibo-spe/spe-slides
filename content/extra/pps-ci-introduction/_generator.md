@@ -208,7 +208,53 @@ The **changes** that will be saved next
 ### *Branch*
 * A **named** development line
 <br>
-{{< image src="branches.svg" >}}
+
+```mermaid
+%%{init: { 'gitGraph': { 'mainBranchName': 'master', 'showCommitLabel': false }} }%%
+gitGraph
+commit
+branch develop
+commit
+commit
+branch release/1.0.0
+checkout develop
+commit
+checkout release/1.0.0
+commit
+checkout master
+merge release/1.0.0
+checkout develop
+merge release/1.0.0
+commit
+branch feature/foo
+checkout master
+branch hotfix/1.0.1
+commit
+commit
+checkout master
+merge hotfix/1.0.1
+checkout develop
+merge hotfix/1.0.1
+commit
+checkout feature/foo
+commit
+checkout develop
+commit
+branch feature/bar
+checkout develop
+commit
+checkout feature/foo
+merge develop
+checkout develop
+commit
+checkout feature/bar
+commit
+merge develop
+commit
+checkout develop
+merge feature/bar
+commit
+```
 
 ### `master`
 * Default branch name
@@ -383,7 +429,7 @@ Example **requirements**:
 
 ## Actual result
 
-{{% code path="PPS-ci-examples/01-dependencies/src/main/java/it/unibo/sampleapp/RateAMovie.java" from=15 to=52 %}}
+{{% code path="shared-slides/PPS-ci-examples/01-dependencies/src/main/java/it/unibo/sampleapp/RateAMovie.java" from="16" to="50" %}}
 ...
 
 ---
