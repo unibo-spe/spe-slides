@@ -6,7 +6,6 @@
 {{- $end := .Get "to" | default (len $content) | int }}
 {{- $end := sub $end $start }}
 {{- $content := after $start (first (add $start $end) $content) -}}
-{{- $content := delimit $content "\n" -}}
 {{- $highlight := .Get "highlight" | default "true" -}}
 {{- if eq $highlight "true" }}
     {{- $language := .Get "language" | default (
@@ -19,7 +18,9 @@
         )
     ) -}}
 ```{{- $language }}
-{{ $content | htmlUnescape }}
+{{- range $index, $element := $content }}
+    {{ $element | safeHTML }}
+{{- end }}
 ```
 {{- else -}}
 {{- $content -}}
