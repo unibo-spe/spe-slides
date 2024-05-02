@@ -4,6 +4,3 @@
 [submodule "reveal-hugo"]
 	path = themes/reveal-hugo
 	url = https://github.com/cric96/reveal-hugo.git
-[submodule "content/extra/pps-ci-introduction/PPS-ci-examples"]
-	path = content/extra/pps-ci-introduction/PPS-ci-examples
-	url = https://github.com/APICe-at-DISI/PPS-ci-examples.git

@@ -429,8 +429,9 @@ Example **requirements**:
 
 ## Actual result
 
-{{% code path="shared-slides/PPS-ci-examples/01-dependencies/src/main/java/it/unibo/sampleapp/RateAMovie.java" from="16" to="50" %}}
-...
+<span style="font-size: .7em">
+{{% code path="shared-slides/PPS-ci-examples/01-dependencies/src/main/java/it/unibo/sampleapp/RateAMovie.java" %}}
+</span>
 
 ---
 
@@ -551,7 +552,7 @@ A paradigmatic example of a hybrid automator:
 * The Gradle build script is *a valid Kotlin script* (using the Gradle API)
   * (There is actually a kludge concerning the `plugins` and `buildscript` blocks)
 * Anything that has not a valid *Kotlin syntax* is not a valid Gradle build script
-* *Kotlin* and *Groovy* picked as they allow *easy DSL creation*
+* *Kotlin* and *Groovy* picked as they enable *easy DSL creation*
 * The *feeling* is to just have *to configure* an existing software
     * *Declarative*, much like Maven plugins
 * When needed, it is easy to configure *custom behaviour*
@@ -584,11 +585,11 @@ A paradigmatic example of a hybrid automator:
 
 `src/main/java/HelloWorld.java`
 
-{{% code path="PPS-ci-examples/00-minimal/src/main/java/HelloWorld.java" %}}
+{{% code path="shared-slides/PPS-ci-examples/00-minimal/src/main/java/HelloWorld.java" %}}
 
 `build.gradle.kts`
 
-{{% code path="PPS-ci-examples/00-minimal/build.gradle.kts" %}}
+{{% code path="shared-slides/PPS-ci-examples/00-minimal/build.gradle.kts" %}}
 
 Yes, it's a one-liner
 
@@ -610,8 +611,13 @@ Yes, it's a one-liner
 
 `repositories`
 * Where to retrieve software from
-    * suggested ones are `mavenCentral()` and `google()`
-    * ~~`jcenter()`~~ was common, but it has been sunsetted (May 2021)
+
+Well known repositories for Java and related technologies (including Scala):
+* The Central Repository: `mavenCentral()` -- de-facto standard
+* Google Android Libraries: `google()`
+* ✝ ~~`jcenter()`~~ sunsetted May 2021
+* Jitpack: `maven { url("https://jitpack.io") }`
+
 
 ---
 
@@ -659,15 +665,15 @@ Gradle proposes a (partial) solution with the so-called *Gradle wrapper*
 
 The Gradle wrapper is *__the__ correct way* to use gradle, and we'll be using it from now on.
 
-
 ---
 
 ## Gradle: our toy example
 
 `src/main/java/it/unibo/sampleapp/RateAMovie.java`
 
-{{% code path="PPS-ci-examples/01-dependencies/src/main/java/it/unibo/sampleapp/RateAMovie.java" from="15" to="42" %}}
-...
+<span style="font-size: .5em">
+{{% code path="shared-slides/PPS-ci-examples/01-dependencies/src/main/java/it/unibo/sampleapp/RateAMovie.java" %}}
+</span>
 
 ---
 
@@ -675,33 +681,15 @@ The Gradle wrapper is *__the__ correct way* to use gradle, and we'll be using it
 
 `settings.gradle.kts`
 
-{{% code path="PPS-ci-examples/01-dependencies/settings.gradle.kts" %}}
-
+{{% code path="shared-slides/PPS-ci-examples/01-dependencies/settings.gradle.kts" %}}
 (one-liner)
 
 ---
 
 ## Gradle: our toy example
 
-`build.gradle.kts`: plugins
-
-{{% code path="PPS-ci-examples/01-dependencies/build.gradle.kts" to=16 %}}
-
----
-
-## Gradle: our toy example
-
-`build.gradle.kts`: dependencies and repositories
-
-{{% code path="PPS-ci-examples/01-dependencies/build.gradle.kts" from=18 to=45 %}}
-
----
-
-## Gradle: our toy example
-
-`build.gradle.kts`: execution and tests
-
-{{% code path="PPS-ci-examples/01-dependencies/build.gradle.kts" from=46  %}}
+`build.gradle.kts`
+{{% code path="shared-slides/PPS-ci-examples/01-dependencies/build.gradle.kts" %}}
 
 ---
 
@@ -720,11 +708,11 @@ The Gradle wrapper is *__the__ correct way* to use gradle, and we'll be using it
 
 `src/main/groovy/HelloGroovy.groovy`
 
-{{% code path="PPS-ci-examples/02-multilang/src/main/groovy/HelloGroovy.groovy" %}}
+{{% code path="shared-slides/PPS-ci-examples/02-multilang/src/main/groovy/HelloGroovy.groovy" %}}
 
 `src/main/java/HelloWorld.java`
 
-{{% code path="PPS-ci-examples/02-multilang/src/main/java/HelloWorld.java" %}}
+{{% code path="shared-slides/PPS-ci-examples/02-multilang/src/main/java/HelloWorld.java" %}}
 
 ---
 
@@ -732,11 +720,11 @@ The Gradle wrapper is *__the__ correct way* to use gradle, and we'll be using it
 
 `src/main/kotlin/HelloKt.kt`
 
-{{% code path="PPS-ci-examples/02-multilang/src/main/kotlin/HelloKt.kt" %}}
+{{% code path="shared-slides/PPS-ci-examples/02-multilang/src/main/kotlin/HelloKt.kt" %}}
 
 `src/main/scala/HelloScala.scala`
 
-{{% code path="PPS-ci-examples/02-multilang/src/main/scala/HelloScala.scala" %}}
+{{% code path="shared-slides/PPS-ci-examples/02-multilang/src/main/scala/HelloScala.scala" %}}
 
 ---
 
@@ -744,7 +732,7 @@ The Gradle wrapper is *__the__ correct way* to use gradle, and we'll be using it
 
 `build.gradle.kts`
 
-{{% code path="PPS-ci-examples/02-multilang/build.gradle.kts" %}}
+{{% code path="shared-slides/PPS-ci-examples/02-multilang/build.gradle.kts" %}}
 
 ---
 
@@ -1091,9 +1079,9 @@ delivery is enabled towards all the aforementioned destinations
 Your error will remain in the repositories *forever* and you will *never* be able to
 fix it, you will need to *create a new release* with a *different version number*.
 
-**Anectodal apologia of no-retract policies**
+### **Why no-retract? An anecdote**
 
-In March 2016, Azer Koçlu unpublished more than 250 of his modules
+> In March 2016, Azer Koçulu unpublished more than 250 of his modules
 from NPM, which is a popular package manager used by Javascript
 projects to install dependencies, because he was asked to rename the
 module `Kik`, whose name is the same of an instant messaging app that

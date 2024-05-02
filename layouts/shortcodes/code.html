@@ -16,12 +16,13 @@
                 )
             )
         )
-    ) -}}
+    ) }}
+
 ```{{- $language }}
 {{- range $index, $element := $content }}
-    {{ $element | safeHTML }}
-{{- end }}
+{{ $element | safeHTML }}
+{{- end -}}{{- "\n" -}}
 ```
-{{- else -}}
+{{ else -}}
 {{- $content -}}
 {{- end -}}

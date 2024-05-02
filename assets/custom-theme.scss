@@ -44,6 +44,9 @@ $linkColor: #0477b9;
 $linkColorHover: lighten( $linkColor, 25% );
 $selectionBackgroundColor: lighten( $linkColor, 25% );
 
+$detailBackgroundColor: #dae5e9;
+$logo: url("../example-background-neg.svg");
+
 $heading1Size: 2.5em;
 $heading2Size: 1.6em;
 $heading3Size: 1.3em;
@@ -52,6 +55,9 @@ $heading4Size: 1.0em;
 @import "reveal-js/dist/theme/template/theme";
 
 section.has-light-background {
+	$detailBackgroundColor: #bd2b0b !global;
+	$logo: url("../example-background.svg") !global;
+
 	&, h1, h2, h3, h4, h5, h6 {
 		color: #222;
 	}
@@ -433,4 +439,25 @@ section.has-light-background {
 	width: 800px;
 	color: darkred;
 	font-weight: bolder;
+}
+
+  // Multicolumn styling
+
+  .reveal div.col {
+	// draw a red border
+	// border: 1px solid red;
+	text-align: left;
+	border: .2em dashed $detailBackgroundColor;
+	border-style: double;
+	border-radius: 1em;
+	padding: 0.5em;
+}
+
+.reveal div.container {
+	// border: 1px solid red;
+	align-self: center;
+	min-width: 90%;
+	margin-right: 5%;
+	margin-left: 5%;
+	margin-top: 1em;
 }
