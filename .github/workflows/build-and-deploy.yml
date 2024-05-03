@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: danysk/action-checkout@0.2.16
       - name: Setup Ruby
-        uses: ruby/setup-ruby@v1.175.1
+        uses: ruby/setup-ruby@v1.176.0
         with:
           working-directory: shared-slides
       - name: Compute the version of Hugo
