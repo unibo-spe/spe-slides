@@ -20,9 +20,10 @@
           var videoFrame = ytVideos[i]
           var isYouTube = /^https?:\/\/(www.)youtube\.com\/.*/.test(videoFrame.src)
           if (isYouTube) {
-              console.log(`Removing ${videoFrame.src}`)
-              var parent = videoFrame.parentElement
+              var div = videoFrame.parentElement
+              var parent = div.parentElement
               videoFrame.remove()
+              div.remove()
               var p = document.createElement('p')
               p.append(
                   document.createTextNode(
@@ -30,18 +31,25 @@
                   )
               )
               p.append(document.createElement('br'))
-              p.append(
-                  document.createTextNode(
-                      `Visit instead ${
-                          videoFrame.src
-                      } or ${
-                          videoFrame.src.replace(
-                              /(^https?:\/\/(www.)youtube\.com)\/(embed\/)(\w+).*/,
-                              "https://www.youtube.com/watch?v=$4"
-                          )
-                      }`
-                  )
-              )
+              p.append(document.createTextNode("Visit instead:"))
+              p.append(document.createElement('br'))
+              const anchor1 = document.createElement('a');
+              anchor1.href = videoFrame.src;
+              anchor1.textContent = videoFrame.src;
+              p.append(anchor1);
+              p.append(document.createElement('br'))
+              const altSrc = videoFrame.src.replace(
+                  /(^https?:\/\/(www.)youtube\.com)\/(embed\/)(\w+).*/,
+                  "https://www.youtube.com/watch?v=$4"
+              );
+              const anchor2 = document.createElement('a');
+              anchor2.href = altSrc;
+              anchor2.textContent = altSrc;
+              p.append(document.createTextNode("or:"))
+              p.append(document.createElement('br'))
+              p.append(anchor2);
+              p.append(document.createElement('br'))
+              p.append(document.createTextNode("to watch the content."))
               parent.appendChild(p)
           }
       }
