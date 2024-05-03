@@ -20,7 +20,7 @@ enableSourceMap = true
 
 # Programming and development paradigms
 
-## Continuous Integration
+## DevOps in a nutshell
 
 ### [Danilo Pianini](mailto:danilo.pianini@unibo.it)
 
