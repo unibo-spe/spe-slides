@@ -93,11 +93,6 @@ html {
     }
 }.render()
 ```
----
-
-# Kotlin 203 -- DSLs
-
-## A simple HTML DSL
 
 Result:
 

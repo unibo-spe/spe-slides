@@ -916,7 +916,7 @@ class B : A() // OK
 ```
 As in Scala, *the constructor of the superclass must be called at extension site*
 <br/>
-Differently than Scala, such invocatin *always requires parentheses*
+Differently than Scala, such invocation *always requires parentheses*
 
 ---
 
@@ -1064,11 +1064,11 @@ In Scala, operator names are valid method names, and infix calls are automatic:
 executer(:/(host, port) / target << reqBody >- { fromRespStr }) // Using Databinder Dispatch
 val graph = Graph((jfc ~+#> fra)(Any()), (fra ~+#> dme)(Any()) // Using ScalaGraph
 ```
-Operators are succint, but cryptic, and their meaning changes with context
+Operators are succinct, but cryptic, and their meaning changes with context
 
 This has been a source of cricism, Kotlin **does not allow to define custom operators**
 * At most, back-ticked names, but some characters are disallowed (`>`, `/`, `:`, etc.)
-* Clumsy, defies the reason why one would use them (terse and succint code)
+* Clumsy, defies the reason why one would use them (terse and succinct code)
 
 ```kotlin
 class A { infix fun `~+#-`(other: A) = "I'm an arcane operator" }
@@ -1430,17 +1430,17 @@ Similar to Scala's `sealed trait`s:
 * sealed hierarchies proved *exhaustive checking* inside `where` clauses
 
 ```kotlin
-sealed class Booze {
-    class Rum : Booze()
-    class Whisky : Booze()
-    class Vodka : Booze()
+sealed interface Booze {
+    object Rum : Booze
+    object Whisky : Booze
+    object Vodka : Booze
 }
 fun goGetMeSome(beverage: Booze) = when (beverage) {
     is Booze.Rum -> "Diplomatico"
     is Booze.Whisky -> "Caol Ila"
     is Booze.Vodka -> "Zubrowka"
 }
-goGetMeSome(Booze.Rum())
+goGetMeSome(Booze.Rum)
 ```
 
 ---
@@ -1511,9 +1511,9 @@ object : Test {
 
 ```kotlin
 typealias Drivers = Pair<String, String>
-typealias Team = Pair<String, Drivers>
-typealias Formula1 = Map<String, Team>
-val `f1 2020` = mapOf(
+typealias Lineup = Pair<String, Drivers>
+typealias F1Season = Map<String, Drivers>
+val `f1 2020`: F1Season = mapOf(
     Team("Ferrari", Drivers("Vettel", "Leclerc")),
     Team("RedBull", Drivers("Versbatten", "Albon")),
     Team("Merdeces", Drivers("Hamilton", "Bottas")),
