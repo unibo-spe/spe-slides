@@ -14,6 +14,14 @@ enableSourceMap = true
 .reveal blockquote {
     font-family: 'Georgia';
 }
+
+.reveal blockquote::before{
+    content: "";
+}
+
+.reveal blockquote::after{
+    content: "";
+}
 </style>
 
 # Domain Driven Design  
@@ -187,7 +195,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 > Set of __software__ abstractions mapping relevant _concepts_ of the domain
 
-- e.g. C# projects, namespaces, interfaces, classes, structures, methods, etc.
+- e.g. Java/Kotlin/Scala projects, packages, interfaces, classes, records, methods, etc.
 
 ---
 
@@ -359,16 +367,16 @@ Model
 
 ### Value Objects
 
-- Identified by their attributes
+- Identified by their _attributes_
     + equality compares attributes alone
-- Must be stateless $\Rightarrow$ require an immutable design
+- Must be _stateless_ $\Rightarrow$ better to use _immutable_ design
     + read-only properties
     + lack of state-changing methods
 - May be implemented as 
     - structures in .NET
-    - data classes in Kotlin, Scala, Python
+    - _data classes_ in Kotlin, Scala, Python
     - records in Java
-- Must implement `equals()` and `hashCode()` on JVM
+- _Must_ implement `equals()` and `hashCode()` on JVM
     + implementation must compare the objects' attributes
 
 ---
@@ -377,13 +385,13 @@ Model
 
 ### Entities
 
-- They have an inherent identity, which never changes during their lifespan
+- They have an inherent _identity_, which never changes during their lifespan
     + common modelling: __identifier attribute__, of some value type
     + equality compares identity
-- Can be stateful $\Rightarrow$ may have a mutable design
+- Can be _stateful_ $\Rightarrow$ may have a _mutable_ design
     + modifiable properties
     + state-changing methods
-- May be implemented via classes in most languages
+- May be implemented via _classes_ in most languages
 - Must implement `equals()` and `hashCode()` on JVM
     + implementation must compare (at least) the objects' identifiers
 
@@ -394,6 +402,7 @@ Model
 {{< plantuml >}}
 interface Customer {
     + CustomerID getID()
+    ..
     + String getName()
     + void **setName**(name: String)
     + String getEmail()
@@ -428,14 +437,14 @@ Customer *-r- CustomerID
 
 ### Definition
 
-- A composite object, aggregating related entities/value objects
+- A _composite_ entity, _aggregating_ related entities/value objects
 
-- It ensures the consistency of the objects it contains
+- It _guarantees_ the _consistency_ of the objects it contains
 
-- It mediates the usage of the composing objects from the outside
-    + acting as a façade
+- It _mediates_ the usage of the composing objects from the outside
+    + acting as a _façade_ ([à la GOF](https://en.wikipedia.org/wiki/Facade_pattern))
 
-- Outside objects should avoid holding references to composing objects
+- Outside objects should _avoid_ holding _references_ to composing objects
 
 ---
 
@@ -446,13 +455,14 @@ Customer *-r- CustomerID
 - They can be or exploit _collections_ to contain composing items
     + they may leverage on the [composite pattern](https://en.wikipedia.org/wiki/Composite_pattern)
 
-- May be better implemented as classes in most programming languages
+- May be better implemented as _classes_ in most programming languages
 
-- Must implement `equals()` and `hashCode()` on JVM
-    + implementation may take composing items into account
+- _Must_ implement `equals()` and `hashCode()` on JVM (as any other entity)
+    + implementation may take _composing_ items into account
 
 - Components of an aggregate should _not_ hold **references** to components of _other_ aggregates
     + that's why they are called aggregate _roots_
+    + notable exception: _references_ to _identifiers_ of other aggregates
 
     ![Aggregate roots should not hold references to other aggregates' components](./aggregate-references.png)
 
@@ -461,6 +471,8 @@ Customer *-r- CustomerID
 ## Aggregate Root (example)
 
 ![Two aggregates with inter-dependencies](./aggregate-root.png)
+
+(notice the link between `Order` and `Buyer` implemented by letting the `Order` hold a reference to the `BuyerID`)
 
 ---
 
@@ -478,30 +490,31 @@ Customer *-r- CustomerID
 
 ### Purpose
 
-+ Factories encapsulate the creation logic for complex objects
++ Factories encapsulate the _creation logic_ for _complex objects_
     * making it evolvable, interchangeable, replaceable
 
-+ They ease the enforcement of invariants
++ They ease the enforcement of _invariants_
 
-+ They support dynamic selection of the most adequate implementation
++ They support _dynamic selection_ of the most adequate _implementation_
+    + while _hiding_ the actual implementation choice
 
 ### Remarks
 
-- DDD’s notion of factory is quite wide
+- DDD's notion of factory is quite loose
     + DDD's Factories $\supset$ GOF's Factories $\cup$ Builders $\cup$ ...
 
 ---
 
 ## Factories (constraints)
 
-- They are usually identityless and stateless objects
+- They are usually _identity-less_ and _state-less_ objects
     + recall the [abstract factory pattern](https://en.wikipedia.org/wiki/Abstract_factory_pattern)
 
-- May be implemented as classes in most OOP languages
+- May be implemented as _classes_ in most OOP languages
 
-- Provide methods to instantiate entities or value objects
+- Provide methods to _instantiate_ entities or value objects
 
-- Usually they require no mutable field/property
+- Usually they require _no mutable_ field/property
 
 - No need to implement `equals()` and `hashCode()` on JVM
 
@@ -531,6 +544,11 @@ interface CustomerFactory {
     ..
     + Customer newCustomerCompany(VatNumber code, String fullName, String email)
 }
+note bottom of CustomerFactory
+- method for creating VAT numbers
+- methods for creating person customers
+- methods for creating company customers
+end note
 
 CustomerFactory -r-> VatNumber: creates
 CustomerFactory -u-> Customer: creates
@@ -540,7 +558,7 @@ CustomerFactory -u-> Customer: creates
 
 ## Repositories (definition)
 
-> Objects mediating the persistent storage/retrieval of other objects
+> Objects mediating the _persistent_ __storage/retrieval__ of other objects
 
 ![Concept of repositories](./repositories.png)
 
@@ -550,42 +568,46 @@ CustomerFactory -u-> Customer: creates
 
 ### Purpose
 
-- Hiding (i.e. be backed by) some database technology 
-- Realising an object-relational mapping (ORM)
-- Storing / retrieving aggregate roots as wholes
-- Supporting CRUD operations on aggregate roots
+- Hiding (i.e. be backed by) some _database technology_ 
+- Possibly realising some sort of [object-relational mapping (ORM)](https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping)
+- _Storing_ / _retrieving_ aggregate roots as _wholes_
+- Supporting _CRUD_ operations on aggregate roots
     - Create, Read, Update, Delete
 
 ### Remarks
 
-- They may exploit factories for information retrieval
-- If properly engineered, avoids lock-in effect for DB technologies 
+- They may exploit _factories_ for turning retrieved data into objects
+- If properly engineered, _avoids lock-in_ effect for database technologies 
 - Design & implementation may require thinking about:
-    - the architecture, the infrastructure, the expected load, etc.
+    - the architecture, 
+    - the infrastructure, 
+    - the expected load, 
+    - etc.
 
 ---
 
 ## Repositories (constraints)
 
-- They are usually identity-less, stateful, and composed objects 
-    + state may consist of the stored objects
-    + state may consist of DB connections
+- They are usually _identity-less_, _stateful_, and _composed_ objects 
+    + state may consist of the _stored objects_
+    + state may consist of _DB connections_
 
-- May be implemented as classes in most OOP languages
+- May be implemented as _classes_ in most OOP languages
 
 - Provide methods to
-    + add, remove, update aggregate root entities 
-    + select and return one or more entity, possibly in a lazy way
-        * this should return `Iterable` or some `Collection` on JVM 
+    + _add_, _remove_, _update_ aggregate root entities 
+    + _select_ and return one or more entities, possibly in a _lazy_ way
+        * this should return `Iterable`, `Collection`, or `Stream` on JVM 
 
-- Non-trivial implementations should take care of
-    + enforcing consistency, in spite of concurrent access I support complex transactions
+- _Non-trivial_ implementations should take care of
+    + enforcing _consistency_, in spite of _concurrent_ access 
+    + support complex _transactions_
 
 ---
 
 ## Repositories (example)
 
-{{< plantuml >}}
+{{< plantuml height="70vh" >}}
 interface CustomerID 
 
 interface Customer
@@ -612,48 +634,49 @@ CustomerRegistry --> CustomerID: exploits
 
 ## Services
 
-> Functional objects encapsulating the business logic of the software (commonly stateless & identity-less),
-> e.g. operations spanning through several entities, objects, aggregates, etc.
+> _Functional_ objects encapsulating the _business logic_ of the software 
+> <br> e.g. operations spanning through _several_ entities, objects, aggregates, etc.
 
 ### Purpose
-- Reifying control-related aspects of the software
-- Wiring aggregates, entities, and value objects together 
-- Exposing coarse-grained functionalities to the users
-- Providing a façade for the domain
+
+- Reifying _control-related_ aspects of the software
+- _Wiring_ aggregates, entities, and value objects _together_ 
+- Exposing _coarse-grained functionalities_ to the users
+- Providing a _façade_ for the domain
 - Make the business logic evolvable, interchangeable, replaceable
 
 ### Remarks
 
-- Services may be exposed via ReSTful API
-- Should be designed keeping current uses cases into account
-    + entities/objects should support future use cases, too
+- Services may be _exposed_ via ReSTful API
+- Should be designed keeping _current uses cases_ into account (i.e. design services to be _purpose-specific_)
+    + entities/objects should support _future use cases_, too (i.e. design entities/objects to be _general purpose_)
 
 ---
 
 ## Services (constraints)
 
-- They are usually identity-less, stateless objects 
+- They are usually _identity-less_, _stateless_ objects 
 
 - May be implemented as classes in OOP languages
-    + or bare functions in functional languages
+    + or bare _functions_ in functional languages
 
-- Commonly provide procedures to do business-related stuff 
-    + e.g. a particular operation
-        * concerning some particular aggregate root 
-        * which does not support it directly 
-        * because the operation is use-case specific
+- Commonly provide _procedures_ to do business-related stuff 
+    + e.g. a particular operation...
+        * ... concerning some particular aggregate root 
+        * ... which does not support it directly through its methods
+        * ... because the operation is use-case specific
     + e.g. proxying an external service
-    + e.g. a complex operation involving aggregates, repositories, factories, etc.
+    + e.g. a complex operation involving several aggregates, repositories, factories, etc.
 
 - Non-trivial implementations should take care of
-    + supporting concurrent access to the service’s facilities 
-    + exposing domain events to the external world
+    + supporting _concurrent access_ to the service’s facilities 
+    + exposing _domain events_ to the external world
 
 --- 
 
 ## Services (example)
 
-{{< plantuml >}}
+{{< plantuml height="70vh" >}}
 interface OrderManagementService {
     + void performOrder(Order order)
 }
@@ -699,9 +722,10 @@ OrderID -d[hidden]- Customer
 
 ## Domain Events (definition)
 
-> A value-like object capturing some domain-related event (i.e. a relevant variation)
+> A value-like object capturing some domain-related _event_ 
+> <br> (i.e., an observable _variation_ in the domain, which is _relevant_ to the software)
 
-- actually, only the event notification/description is reified to a type
+- actually, only the event _notification_/description is reified to a type
 
 ![Concept of domain events](./domain-events.png)
 
@@ -710,31 +734,40 @@ OrderID -d[hidden]- Customer
 ## Domain Events (details)
 
 ### Purpose
-- Propagate changes among portions of the domain model 
-- Record changes concerning the domain
+- _Propagate_ changes among portions of the domain model (e.g. contexts, aggregates, entities, etc.)
+- _Record_ changes concerning the domain
 
 ### Remarks
+
 - Strong relation with the [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) (i.e. publish-subscribe) 
-- Strong relation with the event sourcing approach (described later) 
-- Strong relation with the CQRS pattern (described later)
+
+- Strong relation with the _event sourcing_ approach (described later) 
+
+- Strong relation with the _CQRS pattern_ (described later)
 
 ---
 
 ## Domain Events (constraints)
 
-- They are usually time-stamped value objects
+- They are usually _time-stamped_ value objects
 
-- May be implemented as data-classes or records
+- May be implemented as _data-classes_ or _records_
 
-- They represent a relevant variation in the domain
-    + e.g. a change in the state of some entity / repository
+- They represent a _relevant variation_ in the domain
+    + e.g. a _change_ in the _state_ of some entity / repository
 
 - Event sources & listeners shall be identified too
-    + who is generating the event?
-    + who is consuming the event?
+    + who is _generating_ the event?
+    + who is _consuming_ the event?
 
-- Infrastructural components may be devoted to propagate events across contexts
+- _Infrastructural components_ may be devoted to _propagate_ events across contexts
     + e.g. a message broker, a message queue, etc.
+
+- \[Teacher's Suggestion\]: prefer _neutral_ names for event classes in the model
+    * e.g. `OrderEventArgs` instead of `OrderPerformedEventArgs`
+    * e.g. `OrderEvent` instead of `OrderPerformedEvent`
+    * the reason: the same OOP type may be used to represent different events:
+        + e.g. `orderIssued`, `orderConfirmed`, `orderCancelled`, etc.
 
 ---
 
@@ -785,9 +818,9 @@ note right of OrderManagementService: service
 
 ### Further notions involving __contexts__
 
-- __Bounded Context__: enforce a model’s boundaries & make them explicit
+- __Bounded Context__: enforce a model’s _boundaries_ & make them explicit
 
-- __Context Map__: providing a global view on the domain and its contexts
+- __Context Map__: providing a _global view_ on the domain and its contexts
 
 ---
 
@@ -820,7 +853,7 @@ note right of OrderManagementService: service
 
 ## Bounded Contexts & Context Maps (best practices)
 
-- Clearly _identify & represent__ *boundaries* among contexts
+- Clearly _identify & represent_ **boundaries** among contexts
 
 - *Avoid* __responsibility diffusion__ over a single context
     + one responsible person / team for each context
@@ -1029,7 +1062,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
         * e.g. Gradle sub-projects, Maven modules, .NET assemblies, etc.
     + each module having its own build dependencies
 
-{{< plantuml width="70%">}}
+{{< plantuml height="50vh">}}
 top to bottom direction
 
 component ":domain" as domain
