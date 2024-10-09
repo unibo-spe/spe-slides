@@ -1213,6 +1213,10 @@ Whenever users are willing to _inspect/observe the system_ at time $t$:
 
 # Exercises
 
+Repository: <{{% github-url repo="ddd-exercise" %}}>, branch `exercise`
+
+(solutions on branch `master`)
+
 ---
 
 {{% section %}}

@@ -1,0 +1,4 @@
+{{- $owner := .Get "owner" | default "unibo-spe" -}}
+{{- $repo := .Get "repo" | default "spe-slides" -}}
+{{- $branch := .Get "branch" | default "master" -}}
+https://github.com/{{- $owner -}}/{{- $repo -}}{{- with .Get "path" -}}/blob/{{- $branch -}}/{{- . -}}{{- else -}}{{- end -}}
