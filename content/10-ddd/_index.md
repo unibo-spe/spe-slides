@@ -1022,7 +1022,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ## Hexagonal architecture (concept)
 
-![Hexagonal architecture concept](./layered-architecture.svg)
+![Hexagonal architecture concept](./layered-architecture.png)
 
 - outer layers depend on innermost ones
     + the vice versa is not true
