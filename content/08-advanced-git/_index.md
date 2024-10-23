@@ -684,6 +684,29 @@ Cherry picking is often useful for applying *fixes* or *patches* which are in de
 
 ---
 
+# Bug hunting: bisection
+
+Bisection is a technique to find the commit that introduced a bug
+
+1. Fist, run `git bisect start`
+2. Mark a commit as *good* and another as *bad* to identify a search range
+    * Checkout a revision with the bug and `git bisect bad`
+    * Checkout a revision without the bug and `git bisect good`
+3. Git will then binary search the commit history, checking out commits in the middle automatically
+4. For each commit, test if the bug is present or not, and mark it by `git bisect good` or `git bisect bad`
+5. At some point git will tell you the commit that introduced the bug
+
+## Automatic bisection: `git bisect run`
+
+1. Do points 1 and 2 as above
+2. Write a command that returns `0` if the bug is present, and with `1` to `127` except `125` otherwise
+    * `125` means "cannot be tested"
+3. Run `git bisect run <command> <args>`
+4. You will find yourself at the commit that introduced the bug
+
+
+---
+
 ## Submodules
 
 Using *a repository within another repository*
