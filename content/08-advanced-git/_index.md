@@ -89,6 +89,8 @@ Stashing takes the dirty state of the working directory and saves it on a **st
 
 ---
 
+# Classic branch reconciliation, a recap
+
 ## Merging
 
 * In classic merging, diverging branches are reconciled through a **merge commit**
@@ -367,6 +369,8 @@ They tell two stories:
 
 ---
 
+# Compactation: squashing
+
 ## Squashing
 
 Squashing is the practice of *reassembling multiple commits into a single one*
@@ -529,7 +533,7 @@ Ready: merge all changes in `target`, creating a single commit!
 
 ## Squash with branches (squash-merge)
 
-`git merge --squash target`
+`git merge --squash target && git commit`
 
 ```mermaid
 flowchart RL
@@ -582,6 +586,86 @@ Squashing results in *further alteration* than rebase
 **Rebase** only when you are the only one with the commits, to favor *linearity*
 
 **Squash** when some of the commits are somewhat "tests", points in time you do not want to get back to anyway
+
+
+---
+
+# Rewriting history
+
+## Rebase interactive
+
+* Rebase can be used in *interactive* mode (option `-i`) to *rewrite history*
+* Interactive rebase stops after each commit to allow for changes, such as editing the message or add files
+
+`rebase -i <tree-ish>`
+
+* Considers all commits **after** <tree-ish> and down to the current HEAD
+* The list of commits is shown in a text editor
+* Each line is a command to be executed on the commit
+* Commands are executed sequentially from top to bottom
+
+---
+
+## Rebase interactive: commands
+
+The most important commands are:
+
+* `pick` or `p` $\Rightarrow$ use commit, no changes
+    * note: this is a rebase, so the commit is *replayed*
+* `reword` or `r` $\Rightarrow$ use commit, but edit the commit message
+* `edit` or `e` $\Rightarrow$ use commit, but stop for amending
+* `squash` or `s` $\Rightarrow$ use commit, but meld into previous commit
+* `fixup` or `f` $\Rightarrow$ like "squash", but discard this commit's log message
+* `drop` or `d` $\Rightarrow$ remove commit
+
+---
+
+## Rebase interactive: example
+
+```console
+$ git rebase -i HEAD~7
+pick 41669e3 chore(deps): update shared-slides digest to 550f3a8
+pick 053bfca chore(deps): update shared-slides digest to 249f7ae
+pick 7af4843 chore(deps): update themes/reveal-hugo digest to 6c4bcb7
+pick 3e4259e chore(deps): update shared-slides digest to 5384aaf
+pick 117fa35 chore(deps): update themes/reveal-hugo digest to f9ead1f
+pick 6eb514b chore(deps): update shared-slides digest to 0b573b0
+pick 17743ec migrate from `GetJSON` to `resources.GetRemote` with `transform.Unmarshal`
+```
+
+Commits are listed listed in the *opposite order* than you normally see them using `git log` command.
+
+* Commands can be *changed*
+* Commits can be *reordered*
+
+```text
+reword 053bfca chore(deps): update shared-slides digest to 249f7ae
+drop 41669e3 chore(deps): update shared-slides digest to 550f3a8
+squash 7af4843 chore(deps): update themes/reveal-hugo digest to 6c4bcb7
+squash 3e4259e chore(deps): update shared-slides digest to 5384aaf
+squash 117fa35 chore(deps): update themes/reveal-hugo digest to f9ead1f
+pick 6eb514b chore(deps): update shared-slides digest to 0b573b0
+edit 17743ec migrate from `GetJSON` to `resources.GetRemote` with `transform.Unmarshal`
+```
+
+* *save and exit* the editor
+* Git *rewinds you back to the last commit in that list*
+* Git processes the commands, and, if needed, drops you on the command line to make changes
+* There, you have full control, you can even *split* commits by commit multiple times different changes
+* Once you're satisfied with your changes, run `git rebase --continue`
+
+---
+
+# The golden rule of history rewriting
+
+> **Don’t push your work until you’re happy with it**
+
+> One of the cardinal rules of Git is that, since *so much work is local within your clone*,
+you have a great deal of freedom to *rewrite your history __locally__*.
+However, *once you push your work, it is a different story* entirely,
+and **you should consider pushed work as final** unless you have good reason to change it.
+In short, you should avoid pushing your work until you’re happy with it and ready to share it with the rest of the world.
+
 
 ---
 
