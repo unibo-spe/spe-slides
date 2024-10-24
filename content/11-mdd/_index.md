@@ -30,7 +30,7 @@ enableSourceMap = true
 
 ## Meta-modelling nomenclature
 
-0. (Abstract) __Language__ $\approx$ (abstract) _syntax_ + _semantics_ 
+0. (Abstract) __Language__ $\approx$ (abstract) _syntax_ + _semantics_
 
 1. __Model__ $\approx$ the abstract language by which we describe the possible entities involved in a __domain__
     + the model __abstracts__ a number of similar systems rooted in the domain
@@ -110,9 +110,9 @@ cf. <https://www.omg.org/ocup-2/documents/Meta-ModelingAndtheMOF.pdf>
     3. the transformed model is __rendered__ into a file (e.g. _source code_)
 
 - Is __UML__ adequate? Is it the only choice? _Any alternative?_
-    * UML has a formal syntax and semantics (reified into __graphical representation rules__) 
+    * UML has a formal syntax and semantics (reified into __graphical representation rules__)
     * __rarely enforced__ by software tools
-    * furthermore UML is __general-purpose__
+    * furthermore UML is focussing on __software__
         + only practical for _software engineers_
 
 ---
@@ -299,8 +299,6 @@ end process DFF;
 
 - ... or to __simulate__ the behaviour of the circuit (either _in software_ or _in FPGA_)
 
-{{% /section %}}
-
 ---
 
 ## DSL Examples (pt. 5)
@@ -326,6 +324,8 @@ pension contribution InpsGLA paid by employer 2/3 and employee 1/3 {
     amount = rate for considered_salary
 }
 ```
+
+{{% /section %}}
 
 ---
 
@@ -416,7 +416,7 @@ In both cases, there are technical __prerequisites__:
 - So far we discussed the so-called __external DSLs__
     + i.e. where the syntax is totally custom, hence requiring a __custom parser__
 
-- As opposed to __internal__ (a.k.a. _embedded_) __DSLs__ 
+- As opposed to __internal__ (a.k.a. _embedded_) __DSLs__
     + i.e. where the syntax is a subset of some pre-existing GPL...
     + ... whose syntax is __flexible__ enough to allow _costimisation_
 
@@ -428,7 +428,7 @@ In both cases, there are technical __prerequisites__:
     - [Kotlin DSL for Gradle](https://docs.gradle.org/current/userguide/kotlin_dsl.html)
     - [SBT](https://www.scala-sbt.org/1.x/docs/sbt-by-example.html)
 
-- More on this topic will be introduced by prof. Pianini in future lectures
+- More on this topic in prof. Pianini's slides
 
 ---
 
@@ -439,31 +439,31 @@ plugins {
     `java-library`
 }
 
-dependencies {                              
+dependencies {
     api("junit:junit:4.13")
     implementation("junit:junit:4.13")
     testImplementation("junit:junit:4.13")
 }
 
-configurations {                            
+configurations {
     implementation {
         resolutionStrategy.failOnVersionConflict()
     }
 }
 
-sourceSets {                                
-    main {                                  
+sourceSets {
+    main {
         java.srcDir("src/core/java")
     }
 }
 
-java {                                      
+java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
 }
 
 tasks {
-    test {                                  
+    test {
         testLogging.showExceptions = true
         useJUnit()
     }
@@ -509,7 +509,7 @@ tasks {
 
 ---
 
-# MDD in Practice 
+# MDD in Practice
 
 ---
 
@@ -525,7 +525,7 @@ tasks {
 
 - [ANTLR](https://www.antlr.org/) only parser generation for Java, JS, Python, .Net, C++
 
-- [Language Server Protocol](https://microsoft.github.io/language-server-protocol/overviews/lsp/overview/) (LSP) 
+- [Language Server Protocol](https://microsoft.github.io/language-server-protocol/overviews/lsp/overview/) (LSP)
 
 ---
 
@@ -533,7 +533,7 @@ tasks {
 
 ![LSP concept](./lsp.png)
 
-- de-facto standard protocol among IDEs 
+- de-facto standard protocol among IDEs
 
 - providing various IDE-like capabilities as-a-service
 
@@ -553,7 +553,7 @@ tasks {
 
 - __Meta-modelling__ and __DSL definition__ are done _simultaneously_
 
-- It automatically generates the full language infrastructure, including 
+- It automatically generates the full language infrastructure, including
     + model interfaces / classes ([EMF](https://eclipse.dev/modeling/emf/) compliant)
     + parser
     + validator (with pluggable rules)
@@ -563,7 +563,7 @@ tasks {
     + syntax colouring
     + etc.
     + test stubs
-    
+
 - Exercises and examples about MDD will be based on Xtext
 
 ---
@@ -608,16 +608,14 @@ tasks {
 
 Code: <https://github.com/unibo-spe/sheduler-lang>
 
-1. Clone with Git
+1. Clone with Git the `exercises` branch
 
 2. The cloned repository is and [Ecplise](https://www.eclipse.org/downloads/) project
     + please install [Eclipse for DSL developers](https://eclipse.dev/Xtext/download.html) from Xtext's website
 
-3. Open the cloned repository in Eclipse, **selecting the repository _root_ directory as workspace**
+4. In Eclipse, import the _repository root_ directory as a __Gradle project__
 
-4. In Eclipse, import the `it.unibo.spe.mdd.sheduler.parent` directory as a __Gradle project__
-
-5. You may also use __IntelliJ__, in that case just import the `sheduler-lang/it.unibo.spe.mdd.sheduler.parent` directory as Gradle project
+5. You may also use __IntelliJ__, in that case just import the `sheduler-lang/` directory as _Gradle project_
     + no syntax colouring or Xtext support on IntelliJ or VSCode
 
 ---
@@ -626,37 +624,36 @@ Code: <https://github.com/unibo-spe/sheduler-lang>
 
 ```
 sheduler-lang/
-└── it.unibo.spe.mdd.sheduler.parent/
-    ├── build.gradle
-    ├── gradle/
-    ├── gradle.properties
-    ├── gradlew
-    ├── gradlew.bat
-    ├── it.unibo.spe.mdd.sheduler/
-    │   ├── build.gradle
-    │   └── src/
-    │       └── main/
-    │           └── java/
-    │               └── it/unibo/spe/mdd/sheduler/
-    │                   └── sheduler
-    │                       ├── GenerateSheduler.mwe2
-    │                       └── Sheduler.xtext
-    ├── it.unibo.spe.mdd.sheduler.ide/
-    │   └── build.gradle
-    ├── it.unibo.spe.mdd.sheduler.web/
-    │   └── build.gradle
-    └── settings.gradle
+├── build.gradle
+├── gradle/
+├── gradle.properties
+├── gradlew
+├── gradlew.bat
+├── it.unibo.spe.mdd.sheduler/
+│   ├── build.gradle
+│   └── src/
+│       └── main/
+│           └── java/
+│               └── it/unibo/spe/mdd/sheduler/
+│                   └── sheduler
+│                       ├── GenerateSheduler.mwe2
+│                       └── Sheduler.xtext
+├── it.unibo.spe.mdd.sheduler.ide/
+│   └── build.gradle
+├── it.unibo.spe.mdd.sheduler.web/
+│   └── build.gradle
+└── settings.gradle
 ```
 
 ---
 
 ## Xtext project structure (pt. 2)
 
-- `parent` project is just the container of others
+- _root_ project is just the container of others
 - `sheduler` project is where the domain is modelled, and the language is defined
     * including parser, validator, scoping, etc.
-    * 2 very important files: 
-        + `Sheduler.xtext`: this is where modelling and language definition occurs 
+    * 2 very important files:
+        + `Sheduler.xtext`: this is where modelling and language definition occurs
         + `GenerateSheduler.mwe2`: this is where the automated generation of scoping, validation, generation, testing facilities is configured
 - `ide` project is where the generic IDE support via LSP is defined
     * depends on `sheduler` project
@@ -705,7 +702,7 @@ sheduler-lang/
     var rootPath = ".."
 
     Workflow {
-        
+
         component = XtextGenerator {
             configuration = {
                 project = StandardProjectConfig {
@@ -753,7 +750,7 @@ generate sheduler "http://www.unibo.it/spe/mdd/sheduler/Sheduler"
 TaskPoolSet: pools+=TaskPool+ ;
 
 TaskPool: 'pool' name=ID? '{' tasks+=Task+ '}' ;
-    
+
 Task:
     'schedule' ('task' name=ID)? '{'
         'command' command=STRING
@@ -762,29 +759,29 @@ Task:
             'in' relative=RelativeTime |
             'at' absolute=AbsoluteTime |
             'before' before=[Task] |            // square brackets denote references to other model elements
-            'after' after=[Task] 
+            'after' after=[Task]
         )
         ('repeat' 'every' period=RelativeTime)?
     '}'
 ;
 
 AbsoluteTime: date=Date time=ClockTime ;
-    
+
 Date: year=INT '/' month=INT '/' day=INT;
 
 ClockTime: hour=INT ':' minute=INT (':' second=INT (':' millisecond=INT (':' nanosecond=INT)?)?)? ;
-    
+
 RelativeTime: timeSpans += TimeSpan (('and' | ',' | '+') timeSpans += TimeSpan)* ;
 
 TimeSpan: duration=INT unit=(TimeUnit|LongTimeUnit);
 
 enum TimeUnit: NANOSECONDS = 'ns' | MILLISECONDS = 'ms' | SECONDS = 's' | MINUTES = 'm' | HOURS = 'h' | DAYS = 'd' | WEEKS = 'w' | 	YEARS = 'y' ;
-    
-enum LongTimeUnit returns TimeUnit: 
-    NANOSECONDS = 'nanoseconds' | 
+
+enum LongTimeUnit returns TimeUnit:
+    NANOSECONDS = 'nanoseconds' |
     MILLISECONDS = 'milliseconds' |
     SECONDS = 'seconds' |
-    MINUTES = 'minutes' | 
+    MINUTES = 'minutes' |
     HOURS = 'hours' |
     DAYS = 'days' |
     WEEKS = 'weeks' |
@@ -888,7 +885,7 @@ TaskPool *-- Task
 Task *-- RelativeTime
 Task *-- AbsoluteTime
 RelativeTime *-- TimeSpan
-TimeSpan *-- TimeUnit     
+TimeSpan *-- TimeUnit
 RelativeTime *-- Date
 RelativeTime *-- ClockTime
 @enduml
@@ -925,7 +922,7 @@ Classes are generated too!
 
 - Validation rules are defined in the `ShedulerValidator` class
     * package: `it.unibo.spe.mdd.sheduler.validation`
-    * Gradle sub-project: `sheduler-lang/it.unibo.spe.mdd.sheduler.parent/`__`it.unibo.spe.mdd.sheduler`__
+    * Gradle sub-project: `sheduler-lang/`__`it.unibo.spe.mdd.sheduler`__
 
 - Stub class is generated by Xtext when running the `generateXtextLanguage` task
     * which simply triggers the execution of the `GenerateSheduler.mwe2` file
@@ -952,7 +949,7 @@ Classes are generated too!
         }
     }
     ```
-    
+
     + documentation here: <https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation>
 
 ---
@@ -965,7 +962,7 @@ Remarks:
 * plus the presence of the `@Check` annotation
 * the `@CheckType` annotation is optional, and defaults to `CheckType.NORMAL`
     + `FAST` will run whenever a file is modified
-    + `NORMAL` checks will run when saving the file, and 
+    + `NORMAL` checks will run when saving the file, and
     + `EXPENSIVE` checks will run when explicitly validating the file via the menu option
 * method `error(...)` may be replaced by `warning(...)` for minor issues
 
@@ -975,7 +972,7 @@ Remarks:
 
 Write custom validation rules covering the following constraints:
 
-1. Warning if attempting to represent some `RelativeTime` as [`java.time.Duration`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html) object would result in an overflow 
+1. Warning if attempting to represent some `RelativeTime` as [`java.time.Duration`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html) object would result in an overflow
     + cf. the utility methods in class `TimeUtils`
 
 2. Warning if attempting to represent some `AbsoluteTime` as [`java.time.LocalDateTime`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/LocalDateTime.html) object would result in an overflow
@@ -1009,13 +1006,13 @@ Write custom validation rules covering the following constraints:
 
 8. No periodicity should be allowed for tasks that are scheduled before/after some other task
 
---- 
+---
 
 ## About scoping rules
 
 - Validation rules are defined in the `ShedulerScopeProvider` class
     * package: `it.unibo.spe.mdd.sheduler.scoping`
-    * Gradle sub-project: `sheduler-lang/it.unibo.spe.mdd.sheduler.parent/`__`it.unibo.spe.mdd.sheduler`__
+    * Gradle sub-project: `sheduler-lang/`__`it.unibo.spe.mdd.sheduler`__
 
 - Stub class is generated by Xtext when running the `generateXtextLanguage` task
 
@@ -1038,11 +1035,11 @@ Write custom validation rules covering the following constraints:
     + the scope is essentially a container of `EObject`s, which are the possible values for the `EReference`
         + the implementer of the scope provide should select which `EObject`s to include in the scope
 
---- 
+---
 
 ## Exercise 2: custom scoping rules
 
-### TO-DO 
+### TO-DO
 
 Write a custom scoping policy for the `before` and `after` properties of `Task`s, such that:
 - only `Task`s from the same `TaskPool` can be referenced by some `Task`
@@ -1104,15 +1101,15 @@ public class ShedulerRuntime {
     public void schedule(SheduleTask task) {
         if (task.isPeriodic()) {
             delegate.scheduleWithFixedDelay(
-                task.asRunnable(), 
-                task.getDelay().toMillis(), 
-                task.getPeriod().toMillis(), 
+                task.asRunnable(),
+                task.getDelay().toMillis(),
+                task.getPeriod().toMillis(),
                 TimeUnit.MILLISECONDS
             );
         } else {
             delegate.schedule(
-                task.asRunnable(), 
-                task.getDelay().toMillis(), 
+                task.asRunnable(),
+                task.getDelay().toMillis(),
                 TimeUnit.MILLISECONDS
             );
         }
@@ -1133,8 +1130,8 @@ public class ShedulerTask {
     public SheduleTask setPeriod(Duration period) { /*...*/ }
     public Duration getDelay() { /*...*/ }
 
-    public Process executeAsync() throws IOException { 
-        return new ProcessBuilder(entrypoint, command).inheritIO().start(); 
+    public Process executeAsync() throws IOException {
+        return new ProcessBuilder(entrypoint, command).inheritIO().start();
     }
 
     public Runnable asRunnable() {
@@ -1170,7 +1167,7 @@ public static void main(String[] args) {
     pool_myPool(runtime);
     pool_otherPool(runtime);
 }
-    
+
 private static void pool_myPool(ShedulerRuntime runtime) {
     ShedulerTask task0 = ShedulerTask.in("greetFrequently", "echo hello", "/bin/sh -c", Duration.parse("PT5M"));
     task0.setPeriodic(Duration.parse("PT1H"));
@@ -1209,7 +1206,7 @@ pool otherPool {
 }
 ```
 {{% /col %}}
-{{% /multicol %}} 
+{{% /multicol %}}
 
 ---
 
@@ -1240,8 +1237,8 @@ public class ShedulerGenerator extends AbstractShedulerGenerator {
 
 ## Exercise 4: write an interpreter for the `Sheduler` DSL
 
-- No code generation, just a `main` 
-    1. parsing the DSL 
+- No code generation, just a `main`
+    1. parsing the DSL
     2. and converting each `Task` into a `ShedulerTask`
     3. and running each task via some `ShedulerRuntime`
 
