@@ -1161,28 +1161,6 @@ public class ShedulerTask {
 
 {{% multicol %}}
 {{% col %}}
-```java
-public static void main(String[] args) {
-    ShedulerRuntime runtime = new ShedulerRuntime(Executors.newScheduledThreadPool(1));
-    pool_myPool(runtime);
-    pool_otherPool(runtime);
-}
-
-private static void pool_myPool(ShedulerRuntime runtime) {
-    ShedulerTask task0 = ShedulerTask.in("greetFrequently", "echo hello", "/bin/sh -c", Duration.parse("PT5M"));
-    task0.setPeriodic(Duration.parse("PT1H"));
-    runtime.schedule(task0);
-    ShedulerTask task1 = ShedulerTask.at("greetOnce", "echo hello", "/bin/bash -c", LocalDateTime.parse("2030-10-11T12:13"));
-    runtime.schedule(task1);
-}
-
-private static void pool_otherPool(ShedulerRuntime runtime) {
-    ShedulerTask task0 = ShedulerTask.in("shutdownAfter1Day", "sudo shutdown now", "/bin/zsh -c", Duration.parse("PT24H"));
-    runtime.schedule(task0);
-}
-```
-{{% /col %}}
-{{% col %}}
 ```
 pool myPool {
     schedule task greetFrequently {
@@ -1203,6 +1181,28 @@ pool otherPool {
         entry point "/bin/zsh -c"
         in 1 days
     }
+}
+```
+{{% /col %}}
+{{% col %}}
+```java
+public static void main(String[] args) {
+    ShedulerRuntime runtime = new ShedulerRuntime(Executors.newScheduledThreadPool(1));
+    pool_myPool(runtime);
+    pool_otherPool(runtime);
+}
+
+private static void pool_myPool(ShedulerRuntime runtime) {
+    ShedulerTask task0 = ShedulerTask.in("greetFrequently", "echo hello", "/bin/sh -c", Duration.parse("PT5M"));
+    task0.setPeriodic(Duration.parse("PT1H"));
+    runtime.schedule(task0);
+    ShedulerTask task1 = ShedulerTask.at("greetOnce", "echo hello", "/bin/bash -c", LocalDateTime.parse("2030-10-11T12:13"));
+    runtime.schedule(task1);
+}
+
+private static void pool_otherPool(ShedulerRuntime runtime) {
+    ShedulerTask task0 = ShedulerTask.in("shutdownAfter1Day", "sudo shutdown now", "/bin/zsh -c", Duration.parse("PT24H"));
+    runtime.schedule(task0);
 }
 ```
 {{% /col %}}
