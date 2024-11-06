@@ -14,6 +14,12 @@ enableSourceMap = true
 .reveal blockquote {
     font-family: 'Georgia';
 }
+.reveal blockquote::before{
+    content: "";
+}
+.reveal blockquote::after{
+    content: "";
+}
 </style>
 
 # Containerisation and Orchestration
@@ -94,9 +100,7 @@ To govern the _deployment_ of __software systems__ onto some __infrastructure__
     + users _provide_ the _code_ and some _deployment-automation_ script
     + they _start_ the task,
     + they are interested in _interacting_ with the service
-        * e.g. via the shell
-        * e.g. via some graphical user interface
-        * e.g. via some Web client
+        * e.g. via the shell, via some GUI, via the browser, etc.
 
 - __Parallelism__ may be exploited to support __replication__
     + e.g. for __fault tolerance__
@@ -173,27 +177,27 @@ Some abstraction is needed to encapsulate applications, and their computational 
 
 ## How to achieve encapsulation? (pt. 2)
 
-### Virtual machines and hypervisors
+### Virtual machines and hypervisors (VMH)
 
-- VMH run on/as the OS of a bare-metal machine, abstracting HW and SW peculiarities away
-    * VM have virtualised HW and SW resources, different from the host's ones
+- VMH run _on/as_ the _OS_ of a bare-metal machine, __abstracting__ HW and SW peculiarities away
+    * VM have _virtualised HW_ and SW resources, different from the host's ones
 
-- VMH may instantiate multiple VM on the same machine
+- VMH may instantiate __multiple VM__ on the _same physical machine_
     * partitioning actual resources ahead of time
 
-- each VM runs its own OS, and may host multiple applications
-    * in the eyes of the user, the VM is undistinguishable from a bare-metal machine
+- each VM runs __its own OS__, and may host multiple applications
+    * in the eyes of the user, the VM is _undistinguishable_ from a bare-metal machine
 
-- VM may be paused, snapshot (into file), resumed, and possibly migrated
+- VM may be _paused_, _snapshot_ (into file), _resumed_, and possibly _migrated_
     * snapshots are files containing the whole file-system of the VM
 
-- VM are coarse grained encapsulation units
-    * they are heavy-weight (GBs)
-    * they are slow to start, run, migrate, snapshot
-    * VM commonly encapsulate multiple application-level components
+- VM are __coarse__-grained __encapsulation__ units
+    * they are _heavy_-weight (GBs)
+    * they are _slow_ to start, run, migrate, snapshot
+    * VM commonly encapsulate _multiple application_-level components
         + database, server, plus all their runtimes and libraries, etc.
 
-- Many industry-ready technologies:
+- Many industry-ready __technologies__:
     * VMWare, VirtualBox, KVM, Xen, Hyper-V, QEMU, Proxmox, etc.
 
 ---
@@ -202,27 +206,26 @@ Some abstraction is needed to encapsulate applications, and their computational 
 
 ### Containers and container engines (CE)
 
-- CE run on/as the OS of a bare-metal/virtual machine, abstracting the runtime, storage, and network environment away
+- CE run _on_ the _OS_ of a _bare-metal/virtual_ machine, __abstracting__ the runtime, storage, and network environment away
     + the CPU, memory, OS kernel, drivers, and hardware are __not virtualised__
 
-- one may instantiate multiple containers on the same machine
-    + sharing the actual resources dynamically (overbooking support)
+- one may instantiate __multiple containers__ on the same machine
+    + sharing the actual resources dynamically (_overbooking_ support)
 
-- each container shares the OS kernel of the host, yet having its own runtime(s), storage, and network facilities
-    + in the eyes of the user, the container is a process running on top of a minimal OS
+- each container __shares the OS kernel__ of the host, yet having its own runtime(s), storage, and network facilities
+    + in the eyes of the user, the container is a _process_ running on top of a _minimal OS_
 
-- each container is instance of an image, i.e. a read-only template containing deployment instructions 
-    + differences w.r.t. that image constitute the state of the container
-        * these can be snapshot into file of minimal size
+- each container is _instance_ of an __image__, i.e. a _read-only template_ containing deployment instructions 
+    + differences w.r.t. that image constitute the _state of the container_ (these can be _snapshot_ into file of minimal size)
 
-- containers are fine-grained encapsulation units
-    + they are light-weight (MBs)
-    + they are fast to start, run, snapshot
-    + they are commonly used to encapsulate single application-level components
+- containers are __fine__-grained __encapsulation__ units
+    + they are _light_-weight (MBs)
+    + they are _fast_ to start, run, snapshot
+    + they are commonly used to encapsulate _single application_-level components
         * e.g. a database instance, a web-server instance, etc.
-        * the final application should consist of several, inter-communicating containers
+        * the final application should consist of _several_, inter-communicating _containers_
 
-- Many industry-ready technologies:
+- Many industry-ready __technologies__:
     + Docker, LXC, LXD, Podman, etc.
 
 ---
@@ -290,21 +293,21 @@ Containers provide **runtime isolation** _without_ operating **system replicatio
 
 ## Scaling up to the cluster level
 
-> __Cluster__ $:=$ a set of _similarly configured_ __machines__ (a.k.a. __nodes__) __interconnected__ via a __network__ in order to let users exploit their __joint__ computational power
+> __Cluster__ $\approx$ a set of _similarly configured_ __machines__ (a.k.a. __nodes__) __interconnected__ via a __network__ in order to let users exploit their __joint__ computational power
 
-- Users may want to deploy their applications on the cluster
-    + by means of a single access point
+- Users may want to __deploy__ their applications on the _cluster_
+    + by means of a _single access point_
         + e.g. a Web dashboard, or a CLI
 
-- Deployment shall allocate tasks on the cluster in an efficient way
-    + meeting the tasks' computational requirements
-    + balancing the load among the nodes
-    + matching requirements on actual capabilities of nodes
+- Deployment shall __allocate__ tasks on the cluster _efficiently_
+    + meeting the tasks' _computational requirements_
+    + _balancing_ the _load_ among the nodes
+    + _matching requirements_ on actual capabilities of nodes
 
-- Infrastructure-as-a-service (IaaS) cloud technologies support deploying tasks on clusters, as VM
+- __Infrastructure-as-a-service__ (IaaS) cloud technologies support deploying tasks on clusters, _as VM_
     + e.g. OpenStack, VSphere, etc.
 
-- Container orchestrator support deploying tasks on clusters, as containers
+- __Container orchestrators__ support deploying tasks on clusters, _as containers_
     + e.g. Kubernetes, Docker Swarm, etc.
 
 ---
@@ -334,9 +337,9 @@ Containers provide **runtime isolation** _without_ operating **system replicatio
 
 ## Containerisation vs. Orchestration
 
-- __Containerisation__ $:=$ the process of _encapsulating_ an application into a _container_
+- __Containerisation__ $\approx$ the process of _encapsulating_ an application into a _container_
 
-- __Orchestration__ $:=$ the process of _deploying_ one or more container onto _one or more_ machines
+- __Orchestration__ $\approx$ the process of _deploying_ one or more container onto _one or more_ machines
 
 - __Containerisation__ is a _pre-requisite_ for __orchestration__
 
@@ -359,6 +362,7 @@ Containers provide **runtime isolation** _without_ operating **system replicatio
 - __Volume__: a bridge for letting containers share data with the host
 - __Engine__ (a.k.a. __daemon__): the software running on the host, managing containers, images, volumes, layers, and networks
 
+{{% fragment %}}
 ### Orchestration level
 
 - __Cluster__: a set of machines, joint together by the same container orchestrator 
@@ -366,6 +370,7 @@ Containers provide **runtime isolation** _without_ operating **system replicatio
 - __Service__: a set of replicas of the same container
 - __Stack__: a set of inter-related services
 - __Secret__: encrypted information to be made available on containers
+{{% /fragment %}}
 
 ---
 
@@ -410,7 +415,7 @@ __Docker__: the most famous container technology, actually consisting of several
 ## Running containers
 
 1. Pull an image: `docker pull adoptopenjdk`
-2. Run a container! `docker run adoptopenjdk`
+2. Run a container: `docker run adoptopenjdk`
 
 Every image provides a *default command*, running without options runs such default in a *non-interactive* terminal.
 
@@ -461,13 +466,13 @@ The subcommand `image` allows for running maintenance tasks, e.g.
 
 Docker images are written in a `Dockerfile`
 
-Every command inside a Dockerfile generates a new *layer*
+- Every command inside a Dockerfile generates a new *layer*
 
-The final stack of layers creates the final *image*
+- The final stack of layers creates the final *image*
 
-The `docker build` command interprets the Dockerfile commands to produce a sequence of layers
+- The `docker build` command interprets the `Dockerfile` commands to produce a _sequence of layers_
 
-Changes to a layer do not invalidate previous layers
+- Changes to a layer do _not_ invalidate previous layers
 
 ---
 
@@ -501,11 +506,17 @@ to be built by means of the command: `docker build -t PATH`
 
 ## Content of the `path/to/my/nodejs/project` DIRECTORY
 
+{{< multicol >}}
+{{% col class="col-4" %}}
 1. `Dockerfile` as for the previous slide
 
-{{< multicol >}}
-{{% col %}}
-2. File `package.json`
+2. File `.dockerignore`
+```gitignore
+node_modules/
+```
+{{% /col %}}
+{{% col class="col-4" %}}
+3. File `package.json`
 ```json
 {
   "name": "example",
@@ -523,11 +534,8 @@ to be built by means of the command: `docker build -t PATH`
 }
 ```
 {{% /col %}}
-{{% col %}}
-``````
-{{% /col %}}
-{{% col %}}
-3. File `index.mjs`
+{{% col class="col-4" %}}
+4. File `index.mjs`
 ```js
 import { env } from 'process'
 import express from 'express'
@@ -555,10 +563,6 @@ i.e. a Web service listening on the port indicated by the `SERIVICE_PORT` env va
 {{% /col %}}
 {{< /multicol >}}
 
-4. File `.dockerignore`
-```gitignore
-node_modules/
-```
 
 {{% /section %}}
 
@@ -566,7 +570,7 @@ node_modules/
 
 ## Layers and caching (pt. 1)
 
-Every line in a `Dockerfile` generates a new layer:
+Every *line* in a `Dockerfile` generates a *new layer*:
 
 ![](./layers-1.png)
 
@@ -578,9 +582,9 @@ In other words, Docker keeps track of what information is added to the image at 
 
 ## Layers and caching (pt. 2)
 
-When a `Dockerfile` is built, Docker checks whether the layer has already been built in the recent past
+When a `Dockerfile` is built, Docker checks whether the layer has already been built in the _recent past_
 
-If so, it reuses the cached layer, and skips the execution of the corresponding command
+If so, it reuses the __cached layer__, and skips the execution of the corresponding command
 
 ![](./layers-2.png)
 
@@ -588,7 +592,7 @@ If so, it reuses the cached layer, and skips the execution of the corresponding 
 
 ## Layers and caching (pt. 3)
 
-When the container is run, the images layers are `read-only`, and the container has a `read-write` layer on top of them
+When the container is run, the images layers are *read-only*, and the container has a *read-write* layer on top of them
 
 ![](./rw-layer.png)
 
@@ -600,51 +604,52 @@ In this way, the _space occupied_ by the container is _minimal_
 
 ## Naming images
 
-Image naming is done via *tags*
+Image naming is done via **tags**
 
-The easiest way to do so is assigning tags at *build time* with the `-t` options of `docker build`
+- The easiest way to do so is assigning tags at *build time* with the `-t` options of `docker build`
 
-The option can be repeated multiple times to make multiple tags
+- The option can be repeated multiple times to make multiple tags
 
-```bash
-docker build -t "myImage:latest" -t "myImage:0.1.0" PATH
-```
+    ```bash
+    docker build -t "myImage:latest" -t "myImage:0.1.0" /path/to/Dockerfile/container
+    ```
 
-`latest` is usually used to identify the most recent version of some image
+- `latest` is usually used to identify the most recent version of some image
 
-For instance, you may build the image from a few slides ago with:
-* `docker build -t my-service path/to/my/nodejs/project`
-    + the image `my-service:latest` is automatically created
+- For instance, you may build the image from a few slides ago with:
+    * `docker build -t my-service path/to/my/nodejs/project`
+        + the image `my-service:latest` is automatically created
 
 ---
 
 ## Publishing Docker images
 
-Images get published in *registries*
+Images get published in **registries**
 
-The most famous, free for publicly available images, is *Docker Hub*
+- The most famous, free for publicly available images, is *Docker Hub*
 
-By default, Docker uses Docker Hub as registry (both for `pull` and `push` operations)
+- By default, Docker uses Docker Hub as registry (both for `pull` and `push` operations)
 
-Docker Hub requires registration and CLI login:
-* `docker login docker.io`
+- Docker Hub requires registration and CLI login:
+    * `docker login docker.io`
 
-Once done, publication is performed via `push`:
-* `docker push <image name>`
+- Once done, publication is performed via `push`:
+    * `docker push <image name>`
 
 ---
 
 ## Building Docker images in CI
 
-Of course, as any other software, *custom docker images should get built in CI*
+- Of course, as any other software, *custom docker images should get built in CI*
 
-Several integrators use containers as build environments: it is possible to *build a container using a container*
+- Several integrators use _containers_ as __build environments__: 
+    * it is possible to *build a container using a container*
 
-More in general, there is *no inherent limit to nesting containers*
+- More in general: there is *no inherent limit to nesting containers*
 
-For instance:
-* you may run DIND (Docker-in-Docker) via: `docker run --privileged --rm -it docker:dind`
-* you may use the Docker CLI in a container: `docker run -it --rm docker:cli`
+- For instance:
+    * you may run DIND (Docker-in-Docker) via: `docker run --privileged --rm -it docker:dind`
+    * you may use the Docker CLI in a container: `docker run -it --rm docker:cli`
 
 ---
 
@@ -663,7 +668,7 @@ Their support several use cases:
 
 ## Sorts of volumes (pt. 1)
 
-![](./volume-types.png)
+![](./volume-types-bind.png)
 
 - __Bind mount__: a host directory is __mounted__ into the container
     + the host directory is specified as `<host path>:<guest path>` (both must be __absolute paths__)
@@ -671,6 +676,12 @@ Their support several use cases:
     + data present in `<host path>` can be read within the container at `<guest path>`
     + data written within the container at `<guest path>` can be accessed on `<host path>`
         * even after the container is stopped / deleted
+
+---
+
+## Sorts of volumes (pt. 2)
+
+![](./volume-types-named.png)
 
 - __Named volume__: virtual drives managed by Docker
     + they are created with `docker volume create <name>`
@@ -683,9 +694,9 @@ Their support several use cases:
 
 ---
 
-## Sorts of volumes (pt. 2)
+## Sorts of volumes (pt. 3)
 
-![](./volume-types.png)
+![](./volume-types-temp.png)
 
 - __Tmpfs mount__ [Linux-only]: a temporary file system, living only as long as the container is alive
     + it is mounted into containers as `tmpfs:<guest path>`
@@ -831,7 +842,8 @@ Their support several use cases:
 ### Accessing the volume from the host
 
 3. Alternatively, let's find where the volume is stored on the host
-    * `docker volume inspect my-volume
+    * `docker volume inspect my-volume`
+
 4. Let's analyse the JSON description of the volume:
     ```json
     [
@@ -847,9 +859,15 @@ Their support several use cases:
     ]
     ```
 
-3. The `Mountpoint` entry reveals the location of the volume on the host's file system
+---
 
-4. Let's look into that position (may require _super-user_ access rights):
+## Example: sharing data with named volumes (pt. 4)
+
+### Accessing the volume from the host
+
+5. The `Mountpoint` entry reveals the location of the volume on the host's file system
+
+6. Let's look into that position (may require _super-user_ access rights):
     * `sudo ls -la /var/lib/docker/volumes/my-volume/_data`
     
         ```
@@ -872,28 +890,28 @@ Their support several use cases:
 
 ## How to retain space from a volume?
 
-Volumes are not automatically cleaned up when containers are deleted
+Volumes are NOT automatically _cleaned up_ when containers are _deleted_
 
-Volumes must be __explicitly__ deleted by the user
-* `docker volume rm <volume name>`
+- Volumes must be __explicitly__ deleted by the user
+    * `docker volume rm <volume name>`
 
-In our example, remember to delete `my-volume`:
-* `docker volume rm my-volume`
-    * beware: this will delete all the data in the volume!
+- In our example, remember to delete `my-volume`:
+    * `docker volume rm my-volume`
+        + beware: this will delete all the data in the volume!
 
 ---
 
 ## Sudo-powered containers
 
-- Sometimes one may be willing to let a container access the Docker daemon of its host
-    * this is useful for running containers that can: create/delete other containers, handle images, etc.
+- Sometimes one may be willing to let a container access the _Docker daemon_ __of its host__
+    * this is useful for running containers that will: _create/delete_ other containers, handle images, etc.
 
 - To achieve that one may exploit __bind mounts__
     * to share the Docker daemon's socket with the container
 
-- Explanation
-    * on the host, the Docker daemon is just a service listening for commands on a [Unix socket](https://en.wikipedia.org/wiki/Unix_domain_socket)
-    * the socket is usually reified as a file on the host's file system, at `/var/run/docker.sock`
+- Explanation:
+    * on the host, the Docker daemon is just a _service_ listening for commands on a [Unix socket](https://en.wikipedia.org/wiki/Unix_domain_socket)
+    * the socket is usually reified as a _file_ on the host's file system, at `/var/run/docker.sock`
     * the `docker` command is just a CLI program writing/reading to/from the socket to govern the daemon
 
 - One may simply create a Docker container with the Docker CLI tool installed on it
@@ -912,22 +930,24 @@ In our example, remember to delete `my-volume`:
 
 ## Networks
 
-Docker may virtualise container's networking facilities
+Docker may virtualise container's __networking facilities__
 1. network interfaces
 2. IP addresses
 3. layer-4 ports
 
 <br/>
 
-This is useful for letting containers communicate with any external entity
-- most commonly, other containers or the host
+This is useful to let containers __communicate__ with any external entity
+<br/>most commonly, other containers or the host
 
+{{% fragment %}}
 <br/>
 
-Networks are virtual entities managed by Docker
-- they mimic the notion of __layer-3 network__
-- in the eyes of the single container, they are __virtual network interfaces__
-- overall, their purpose is to __delimit__ the scope of communication for containers
+> __Networks__ are virtual entities managed by Docker
+> - they mimic the notion of _layer-3 network_
+> - in the eyes of the single container, they are _virtual network interfaces_
+> - overall, their purpose is to _delimit_ the __communication scope__ for containers
+{{% /fragment %}}
 
 ---
 
@@ -1090,7 +1110,7 @@ Let's create a non-trivial scenario with 2 container attached to the same networ
 
 ---
 
-## Exposing ports
+## Exposing ports (pt. 1)
 
 - When a container wraps a __service__ listening on __layer-4 port__...
     + ... the port is __not accessible__ from the _outside_ world
@@ -1107,6 +1127,10 @@ Let's create a non-trivial scenario with 2 container attached to the same networ
     ```
 
     (look at the `PORTS` column)
+
+---
+
+## Exposing ports (pt. 2)
 
 - When _running_ a Docker _container_, the exposed port can be mapped to host's ports via `-P` option
     + this would make any `EXPOSE`d port in the image mapped to some _random_ port of the host
@@ -1174,7 +1198,7 @@ The example application is composed of the following parts:
 
 
 {{< multicol >}}
-{{% col %}}
+{{% col class="col-6" %}}
 ```yaml
 version: 3.9                    # version of the specification
 
@@ -1223,7 +1247,7 @@ services:                       # section defining services composing the stack
       - db-credentials          # reference to the secret (by name)
 ```
 {{% /col %}}
-{{% col %}}
+{{% col class="col-6" %}}
 ```yaml
 volumes:                   # section for volumes to be created in the stack
   db-data:                 # name of the volume, to be referenced by services
@@ -1284,13 +1308,20 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
 - they allow users to configure their services' behaviour _without_ the need to __(re)build a (new) image__
 - they are _read-only_ files, mounted into services' containers, similarly to _read-only_ __volumes__
 - they are declared in the `configs` section of the `docker-compose.yml` file
+
+---
+
+## Orchestration-level notions (pt. 3)
+
+### Configs
+
 - one config may either be created __stack-wise__ out of a __local file__ from the _host_...
     ```yaml
     configs:
         config_name:
             file: /path/to/config/on/the/host
     ```
-- ... or it can be __manually created__ by means of the `docker config create [OPTIONS] NAME PATH|-` command
+- ... or it can be __manually created__ by means of the `docker config create [OPTIONS] NAME PATH` command
     + in this case they can be referenced in several `docker-compose.yml` files:
         ```yaml
         configs:
@@ -1680,7 +1711,7 @@ secrets:
 
 - Docker Compose is also useful for software __testing__
 
-- E.g. whenever the system under test relied on some infrastructural component
+- E.g. whenever the system under test relies on some _infrastructural component_
     * e.g. a database, a message broker, a cache, etc.
 
 - Usual workflow for testing:
