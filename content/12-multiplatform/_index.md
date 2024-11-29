@@ -14,6 +14,12 @@ enableSourceMap = true
 .reveal blockquote {
     font-family: 'Georgia';
 }
+.reveal blockquote::before{
+    content: "";
+}
+.reveal blockquote::after{
+    content: "";
+}
 </style>
 
 # Multi-platform programming
@@ -43,7 +49,7 @@ enableSourceMap = true
 # What are software platforms?
 ## Operative systems (?)
 
-- Most software runs on top of an __opertive system__ (OS)
+- Most software runs on top of an __operative system__ (OS)
 
 - So yes, all operative systems are platforms
 
@@ -60,7 +66,7 @@ enableSourceMap = true
 
 - Programming languages?
   * not that simple
-    + e.g. Scala apps can call Java code
+    + e.g. Scala apps can _call_ Java code
 
 - Runtimes
   * i.e. the set of libraries and conventions backing programming languages
@@ -70,7 +76,7 @@ enableSourceMap = true
 ---
 
 # What are software platforms?
-## Precise definitions
+## Definition attempt
 
 > **Software platform** $\stackrel{\Delta}{=}$ anything having an **API** enabling the writing of applications,
 > and the **runtime** supporting the execution of those applications
@@ -83,8 +89,8 @@ enableSourceMap = true
 
 # What are API and runtimes?
 
-> [**API**](https://en.wikipedia.org/wiki/API) $\equiv$ application programming interface(s) $\stackrel{\Delta}{=}$ a _formal_ specification of the set of **functionalities** provided by a software (sub-)system for _external_ usage, there including their **input**, **outputs**, and _enviromental_ **preconditions** and **effects**
-- client-server methaphor is implicit
+> [**API**](https://en.wikipedia.org/wiki/API) $\equiv$ application programming interface(s) $\stackrel{\Delta}{=}$ a _formal_ specification of the set of **functionalities** provided by a software (sub-)system for _external_ usage, there including their **input**, **outputs**, and _environmental_ **preconditions** and **effects**
+- client-server metaphor is implicit
 
 > [**Runtime**](https://en.wikipedia.org/wiki/Runtime_system) [system/environment] $\approx$ the set of computational resources backing the execution of a software (sub-)system
 - we say that "runtimes _support_ API"
@@ -95,15 +101,15 @@ enableSourceMap = true
 
 ## Examples of API
 
-- all possible _public_ interfaces / classes / structures in an OOP module
+- all possible _public interfaces_ / classes / structures in an __OOP module__
   * and their public/protected methods / fields / properties / constructors
-    + and their formal arguments, return types, throwable excepions
+    + and their formal arguments, return types, throwable exceptions
 
-- all possible commands a CLI application accept as input
+- all possible _commands_ a __CLI application__ accept as _input_
   * and their admissible sub-commands, options, and arguments
-    + and the corresponding outputs, exit values, and side-effects
+    + and the corresponding outputs, exit values, and side effects
 
-- all possible paths a Web service may accept HTTP request onto
+- all possible _routes_ a __Web service__ may accept HTTP request onto
   * and their admissible HTTP methods
     + and their admissible query / path / body / header parameters
       - and the corresponding status codes, and response bodies
@@ -114,16 +120,16 @@ enableSourceMap = true
 
 ## Examples of runtimes
 
-- any virtual machine (JVM, CRL, CPython, V8)
+- any _interpreter_ (JVM, CRL, CPython, V8)
   * and their standard libraries
   * and their type system and internal conventions
     + eg value/reference types in JVM/CRL, global lock in CPython
 
-- any operative system (Win, Mac, Linux)
+- any _operative system_ (Win, Mac, Linux)
   * and their system calls, daemons, package managers, default commands, etc
   * and their program memory, access control, file system models
 
-- any Web service 
+- any _Web service_ 
   * and the protocols they leverage upon
   * and their URL structuring model
   * the data schema of their input/output objects
@@ -135,19 +141,19 @@ enableSourceMap = true
 
 # Notable platforms
 
-- The Java Virtual Machine (JVM)
+- The __Java Virtual Machine__ (JVM)
   * supported languages: Java, Kotlin, Scala, Clojure, etc.
 
-- .NET's [pronunced "dot NET"] Common Language Runtime (CRL)
+- .NET's [pronounced "dot NET"] __Common Language Runtime__ (CRL)
   * supported languages: C#, VB.NET, F#, etc.
 
-- Python 3
+- __Python__ 3
   * supported language: Python
 
-- NodeJS (V8)
+- __NodeJS__ (V8)
   * supported language: JavaScript, TypeScript, etc.
 
-- Each browser may be considered as a platform per se
+- Each __browser__ may be considered as a platform per se
   * supported language: JavaScript
 
 - ...
@@ -156,19 +162,19 @@ enableSourceMap = true
 
 # Practical features of platforms
 
-- standard libraries
+- _standard libraries_
   * i.e. pre-cooked functionalities developers / users may exploit
 
-- predefined design decisions 
+- predefined _design decisions_ 
   * e.g. global lock in Python, event loop in JavaScript, etc.
 
-- organizational, stylistic, technical conventions
+- organizational, stylistic, technical _conventions_
   * e.g. project structure, code linting, nomenclature, etc.
 
-- packaging conventions, import mechanisms, and software repositories
+- _packaging_ conventions, _import mechanisms_, and _software repositories_
   * e.g. classpath for the JVM, NPM for JS, Pip + Pypi for Python, etc.
 
-- user communities
+- user _communities_
   * e.g. many Data scientists use Python, many Web developers use JVM / JS
 
 ---
@@ -181,31 +187,31 @@ enableSourceMap = true
 
 ## Standard libraries
 
-- Types from the `java.*` and `javax.*` packages are usable from any JVM language 
+- Types from the `java.*` and `javax.*` packages are usable from _any_ JVM language 
 
-- Many nice functionalities covering:
+- Many nice _functionalities_ covering:
   * multi-threading, non-blocking IO, asynchronous programming
   * OS-independent GUI, or IO management
   * data structures and algorithms for collections and streams
   * unlimited precision arithmetic
 
-- Many functionalities are provided by community-driven third party libraries
+- Many functionalities are provided by _community-driven_ **third party** _libraries_
   * e.g. YAML/JSON parsing / generation, CSV parsing, complex numbers
 
 ---
 
 ## Predefined design decisions
 
-- Everything is (indirectly) a subclass/instance of `Object`
+- Everything is (indirectly) a _subclass/instance_ of `Object`
   * except fixed set of primitive types, and static stuff
 
-- Every object is potentially a lock
+- Every object is potentially a _lock_
   * useful for concurrency
 
 - Default methods inherited by `Object` class
   * e.g. `toString`, `equals`, `hashCode`
 
-- All methods are virtual by default
+- All methods are _virtual by default_
 
 - ...
 
@@ -213,32 +219,32 @@ enableSourceMap = true
 
 ## Organizational, stylistic, technical conventions
 
-- Project should be organized according to the Maven's [standard directory layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html)
+- _Project_ should be organized according to the Maven's [standard directory layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html)
 
-- Official stylistic conventions for most JVM languages
+- Official _stylistic conventions_ for most JVM languages
   * e.g. type names in `PascalCase`, members names in `camelCase`
   * e.g. getters/setters in Java vs. Kotlin's or Scala's properties
 
 - Many technical conventions:
- * iterable data structures should implement the `Iterable` interface
- * variadic arguments are considered arrays
- * constructors for collections subclasses accept `Iterable`s as input
+ * _iterable_ data structures should implement the `Iterable` interface
+ * _variadic_ arguments are considered _arrays_
+ * _constructors_ for collections subclasses accept `Iterable`s as input
  * ...
 
 ---
 
 ## Packaging conventions, import mechanisms, and software repositories
 
-* Code is organized into packages
-  - packages must correspond to directory structures
+* _Project files_ are organized into _packages_
+  - packages must correspond to _directory structures_
 
-* Code archives (`.jar`) are Zip files containing compiled classes
+* Code _archives_ (`.jar`) are _Zip files_ containing compiled classes
 
-* Basic import mechanism: the class path
+* Basic _import mechanism_: the __class path__
   * i.e. the path where classes are looked for
   * commonly set at application startup
 
-* Many third-party repositories for JVM libraries
+* Many _third-party repositories_ for JVM libraries
   - [Maven central repository](https://central.sonatype.com) is the most relevant one
   - many tools for dependency management (e.g. Maven, Gradle)
 
@@ -246,13 +252,13 @@ enableSourceMap = true
 
 ## User communities
 
-- Android developers
+- _Android_ developers
 
-- Back-end Web developers
+- _Back-end_ Web developers
 
-- Desktop applications developers
+- _Desktop applications_ developers
 
-- Researchers in the fields of: semantic Web, multi-agent systems, etc.
+- Researchers in the fields of: _semantic Web_, _multi-agent systems_, etc.
 
 - ...
 
@@ -268,30 +274,30 @@ enableSourceMap = true
 
 ## Standard libraries
 
-- Notably, one the richest standard libraries ever
+- Notably, one the _richest_ __standard libraries__ ever
 
-- Many nice functionalities covering:
+- Many nice _functionalities_ covering:
   * all the stuff covered by Java
   * plus many more, e.g. complex numbers, JSON and CSV parsing, etc
 
-- Many functionalities are provided by community-driven third party libraries
-  * e.g. scientific or ML libraries
+- Many functionalities are provided by community-driven _third party libraries_
+  * e.g. _scientific_ or _ML_ libraries
 
 ---
 
 ## Predefined design decisions
 
-- Everything is (indirectly) a subclass/instance of `object`
+- Everything is (indirectly) a _subclass/instance_ of `object`
   * no exceptions
 
 - [Global Interpreter Lock](https://realpython.com/python-gil/) (GIL)
 
-- Magic methods supporting various language features
+- _Magic methods_ supporting various language features
   * e.g. `__str__`, `__eq__`, `__iter__`
 
-- No support for overloading
+- No support for _overloading_
 
-- Variadic and keywords arguments
+- _Variadic_ and _keywords_ __arguments__
 
 - ...
 
@@ -299,48 +305,48 @@ enableSourceMap = true
 
 ## Organizational, stylistic, technical conventions
 
-- Project should be organized according to [Kenneth Reitz's layout](https://docs.python-guide.org/writing/structure/)
+- _Project files_ should be organized according to [Kenneth Reitz's layout](https://docs.python-guide.org/writing/structure/)
 
-- Official stylistic conventions for Python ([PEP8](https://peps.python.org/pep-0008/))
+- Official _stylistic conventions_ for Python ([PEP8](https://peps.python.org/pep-0008/))
   * e.g. type names in `PascalCase`, members names in `snake_case`
-  * e.g. indentation-aware syntax, blank line conventions, etc.
+  * e.g. _indentation-aware_ syntax, blank line conventions, etc.
   * ...
 
-- Many technical conventions:
+- Many _technical conventions_:
  * [duck typing](https://realpython.com/lessons/duck-typing/)
  * iterable data structures should implement the `__iter__` method
- * variadic arguments are considered tuples
- * keyword arguments are considered sets
+ * _variadic_ arguments are considered _tuples_
+ * _keyword_ arguments are considered _sets_
  * ...
 
 ---
 
 ## Packaging conventions, import mechanisms, and software repositories
 
-* Code is organized into packages and modules
-  - packages must correspond to directory structures
-  - modules must correspond to files
+* _Project files_ are organized into __packages__ and __modules__
+  - packages $\leftrightarrow$ _directories_
+  - modules $\leftrightarrow$ _files_
 
-* Code archives (`.whl`) are Zip files containing Python sources
+* Code _archives_ (`.whl`) are _Zip files_ containing Python sources
 
-* Each Python installation has an internal folder where libraries are stored
-  * `pip` simply unzips modules/packages in there
-  * `import` statements look for packages/modules in there
+* Each Python _environment_ has an _internal folder_ where __installed libraries__ are stored
+  * `pip` simply _unzips_ modules/packages in there
+  * `import` statements _look for_ packages/modules in there
 
-* [Pypi](https://pypi.org/) as the official repository for Python libraries
+* [Pypi](https://pypi.org/) as the _official repository_ for Python libraries
   * `pip` as the official tool for dependency management
 
 ---
 
 ## User communities
 
-- Data-science community
+- _Data-science_ community
 
-- Back-end Web developers
+- _Back-end_ Web developers
 
-- Desktop applications developers
+- _Desktop applications_ developers
 
-- System administrators
+- _System administrators_
 
 - ...
 
@@ -356,38 +362,38 @@ enableSourceMap = true
 
 ## Standard library
 
-- Very limited standard library from JavaScript
-  + enriched with many Node modules
+- Very __limited__ _standard library_ from JavaScript
+  + enriched with many _Node modules_
 
-- Many nice functionalities covering:
+- Many nice _functionalities_ covering:
   * networking and IPC
   * OS, multiprocess, and cryptographic utilities
 
-- Many functionalities are provided by community-driven third party libraries
+- Many functionalities are provided by _community-driven_ **third party** _libraries_
   * you can find virtually anything on [npmjs.com](https://www.npmjs.com/)
 
 ---
 
 ## Predefined design decisions
 
-- Object orientation based on [prototypes](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes)
+- _Object orientation_ based on [prototypes](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes)
 
-- Single threaded design + [event loop](https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick)
+- _Single threaded_ design + [event loop](https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick)
 
-- Asynchronous programming via [continuation-passing style](https://matt.might.net/articles/by-example-continuation-passing-style/)
+- _Asynchronous programming_ via [continuation-passing style](https://matt.might.net/articles/by-example-continuation-passing-style/)
 
 ---
 
 ## Organizational, stylistic, technical conventions
 
-- Project structure is somewhat arbitrary
-  * the project must contain a `package.json` file 
+- _Project structure_ is somewhat __arbitrary__ (no established convention)
+  * the project must contain a `package.json` file in the _root_ directory
   * declaring the entry point of the project
 
-- Many conventions co-exist
+- Many _structure conventions_ co-exist
   * e.g. [W3School's one](https://www.w3schools.com/js/js_conventions.asp)
 
-- Many technical conventions:
+- Many _technical conventions_:
   * duck typing
   * magic variables, e.g. for prototype
   * ...
@@ -396,28 +402,28 @@ enableSourceMap = true
 
 ## Packaging conventions, import mechanisms, and software repositories
 
-* Code is organized into modules
+* _Project files_ are organized into __modules__
   - modules are file containing anything
   - and declaring what to export
 
-* Code archives (`.tar.?z`) are compressed tarball files containing JS sources
+* Code _archives_ (`.tar.?z`) are compressed _tarball files_ containing JS sources
 
-* Third party libraries can be installed via `npm`
+* Third-party _libraries_ can be __installed__ via `npm`
   * locally, for the user, or globally
 
 
-* [NPM](https://www.npmjs.com/) as the official repository for JS libraries
+* [NPM](https://www.npmjs.com/) as the official _repository_ for JS libraries
   * `npm` as the official tool for dependency management
 
 ---
 
 ## User communities
 
-- Front-end Web developers
+- _Front-end_ Web developers
 
-- Back-end Web developers
+- _Back-end_ Web developers
 
-- GUI developers
+- _GUI_ developers
 
 - ...
 
@@ -429,23 +435,24 @@ enableSourceMap = true
 
 # Platforms from software developers' perspective
 
-The choice of a platform impacts developers during:
+The __choice__ of a _platform_ impacts developers during:
 
-- the design phase
+- the _design_ phase
 
-- the implementation phase
+- the _implementation_ phase
 
-- the testing phase
+- the _testing_ phase
 
-- the release phase
+- the _release_ phase
 
 ---
 
 ## How platform affects the **design** phase
 
-- One may choose the platform which minimises the __abstraction gap__ w.r.t. the problem at hand
+- One may choose the platform which minimizes the __abstraction gap__ w.r.t. the problem at hand
 
-> __Abstraction gap__ $\approx$ the space among the __problem__ and the prior functionalities offered by a __platform__. Ideally, the bigger the space the more _effort_ is required to build the solution 
+> __Abstraction gap__ $\approx$ the space among the __problem__ and the prior functionalities offered by a __platform__. 
+> Ideally, the bigger the space the more _effort_ is required to build the solution 
 
 {{< figure src="abstraction-gap.svg" width="70%" >}}
 
@@ -453,9 +460,9 @@ The choice of a platform impacts developers during:
 
 ## How platform affects the **implementation** phase
 
-- Developers build solutions by leveraging the API of the platform
+- Developers _write_ solutions by leveraging the _API_ of the __platform__
 
-- ... as well as the API of any third-party library available for that platform
+- ... as well as the API of any __third-party library__ available for that platform
 
 {{< figure src="third-party.svg" width="80%" >}}
 
@@ -463,12 +470,12 @@ The choice of a platform impacts developers during:
 
 ## How platform affects the **testing** phase
 
-- Test suites are a "project in the project"
+- _Test suites_ are a __"project in the project"__
   * so remarks are similar w.r.t. the implementation phase
 
-- One may test the system against as many versions as possible of the underlying platforms
+- One may test the system against _as many versions as possible_ of the underlying platforms
 
-- One may test the system against as many OS as possible
+- One may test the system against _as many OS_ as possible
   * virtual platforms may behave differently depending on the OS
 
 ---
@@ -477,11 +484,11 @@ The choice of a platform impacts developers during:
 
 > __Release__ $\approx$ publishing some packaged software system onto a repository, hence enabling its import and exploitation
 
-- Packaging systems are platform-specific...
+- _Packaging systems_ are platform-specific...
 
-- Repositories are platform-specific...
+- _Repositories_ are platform-specific...
 
-- ... release is therefore platform specific
+- ... _release_ is therefore platform specific
 
 {{% /section %}}
 
