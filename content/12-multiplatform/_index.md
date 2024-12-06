@@ -1466,6 +1466,8 @@ package "io github gciatto csv **impl**" {
         + constructor(header: Header, records: Iterable<Record>)
     }
 
+    interface Table
+
     Table <|-- DefaultTable
 }
 {{% /plantuml %}}
@@ -1552,7 +1554,7 @@ internal class DefaultRecord(override val header: Header, values: Iterable<Strin
         get() = super.values
 
     override fun get(column: String): String =
-        header.indexOf(column).takeIf { it in 0..< size }?.let { values[it] }
+        header.indexOf(column).takeIf { it in 0 ..< size }?.let { values[it] }
             ?: throw NoSuchElementException("No such column: $column")
 
     override fun toString(): String = toString("Record")
