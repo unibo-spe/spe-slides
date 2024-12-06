@@ -56,7 +56,7 @@ jobs:
       - name: Build slides with hugo
         run: hugo
       - name: Transform and Inline Mermaid charts
-        uses: cric96/inline-mermaid@1.12.0
+        uses: cric96/inline-mermaid@1.13.0
         with:
           root-folder: build
           config-file: config.toml
