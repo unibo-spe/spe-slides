@@ -57,7 +57,7 @@ Kubernetes has grown to be on of the largest and most popular *open source* proj
 
 <br/>
 
-<script type="text/javascript" src="https://ssl.gstatic.com/trends_nrtr/3523_RC02/embed_loader.js"></script> <script type="text/javascript"> trends.embed.renderExploreWidget("TIMESERIES", {"comparisonItem":[{"keyword":"Docker Swarm","geo":"","time":"2015-01-01 2023-01-01"},{"keyword":"Kubernetes","geo":"","time":"2015-01-01 2023-01-01"}],"category":0,"property":""}, {"exploreQuery":"date=2015-01-01%202023-01-01&q=Docker%20Swarm,Kubernetes","guestPath":"https://trends.google.com:443/trends/embed/"}); </script>
+<script type="text/javascript" src="https://ssl.gstatic.com/trends_nrtr/3523_RC02/embed_loader.js"></script> <script type="text/javascript"> trends.embed.renderExploreWidget("TIMESERIES", {"comparisonItem":[{"keyword":"Docker Swarm","geo":"","time":"2015-01-01 2025-01-01"},{"keyword":"Kubernetes","geo":"","time":"2015-01-01 2025-01-01"}],"category":0,"property":""}, {"exploreQuery":"date=2015-01-01%202023-01-01&q=Docker%20Swarm,Kubernetes","guestPath":"https://trends.google.com:443/trends/embed/"}); </script>
 
 ---
 
@@ -68,8 +68,8 @@ it is meant to support *reliable* and *scalable* software systems.
 
 {{% fragment %}}
 - __Reliability__: Services cannot fail, they must maintain *availability* even during software rollouts
-- __Scalability__: Services must grow their capacity to keep up with ever-increasing usage without redesigning the distributed system. Obviously, this includes both a scale-up and a scale-down of the service.
-- __Distributed Systems__: Pieces of software that together make up the service; they may run on different machines connected, and coordinating, via the network.
+- __Scalability__: Services can adapt their capacity to keep up with the usage, without redesigning the distributed system. This includes both a *scale-up* and a *scale-down* of the service.
+- __Distributed System__: Pieces of software the service is composed of; they may run on different machines (connected to each-other), and may coordinate their behaviour through the network.
 {{% /fragment %}}
 
 
@@ -78,8 +78,8 @@ it is meant to support *reliable* and *scalable* software systems.
 ## Key features
 - Immutability
 - Everything is a declarative configuration object
-- Broader range of object to create, and manage, the production environment
-- Automatic scaling (up and down)
+- Broader range of object to create, and manage, the production environment with respect to Docker Swarm
+- Automatic scaling of resources (horizontal, vertical, increasing and decreasing)
 - Built-in monitoring
 - Security
 
@@ -88,13 +88,16 @@ it is meant to support *reliable* and *scalable* software systems.
 ## Immutability
 
 Just like Docker Swarm, Kubernetes is a container orchestrator. 
-Containers represent a declarative way to package and run applications, giving an immutable environment that can be deployed anywhere.
+- Containers represent a declarative way to package and run applications 
+- Containers can be deployed anywhere
+- They are meant to be stateless, thus changed at any time
 
 <br>
 
-__So, why Docker Swarm is not enough?__
+__Why Docker Swarm is not enough?__
 
-Docker Swarm is not meant to support large production deployments at scale.
+Docker Swarm do support large production deployments at scale, 
+while Kubernetes natively support it.
 
 ---
 
@@ -104,25 +107,23 @@ Docker Swarm is not meant to support large production deployments at scale.
 {{% col %}}
 
 ### Docker Swarm 
-- stuck to the docker ecosystem,
+- makes use of the docker ecosystem:
   - it does not support other container runtimes,
-  - it requires docker primitives to be used to manage the environment.
-- the only way to manage the environment is through the `docker-compose.yml` file.
+  - relies on docker primitives to be used to manage the environment.
+- the environment is managed through the `docker-compose.yml` file.
 
 ### Example with a Docker Stack: 
 
 ```
 docker stack deploy -c docker-compose.yml <stack_name>
 ```
-__Docker primitives required to build the environment__
-
-
+__Docker primitives to build the environment__
 
 {{% /col %}} {{% col %}}
 
 ### Kubernetes 
-- **"everything is an object"**
-  - broader range of objects to customise the production environment,
+- Adheres to the principle **"everything is an object"**
+  - broader range of objects to shape the production environment,
   - external declarative tool, named `kubectl`, to manage the environment.
 - it can be configured to work upon different container runtimes, such as *Docker*, *containerd*, *CRI-O*, etc.
 
@@ -132,7 +133,7 @@ __Docker primitives required to build the environment__
 ```
 kubectl create -f configuration-file.yaml
 ```
-__Command valid for every resource in the Kubernetes ecosystem__
+__Instruction valid for every resource in the Kubernetes ecosystem__
 
 {{% /col %}}
 {{% /multicol %}}
@@ -196,16 +197,16 @@ And the list goes on...
 {{% /col %}} {{% col %}}
 
 ### Kubernetes
-- Can scale up and down the replicas of a resource,
-  - both automatically and after a manual intervention,
-  - the automatic scaling can be configured to be based on observed metrics (i.e. the usage of the CPU/Memory). 
+- Can scale up and down replicas of a resource,
+  - both automatically and with a manual intervention,
+  - the automatic scaling can be configured on the observation of *metrics* (i.e. the usage of the CPU/Memory). 
 - The cluster can grow its capacity, 
   - *automatically* and after a manual intervention.
   - supported only when running on [some](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler#faqdocumentation) cloud providers.
 
 <br>
 
-- __Replicas and metrics are managed by resource objects too__
+- __Replicas and metrics are resource objects too__
 
 
 {{% /col %}}
@@ -237,6 +238,18 @@ And the list goes on...
 ---
 
 ## Metrics in Kubernetes
+
+- *Metrics Registry* is the component of the Kubernetes' Control Plane that exposes **API** to watch for cluster's metrics.
+  - *Metrics Server* is the built-in implementation of this service
+  - there are external Metrics Servers which can be adopted instead of it. 
+- There are mainly three kinds of metrics: 
+  - **Resource Metrics**: concerning *memory* and *cpu* of Kubernetes' resource objects.
+  - **Custom Metrics**: other information about Kubernetes' resource objecs.
+  - **External Metrics**: metrics not related with Kubernetes' resources (i.e. number of incoming HTTP requests)
+
+--- 
+
+## Metrics in Kubernetes
 <br>
 <img src="hpa2.png" width=60% />
 
@@ -260,7 +273,7 @@ And the list goes on...
 - Fine grained access control based on RBAC,
   - configurable for the single use case
 
-- Resources management is performed using the `kubectl` tool,
+- Resources are externally managed with `kubectl` tool,
   - it connects remotely to a cluster => no need to access a cluster node
   - it is configured with specific user credentials
     - with a RBAC authorization
@@ -296,7 +309,7 @@ And the list goes on...
 
 ### Kubernetes smallest deployable unit.
 - Runs one (or more) containers
-  - this allow to deploy toghether two different containers that are symbiotic between themself
+  - Pods allow to deploy toghether two different containers that are symbiotic between themself
     - for example, a web server container and the git synchronizer one that keeps it updated 
     - this is not the case of a web server and its database, which can be deployed in two different nodess
 
@@ -568,10 +581,10 @@ spec:
 <br>
 <br>
 
-`Pods` are not directly managed by the user, but through by a higher-level object called `Deployment`.
+`Pods` are not directly managed by the user, but through higher-level objects called `Deployment`.
 - They exist to manage the release of a new version of the application
 - Avoid downtime during the update process of a Pod
-- Entity that ties together a `ReplicaSets` and `Pods`
+- Ties together `ReplicaSets` and `Pods`
 
 {{% /col %}}
 {{% /multicol %}}
@@ -612,7 +625,7 @@ spec:
 <br>
 <br>
 
-The connection between the `Deployment` and the `Pods` is done using the `selector` field
+The connection between `Deployments` and `Pods` is done using the `selector` field
  - they are unique labels that identify the `Pods` that the `Deployment` will manage
 
 {{% /col %}}
@@ -620,18 +633,18 @@ The connection between the `Deployment` and the `Pods` is done using the `select
 
 ---
 
-## Kubernetes objects: ReplicaSet
+## Kubernetes objects: ReplicaSets
 
-They are the objects that manage the `Pod` number
- - they usually are not managed directly by the user, but through a `Deployment`
- - they let to scale the number of `Pods` up and down
+The object that manages the `Pod` number
+ - usually not directly managed by the user, but through a `Deployment`
+ - allows to scale the number of `Pods` up and down
 
 
 <br>
 <br>
 
 <div class="center">
-Since a <code>Deployment</code> object manages a <code>ReplicaSet</code> one, users can scale dynamically the <code>Pod</code>'s number using:
+Since a <code>Deployment</code> object manages a <code>ReplicaSet</code>, users can scale dynamically the <code>Pod</code>'s number using:
 </div>
 
 <div class="custom">
@@ -656,12 +669,12 @@ kubectl scale deployment <name> --replicas=<number>
 <br>
 <br>
 
-Service discovery in Kubernetes starts with the *Service* object. 
-  - They are the entry-point for the application
+Service discovery in Kubernetes is done with *Service* objects. 
+  - They are the entry-point of the application
   - They redirect requests to the Pods in the cluster nodes
-    - Don't forget that Pods are ephemeral, so they can be moved between nodes, and their IP address can change
+    - **why?** Pods are ephemeral, so they can be moved between nodes, and their IP address is subject to changes
   - They group Pods in a network
-    - meaning that Services know which Pods are replicas
+    - meaning that Services know how many replicas exist for one Pod 
 
 <br>
 
@@ -684,12 +697,12 @@ There are three main types of Services:
 | Name | Description |
 | --- | --- |
 | `ClusterIP` | Exposes the Service on a cluster-internal IP, only reachable <br> from within the cluster. This is the *default* value. |
-| `NodePort` | Exposes the Service on each Node’s IP at a static port. |
-| `LoadBalancer` | Exposes the server externally using a load balancer. <br> This type of Service is not offered directly from Kubernetes.  |
+| `NodePort` | Exposes the Service on the Node’s IP with a fixed port. |
+| `LoadBalancer` | Exposes the server *externally* using a load balancer. <br> This type of Service is not offered directly from Kubernetes.  |
 
 ---
 
-`Deployments` are not the only road:
+`Deployments` are not the only solution:
 
 {{% multicol %}}
 {{% col %}}
@@ -721,11 +734,11 @@ As nodes are removed from the cluster, those Pods are garbage collected.
 
 ## Access Control
 
-Enforced through the `Service Account` resource object
+Enforced through the `Service Account` resource object, which:
 - represents a distinct identity in the cluster
-- each one of them is *bound* to a specific `Namespace`
-- grants access to the API server
-- grants permissions through the *RBAC* mechanism
+- is *bound* to a specific `Namespace`
+- grants access to the Kubernetes' API server
+- grants permissions with *RBAC* to users
 - can be used to configure the authentication within `kubectl`
 
 ---
