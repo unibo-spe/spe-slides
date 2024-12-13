@@ -747,6 +747,14 @@ Enforced through the `Service Account` resource object, which:
 
 ---
 
+## Requirements
+
+- `minikube`: [link](https://minikube.sigs.k8s.io/docs/start/)
+- `virtualbox`: [link](https://www.virtualbox.org/wiki/Downloads)
+- `kubectl`: [link](https://kubernetes.io/docs/tasks/tools/#kubectl)
+
+---
+
 ## Installation of Kubernetes
 
 - Several tools support the installation of a *production-ready Kubernetes cluster*, because is a **complex** process
@@ -833,7 +841,7 @@ $ minikube start
 - Now you have a virtual machine running on VirtualBox, and hosting a Kubernetes cluster.
   - You can look for it using the VirtualBox GUI
 - Minikube configured your `kubectl` environment
-  - **But you don't have `kubectl` installed yet!**
+  - **Even if you don't have `kubectl` installed!**
 
 ---
 
