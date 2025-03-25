@@ -166,7 +166,7 @@ foo = null // error: null can not be a value of a non-null type String
 # Kotlin 101
 ## Accessing nullable types
 
-Nullable types memebers can't be accessed by `.`.
+Nullable types members can't be accessed by `.`.
 ```kotlin
 var baz: String? = "foo"
 baz.length // error: only safe (?.) or non-null asserted (!!.) calls are allowed...
@@ -931,7 +931,7 @@ class B : A() // Perfectly fine
 ```
 With abstract, however, the superclass cannot be created
 <br/>
-(and it should have actual `abstract` memebers anyway)
+(and it should have actual `abstract` members anyway)
 ```kotlin
 open class Open
 abstract class Abstract
