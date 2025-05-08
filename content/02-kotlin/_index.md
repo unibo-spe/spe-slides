@@ -1958,7 +1958,7 @@ Kotlin provides a number of built-in functions that run a lambda expression in a
 
 Can be invoked on an object, passing a lambda expression.
 <br/>
-The method receiver is bound to the lambda parameter
+The lambda parameter is bound to the `let` receiver
 <br/>
 the return type is the result of the function
 
@@ -1991,7 +1991,7 @@ the return type is the result of the function
 
 ## Scope functions
 
-#### `with` : `(T.() -> R) -> R`
+#### `with` : `(T, T.() -> R) -> R`
 
 Non-extension version of `run`,
 the context object is passed as first parameter
