@@ -2054,7 +2054,7 @@ A lot of language details have been left out of this guide, non complete list:
 * `noinline` and `crossinline`
 * coroutines
 * interoperatibility with Java
-* `inline class`es
+* `value class`es
 
 ---
 
