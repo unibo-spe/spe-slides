@@ -121,8 +121,10 @@ Changes will be published on the forum
   * Full-scale *automation*
     * Including *continuous integration* and delivery
   * Deploy automation via *containerization* and/or *orchestration*
-  * Technically involve _2+ platforms_
+  * Technically involve _2+ **target** platforms_
     * e.g., JVM, NodeJS, Python, C, C++, Rust, Go, etc.
+    * two targets are different if they run on a different runtime (e.g., native + JVM)
+    * two targets are *likely* different if they use different build systems (but there are exceptions: Scala/sbt + Java/Gradle are not considered different targets)
 
 * Can be a **joint effort** with other courses
   * We care about the *domain modeling* and the application of *DevOps techniques*
