@@ -135,6 +135,22 @@ Changes will be published on the forum
 
 ---
 
+# "Project work"
+
+The exam's project can be developed a "project work", namely,
+a project whose requirements are provided by a real-world company,
+which acts as a commissioner.
+
+* The students will interact with the company to apply Domain-Driven Design on a real piece of software.
+* The project will be open source
+* All the features required for a "normal" exam project still hold
+
+It is an opportunity to *learn by doing* in a context closer to the industry.
+
+Available project works will be posted on the course site on https://virtuale.unibo.it/
+
+---
+
 # Software
 
 ## Required
