@@ -6,9 +6,9 @@ Always reference these instructions first and fallback to search or bash command
 ## Working Effectively
 - **Prerequisites and Setup:**
   - Ensure Git submodules are initialized: `git submodule init && git submodule update` 
-  - Install Hugo extended: Download from `https://github.com/gohugoio/hugo/releases/download/v0.149.1/hugo_extended_0.149.1_linux-amd64.deb` then `sudo dpkg -i hugo.deb`
+  - Install Hugo extended: Check `.github/workflows/build-and-deploy.yml` for current version (extract from `gohugoio/hugo@v{VERSION}` line), then download from `https://github.com/gohugoio/hugo/releases/download/v{VERSION}/hugo_extended_{VERSION}_linux-amd64.deb` and install with `sudo dpkg -i hugo.deb`
   - Install inotify-tools for development: `sudo apt-get install -y inotify-tools`
-  - Ruby should be available (version 3.4.5+): `ruby --version`
+  - Ruby should be available: Check `.ruby-version` file for required version, ensure `ruby --version` matches
 
 - **Build the slides (FAST - takes ~3 seconds total):**
   - `shared-slides/preprocess.rb` -- Ruby preprocessor, takes ~1 second
@@ -51,7 +51,7 @@ ls -la /
 .git/             (Git repository)
 .github/          (GitHub workflows and settings)  
 .gitmodules       (Git submodule configuration)
-.ruby-version     (Ruby version: 3.4.5)
+.ruby-version     (Ruby version: check file for current version)
 config.toml       (Hugo configuration)
 content/          (Slide content and generators)
 shared-slides/    (Git submodule: shared slide content)
@@ -108,6 +108,6 @@ Environment: "development"
 ## Troubleshooting
 - **Empty shared-slides directory**: Run `git submodule init && git submodule update`
 - **Hugo not found**: Install Hugo extended from GitHub releases (see prerequisites)
-- **Ruby errors**: Ensure Ruby 3.4.5+ is installed
+- **Ruby errors**: Ensure Ruby version matches `.ruby-version` file requirements
 - **Build fails**: Check that all submodules are properly initialized
 - **Development server won't start**: Ensure inotify-tools is installed for file watching
