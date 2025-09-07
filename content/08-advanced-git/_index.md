@@ -1019,7 +1019,7 @@ Any of the `tree-ish`es can be used to checkout!
 
 Scripts that execute when some events happen, stored in `.git/hooks`
 
-They are **not part of the repository code**, and hence **they cannot get commited and pushed**
+They are **not part of the repository code**, and hence **they cannot get committed and pushed**
 
 Events also dictate the file names:
 * `applypatch-msg`
