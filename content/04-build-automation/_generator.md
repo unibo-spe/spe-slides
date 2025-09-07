@@ -28,6 +28,7 @@ enableSourceMap = true
 * Build automation:
   * The software lifecycle
   * Automation styles
+  * Poetry as a modern declarative build system
 * Gradle as paradigmatic build automator
     * Core concepts and basics
     * Dependency management and configurations
@@ -42,6 +43,12 @@ enableSourceMap = true
 ---
 
 <!-- write-here "shared-slides/build-systems/build-systems-intro.md" -->
+
+<!-- end-write -->
+
+---
+
+<!-- write-here "shared-slides/build-systems/poetry-declarative.md" -->
 
 <!-- end-write -->
 
