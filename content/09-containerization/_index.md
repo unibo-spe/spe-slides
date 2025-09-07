@@ -2113,7 +2113,7 @@ let's use `software-process-engineering` as password for the `admin` user
 
 ## Portainer's Home Page
 
-Upon login, one is presented with the _home page_, asking you to select one __enviroment__
+Upon login, one is presented with the _home page_, asking you to select one __environment__
 + __environments__ are clusters (one Portainer instance may manage multiple clusters)
 
 {{< figure src="./portainer-hello.png" width="50%" >}}
