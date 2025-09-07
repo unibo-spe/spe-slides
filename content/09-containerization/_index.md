@@ -1097,7 +1097,7 @@ Let's create a non-trivial scenario with 2 container attached to the same networ
 ## Bridge network (pt. 5)
 
 5. let's restart a Docker-in-Docker daemon, using the `docker` hostname:
-    * `docker run --privileged -d --rm --network my-network --name dind --hostname docker docker:dind dockerd --host=tcp://0.0.0.0:2375`
+    * `docker run --privileged -d --rm --network my-network --name dind --hostname docker:dind dockerd --host=tcp://0.0.0.0:2375`
     * in general, it would be better to both `--name X` and `--hostname X`
         + same name and hostname to avoid confusion!
     * `dockerd --host=tcp://0.0.0.0:2375` is necessary to force the port the daemon will listen on
