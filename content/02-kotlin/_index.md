@@ -37,6 +37,8 @@ Clearly inspired by a mixture of Java, C#, Scala, and Groovy
 
 **In this course** -- we'll need it for Gradle and *internal* domain specific languages
 
+**Note**: This presentation covers Kotlin up to version 2.2.x (2024), including the latest language features and improvements.
+
 ---
 
 ## Philosophy: Kotlin vs. Scala
@@ -1427,7 +1429,8 @@ val (a, b, c) = A()
 Similar to Scala's `sealed trait`s:
 * ~~`class`es, not supported for `interface`s~~ Supported since [Kotlin 1.5.0](https://kotlinlang.org/docs/whatsnew15.html#sealed-interfaces)
 * subtypes must be defined inside the sealed class
-* sealed hierarchies proved *exhaustive checking* inside `where` clauses
+* sealed hierarchies provide *exhaustive checking* inside `when` clauses
+* Further enhanced in Kotlin 2.2.x with better performance and compilation
 
 ```kotlin
 sealed interface Booze {
@@ -2044,6 +2047,210 @@ Used to cause side effects and returning the original object
 
 ---
 
+# Kotlin 2.2.x -- What's New
+
+## Context Receivers (Preview)
+
+One of the most significant new features in Kotlin 2.2.x
+* Provides a clean way to pass context information through function calls
+* Enables powerful DSL patterns and dependency injection
+* Still in preview, requires opt-in with `@file:OptIn(ExperimentalStdlibApi::class)`
+
+```kotlin
+context(UserService, Logger)
+fun welcomeUser(userId: String) {
+    val user = findUserById(userId) // from UserService context
+    log("Welcoming user: ${user.name}") // from Logger context
+}
+
+// Usage
+with(userService) {
+    with(logger) {
+        welcomeUser("123")
+    }
+}
+```
+
+---
+
+# Kotlin 2.2.x -- What's New
+
+## Enhanced Context Receivers
+
+Context receivers allow multiple contexts and complex patterns:
+
+```kotlin
+context(UserService, NotificationService, Logger)
+fun processUserNotification(userId: String, message: String) {
+    val user = findUserById(userId)
+    sendNotification(user, message)
+    log("Notification sent to ${user.name}")
+}
+
+// Declares a property with a context parameter
+context(users: UserService)
+val firstUser: String
+    // Uses findUserById from the context    
+    get() = users.findUserById(1)
+```
+
+You can use `_` as a context parameter name for anonymous access:
+```kotlin
+context(_: UserService)
+fun logWelcome() {
+    // Finds the appropriate log function from UserService
+    log("Welcome!")
+}
+```
+
+---
+
+# Kotlin 2.2.x -- What's New
+
+## Multiplatform Improvements
+
+Kotlin 2.2.x brings significant enhancements to Kotlin Multiplatform:
+* **Improved Gradle plugin** with better configuration and performance
+* **Enhanced expect/actual declarations** with more flexible matching
+* **Better IDE support** for multiplatform projects
+* **Compose Multiplatform stability** improvements
+
+```kotlin
+// Enhanced expect/actual with more flexible matching
+expect class PlatformSpecific {
+    fun performAction(): String
+}
+
+// More powerful multiplatform configuration in build.gradle.kts
+kotlin {
+    wasmJs {
+        browser()
+        nodejs()
+    }
+    
+    sourceSets {
+        commonMain.dependencies {
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+        }
+    }
+}
+```
+
+---
+
+# Kotlin 2.2.x -- What's New
+
+## WebAssembly (WASM) Support
+
+Kotlin 2.2.x significantly improves WebAssembly support:
+* **Stable WASM target** for browser and Node.js
+* **Better performance** with optimized compilation
+* **Improved interoperability** with JavaScript libraries
+* **Enhanced debugging** support in browsers
+
+```kotlin
+// build.gradle.kts configuration for WASM
+kotlin {
+    wasmJs {
+        binaries.executable()
+        browser {
+            commonWebpackConfig {
+                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+                    static = (static ?: mutableListOf()).apply {
+                        add(project.projectDir.path)
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+---
+
+# Kotlin 2.2.x -- What's New
+
+## Collection API Enhancements
+
+New collection functions and improvements:
+* **Chunked operations** for better data processing
+* **Window operations** for sliding window patterns
+* **Enhanced sequence processing** with better performance
+
+```kotlin
+val numbers = (1..100).toList()
+
+// New chunked operations
+val chunks = numbers.chunked(10) { it.sum() } // Sums each chunk of 10
+
+// Enhanced windowed operations
+val windows = numbers.windowed(size = 3, step = 2, partialWindows = true)
+
+// Improved sequence operations
+val result = numbers.asSequence()
+    .chunked(5)
+    .map { chunk -> chunk.maxOrNull() }
+    .filterNotNull()
+    .toList()
+```
+
+---
+
+# Kotlin 2.2.x -- What's New
+
+## Performance Improvements
+
+Kotlin 2.2.x includes numerous performance enhancements:
+* **Faster compilation** with improved K2 compiler
+* **Better runtime performance** for collection operations
+* **Optimized coroutines** execution
+* **Reduced memory allocation** in common operations
+
+## Value Classes Improvements
+
+Enhanced value class functionality:
+* **Better JVM optimization** for value classes
+* **Improved interoperability** with Java
+* **Enhanced debugging** support
+
+```kotlin
+@JvmInline
+value class UserId(val value: String) {
+    init {
+        require(value.isNotEmpty()) { "UserId cannot be empty" }
+    }
+}
+
+// Better performance and smaller memory footprint
+fun processUser(id: UserId) = TODO()
+```
+
+---
+
+# Kotlin 2.2.x -- What's New
+
+## Definitely Non-Nullable Types
+
+Enhanced null safety with definitely non-nullable types:
+
+```kotlin
+// Type parameter with definite non-nullable bound
+fun <T : Any> processNonNull(value: T & Any): T {
+    // T is definitely non-nullable here
+    return value.toString().let { value }
+}
+
+// Enhanced null safety in generic contexts
+interface Repository<T : Any> {
+    fun save(entity: T & Any): T & Any
+    fun findById(id: String): T?
+}
+```
+
+This provides stronger guarantees about nullability in generic contexts.
+
+---
+
 # Extra content
 
 A lot of language details have been left out of this guide, non complete list:
@@ -2055,6 +2262,7 @@ A lot of language details have been left out of this guide, non complete list:
 * coroutines
 * interoperatibility with Java
 * `value class`es
+* **New in 2.2.x**: context receivers, WASM support, enhanced multiplatform, performance improvements
 
 ---
 
