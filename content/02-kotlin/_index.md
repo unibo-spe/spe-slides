@@ -1823,12 +1823,14 @@ sum == (0..100).sum()
 
 # Kotlin 202 -- Functional Kotlin
 
-## Flow control with lambdas
+## Inlining and `return` from lambdas
 
-Kotlin rule: `return` returns from the closest *named* `fun`ction
+* Normally, `return` in lambda expressions is *forbidden*
+* When a function is declared `inline`, since its code and the code of its lambdas are copied at call site,
+  `return` is allowed and returns from the *enclosing function*
 
 ```kotlin
-fun breakingFlow(): List<Int> = (0..10).toList().map {
+fun breakingFlow(): List<Int> = (0..10).toList().map { // map is declared inline in the stdlib
     if (it > 4) {
         return (0..it).toList() // returns from breakingFlow
     }
@@ -1837,7 +1839,7 @@ fun breakingFlow(): List<Int> = (0..10).toList().map {
 breakingFlow()
 ```
 
-A *qualified `return`* can be used to return from lambdas:
+* A *qualified `return`* can be used to return from lambdas:
 
 ```kotlin
 fun breakingFlow(): List<Int> = (0..10).toList().map {
@@ -1848,6 +1850,28 @@ fun breakingFlow(): List<Int> = (0..10).toList().map {
 }
 breakingFlow()
 ```
+
+---
+
+# Kotlin 202 -- Functional Kotlin
+
+## `crossinline`
+
+The return from inline functions can be disabled by marking the lambda parameter with the `crossinline` keyword
+* required when lambdas are called from other execution contexts:
+
+```kotlin
+inline fun f(crossinline body: () -> Unit) {
+    val f = object: Runnable { override fun run() = body() } // body is called from another context and cannot return from f
+}
+```
+
+## `noinline`
+
+Cross-inlining is insufficient when the lambda must be passed around or stored for later use
+* In this case, the lambda inlining can be disabled entirely by marking the parameter with `noinline`
+
+#### **Note**: the compiler is pretty good at clearly reporting when `crossinline` or `noinline` are required
 
 ---
 
@@ -2104,10 +2128,10 @@ A lot of language details have been left out of this guide, non complete list:
 * enum classes
 * spread operator
 * annotations
-* `noinline` and `crossinline`
 * coroutines
-* interoperatibility with Java
+* interoperatibility with Java, Javscript, and C
 * `value class`es
+* context parameters
 
 ---
 
