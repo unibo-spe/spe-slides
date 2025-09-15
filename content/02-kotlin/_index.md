@@ -27,11 +27,11 @@ enableSourceMap = true
 # Why Kotlin
 
 JetBrains-made modern programming language
-* Focused on "practical use" (whatever that means)
+* Focused on "practical use"
 
 Gaining momentum since Google adopted is as *official Android language*
-<br>
-(along with Java and C++)
+* initially along with Java and C++
+* now Android is Kotlin-first
 
 Clearly inspired by a mixture of Java, C#, Scala, and Groovy
 
@@ -53,9 +53,8 @@ Clearly inspired by a mixture of Java, C#, Scala, and Groovy
 * Born in industry, for the industry
 * Many more "core" constructs and keywords than Scala
 * Focused on getting productive quickly and reducing programming errors
-* Focus on multi-target (can compile towards JVM, JavaScript, and native)
-    * Scala can as well by the way
-    * Kotlin puts more care into bidirectional compatibility
+* Focus on multi-target (can compile towards JVM, JavaScript, WASM and native, including iOS)
+    * With care to bidirectional compatibility
 
 ---
 
@@ -208,7 +207,7 @@ baz!!{{<comment_frag " // throws a KotlinNullPointerException, like the good ol'
 # Kotlin 101
 
 ### Elvis operator `?:`
-Yeah it's actually named after Elvis Presley due to his haircut 😉
+Named after Elvis Presley's haircut 🕺
 <br/>
 * Returns the left operand if it's not `null`, otherwise the right one
 
@@ -389,7 +388,7 @@ l + i{{<comment_frag " // OK, operators are overloaded" >}}
 
 # Kotlin 101
 
-## Strings and templating
+## Strings and string templates
 
 Spiced up version of Java strings, Groovy-style templating:
 * `$` begins a template expression
@@ -402,6 +401,7 @@ val batman = "Batman"
 "Batman is $batman.length characters long"{{<comment_frag " // Batman is Batman.length characters long" >}}
 "Batman is ${batman.length} characters long"{{<comment_frag " // Batman is 6 characters long" >}}
 ```
+
 ---
 
 # Kotlin 101
@@ -413,7 +413,6 @@ Triple-double-quoted strings are considered *raw strings*
 * newlines are intended as part of the string
 * Very handy for writing regular expressions
 * `$`-templating still works
-    * writing a dollar symbols requires some tricks
 
 ```kotlin
 val dante = """
@@ -422,8 +421,45 @@ val dante = """
     ch'ogne lingua devèn, tremando, muta
     e li occhi non l'ardiscon di guardare.
     """.trimIndent() // Indentation can be trimmed
-val finalWordsEndingInA = """\W*(\w*a)\W*${'$'}""".toRegex(RegexOption.MULTILINE) // '$' escaped
+val finalWordsEndingInA = """\W*(\w*a)\W*$""".toRegex(RegexOption.MULTILINE) // '$' escaped
 finalWordsEndingInA.findAll(dante).map { it.groups[1]?.value }.toList() {{<comment_frag " // [saluta, muta]" >}}
+```
+
+---
+
+# Kotlin 101
+
+## Multi-dollar string interpolation (since Kotlin 2.2.20)
+
+* Writing dollar symbols in strings is cumbersome (requires escaping with `${'$'}`)
+    * can become a nightmare when writing e.g., JSON schemas
+
+```kotlin
+val jsonSchema : String
+    get() = """
+    {
+      "${'$'}schema": "https://json-schema.org/draft/2020-12/schema",
+      "${'$'}id": "https://example.com/product.schema.json",
+      "${'$'}dynamicAnchor": "meta",
+      "title": "${findTitle()}",
+      "type": "object"
+    }
+    """
+```
+
+* Specify how many consecutive dollar signs are required to trigger interpolation by prefixing them to the (multiline) string literal
+
+```kotlin
+val jsonSchema : String
+    get() = $$"""
+    {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://example.com/product.schema.json",
+      "$dynamicAnchor": "meta",
+      "title": "$${findTitle()}",
+      "type": "object"
+    }
+    """
 ```
 
 ---
@@ -481,13 +517,14 @@ val `val` = "Hey look I can name things with keywords!"
 val `names can also contain spaces` = 1
 ```
 
-* General rule: **avoid it**
+* General rule: **avoid it**, but in tests
 * It might be needed for interoperability with other languages, e.g. if a Java field is named `val`
-* Tolerated in tests with Junit (but Kotlin-native suites as Kotest do not need it)
+* Tests using kotlin.test can use them:
 
 ```kotlin
-class JunitTest {
-    @Test fun `404 errors should cause a wait and retry`() = TODO() // Nice and very clear name
+class WebAgentTest {
+    @Test
+    fun `404 errors should cause a wait and retry`() = TODO() // Nice and very clear name
 }
 ```
 
@@ -529,7 +566,7 @@ Warning: local functions often hinder clarity
 * **No classic** `for(init; condition; then) { block }` loop
 * Only available as `for`/`in`: `for (element in collection) { block }`
 * **Not a powerful combinator** like Scala's `for`
-* *Rarely used* (I think I might have used it twice in my career)
+* *Seldom used*
 
 ---
 
@@ -755,12 +792,9 @@ val baz = foo.plus(bar)
 
 ## Interfaces
 
-* Similar to Java 8+
-* Methods can be implemented
-* Can host properties
-    * And their accessors can be implemented
+* Can host *methods* and *properties*
+    * Both can be implemented
     * Properties in interfaces *do not have backing fields*
-* Both properties and methods can be implemented there
 * Scala-like mixins not supported
     * A Kotlin `interface` cannot be a subclass of a Kotlin `class`
 ```scala
@@ -1633,19 +1667,38 @@ janesJson // Does it change? {{<comment_frag "{name=Janet Smitherson, birthYear=
 
 # Kotlin 201 -- Advanced OOP
 
-## Custom delegates
+## Delegated properties and custom delegates
 
-A valid delegate for a `val` is a `class` with a method:
+They represent *kinds* of properties whose get/set behavior is defined once and for all, e.g.:
+* lazy properties
+* observable properties
+
+Any class with a method:
 ```kotlin
 operator fun getValue(thisRef: T, property: KProperty<*>): R
 ```
+is a valid delegate for a `val` is a `class`
 where T is the "owner" type, and R is the type of the property
 
 A valid delegate for a `var` must also have a `setValue` method:
 ```kotlin
-operator fun setValue(thisRef: T, property: KProperty<*>, value: P): R
+operator fun setValue(thisRef: T, property: KProperty<*>, value: P): Unit
 ```
 where T and R are the same as in `getValue`, and P is a supertype of R
+
+**Note**: that this is a form of structural typing, exceptional with the Kotlin type system (typically nominal)
+
+```kotlin
+object OwnName {
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): String = property.name
+}
+val myName by OwnName // "myName"
+// can be class if you need to provide parameters
+class RepeatName(val times: Int) {
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): String = property.name.repeat(times)
+}
+val tac by RepeatName(3) // "tactactac"
+```
 
 ---
 
