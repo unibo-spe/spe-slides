@@ -185,21 +185,160 @@ include(CPack)
 * **Dependency resolution**: Handles dependency resolution and locking via `poetry.lock`.
 * **Virtual environments**: Automatically manages isolated Python environments per project.
 * **Build and publish**: Supports building and publishing packages to PyPI or other repositories.
+---
+
+## Python's conflicting standards
+
+![xkcd](https://imgs.xkcd.com/comics/python_environment.png)
+
+Since there were no standard management systems originally,
+multiple tools *proliferated*
+
+* The Python Packaging Authority (PyPA) is inconsistent in its suggestions:
+    * Recommends [`venv`](https://docs.python.org/3/library/venv.html)
+    * Also recommends [Pipenv](https://pipenv.pypa.io/en/latest/) , which uses [`virtualenv`](https://virtualenv.pypa.io/en/latest/)
+    * Also endorses [Poetry](https://python-poetry.org/)
+
+* Many Python developers also rely on [PyEnv](https://github.com/pyenv/pyenv)
+
+* Many data scientists use [Anaconda](https://www.anaconda.com/)
 
 ---
 
+## Python ecosystem
 
-## The Apache Maven build lifecycle
+1. By default, Python is installed _system-wide_
+    + i.e. there should be _one_ (and __only__ one) Python interpreter on the system
+    + **Problem 1**: two different projects cannot use different versions of Python!
 
-A build lifecycle typical of *declarative automators*:
+2. All Python installations come with `pip`, the _package installer_ for Python
+    * Python packages are supposed to be installed _system-wide_ with `pip install PACKAGE_NAME`
+    * **Problem 2**: Two different projects cannot use different versions of the same package!
 
-1. `validate` - validate the project is correct and all necessary information is available
-2. `compile` - compile the source code of the project
-3. `test` - test the compiled source code using a suitable unit testing framework. These tests should not require the code be packaged or deployed
-4. `package` - take the compiled code and package it in its distributable format, such as a JAR.
-5. `verify` - run any checks on results of integration tests to ensure quality criteria are met
-6. `install` - install the package into the local repository, for use as a dependency in other projects locally
-7. `deploy` - done in the build environment, copies the final package to the remote repository for sharing with other developers and projects.
+* `PyEnv` is a tool to manage _multiple_ Python __installations__ _on the same system_
+    + *tackles Problem 1*
+    + **Poetry** checks that the right Python version is used, but does not manage Python installations
+
+* `virtualenv` and `venv` create _virtual_ Python installations _on the same system_
+    + `virtualenv` is a _third-party_ tool, `venv` is _built-in_ in Python 3.3 and later
+    + *tackles Problem 2*
+    + **Poetry** automatically creates and manages virtual environments for each project
+
+---
+
+## Poetry's canonical project structure
+
+```bash
+root-directory/
+├── main_package/
+│   ├── __init__.py
+│   ├── sub_module.py
+│   └── sub_package/ 
+│       ├── __init__.py 
+│       └── sub_sub_module.py 
+├── test/
+│   ├── test_something.py
+│   └── test_something_else.py/ 
+├── pyproject.toml # File where project configuration (metadata, dependencies, etc.) is stored
+├── poetry.toml # File where Poetry configuration is stored
+├── poetry.lock # File where Poetry locks the dependencies
+└── README.md
+```
+
+If you already use Python, notice:
+- no `requirements.txt` nor `requirements-dev.txt`
+- `pyproject.toml`, `poetry.toml`, and `poetry.lock` are **Poetry-specific**
+- `poetry.lock` is generated _automatically_ by Poetry, and you should not be manually edited
+---
+
+## A Python [`calculator`](https://github.com/unibo-dtm-se/calculator)
+
+(courtesy of Giovanni Ciatto)
+
+```toml
+[tool.poetry]
+
+# publication metadata
+name = "unibo-dtm-se-calculator"
+packages = [ # files to be included for publication
+    { include = "calculator" },
+]
+version = "0.1.1"
+description = "A simple calculator toolkit written in Python, with several UIs."
+authors = ["Giovanni Ciatto <giovanni.ciatto@unibo.it>"]
+license = "Apache 2.0"
+readme = "README.md"
+
+# dependencies (notice that Python is considered a dependency)
+[tool.poetry.dependencies] 
+python = "^3.10.0"
+Kivy = "^2.3.0"
+
+# development dependencies
+[tool.poetry.group.dev.dependencies]
+poetry = "^1.7.0"
+pytest = "^8.1.0"
+coverage = "^7.4.0"
+mypy = "^1.9.0"
+
+# executable commands that will be created then installing this package
+[tool.poetry.scripts]
+calculator-gui = "calculator.ui.gui:start_app"
+calculator = "calculator.ui.cli:start_app"
+
+# where to download the dependencies from
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+# packaging dependencies
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+# the project-specific environment will be created in the local .venv folder
+[virtualenvs]
+in-project = true 
+```
+
+Pure TOML: completely declarative
+
+---
+
+## Poetry: build lifecycle
+
+Poetry is used via the `poetry` command line tool:
+* `poetry install` -- resolves and installs dependencies
+* `poetry run <command>` -- runs a command within the virtual environment
+
+### Actual behavior of `poetry install`
+
+1. *Validate* the project is correct and all necessary information is available
+2. *Verify* the version of Python is correct
+3. *Resolve* the dependencies, or use the ones in `poetry.lock` if already available
+4. *Retrieve* the dependencies from the specified sources
+5. *Create* a virtual environment if not already available
+6. *Install* the dependencies in the virtual environment
+
+Subsequent lifecycle phases are managed by the `poetry run` command, and are thus custom.
+
+❗ Except for `install`, Poetry does not provide a predefined lifecycle
+
+---
+
+## A structured build lifecycle: Apache Maven
+
+A build lifecycle typical of *declarative automators*, composed by *phases*.
+
+⚠️ Selecting a phase implies executing all previous phases.
+
+1. `validate` -- validate the project is correct and all necessary information is available
+2. `compile` -- compile the source code of the project
+3. `test` -- test the compiled source code using a suitable unit testing framework. These tests should not require the code be packaged or deployed
+4. `package` -- take the compiled code and package it in its distributable format, such as a JAR.
+5. `verify` -- run any checks on results of integration tests to ensure quality criteria are met
+6. `install` -- install the package into the local repository, for use as a dependency in other projects locally
+7. `deploy` -- done in the build environment, copies the final package to the remote repository for sharing with other developers and projects.
 
 * Phases are made of *plugin goals*
 * **Execution** requires the name of a *phase* or *goal* (dependent goals will get executed)
@@ -209,7 +348,7 @@ What if there is no plugin for something peculiar of the project?
 
 ---
 
-## A lifecycle for build lifecycles
+## A meta-build lifecycle: a lifecycle for build lifecycles
 
 1. **Initialization**: understand what is part of a build
 2. **Configuration**: create the necessary phases / goals and configure them
@@ -225,101 +364,19 @@ $\Rightarrow$ Typical of *hybrid automators*
 
 ---
 
-## A declarative automator: Poetry
-
-
----
-
-### Poetry: Typical Workflow
-
-1. **Project creation**
-
-```bash
-poetry new my-project
-cd my-project
-```
-
-2. **Add dependencies**
-```bash
-poetry add requests
-poetry add --dev pytest
-```
-
-3. **Install dependencies**
-```bash
-poetry install
-```
-
-4. **Run scripts or commands**
-```bash
-poetry run python my_project/main.py
-poetry run pytest
-```
-
-5. **Build and publish**
-```bash
-poetry build
-poetry publish
-```
-
----
-
-### Poetry: pyproject.toml Example
-
-```toml
-[tool.poetry]
-name = "my-project"
-version = "0.1.0"
-description = "A sample Python project"
-authors = ["Your Name <you@example.com>"]
-
-[tool.poetry.dependencies]
-python = "^3.10"
-requests = "^2.28.0"
-
-[tool.poetry.dev-dependencies]
-pytest = "^7.0.0"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-```
-
----
-
-### Poetry vs. Other Build Tools
-
-| Feature                | Poetry           | pip/setuptools | Gradle/Maven (JVM) |
-|------------------------|------------------|----------------|--------------------|
-| Declarative config     | pyproject.toml   | setup.py       | build.gradle/pom   |
-| Dependency locking     | poetry.lock      | requirements.txt| lockfiles          |
-| Virtualenv management  | Built-in         | External tools | N/A                |
-| Build & publish        | Built-in         | Manual         | Built-in           |
-| Plugin system          | Limited          | N/A            | Extensive          |
-
-* **Poetry** brings Python closer to the declarative, reproducible builds typical of JVM and Node.js ecosystems.
-
----
-
-### When to Use Poetry
-
-* For **modern Python projects** needing reproducible builds and dependency management.
-* When you want **declarative configuration** and minimal imperative scripting.
-* If you need **isolated environments** and easy publishing to PyPI.
-
----
-
 ## Gradle
 
 A paradigmatic example of a hybrid automator:
 * Written mostly in Java
-* with an outer Groovy DSL
-* ...and, more recently, a Kotlin DSL
+* with an outer Groovy layer and DSL
+* ...and, more recently, a Kotlin layer and DSL
 
 ### Our approach to Gradle
 
 * We are **not** going to learn "how to *use* Gradle"
-* We are going to *learn how to Gradle*
+* We are going to *explore how to drive Gradle from scratch*
+    * Gradle is flexible enough to allow an exploration of its core concepts
+    * It will work as an exemplary case for most hybrid automators
     * Other automation systems can be driven similarly once the basics are understood
 
 ---
@@ -425,10 +482,10 @@ It is time to create our first *task*
 <br>
 Create a `build.gradle.kts` file as follows:
 
+
+
 ```gradle
-tasks.register("brokenTask") { // creates a new task
-    println("this is executed at CONFIGURATION time!")
-}
+{{% import-raw path="examples/broken-task/build.gradle.kts" %}}
 ```
 
 Now launch gradle with `gradle brokenTask`:
@@ -472,11 +529,7 @@ Only later, when a task is invoked, the block gets *actually executed*
 
 Let's write a *correct* task
 ```gradle
-tasks.register("helloWorld") {
-    doLast { // This method takes as argument a Task.() -> Unit
-        println("Hello, World!")
-    }
-}
+{{% import-raw path="examples/working-task/build.gradle.kts" %}}
 ```
 
 Execution with `gradle helloWorld`
@@ -593,7 +646,7 @@ Build logic:
 
 ```gradle
 import org.gradle.internal.jvm.Jvm
-tasks.register<Exec>("compileJava") {
+tasks.register<Exec>("compileJava") { // This is a Kotlin lambda with receiver!
     val sources = findSources() //
     if (sources.isNotEmpty())  { // If the folder exists and there are files
         val javacExecutable = Jvm.current().javacExecutable.absolutePath // Use the current JVM's javac
