@@ -1,4 +1,3 @@
-
 +++
 
 title = "Build Automation"
@@ -47,7 +46,152 @@ enableSourceMap = true
 
 ---
 
+<!-- write-here "shared-slides/build-systems/dependencies.md" -->
+
+<!-- end-write -->
+
+---
+
+## Imperative build tool example: CMake
+
+[CMake](https://cmake.org/) is a widely used *imperative* build automation tool, especially in C and C++ projects.
+
+* **Imperative configuration**: Build instructions are specified in `CMakeLists.txt` using CMake's own scripting language.
+* **Cross-platform**: Generates native build files for various platforms (Makefiles, Visual Studio projects, etc.).
+* **Dependency management**: Supports finding and linking against external libraries.
+* **Build targets**: Allows defining multiple build targets (executables, libraries) within a single project.
+* **Custom commands**: Supports custom build commands and scripts for specialized tasks.
+
+---
+
+[CMake build file example](https://github.com/krux02/minimal_cmake_example/blob/master/CMakeLists.txt)
+
+CMake version and project name, declarative:
+```cmake
+cmake_minimum_required(VERSION 3.0) # setting this is required
+project(example_project)            # this sets the project name
+```
+
+File globbing: search of what to build is manual/imperative:
+
+```cmake
+# These instructions search the directory tree when cmake is
+# invoked and put all files that match the pattern in the variables 
+# `sources` and `data`.
+file(GLOB_RECURSE sources      src/main/*.cpp src/main/*.h)
+file(GLOB_RECURSE sources_test src/test/*.cpp)
+file(GLOB_RECURSE data resources/*)
+# You can use set(sources src/main.cpp) etc if you don't want to
+# use globbing to find files automatically.
+```
+
+Target definitions, imperative:
+
+```cmake
+# The data is just added to the executable, because in some IDEs (QtCreator) 
+# files are invisible when they are not explicitly part of the project.
+add_executable(example ${sources} ${data})
+
+# Just for example add some compiler flags.
+target_compile_options(example PUBLIC -std=c++1y -Wall -Wfloat-conversion)
+
+# This allows to include files relative to the root of the src directory with a <> pair
+target_include_directories(example PUBLIC src/main)
+
+# This copies all resource files in the build directory.
+# We need this, because we want to work with paths relative to the executable.
+file(COPY ${data} DESTINATION resources)
+```
+
+---
+
+Depedency management, imperative:
+
+```cmake
+# This defines the variables Boost_LIBRARIES that containts all library names
+# that we need to link into the program.
+find_package(Boost 1.36.0 COMPONENTS filesystem system REQUIRED)
+
+target_link_libraries(example PUBLIC
+  ${Boost_LIBRARIES}
+  # here you can add any library dependencies
+)
+```
+
+Testing with googletest, imperative:
+
+```cmake
+find_package(GTest)
+if(GTEST_FOUND)
+  add_executable(unit_tests ${sources_test} ${sources})
+
+  # This define is added to prevent collision with the main.
+  # It might be better solved by not adding the source with the main to the
+  # testing target.
+  target_compile_definitions(unit_tests PUBLIC UNIT_TESTS)
+
+  # This allows us to use the executable as a link library, and inherit all 
+  # linker options and library dependencies from it, by simply adding it as dependency.
+  set_target_properties(example PROPERTIES ENABLE_EXPORTS on)
+
+  target_link_libraries(unit_tests PUBLIC ${GTEST_BOTH_LIBRARIES} example)
+
+  target_include_directories(unit_tests PUBLIC ${GTEST_INCLUDE_DIRS})
+endif()
+```
+
+---
+
+Packaging with CPack, mostly imperative with some declarative parts:
+
+```cmake
+# All install commands get the same destination. this allows us to use paths
+# relative to the executable.
+install(TARGETS example DESTINATION example_destination)
+
+# This is basically a repeat of the file copy instruction that copies the
+# resources in the build directory, but here we tell cmake that we want it
+# in the package.
+install(DIRECTORY resources DESTINATION example_destination)
+
+# Now comes everything we need, to create a package
+# there are a lot more variables you can set, and some
+# you need to set for some package types, but we want to
+# be minimal here.
+set(CPACK_PACKAGE_NAME "MyExample")
+set(CPACK_PACKAGE_VERSION "1.0.0")
+
+# We don't want to split our program up into several incomplete pieces.
+set(CPACK_MONOLITHIC_INSTALL 1)
+
+# This must be last
+include(CPack)
+```
+
+---
+
+## Declarative build tool example: Python Poetry
+
+
+[Poetry](https://python-poetry.org/) is a modern, *declarative* build and dependency management tool for Python.
+
+* **Declarative configuration**: All project metadata, dependencies, and build instructions are specified in `pyproject.toml`.
+    * Declarative build tools tend to favor markup files over scripts:
+        * XML (Maven)
+        * TOML (Poetry, Rust's Cargo)
+        * JSON (Node.js's npm)
+        * YAML (JetBrains' Amper)
+* **Scripted tasks**: Allows definition of custom scripts for automation.
+* **Dependency resolution**: Handles dependency resolution and locking via `poetry.lock`.
+* **Virtual environments**: Automatically manages isolated Python environments per project.
+* **Build and publish**: Supports building and publishing packages to PyPI or other repositories.
+
+---
+
+
 ## The Apache Maven build lifecycle
+
+A build lifecycle typical of *declarative automators*:
 
 1. `validate` - validate the project is correct and all necessary information is available
 2. `compile` - compile the source code of the project
@@ -78,6 +222,90 @@ What if there is no plugin for something peculiar of the project?
 Rather than declaratively fit the build into a predefined lifecycle, declaratively define a build lifecycle
 
 $\Rightarrow$ Typical of *hybrid automators*
+
+---
+
+## A declarative automator: Poetry
+
+
+---
+
+### Poetry: Typical Workflow
+
+1. **Project creation**
+
+```bash
+poetry new my-project
+cd my-project
+```
+
+2. **Add dependencies**
+```bash
+poetry add requests
+poetry add --dev pytest
+```
+
+3. **Install dependencies**
+```bash
+poetry install
+```
+
+4. **Run scripts or commands**
+```bash
+poetry run python my_project/main.py
+poetry run pytest
+```
+
+5. **Build and publish**
+```bash
+poetry build
+poetry publish
+```
+
+---
+
+### Poetry: pyproject.toml Example
+
+```toml
+[tool.poetry]
+name = "my-project"
+version = "0.1.0"
+description = "A sample Python project"
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.28.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+```
+
+---
+
+### Poetry vs. Other Build Tools
+
+| Feature                | Poetry           | pip/setuptools | Gradle/Maven (JVM) |
+|------------------------|------------------|----------------|--------------------|
+| Declarative config     | pyproject.toml   | setup.py       | build.gradle/pom   |
+| Dependency locking     | poetry.lock      | requirements.txt| lockfiles          |
+| Virtualenv management  | Built-in         | External tools | N/A                |
+| Build & publish        | Built-in         | Manual         | Built-in           |
+| Plugin system          | Limited          | N/A            | Extensive          |
+
+* **Poetry** brings Python closer to the declarative, reproducible builds typical of JVM and Node.js ecosystems.
+
+---
+
+### When to Use Poetry
+
+* For **modern Python projects** needing reproducible builds and dependency management.
+* When you want **declarative configuration** and minimal imperative scripting.
+* If you need **isolated environments** and easy publishing to PyPI.
 
 ---
 
@@ -1541,24 +1769,6 @@ You may want to use Java 16 to run Gradle, but compile in a Java 8-compatible by
 
 ---
 
-## Build vs. Compile vs. Test toolchains
-
-We now have three different runtimes at play:
-1. One or more **compilation targets**
-    * In case of JVM projects, the target bytecode version
-    * In case of .NET projects, the target .NET
-    * In case of native projects, the target OS / architecture
-2. One or more **runtime targets**
-    * In case of JVM or .NET projects the virtual machines we want to support
-3. A **built-time runtime**
-    * In case of Gradle, the JVM running the build system
-
-These toolchains *should be controlled indipendently*!
-
-You may want to use Java 16 to run Gradle, but compile in a Java 8-compatible bytecode, and then test on Java 11.
-
----
-
 ## Gradle and the toolchains
 
 Default behaviour: Gradle uses *the same JVM it is running in* as:
@@ -2178,6 +2388,3 @@ In `settings.gradle.kts`:
 
 ---
 
-# Build Automation
-
-{{% import path="reusable/header.md" %}}
