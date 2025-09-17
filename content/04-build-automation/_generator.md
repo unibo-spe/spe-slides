@@ -684,7 +684,7 @@ Compiled files are in `build/bin`!
 
 ## Gradle: dependency management
 
-Dependency management in Gradle depends from two fundamental concepts:
+Dependency management in Gradle is rooted in two fundamental concepts:
 * **Dependency**, a resource of some kind, possibly having other (*transitive*) dependencies
 * **Configuration**, a *resolvable* (mappable to actual resources) set of dependencies
     * $\Rightarrow$ Not to be confused with the configuration **phase**!
