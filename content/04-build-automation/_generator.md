@@ -602,21 +602,20 @@ OpenJDK 64-Bit Server VM (build 11.0.8+10, mixed mode)
 
 ---
 
-## Gradle: principle of automation
+## Automate everything
+
+> *If you know how to do it, then you can instruct a machine to do it*
+
+*Once you learn how some product is built, and you know how to build it by hand*
+<br>
+**you have all the knowledge required to automate its construction**
 
 Let's try something more involved: compiling some Java source located in `src`.
-<br>
-#### **PRINCIPLE**
-> *If you know how to do it, then you can instruct a machine to do it*
 
 Compiling a Java source is just matter of invoking the `javac` compiler:
 * Passing the files to be compiled
 * Passing an appropriate classpath where to look for dependencies
 * Passing where to put generated files
-
-*Once you learn how some product is built, and you know how to build it by hand*
-<br>
-**you have all the knowledge required to automate its construction**
 
 ---
 
@@ -630,46 +629,49 @@ class HelloWorld {
     }
 }
 ```
+
 Build logic:
-1. Find the sources to be compiled
-2. If any, find `javac`
+1. Find the Java compiler executable
+2. Find the sources to be compiled
 3. Invoke `javac -d destination <files>`
 
-```gradle
-import org.gradle.internal.jvm.Jvm
-tasks.register<Exec>("compileJava") { // This is a Kotlin lambda with receiver!
-    val sources = findSources() //
-    if (sources.isNotEmpty())  { // If the folder exists and there are files
-        val javacExecutable = Jvm.current().javacExecutable.absolutePath // Use the current JVM's javac
-        commandLine(
-            "$javacExecutable",
-            "-d", "$buildDir/bin", // destination folder: the output directory of Gradle, inside "bin"
-            *sources
-        )
-    }
-    // the task's doLast is inherited from Exec
-}
-```
+Which step should be in configuration, and which in execution?
+
+**General rule**: move as much as possible to execution
+* The less is done at configuration time, the faster the build when the task is not executed
+* Delaying to execution allows for more flexible configuration
+
 ---
 
-## Gradle: compiling from scratch
+## Lazy configuration in Gradle
 
-Here is the `findSources()` function:
-* Pure Kotlin
-* Single expression
-* Fluent safe call chaining
+Gradle supports the construction of *lazy* properties and providers:
 
-```kotlin
-fun findSources(): Array<String> = projectDir // From the project
-    .listFiles { it: File -> it.isDirectory && it.name == "src" } // Find a folder named 'src'
-    ?.firstOrNull() // If it's not there we're done
-    ?.walk() // If it's there, iterate all its content (returns a Sequence<File>)
-    ?.filter { it.extension == "java" } // Pick all Java files
-    ?.map { it.absolutePath } // Map them to their absolute path
-    ?.toList() // Sequences can't get converted to arrays, we must go through lists
-    ?.toTypedArray() // Convert to Array<String>
-    ?: emptyArray() // Yeah if anything's missing there are no sources
+1. Wire together Gradle components without worrying about values, just knowing their *provider*.
+    * Configuration happens *before* execution, some values are unknown
+    * yet their provider is known at configuration time
+
+#### In the gradle API
+
+`Provider` -- a value that can only be queried and cannot be changed
+* Transformable through a `map` method
+* Easily built via `project.provider { ... }` (`project` can be omitted in build scripts)
+
+`Property` -- a value that can be queried and also changed
+* Subtype of Provider
+* Can be `set` by passing a value or a `Provider`
+* A new property can be created via `project.objects.property<Type>()` (`project` can be omitted in build scripts)
+
+---
+
+inputs and outputs
+
+---
+
+```gradle
+{{% import-raw path="examples/compile-java/build.gradle.kts" %}}
 ```
+
 Execution:
 ```bash
 gradle compileJava
