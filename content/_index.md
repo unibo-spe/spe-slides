@@ -10,29 +10,44 @@ targetPath = "css/custom-theme.css"
 
 +++
 
-## {{% course_name %}}
+# {{% course_name %}}
 
 [Danilo Pianini --- `danilo.pianini@unibo.it`](mailto:danilo.pianini@unibo.it)
 
 [Giovanni Ciatto --- `giovanni.ciatto@unibo.it`](mailto:giovanni.ciatto@unibo.it)
 
-### Index of the course
+## Index of the course
 
 * [Introduction to the course](00-intro)
-* [Domain Driven Design](10-ddd)
-* [Model Driven Development](11-mdd)
+
+{{% multicol %}}
+{{% col %}}
+
+### __Module 1__
+
 * [The DevOps philosophy](01-devops-intro)
 * [Kotlin for Scala developers](02-kotlin)
-  * [Internal DSLs construction](03-internal-dsls)
-* [Build automation](04-build-automation)
+    * 🚧 [Internal DSLs construction](03-internal-dsls)
+* 🚧 [Build automation](04-build-automation)
 * Sharing
-  * [Software versioning](05-version-selection)
-  * [Software licensing](06-licenses)
+    * [Software versioning](05-version-selection)
+    * [Software licensing](06-licenses)
+* 🚧 [Continuous integration/delivery/deployment](07-ci)
+* 🚧 [Advanced version control](08-advanced-git)
+
+{{% /col %}}
+{{% col %}}
+
+### __Module 2__
+
+* [Domain Driven Design](10-ddd)
+* [Model Driven Development](11-mdd)
 * [Containerization and Orchestration](09-containerization)
-* [Continuous integration/delivery/deployment](07-ci)
-* [Advanced version control](08-advanced-git)
 * [Multi-platform programming](12-multiplatform)
 * [Performance engineering](13-performance-engineering)
+
+{{% /col %}}
+{{% /multicol %}}
 
 ---
 
