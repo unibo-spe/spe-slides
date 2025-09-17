@@ -398,6 +398,8 @@ A paradigmatic example of a hybrid automator:
 * **Task** -- An atomic operation on the project, which can
   * have input and output files
   * depend on other tasks (can be executed only if those are completed)
+  * Tasks *bridge the declarative and imperative worlds*
+
 
 ---
 
