@@ -100,7 +100,7 @@ Changes will be published on the forum
 
 # Prerequisites
 
-* Knowledge of *Java* and *Scala*
+* Knowledge of *Java*, *Scala* is a nice to have
 * Minimal ability with `git`
   * initializing and managing the repository options
   * committing
@@ -108,6 +108,7 @@ Changes will be published on the forum
   * fetching and pushing
 * A *curious mindset*
   * Never stop when it works, stop when you know *why* it does
+    * This is especially true in the LLM era
 
 ---
 
@@ -133,6 +134,8 @@ Changes will be published on the forum
 * Can be a project created for SPE alone
   * If you are short on ideas, we can help :)
 
+* Can be a project that covers SPE + thesis
+
 ---
 
 # "Project work"
@@ -157,14 +160,16 @@ Available project works will be posted on the course site on https://virtuale.un
 * A working internet connection
 * A working JDK installation
   * Consider using [Jabba](https://github.com/shyiko/jabba)
-* Kotlin (kotlinc REPL working)
-* Gradle
 * Docker
 
 ## Recommended
+* Kotlin
+* Gradle
 * IntelliJ Idea
 * Visual Studio Code
 * A decent Unix terminal
+    * I recommend a well-configured `zsh` shell
+* ki-shell ([Kotlin Interactive Shell](https://github.com/Kotlin/kotlin-interactive-shell))
 
 ---
 
