@@ -50,7 +50,7 @@ targetPath = "css/custom-theme.css"
 
 # Pages of the course
 
-- [Virtual Learning Environment ("Virtuale")](https://virtuale.unibo.it/course/view.php?id=50031)
+- [Virtual Learning Environment ("Virtuale")](https://virtuale.unibo.it/course/view.php?id=73722)
   + please enroll if you didn't already
 
 - [These slides](https://unibo-spe.github.io)
