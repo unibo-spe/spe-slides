@@ -81,7 +81,7 @@ Lectures in lab with immediate hands-on.
 
 ## [Timetable]({{< teaching_page >}}/orariolezioni)
 
-* **Thursday 11:00--14:00** (2h) --- Lab 3.1
+* **Thursday 11:00--14:00** (3h) --- Room 2.5
 * **Friday 11:00--14:00** (3h) --- Lab 4.2
 
 Changes will be published on the forum
