@@ -70,6 +70,11 @@ enableSourceMap = true
 
 ## Course details
 
+### Teachers
+
+* Danilo Pianini -- [danilo.pianini@unibo.it](mailto:danilo.pianini@unibo.it)
+* Giovanni Ciatto -- [giovanni.ciatto@unibo.it](mailto:giovanni.ciatto@unibo.it)
+
 ### Exam
 
 Project, can be shared with other courses: the required techniques are orthogonal to any software system.
