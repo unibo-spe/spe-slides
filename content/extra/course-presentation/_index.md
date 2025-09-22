@@ -49,30 +49,38 @@ enableSourceMap = true
 
 ---
 
-## Why it strengthens a software engineering CV
+## Why it strengthens a software engineering curriculum
 
 * Shows you can **design the process**, not just code
-    * set up and evolve agile pipelines with build, test, CI, and CD.
-    * Employers value engineers who ship reliably.
+    * You learn to move from domain analysis to running systems using *DDD/MDD*, supported by *DSLs* and *generators*.
+    * *set up and evolve agile pipelines* with build, test, CI, and CD.
+* You practice build automation, containerization, and orchestration so your code runs **reproducibly** in teams and production
+     * Employers value engineers who ship *reliably*.
 * Proves **version-control mastery** beyond basics, including complex histories and multi-repo work.
 * Signals **licensing and versioning literacy** for open-source and enterprise contexts.
 * Adds **DDD/MDD and DSL** skills that differentiate you for platform, tooling, and architecture roles.
-
-<br>
-
-## Why it matters for software work in general
-
-* You learn to move from domain analysis to running systems using *DDD/MDD*, supported by *DSLs* and *generators*.
-    * shortens time to market
-    * improves correctness
-* You practice containerisation and orchestration so your code runs *reproducibly* in teams and production
-* You build habits of automated quality and delivery.
-    * reduces repetitive work
-    * reduces incident risk across any stack
-
-<br>
-
-## Why master’s students should consider it
-
+* You build **habits** of **automated quality and delivery**.
+    * *reduces repetitive* work
+    * *reduces* incident *risk* across any stack
 * It converts theory into **end-to-end engineering practice** (a the gap most graduates need to close):
     * domain analysis → DSLs → builds → tests → CI/CD → deploy
+
+
+---
+
+## Course details
+
+### Exam
+
+Project, can be shared with other courses: the required techniques are orthogonal to any software system.
+
+### Prerequisites
+
+* *Java* or *C#* knowledge, *Scala* is a plus
+* *Basic git* knowledge
+    * Stage management / commit / remote / fetch / pull / push
+
+### Schedule
+
+* First semester
+* 6 CFU
