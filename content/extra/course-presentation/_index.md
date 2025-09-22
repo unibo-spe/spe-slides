@@ -45,6 +45,10 @@ enableSourceMap = true
 
 ---
 
+![](another-ci-cd.svg)
+
+---
+
 ## Why it strengthens a software engineering CV
 
 * Shows you can **design the process**, not just code
