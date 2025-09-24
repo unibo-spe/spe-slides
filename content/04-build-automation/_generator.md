@@ -248,7 +248,8 @@ root-directory/
 If you already use Python, notice:
 - no `requirements.txt` nor `requirements-dev.txt`
 - `pyproject.toml`, `poetry.toml`, and `poetry.lock` are **Poetry-specific**
-- `poetry.lock` is generated _automatically_ by Poetry, and you should not be manually edited
+- `poetry.lock` is generated _automatically_ by Poetry, and should not be edited manually
+
 ---
 
 ## A Python [`calculator`](https://github.com/unibo-dtm-se/calculator)
@@ -583,9 +584,11 @@ Gradle offers some facilities to make writing new tasks easier
 <br>
 An example is the [`org.gradle.api.Exec`](https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Exec.html) task type, representing a command to be executed on the underlying command line
 
-At task registration time, it is possible to specify the task type.
+The task type can be specified at task registration time.
 <br>
-Any `open class` implementing [`org.gradle.api.Task`](https://docs.gradle.org/current/javadoc/org/gradle/api/Task.html) can be instanced
+Any `open class` implementing [`org.gradle.api.Task`](https://docs.gradle.org/current/javadoc/org/gradle/api/Task.html) can be instanced.
+
+Tasks of unspecified type are plain `BaseTask`s
 
 ```gradle
 {{% import-raw path="examples/print-java/build.gradle.kts" %}}
@@ -640,6 +643,26 @@ Which step should be in configuration, and which in execution?
 **General rule**: move as much as possible to execution
 * The less is done at configuration time, the faster the build when the task is not executed
 * Delaying to execution allows for more flexible configuration
+
+---
+
+## Lazy configuration, inputs, outputs
+
+```java
+tasks.register<Exec>("compileJava") {
+    // Computed at configuration time
+    val sources = TODO("assume this is expensive")
+    // configuration that needs "sources"
+    doFirst { // We need to compute the sources and classpath as late as possible!
+        sources.forEach { ... }
+    }
+}
+```
+
+* Problem: we need to run the *expensive* operation even if the task is *not executed*!
+    * We must **delay** the execution as much as possible
+* Problem: other tasks may *generate sources*, and should thus run before
+    * We must understand that the output of some tasks is the input of other tasks
 
 ---
 
