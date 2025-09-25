@@ -112,10 +112,10 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 <br>
 
 - Examples of domains and the contexts composing them
-    + some university (department, faculty, HR, etc.)
-    + some given company (manufacturing, marketing, HR, etc.)
-    + linear algebra (matrices, complex numbers, polynoms, etc.)
-    + machine learning (classification, regression, feature selection, etc.)
+    + some __university__ (department, faculty, HR, etc.)
+    + some given __company__ (manufacturing, marketing, HR, etc.)
+    + __linear algebra__ (matrices, complex numbers, polynoms, etc.)
+    + __machine learning__ (classification, regression, feature selection, etc.)
 
 ---
 
@@ -126,9 +126,11 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
         * i.e. modelling should elicit the key aspects of a domain, possibly by interacting with experts
         * i.e. design and implementation should _mirror_ the domain
 
-- Words do not have meaning per se, but rather w.r.t. a domain
-    + i.e. the _same word_ may have _different meanings_ in different domains
-    + each domain comes with a particular language characterising it
+<br>
+
+- __Words do not have meaning per se__, _but rather w.r.t. a domain_
+    + i.e. the _same word_ may have __different meanings__ in different domains
+    + each domain comes with a particular __language__ characterising it
         * _software components_ (interfaces, classes, etc.) should be _named after_ that language
     + _interaction with experts_ is essential to identify a domain’s language
 
@@ -136,13 +138,13 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ## DDD Philosophy (pt. 2)
 
-- Software should stick to the domain, at any moment
-    + archiecture and implementation should favour adherence to the domain
+- Software should _adhere_ to the _domain_, at any moment
+    + architecture and implementation should favour adherence to the domain
         * in spite of their evolution / modification
 
 <br>
 
-- Functionalities, structure, and UX should mirror the domain too
+- Functionalities, structure, and UX should _mirror_ the domain too
     - using the libraries should be natural for developers
     - UX should be natural for users
 
@@ -571,7 +573,7 @@ CustomerFactory -u-> Customer: creates
 - Hiding (i.e. be backed by) some _database technology_ 
 - Possibly realising some sort of [object-relational mapping (ORM)](https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping)
 - _Storing_ / _retrieving_ aggregate roots as _wholes_
-- Supporting _CRUD_ operations on aggregate roots
+- Supporting _CRUD_ operations on aggregate roots, and/or _wrapping common queries_
     - Create, Read, Update, Delete
 
 ### Remarks
@@ -661,14 +663,14 @@ CustomerRegistry --> CustomerID: exploits
     + or bare _functions_ in functional languages
 
 - Commonly provide _procedures_ to do business-related stuff 
-    + e.g. a particular operation...
-        * ... concerning some particular aggregate root 
-        * ... which does not support it directly through its methods
-        * ... because the operation is use-case specific
-    + e.g. proxying an external service
-    + e.g. a complex operation involving several aggregates, repositories, factories, etc.
+    + e.g. a __complex operation__...
+        * ... concerning some particular _aggregate root_
+        * ... which does <u>not</u> support the operation directly through its methods
+            - (maybe because the operation is use-case specific)
+    + e.g. __proxying__ an external service
+    + e.g. a complex operation spanning through __several aggregates__, repositories, factories, etc.
 
-- Non-trivial implementations should take care of
+- _Non-trivial_ implementations should take care of
     + supporting _concurrent access_ to the service’s facilities 
     + exposing _domain events_ to the external world
 
