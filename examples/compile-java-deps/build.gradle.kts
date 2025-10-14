@@ -35,7 +35,7 @@ tasks.register<Exec>("compileJava") { // This is a Kotlin lambda with receiver!
 
 // Minimal file access DSL
 object AllFiles
-val Project.allFiles: AllFiles get() = AllFiles
+val Project.allFiles: AllFiles get() = AllFiles // We need this to prevent "Object AllFiles captures the script class instance" error
 data class Finder(val path: File) {
     fun withExtension(extension: String): List<File> =
         path.walkTopDown().filter { it.isFile && it.extension == extension }.toList()

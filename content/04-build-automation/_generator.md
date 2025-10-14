@@ -737,81 +737,52 @@ Let's see a use case: compiling a Java source with a dependency
 Conceptually, we want something like:
 ```kotlin
 // Gradle way to create a configuration
-val compileClasspath by configurations.creating // Delegation!
+val compileClasspath ... // Delegation!
 dependencies {
-    forEachLibrary { // this function does not exist, unfortunate...
-        compileClasspath(files(it))
-    }
+    compileClasspath.add(dir("libs").files.filter { it.extension == "jar" })
 }
 ```
 To be consumed by our improved compile task:
 ```kotlin
 tasks.register<Exec>("compileJava") {
-    // Resolve the classpath configuration (in general, files could be remote and need fetching)
-    val classpathFiles = compileClasspath.resolve()
-    val sources = findSources() // Find sources
-    if (sources != null)  {
-        val javacExecutable = Jvm.current().javacExecutable.absolutePath
-        val separator = if (Os.isFamily(Os.FAMILY_WINDOWS)) ";" else ":" // Deal with Windows conventions
-        commandLine(
-            "$javacExecutable", "-cp", classpathFiles.joinToString(separator = separator),
-            "-d", "bin", *sources
-        )
-    }
+    ...
+    else -> args(
+        "-d", outputDir,
+        // classpath from the configuration
+        "-cp", "${File.pathSeparator}${compileClasspath.asPath}",
+        *sources.toTypedArray(),
+    )
 }
 ```
-We just need to write `forEachLibrary`, but that is just a Kotlin exercise...
 
 ---
 
-## Micro exercise in Kotlin
+## Gradle: using custom configurations
 
-...not particularly difficult to solve:
-1. It's just something we need to do for each library
-```kotlin
-fun forEachLibrary(todo: (String) -> Unit) {
-    findLibraries().forEach {
-        todo(it)
-    }
-}
+A minimal DSL to simplify file access:
+
+```gradle
+{{% import-raw path="examples/compile-java-deps/build.gradle.kts" from=36 %}}
 ```
-2. `findLibraries()` is similar to `findSources()`, let's refactor:
-```kotlin
-fun findSources() = findFilesIn("src").withExtension("java") // OK now we need findFiles()
-fun findLibraries() = findFilesIn("lib").withExtension("jar") // And we also need a way to invoke withExtension
+
+Dependency declaration (configuration time):
+```gradle
+{{% import-raw path="examples/compile-java-deps/build.gradle.kts" from=3 to=10 %}}
 ```
-3. Let's use an intermediate class representing a search on a folder:
-```kotlin
-fun findFilesIn(directory: String) = FinderInFolder(directory)
-data class FinderInFolder(val directory: String) {
-    fun withExtension(extension: String): Array<String> = TODO()
-}
-// Now it compiles! We just need to write the actual method, but that's easy
+
+Dependency use (execution time):
+```gradle
+{{% import-raw path="examples/compile-java-deps/build.gradle.kts" from=17 to=33 %}}
 ```
+
 ---
 
-## Micro exercise in Kotlin
+## Gradle: using custom configurations
 
-Complete solution:
-```kotlin
-data class FinderInFolder(val directory: String) {
-    fun withExtension(extension: String): Array<String> = projectDir
-        .listFiles { it: File -> it.isDirectory && it.name == directory }
-        ?.firstOrNull()
-        ?.walk()
-        ?.filter { it.extension == extension }
-        ?.map { it.absolutePath }
-        ?.toList()
-        ?.toTypedArray()
-        ?: emptyArray()
-}
-fun findFilesIn(directory: String) = FinderInFolder(directory)
-fun findSources() = findFilesIn("src").withExtension("java")
-fun findLibraries() = findFilesIn("lib").withExtension("jar")
-fun DependencyHandlerScope.forEachLibrary(todo: DependencyHandlerScope.(String) -> Unit) {
-    findLibraries().forEach { todo(it) }
-}
+Full example:
 
+```gradle
+{{% import-raw path="examples/compile-java-deps/build.gradle.kts" %}}
 ```
 
 ---
