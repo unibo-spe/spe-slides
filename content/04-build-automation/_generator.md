@@ -666,6 +666,22 @@ tasks.register<Exec>("compileJava") {
 
 ---
 
+## Task inputs and outputs
+
+How can Gradle determine which tasks some task depends on?
+* Explicit dependencies (later)
+* Implicit dependencies, via *inputs* and *outputs*
+    * If a task *input* is the *output* of another task, then the first task depends on the second
+
+Inputs and outputs can be configured via the `inputs` and `outputs` properties of a task.
+
+Inputs and outputs are also used by Gradle to determine if a task is `UP-TO-DATE`,
+namely, if it can be skipped because its inputs have not changed since the last execution.
+* This is called *incremental build*.
+* Large builds can be sped up significantly.
+
+---
+
 ## Lazy configuration in Gradle
 
 Gradle supports the construction of *lazy* properties and providers:
@@ -684,10 +700,6 @@ Gradle supports the construction of *lazy* properties and providers:
 * Subtype of Provider
 * Can be `set` by passing a value or a `Provider`
 * A new property can be created via `project.objects.property<Type>()` (`project` can be omitted in build scripts)
-
----
-
-inputs and outputs
 
 ---
 

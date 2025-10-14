@@ -27,7 +27,7 @@ targetPath = "css/custom-theme.css"
 
 * [The DevOps philosophy](01-devops-intro)
 * [Kotlin for Scala developers](02-kotlin)
-    * 🚧 [Internal DSLs construction](03-internal-dsls)
+    * [Internal DSLs construction](03-internal-dsls)
 * 🚧 [Build automation](04-build-automation)
 * Sharing
     * [Software versioning](05-version-selection)
