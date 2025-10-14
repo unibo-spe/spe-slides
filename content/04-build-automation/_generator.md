@@ -805,7 +805,9 @@ dependencies {
     runtimeClasspath(files("$buildDir/bin"))
 }
 ```
+
 2. Let's write the task
+
 ```kotlin
 tasks.register<Exec>("runJava") {
     val classpathFiles = runtimeClasspath.resolve()
