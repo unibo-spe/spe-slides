@@ -11,7 +11,7 @@ allprojects {
         }
     }
     val compilationDestination: String = layout.buildDirectory.dir("bin").get().asFile.absolutePath
-    val compileJava = tasks.register<Exec>("compileJava") { // This is a Kotlin lambda with receiver!
+    tasks.register<Exec>("compileJava") {
         inputs.dir(projectDir.resolve("src"))
         outputs.dir(compilationDestination)
         val javacExecutable = Jvm.current().javacExecutable.absolutePath // Use the current JVM's javac
