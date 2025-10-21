@@ -5,6 +5,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Exec
 import org.gradle.internal.jvm.Jvm
+import org.gradle.kotlin.dsl.property
 import java.io.File
 
 interface TaskWithClasspath : Task {
@@ -30,6 +31,3 @@ abstract class AbstractJvmExec : TaskWithClasspath, Exec() {
 
     protected abstract fun Jvm.jvmExecutableForTask(): File
 }
-
-public inline fun <reified T> org.gradle.api.model.ObjectFactory.property(): org.gradle.api.provider.Property<T> =
-    this.property(T::class.java)

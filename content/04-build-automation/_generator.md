@@ -796,45 +796,68 @@ Next step: we can compile, why not executing the program as well?
     * includes the output folder
     * In general we may need stuff at runtime that we don't need at compile time
         * E.g. stuff loaded via reflection
-```kotlin
-val runtimeClasspath by configurations.creating {
-    extendsFrom(compileClasspath) // Built-in machinery to say that one configuration is another "plus stuff"
-}
-dependencies {
-    ...
-    runtimeClasspath(files("$buildDir/bin"))
-}
+
+```gradle
+{{% import-raw path="examples/run-java-deps/build.gradle.kts" from=3 to=12 %}}
 ```
 
 2. Let's write the task
 
-```kotlin
-tasks.register<Exec>("runJava") {
-    val classpathFiles = runtimeClasspath.resolve()
-    val mainClass = "PrintException" // Horribly hardcoded, we must do something
-    val javaExecutable = Jvm.current().javaExecutable.absolutePath
-    commandLine(javaExecutable, "-cp", classpathFiles.joinToString(separator = separator), mainClass)
-}
+```gradle
+{{% import-raw path="examples/run-java-deps/build.gradle.kts" from=39 to=49 %}}
 ```
+
+---
+
+{{% multicol %}}
+{{% col %}}
+```gradle
+{{% import-raw path="examples/run-java-deps/build.gradle.kts" to=50 %}}
+```
+{{% /col %}}
+{{% col %}}
+```gradle
+{{% import-raw path="examples/run-java-deps/build.gradle.kts" from=51 %}}
+```
+{{% /col %}}
+{{% /multicol %}}
 
 ---
 
 ## Gradle: task dependencies
 
-Let's run it!
+Let us temporarily comment:
+```gradle
+{{% import-raw path="examples/run-java-deps/build.gradle.kts" from=41 to=41 %}}
+```
+and run:
 
 ```bash
-❯ gradle runJava
-
 > Task :runJava FAILED
-Error: Could not find or load main class PrintException
-Caused by: java.lang.ClassNotFoundException: PrintException
+
+[Incubating] Problems report is available at: file:///home/danysk/LocalProjects/spe-slides/examples/run-java-deps/build/reports/problems/problems-report.html
 
 FAILURE: Build failed with an exception.
 
 * What went wrong:
-Execution failed for task ':runJava'.
-> Process 'command '/usr/lib/jvm/java-11-openjdk/bin/java'' finished with non-zero exit value 1
+A problem was found with the configuration of task ':runJava' (type 'Exec').
+  - Type 'org.gradle.api.tasks.Exec' property '$1' specifies directory '/home/danysk/LocalProjects/spe-slides/examples/run-java-deps/build/bin' which doesn't exist.
+    
+    Reason: An input file was expected to be present but it doesn't exist.
+    
+    Possible solutions:
+      1. Make sure the directory exists before the task is called.
+      2. Make sure that the task which produces the directory is declared as an input. # <<<< OUR PROBLEM!!
+    
+    For more information, please refer to https://docs.gradle.org/8.14/userguide/validation_problems.html#input_file_does_not_exist in the Gradle documentation.
+
+* Try:
+> Make sure the directory exists before the task is called
+> Make sure that the task which produces the directory is declared as an input
+> Run with --scan to get full insights.
+
+BUILD FAILED in 752ms
+1 actionable task: 1 executed
 ```
 
 $\Rightarrow$ The code was not compiled!
@@ -845,31 +868,20 @@ $\Rightarrow$ The code was not compiled!
 
 ## Gradle: task dependencies
 
-```kotlin
-// Let's get a reference to the task
-val compileJava = tasks.register<Exec>("compileJava") {
-    ...
-}
-tasks.register<Exec>("runJava") {
-    ...
-    dependsOn(compileJava) // runJava can run only if compileJava has been run
-}
-
-```
-
-Run now:
+Run with the dependency correctly set:
 
 ```bash
-TERM=dumb gradle runJava
+ ./gradlew runJava                                                                                                                                                                                1 ✘  3.4.7  
+
 > Task :compileJava
+[/home/danysk/LocalProjects/spe-slides/examples/run-java-deps/src/HelloMath.java]
 
 > Task :runJava
-java.lang.IllegalStateException
-        at PrintException.main(PrintException.java:5)
+avg=3.0, std.dev=1.5811388300841898
+regression: y = 2.0300000000000002 * x + -0.030000000000001137
+R²=0.998957626296907
 
-Just printed a stacktrace, I'm fine actually
-
-BUILD SUCCESSFUL in 775ms
+BUILD SUCCESSFUL in 581ms
 2 actionable tasks: 2 executed
 ```
 
@@ -911,168 +923,6 @@ The Gradle wrapper is ***the** correct way* to use gradle, and we'll be using it
 
 ---
 
-## Cleaning up
-
-A source of failures when building is *dirty status*.
-<br>
-For istance, in the previous example, before we introduced a dependency between tasks:
-
-* clean execution fails
-* execution after a *manual* execution of compile works
-    * **false positive!**
-
-We need a way to start clean.
-<br>
-This usually involves cleaning up the build directory - not so hard in our example
-
-```kotlin
-tasks.register("clean") { // A generic task is fine
-    doLast {
-        if (!buildDir.deleteRecursively()) {
-            error("Cannot delete $buildDir")
-        }
-    }
-}
-```
-
----
-
-## Build hierarchies
-
-Sometimes projects are *modular*
-<br>
-Where a module is a sub-project with a clear identity, possibly reusable elsewhere
-
-Examples:
-* A smartphone application with:
-    * A common library
-    * A software that uses such library for the actual app
-* Bluetooth control software comprising:
-    * Platform-specific drivers
-    * A platform-agnostic bluetooth API and service
-    * A CLI interface to the library
-    * A Graphical interface
-
-Modular software *simplifies maintenance* and *improves understandability*
-<br>
-Modules may **depend** on other modules
-<br>
-Some build tasks of some module may require build tasks *of other modules* to be complete before execution
-
----
-
-## Hierarchial project
-
-Let us split our project into two components:
-* A base library
-* A stand-alone application using the library
-
-We need to reorganize the build logic to something similar to
-
-```text
-hierarchial-project
-|__:library
-\__:app
-```
-
-Desiderata:
-* We can compile any of the two projects from the root
-* We can run the app from the root
-* Calling a run of the app implies a compilation of the library
-* We can clean both projects
-
----
-
-## Authoring subprojects in Gradle
-
-Gradle (as many other build automators)
-offers built-in support for *hierarchial projects*.
-<br>
-Gradle is limited to *two levels*, other products such as Maven have no limitation
-
-Subprojects are listed in a `settings.gradle.kts` file
-<br>
-Incidentally, it's the same place where the project name can be specified
-
-Subprojects *must have their own* `build.gradle.kts`
-<br>
-They can also have their own `settings.gradle.kts`, e.g. for selecting a name different than their folder
-
----
-
-## Authoring subprojects in Gradle
-
-1. Create a settings.gradle.kts and declare your modules:
-
-```gradle
-rootProject.name = "project-with-hierarchy"
-
-include(":library") // There must be a folder named "library"
-include(":app") // There must be a folder named "app"
-```
-
-2. In the root project, configure the part common to **all** projects in a `allprojects` block
-    * e.g., in our case, the `clean` task should be available for each project
-
-```gradle
-allprojects {
-    tasks.register("clean") { // A generic task is fine
-        if (!buildDir.deleteRecursively()) {
-            error("Cannot delete $buildDir")
-        }
-    }
-}
-```
-
----
-
-## Authoring subprojects in Gradle
-
-3. Put the part shared by *solely the sub-projects* into a `subprojects` block
-    * e.g., in our case, the `compileJava` task and the related utilities
-
-```kotlin
-subprojects {
-    // This must be there, as projectDir must refer to the *current* project
-    data class FinderInFolder(val directory: String) ...
-    fun findFilesIn(directory: String) = FinderInFolder(directory)
-    fun findSources() = findFilesIn("src").withExtension("java")
-    fun findLibraries() = findFilesIn("lib").withExtension("jar")
-    fun DependencyHandlerScope.forEachLibrary(todo: DependencyHandlerScope.(String) -> Unit) ...
-    val compileClasspath by configurations.creating
-    val runtimeClasspath by configurations.creating { extendsFrom(compileClasspath) }
-    dependencies { ... }
-    tasks.register<Exec>("compileJava") { ... }
-}
-```
-
----
-
-## Authoring subprojects in Gradle
-
-4. In each subproject's `build.gradle.kts`, add further customization as necessary
-    * e.g., in our case, the `runJava` task can live in the `:app` subroject
-5. Connect configurations to each other using dependencies
-    * in `app`'s `build.gradle.kts`, for instance:
-```gradle
-dependencies {
-    compileClasspath(project(":library")) { // My compileClasspath configuration depends on project library
-        targetConfiguration = "runtimeClasspath" // Specifically, from its runtime
-    }
-}
-```
-6. Declare inter-subproject task dependencies
-    * Tasks may fail if ran out of order!
-    * Compiling `app` requires `library` to be compiled!
-    * inside `app`'s `build.gradle.kts`:
-```gradle
-tasks.compileJava { dependsOn(project(":library").tasks.compileJava) }
-```
-
-*Note*: `library`'s `build.gradle.kts` is actually empty at the end of the process
-
----
-
 ## Mixed imperativity and declarativity
 
 At the moment, we have part of the project that's declarative, and part that's imperative:
@@ -1081,8 +931,6 @@ At the moment, we have part of the project that's declarative, and part that's i
     * configurations and their relationships
     * dependencies
     * task dependencies
-    * project hierarchy definition
-    * some parts of the task configuration
 * **Imperative**
     * Operations on the file system
     * some of the actual task logics
@@ -1115,24 +963,25 @@ Let's begin our operation of isolation of imperativity by refactoring our hierar
 
 * We have a number of "Java-related" tasks.
 * All of them have a classpath
-* One has an output directory
-* One has a "main class"
+* All of them have an executable that depend on the operation they perform
+* One has an output directory and input sources
+* One has a "main class" input
 
 ```mermaid
 classDiagram
     direction LR
-    Exec <|-- JavaTask
-    JavaTask <|-- JavaCompile
-    JavaTask <|-- JavaExecute
-    class JavaTask {
-        Set~File~ classpath
-        File javaExecutable
+    Task <|-- TaskWithClasspath
+    TaskWithClasspath <|-- JavaCompileTask
+    TaskWithClasspath <|-- JavaRunTask
+    class TaskWithClasspath {
+        Property~FileCollection~ classpath
     }
-    class JavaCompile {
-        File outputDirectory
+    class JavaCompileTask {
+        Property~FileCollection~ sources
+        DirectoryProperty destinationDir
     }
-    class JavaExecute {
-        String mainClass
+    class JavaRunTask {
+        Property~String~ mainClass
     }
 ```
 
@@ -1322,24 +1171,139 @@ tasks.register<RunJava>("runJava") {
 
 ---
 
-## Divide, conquer, encapsulate, adorn
+## Build hierarchies
 
-General approach to a *new* build automation problem:
+Sometimes projects are *modular*
+<br>
+Where a module is a sub-project with a clear identity, possibly reusable elsewhere
 
-**Divide**: Identify the *base steps*, they could become your tasks
+Examples:
+* A smartphone application with:
+    * A common library
+    * A software that uses such library for the actual app
+* Bluetooth control software comprising:
+    * Platform-specific drivers
+    * A platform-agnostic bluetooth API and service
+    * A CLI interface to the library
+    * A Graphical interface
 
-* Or any concept your build system exposes to model atomic operations
+Modular software *simplifies maintenance* and *improves understandability*
+<br>
+Modules may **depend** on other modules
+<br>
+Some build tasks of some module may require build tasks *of other modules* to be complete before execution
 
-**Conquer**: Clearly express the *dependencies* among them
+---
 
-* Build a *pipeline*
-* Implement them Providing a *clean API*
+## Hierarchial project
 
-**Encapsulate**: confine imperative logic, make it an *implementation detail*
+Let us split our project into two components:
+* A base library
+* A stand-alone application using the library
 
-**Adorn**: provide a DSL that makes the library *easy and intuitive*
+We need to reorganize the build logic to something similar to
 
-*Not very different than what's usually done in (good) software development*
+```text
+hierarchial-project
+|__:library
+\__:app
+```
+
+Desiderata:
+* We can compile any of the two projects from the root
+* We can run the app from the root
+* Calling a run of the app implies a compilation of the library
+* We can clean both projects
+
+---
+
+## Authoring subprojects in Gradle
+
+Gradle (as many other build automators)
+offers built-in support for *hierarchial projects*.
+<br>
+Gradle is limited to *two levels*, other products such as Maven have no limitation
+
+Subprojects are listed in a `settings.gradle.kts` file
+<br>
+Incidentally, it's the same place where the project name can be specified
+
+Subprojects *must have their own* `build.gradle.kts`
+<br>
+They can also have their own `settings.gradle.kts`, e.g. for selecting a name different than their folder
+
+---
+
+## Authoring subprojects in Gradle
+
+1. Create a settings.gradle.kts and declare your modules:
+
+```gradle
+rootProject.name = "project-with-hierarchy"
+
+include(":library") // There must be a folder named "library"
+include(":app") // There must be a folder named "app"
+```
+
+2. In the root project, configure the part common to **all** projects in a `allprojects` block
+    * e.g., in our case, the `clean` task should be available for each project
+
+```gradle
+allprojects {
+    tasks.register("clean") { // A generic task is fine
+        if (!buildDir.deleteRecursively()) {
+            error("Cannot delete $buildDir")
+        }
+    }
+}
+```
+
+---
+
+## Authoring subprojects in Gradle
+
+3. Put the part shared by *solely the sub-projects* into a `subprojects` block
+    * e.g., in our case, the `compileJava` task and the related utilities
+
+```kotlin
+subprojects {
+    // This must be there, as projectDir must refer to the *current* project
+    data class FinderInFolder(val directory: String) ...
+    fun findFilesIn(directory: String) = FinderInFolder(directory)
+    fun findSources() = findFilesIn("src").withExtension("java")
+    fun findLibraries() = findFilesIn("lib").withExtension("jar")
+    fun DependencyHandlerScope.forEachLibrary(todo: DependencyHandlerScope.(String) -> Unit) ...
+    val compileClasspath by configurations.creating
+    val runtimeClasspath by configurations.creating { extendsFrom(compileClasspath) }
+    dependencies { ... }
+    tasks.register<Exec>("compileJava") { ... }
+}
+```
+
+---
+
+## Authoring subprojects in Gradle
+
+4. In each subproject's `build.gradle.kts`, add further customization as necessary
+    * e.g., in our case, the `runJava` task can live in the `:app` subroject
+5. Connect configurations to each other using dependencies
+    * in `app`'s `build.gradle.kts`, for instance:
+```gradle
+dependencies {
+    compileClasspath(project(":library")) { // My compileClasspath configuration depends on project library
+        targetConfiguration = "runtimeClasspath" // Specifically, from its runtime
+    }
+}
+```
+6. Declare inter-subproject task dependencies
+    * Tasks may fail if ran out of order!
+    * Compiling `app` requires `library` to be compiled!
+    * inside `app`'s `build.gradle.kts`:
+```gradle
+tasks.compileJava { dependsOn(project(":library").tasks.compileJava) }
+```
+
+*Note*: `library`'s `build.gradle.kts` is actually empty at the end of the process
 
 ---
 
@@ -1365,6 +1329,28 @@ It usually includes:
     * Application must create the extension, the tasks, and the rest of the imperative stuff
 * A **manifest** file declaring which of the classes implementing `Plugin` is the entry point of the declared plugin
     * located in `META-INF/gradle-plugins/<plugin-name>.properties`
+
+---
+
+## Divide, conquer, encapsulate, adorn
+
+General approach to a *new* build automation problem:
+
+**Divide**: Identify the *base steps*, they could become your tasks
+
+* Or any concept your build system exposes to model atomic operations
+
+**Conquer**: Clearly express the *dependencies* among them
+
+* Build a *pipeline*
+* Implement them Providing a *clean API*
+
+**Encapsulate**: confine imperative logic, make it an *implementation detail*
+
+**Adorn**: provide a DSL that makes the library *easy and intuitive*
+
+*Not very different than what's usually done in (good) software development*
+
 
 ---
 

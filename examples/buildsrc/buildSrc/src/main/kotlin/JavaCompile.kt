@@ -6,6 +6,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.internal.jvm.Jvm
+import org.gradle.kotlin.dsl.property
 import java.io.File
 
 open class JavaCompile: JavaCompileTask, AbstractJvmExec() {

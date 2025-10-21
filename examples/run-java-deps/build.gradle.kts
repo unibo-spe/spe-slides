@@ -38,7 +38,7 @@ val compileJava = tasks.register<Exec>("compileJava") { // This is a Kotlin lamb
 
 tasks.register<Exec>("runJava") {
     inputs.dir(compilationDestination)
-    dependsOn(compileJava)
+    dependsOn(compileJava) // IMPORTANT! This is a task dependency, we must compile before running
     executable(Jvm.current().javaExecutable.absolutePath)
     doFirst {
         args(
