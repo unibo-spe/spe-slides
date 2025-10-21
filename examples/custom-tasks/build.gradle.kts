@@ -59,8 +59,8 @@ abstract class AbstractJvmExec : TaskWithClasspath, Exec() {
         executable(Jvm.current().jvmExecutableForTask().absolutePath)
     }
 
+    // Extension function with virtual dispatch receiver!
     protected abstract fun Jvm.jvmExecutableForTask(): File
-
 }
 
 open class JavaRun() : JavaRunTask, AbstractJvmExec() {

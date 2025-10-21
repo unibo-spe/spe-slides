@@ -984,6 +984,49 @@ classDiagram
         Property~String~ mainClass
     }
 ```
+---
+
+## Isolation of imperativity
+### Task type definition
+
+```gradle
+{{% import-raw path="examples/custom-tasks/build.gradle.kts" from=41 to=52 %}}
+```
+
+---
+
+## Isolation of imperativity
+### Task design
+
+Next step: let's inherit the behavior of our tasks from `Exec`:
+
+```mermaid
+classDiagram
+    direction LR
+    Task <|-- TaskWithClasspath
+    Task <|-- Exec
+    TaskWithClasspath <|-- JavaCompileTask
+    TaskWithClasspath <|-- JavaRunTask
+    TaskWithClasspath <|-- AbstractJvmExec
+    Exec <|-- AbstractJvmExec
+    JavaCompileTask <|-- JavaCompile
+    AbstractJvmExec <|-- JavaCompile
+    JavaRunTask <|-- JavaRun
+    AbstractJvmExec <|-- JavaRun
+    class TaskWithClasspath {
+        Property~FileCollection~ classpath
+    }
+    class JavaCompileTask {
+        Property~FileCollection~ sources
+        DirectoryProperty destinationDir
+    }
+    class JavaRunTask {
+        Property~String~ mainClass
+    }
+    style JavaCompile fill:#f7f,stroke:#333,stroke-width:4px
+    style JavaRun fill:#f7f,stroke:#333,stroke-width:4px
+    style AbstractJvmExec fill:#fbf,stroke:#333,stroke-width:4px
+```
 
 ---
 
@@ -991,31 +1034,21 @@ classDiagram
 
 Gradle supports the definition of new task types:
 * New tasks *must implement* the `Task` interface
-    * They *usually inherit* from `DefaultTask`
+    * They *usually inherit* from `BaseTask`
 * They must be *extensible* (`open`)
-    * At runtime, Gradle creates subclasses on the fly
-* They must have *a parameterless constructor annotated* with `@Inject`
+    * Gradle creates subclasses on the fly under the hood
+* They must have *a parameterless constructor* annotated with `@Inject`
     * Costruction of tasks happens via dependency injection
 * A public method can be marked as `@TaskAction`, and will get invoked to execute the task
 
-```kotlin
-open class Clean @Inject constructor() : DefaultTask() {
-    @TaskAction
-    fun clean() {
-        if (!project.buildDir.deleteRecursively()) {
-            error("Cannot delete ${project.buildDir}")
-        }
-    }
-}
-```
 
 ---
 
 ### Input, output, caching, and continuous build mode
 
-In general, it is a good practice (that will become mandatory in future gradle releases)
+In recent Gradle versions, it is mandatory
 to *annotate every public property* of a task with a marker annotation that determines whether it is an *input* or an *output*.
-* `@Input`, `@InputFile`, `@InputFiles`, `@InputDirectory`, `@InputDirectories`
+* `@Input`, `@InputFile`, `@InputFiles`, `@InputDirectory`, `@InputDirectories`, `@Classpath`
 * `@OutputFile`, `@OutputFiles`, `@OutputDirectory`, `@OutputDirectories`
     * `@Internal` marks *internal* output properties (not reified on the file system)
 
@@ -1031,34 +1064,55 @@ to *annotate every public property* of a task with a marker annotation that dete
 
 ---
 
+## Custom Task types in Gradle
+
+
+{{% multicol %}}
+{{% col %}}
+```gradle
+{{% import-raw path="examples/custom-tasks/build.gradle.kts" from=54 to=84 %}}
+```
+{{% /col %}}
+{{% col %}}
+```gradle
+{{% import-raw path="examples/custom-tasks/build.gradle.kts" from=85 %}}
+```
+{{% /col %}}
+{{% /multicol %}} 
+
+---
+
+## Isolation of imperativity
+### Problem
+
+In our main `build.gradle.kts`, we have:
+
+{{% multicol %}}
+{{% col %}}
+a *declarative* part
+
+```gradle
+{{% import-raw path="examples/custom-tasks/build.gradle.kts" from=3 to=29 %}}
+```
+{{% /col %}}
+{{% col %}}
+an *imperative* part
+
+```gradle
+{{% import-raw path="examples/custom-tasks/build.gradle.kts" from=30 to=54 %}}
+```
+
+(continues a lot further)
+{{% /col %}}
+{{% /multicol %}}
+
+
+---
+
 ## Isolation of imperativity
 ### Idea
 
-In our main `build.gradle.kts`
-
-```gradle
-// Imperative part
-abstract class JavaTask(javaExecutable: File = Jvm.current().javaExecutable) : Exec() { ... }
-open class CompileJava @javax.inject.Inject constructor() : JavaTask(Jvm.current().javacExecutable) { ... }
-open class RunJava @javax.inject.Inject constructor() : JavaTask() { ... }
-
-// Declarative part
-allprojects { tasks.register<Clean>("clean") }
-subprojects {
-    val compileClasspath by configurations.creating
-    val runtimeClasspath by configurations.creating { extendsFrom(compileClasspath) }
-    dependencies {
-        findLibraries().forEach { compileClasspath(files(it)) }
-        runtimeClasspath(files("$buildDir/bin"))
-    }
-    tasks.register<CompileJava>("compileJava")
-}
-```
-In subprojects, only have the declarative part
-
-Unfortunately, *subprojects have no access to the root's defined types*
-* Fragile access only via reflection
-* Enormous **code duplication**
+TODO
 
 ---
 
