@@ -7,7 +7,7 @@ import java.io.File
 
 abstract class JavaRun() : JavaRunTask, AbstractJvmExec() {
     @get:Input
-    override val mainClass: Property<String> = project.objects.property<String>()
+    override val mainClass: Property<String> = project.objects.property()
 
     override fun Jvm.jvmExecutableForTask(): File = javaExecutable
 

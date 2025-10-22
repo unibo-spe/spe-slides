@@ -11,7 +11,7 @@ import java.io.File
 abstract class JavaCompile: JavaCompileTask, AbstractJvmExec() {
 
     @get:InputFiles
-    override val sources: Property<FileCollection> = project.objects.property<FileCollection>()
+    override val sources: Property<FileCollection> = project.objects.property()
     @get:OutputDirectory
     override val destinationDir: DirectoryProperty = project.objects.directoryProperty()
 
