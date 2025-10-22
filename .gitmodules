@@ -4,3 +4,6 @@
 [submodule "reveal-hugo"]
 	path = themes/reveal-hugo
 	url = https://github.com/cric96/reveal-hugo.git
+[submodule "examples/full-plugin"]
+	path = examples/full-plugin
+	url = https://github.com/DanySK/template-for-gradle-plugins.git
