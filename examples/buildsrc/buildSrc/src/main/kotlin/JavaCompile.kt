@@ -1,22 +1,19 @@
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
 import org.gradle.api.provider.Property
-import org.gradle.api.tasks.Classpath
-import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.internal.jvm.Jvm
 import org.gradle.kotlin.dsl.property
 import java.io.File
 
-open class JavaCompile: JavaCompileTask, AbstractJvmExec() {
+abstract class JavaCompile: JavaCompileTask, AbstractJvmExec() {
 
-    @Input
+    @get:InputFiles
     override val sources: Property<FileCollection> = project.objects.property<FileCollection>()
-    @OutputDirectory
+    @get:OutputDirectory
     override val destinationDir: DirectoryProperty = project.objects.directoryProperty()
-    @Classpath
-    override val classpath: Property<FileCollection> = project.objects.property<FileCollection>()
 
     override fun Jvm.jvmExecutableForTask(): File = javacExecutable
 

@@ -52,7 +52,7 @@ interface JavaRunTask : TaskWithClasspath {
 }
 
 abstract class AbstractJvmExec : TaskWithClasspath, Exec() {
-    @Classpath
+    @get:Classpath
     override val classpath: Property<FileCollection> = project.objects.property<FileCollection>()
 
     init {
@@ -63,11 +63,8 @@ abstract class AbstractJvmExec : TaskWithClasspath, Exec() {
     protected abstract fun Jvm.jvmExecutableForTask(): File
 }
 
-open class JavaRun() : JavaRunTask, AbstractJvmExec() {
-    @Classpath
-    override val classpath: Property<FileCollection> = project.objects.property<FileCollection>()
-
-    @Input
+abstract class JavaRun() : JavaRunTask, AbstractJvmExec() {
+    @get:Input
     override val mainClass: Property<String> = project.objects.property<String>()
 
     override fun Jvm.jvmExecutableForTask(): File = javaExecutable
@@ -82,14 +79,12 @@ open class JavaRun() : JavaRunTask, AbstractJvmExec() {
     }
 }
 
-open class JavaCompile: JavaCompileTask, AbstractJvmExec() {
+abstract class JavaCompile: JavaCompileTask, AbstractJvmExec() {
 
-    @Input
+    @get:InputFiles
     override val sources: Property<FileCollection> = project.objects.property<FileCollection>()
-    @OutputDirectory
+    @get:OutputDirectory
     override val destinationDir: DirectoryProperty = project.objects.directoryProperty()
-    @Classpath
-    override val classpath: Property<FileCollection> = project.objects.property<FileCollection>()
 
     override fun Jvm.jvmExecutableForTask(): File = javacExecutable
 

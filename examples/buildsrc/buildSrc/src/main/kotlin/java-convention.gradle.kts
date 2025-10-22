@@ -4,9 +4,9 @@ val runtimeClasspath: Configuration by configurations.creating {
     extendsFrom(compileClasspath)
 }
 
-dependencies { // built-in in Gradle
-    allFilesIn("libs").withExtension("jar").forEach { // Not Gradle: defined below
-        compileClasspath(files(it)) // The Configuration class overrides the invoke operator
+dependencies {
+    allFilesIn("libs").withExtension("jar").forEach {
+        compileClasspath(files(it))
     }
     runtimeClasspath(files(compilationDestination))
 }
@@ -19,6 +19,5 @@ tasks.register<JavaCompile>("compileJava") {
 
 tasks.register<JavaRun>("runJava") {
     classpath = runtimeClasspath
-    mainClass = "HelloMath"
     dependsOn(tasks.named("compileJava"))
 }

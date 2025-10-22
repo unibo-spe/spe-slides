@@ -557,24 +557,73 @@ Delaying the execution allows for *more flexible configuration*
 This will be especially useful when *modifying existing behavior*
 
 ```gradle
-tasks.register("helloWorld") {
-    doLast { println("Hello, World!") }
-}
-
-tasks.getByName("helloWorld") { // let's find an existing task
-    doFirst { // Similar to doLast, but adds operations in head
-        println("Configured later, executed first.")
-    }
-}
+{{% import-raw path="examples/configuration-avoidance/build.gradle.kts" to=12 %}}
 ```
 
-```bash
-gradle helloWorld
+output of `gradle helloWorld`:
+```text
+Configuring task: helloWorld
 
 > Task :helloWorld
-Configured later, executed first.
+About to say hello...
 Hello, World!
+
+BUILD SUCCESSFUL in 231ms
+1 actionable task: 1 executed
 ```
+
+---
+
+## Gradle: configuration avoidance
+
+While task execution happens only for those tasks that are invoked (or their dependencies),
+task configuration happens for *all* tasks declared in the build script.
+* This can lead to *performance issues* in large builds
+
+In Gradle, tasks are registered lazily, and can be configured lazily as well, using the `configure` and `configureEach` methods.
+
+{{% multicol %}}
+{{% col %}}
+```gradle
+{{% import-raw path="examples/configuration-avoidance/build.gradle.kts" %}}
+```
+{{% /col %}}
+{{% col %}}
+`gradle helloWorld` output:
+```text
+Configuring task: helloWorld
+
+> Task :helloWorld
+Starting task: helloWorld
+About to say hello...
+Hello, World!
+Finished task: helloWorld
+
+BUILD SUCCESSFUL in 395ms
+1 actionable task: 1 executed
+```
+
+`gradle tasks` output:
+```text
+Configuring task: tasks
+
+> Task :tasks
+Starting task: tasks
+Configuring task: help        # Configuration happens only when a task is needed!
+Configuring task: projects
+... list of tasks ...
+Configuring task: helloWorld
+
+------------------------------------------------------------
+Tasks runnable from root project 'configuration-avoidance'
+------------------------------------------------------------
+... list of tasks ...
+BUILD SUCCESSFUL in 239ms
+1 actionable task: 1 executed
+```
+{{% /col %}}
+{{% /multicol %}}
+
 
 ---
 
@@ -588,7 +637,7 @@ The task type can be specified at task registration time.
 <br>
 Any `open class` implementing [`org.gradle.api.Task`](https://docs.gradle.org/current/javadoc/org/gradle/api/Task.html) can be instanced.
 
-Tasks of unspecified type are plain `BaseTask`s
+Tasks of unspecified type are plain `DefaultTask`s
 
 ```gradle
 {{% import-raw path="examples/print-java/build.gradle.kts" %}}
@@ -602,23 +651,6 @@ OpenJDK Runtime Environment (build 11.0.8+10)
 OpenJDK 64-Bit Server VM (build 11.0.8+10, mixed mode)
 /usr/lib/jvm/java-11-openjdk/bin/java invocation complete
 ```
-
----
-
-## Automate everything
-
-> *If you know how to do it, then you can instruct a machine to do it*
-
-*Once you learn how some product is built, and you know how to build it by hand*
-<br>
-**you have all the knowledge required to automate its construction**
-
-Let's try something more involved: compiling some Java source located in `src`.
-
-Compiling a Java source is just matter of invoking the `javac` compiler:
-* Passing the files to be compiled
-* Passing an appropriate classpath where to look for dependencies
-* Passing where to put generated files
 
 ---
 
@@ -967,6 +999,8 @@ Let's begin our operation of isolation of imperativity by refactoring our hierar
 * One has an output directory and input sources
 * One has a "main class" input
 
+{{% multicol %}}
+{{% col %}}
 ```mermaid
 classDiagram
     direction LR
@@ -984,14 +1018,14 @@ classDiagram
         Property~String~ mainClass
     }
 ```
----
-
-## Isolation of imperativity
-### Task type definition
-
+{{% /col %}}
+{{% col %}}
 ```gradle
 {{% import-raw path="examples/custom-tasks/build.gradle.kts" from=41 to=52 %}}
 ```
+
+{{% /col %}}
+{{% /multicol %}}
 
 ---
 
@@ -1034,23 +1068,24 @@ classDiagram
 
 Gradle supports the definition of new task types:
 * New tasks *must implement* the `Task` interface
-    * They *usually inherit* from `BaseTask`
-* They must be *extensible* (`open`)
-    * Gradle creates subclasses on the fly under the hood
-* They must have *a parameterless constructor* annotated with `@Inject`
-    * Costruction of tasks happens via dependency injection
+    * They *usually inherit* from `DefaultTask`
+* They must be `abstract`
+    * Gradle creates subclasses on the fly under the hood and injects methods
 * A public method can be marked as `@TaskAction`, and will get invoked to execute the task
-
 
 ---
 
 ### Input, output, caching, and continuous build mode
 
 In recent Gradle versions, it is mandatory
-to *annotate every public property* of a task with a marker annotation that determines whether it is an *input* or an *output*.
+to _annotate every public property's **getter**_ of a task with a marker annotation 
+for gradle to mark it as an *input* or an *output*.
 * `@Input`, `@InputFile`, `@InputFiles`, `@InputDirectory`, `@InputDirectories`, `@Classpath`
 * `@OutputFile`, `@OutputFiles`, `@OutputDirectory`, `@OutputDirectories`
     * `@Internal` marks *internal* output properties (not reified on the file system)
+    * `@Internal` marks *internal* output properties (not reified on the file system)
+* In practice, these appear in Kotlin code as `@get:Input`, etc.
+    * Otherwise, Kotlin would generate the annotation on the *field*, not on the *getter*, and Gradle would ignore it
 
 #### Why?
 
@@ -1059,7 +1094,7 @@ to *annotate every public property* of a task with a marker annotation that dete
     * This allows for *much* faster builds while working on large projects
         * Time to build completion can decrease a dozen minutes to seconds!
 2. **Continuous build**
-    * Re run tasks upon changes with the `-t` option
+    * Re-run tasks upon changes with the `-t` option
     * (In/Out)put markers are used to understand *what* to re-run
 
 ---
@@ -1070,12 +1105,12 @@ to *annotate every public property* of a task with a marker annotation that dete
 {{% multicol %}}
 {{% col %}}
 ```gradle
-{{% import-raw path="examples/custom-tasks/build.gradle.kts" from=54 to=84 %}}
+{{% import-raw path="examples/custom-tasks/build.gradle.kts" from=54 to=81 %}}
 ```
 {{% /col %}}
 {{% col %}}
 ```gradle
-{{% import-raw path="examples/custom-tasks/build.gradle.kts" from=85 %}}
+{{% import-raw path="examples/custom-tasks/build.gradle.kts" from=82 %}}
 ```
 {{% /col %}}
 {{% /multicol %}} 
@@ -1106,122 +1141,137 @@ an *imperative* part
 {{% /col %}}
 {{% /multicol %}}
 
-
----
-
-## Isolation of imperativity
 ### Idea
 
-TODO
+**Hide** the *imperative* part *under the hood*,
+and **expose** a purely *declarative API* to the *user*.
 
 ---
 
 ## Isolation of imperativity
-### Project-wise API extension (plugin)
+### Project-wise API extension
 
-Gradle provides the functionality we need (project-global type definitions) using a special `buildSrc` folder
+Gradle provides a way to define project-wise build APIs using a special `buildSrc` folder
 * Requires a Gradle configuration file
     * What it actually does will be clearer in future
-* Requires a peculiar directory structure
-```bash
+
+{{% multicol %}}
+{{% col %}}
+Directory structure:
+
+```text
+project-folder
 ├── build.gradle.kts
 ├── buildSrc
 │   ├── build.gradle.kts
 │   └── src
 │       └── main
 │           └── kotlin
-│               └── OurImperativeCode.kt
+│               ├── ImperativeAPI.kts
+│               └── MoreImperativeAPIs.kt
 └── settings.gradle.kts
 ```
-* Allows imperative code to get *isolated* and *shared* among subprojects!
+{{% /col %}}
+{{% col %}}
+`buildSrc/build.gradle.kts`' contents (clearer in future):
+
+```gradle
+{{% import-raw path="examples/buildsrc/buildSrc/build.gradle.kts" %}}
+```
+{{% /col %}}
+{{% /multicol %}}
 
 ---
 
 ## Isolation of imperativity
-### Project-wise API extension (plugin)
+### Project-wise API extension
 
-inside `buildSrc/build.gradle.kts` (clearer in future):
+{{% multicol %}}
+{{% col %}}
+Directory structure for our Java infrastructure:
+```text
+examples/buildsrc
+├── build.gradle.kts
+├── buildSrc
+│   ├── build.gradle.kts
+│   └── src
+│       └── main
+│           └── kotlin
+│               ├── AllFiles.kt
+│               ├── JavaCompile.kt
+│               ├── JavaRun.kt
+│               └── JavaTasksAPI.kt
+├── gradlew
+├── gradlew.bat
+├── libs
+│   └── commons-math3-3.6.1.jar
+└── src
+    └── HelloMath.java
+```
+{{% /col %}}
+{{% col %}}
+our new `build.gradle.kts`:
+```gradle
+{{% import-raw path="examples/buildsrc/buildSrc/src/main/kotlin/java-convention.gradle.kts" %}}
+```
 
+{{% /col %}}
+{{% /multicol %}}
+
+we can use all types defined in `buildSrc/src/main/kotlin/` in the main project's `build.gradle.kts`!
+
+---
+
+## Isolation of imperativity
+### Project-wise conventions
+
+{{% multicol %}}
+{{% col %}}
+What our `build.gradle.kts` defines is now a *convention* for Java projects:
+```gradle
+{{% import-raw path="examples/buildsrc/buildSrc/src/main/kotlin/java-convention.gradle.kts" %}}
+```
+
+{{% /col %}}
+{{% col %}}
+* There exist two configurations:
+    * `compileClasspath`
+    * `runtimeClasspath`, which extends from `compileClasspath`
+* All jars in `libs` are added to both configurations
+* There is a `compileJava` task that compiles all Java sources in `src`
+* There is a `runJava` task that runs a specified main class
+
+These could be valid for *any Java project*!
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+## Isolation of imperativity
+### Project-wise conventions
+
+* Conventional build logic can be defined in `buildSrc/src/main/kotlin/convention-name.gradle.kts`,
+* and imported in the main `build.gradle.kts` via:
 ```gradle
 plugins {
-    `kotlin-dsl`
-}
-repositories {
-    mavenCentral()
+    id("convention-name")
 }
 ```
 
-excerpt of `buildSrc/src/main/kotlin/JavaOperations.kt` (full code in the repo)
-
-
-```kotlin
-open class Clean @Inject constructor() : DefaultTask() { ... }
-abstract class JavaTask(javaExecutable: File = Jvm.current().javaExecutable) : Exec() { ... }
-open class CompileJava @javax.inject.Inject constructor() : JavaTask(Jvm.current().javacExecutable) {
-    @OutputDirectory // Marks this property as an output
-    var outputFolder: String = "${project.buildDir}/bin/"
-    ...
-}
-open class RunJava @javax.inject.Inject constructor() : JavaTask() {
-    @Input // Marks this property as an Input
-    var mainClass: String = "Main"
-    ...
-}
-```
-
----
-
-## Isolation of imperativity
-### Project-wise API extension (plugin)
-
-Our Project's `build.gradle.kts` (full):
-
-```kotlin
-allprojects {
-    tasks.register("clean") { // A generic task is fine
-        doLast {
-            if (!buildDir.deleteRecursively()) {
-                error("Cannot delete $buildDir")
-            }
-        }
-    }
-}
-subprojects {
-    val compileClasspath by configurations.creating
-    val runtimeClasspath by configurations.creating { extendsFrom(compileClasspath) }
-    dependencies {
-        findLibraries().forEach { compileClasspath(files(it)) }
-        runtimeClasspath(files("$buildDir/bin"))
-    }
-    tasks.register<CompileJava>("compileJava")
-}
-
-```
-
-**Purely declarative, yay!**
-
----
-
-## Isolation of imperativity
-### Project-wise API extension (plugin)
-
-Our `app` suproject's `build.gradle.kts` (full):
-
+{{% multicol %}}
+{{% col %}}
+`buildSrc/src/main/kotlin/java-convention.gradle.kts`:
 ```gradle
-dependencies {
-    compileClasspath(project(":library")) { targetConfiguration = "runtimeClasspath" }
-}
-tasks.compileJava {
-    dependsOn(project(":library").tasks.compileJava)
-    fromConfiguration(configurations.compileClasspath.get())
-}
-tasks.register<RunJava>("runJava") {
-    fromConfiguration(configurations.runtimeClasspath.get())
-    mainClass = "PrintException"
-}
+{{% import-raw path="examples/buildsrc/buildSrc/src/main/kotlin/java-convention.gradle.kts" %}}
 ```
-
-**Purely declarative, yay!**
+{{% /col %}}
+{{% col %}}
+`build.gradle.kts`:
+```gradle
+{{% import-raw path="examples/buildsrc/build.gradle.kts" %}}
+```
+{{% /col %}}
+{{% /multicol %}}
 
 ---
 
@@ -1299,49 +1349,24 @@ include(":library") // There must be a folder named "library"
 include(":app") // There must be a folder named "app"
 ```
 
-2. In the root project, configure the part common to **all** projects in a `allprojects` block
-    * e.g., in our case, the `clean` task should be available for each project
-
+2. In the root project, configure the part common to **all** projects (included the root project) in a `allprojects` block
 ```gradle
 allprojects {
-    tasks.register("clean") { // A generic task is fine
-        if (!buildDir.deleteRecursively()) {
-            error("Cannot delete $buildDir")
-        }
-    }
+    // Executed for every project, included the root one
+    // here, `project` refers to the current project
 }
 ```
-
----
-
-## Authoring subprojects in Gradle
 
 3. Put the part shared by *solely the sub-projects* into a `subprojects` block
-    * e.g., in our case, the `compileJava` task and the related utilities
-
-```kotlin
+```gradle
 subprojects {
-    // This must be there, as projectDir must refer to the *current* project
-    data class FinderInFolder(val directory: String) ...
-    fun findFilesIn(directory: String) = FinderInFolder(directory)
-    fun findSources() = findFilesIn("src").withExtension("java")
-    fun findLibraries() = findFilesIn("lib").withExtension("jar")
-    fun DependencyHandlerScope.forEachLibrary(todo: DependencyHandlerScope.(String) -> Unit) ...
-    val compileClasspath by configurations.creating
-    val runtimeClasspath by configurations.creating { extendsFrom(compileClasspath) }
-    dependencies { ... }
-    tasks.register<Exec>("compileJava") { ... }
+    // Executed for all subprojects
+    // here, `project` refers to the current project
 }
 ```
 
----
-
-## Authoring subprojects in Gradle
-
 4. In each subproject's `build.gradle.kts`, add further customization as necessary
-    * e.g., in our case, the `runJava` task can live in the `:app` subroject
 5. Connect configurations to each other using dependencies
-    * in `app`'s `build.gradle.kts`, for instance:
 ```gradle
 dependencies {
     compileClasspath(project(":library")) { // My compileClasspath configuration depends on project library
@@ -1350,14 +1375,10 @@ dependencies {
 }
 ```
 6. Declare inter-subproject task dependencies
-    * Tasks may fail if ran out of order!
-    * Compiling `app` requires `library` to be compiled!
-    * inside `app`'s `build.gradle.kts`:
+    * Tasks may fail if ran out of order! Compiling `app` requires `library` to be compiled.
 ```gradle
 tasks.compileJava { dependsOn(project(":library").tasks.compileJava) }
 ```
-
-*Note*: `library`'s `build.gradle.kts` is actually empty at the end of the process
 
 ---
 
@@ -1414,7 +1435,7 @@ General approach to a *new* build automation problem:
     * the *classpath* used for such tasks can be explored with the built-in task `buildEnvironment`
     * if a plugin is not found, then if a version for it is available it's *fetched from remote repositories*
         * by default the [Gradle plugin portal](https://plugins.gradle.org/)
-* Plugin need to be **applied**
+* Plugins need to be **applied**
     * Which actually translates to calling the `apply(Project)` function
     * Application for *hierarchial* projects is *not automatic*
         * You might want your plugin to be applied only in some subprojects!
