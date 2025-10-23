@@ -2078,7 +2078,7 @@ Adds the following tasks:
 
 ---
 
-# Detekt
+## Detekt
 
 * Configurable static source code analyzer
 
