@@ -1167,7 +1167,7 @@ project-folder
 │   └── src
 │       └── main
 │           └── kotlin
-│               ├── ImperativeAPI.kts
+│               ├── ImperativeAPI.kt
 │               └── MoreImperativeAPIs.kt
 └── settings.gradle.kts
 ```
