@@ -1851,7 +1851,7 @@ including [one I've developed](https://github.com/DanySK/git-sensitive-semantic-
 Minimal configuration:
 ```kotlin
 plugins {
-    id ("org.danilopianini.git-sensitive-semantic-versioning") version "0.3.0"
+    id ("org.danilopianini.git-sensitive-semantic-versioning") version "<latest version>"
 }
 ```
 
