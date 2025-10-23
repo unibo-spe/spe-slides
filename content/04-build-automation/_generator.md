@@ -2368,7 +2368,9 @@ Example scans:
 
 In `settings.gradle.kts`:
 
-{{< github owner="DanySK" repo="Template-for-Gradle-Plugins" path="settings.gradle.kts" from=6 to=12 >}}
+```gradle
+{{% import-raw path="examples/full-plugin/settings.gradle.kts" from=7 to=13 %}}
+```
 
 ---
 
