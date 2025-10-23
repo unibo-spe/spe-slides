@@ -2059,7 +2059,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 
 ---
 
-# Ktlint
+## Ktlint
 
 * Linter with *minimal configuration* options
 * Configuration happens in a `.editorconfig` file
