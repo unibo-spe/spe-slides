@@ -1923,6 +1923,7 @@ group = "it.unibo.firstplugin"
 Many repositories require to register the group and associate developer identities to it
 
 The project name set in `settings.gradle.kts` is usually used as **artifactId**
+* In case of hierarchical projects, each subproject is a separate artifact and its name is used as artifactId
 
 ---
 
