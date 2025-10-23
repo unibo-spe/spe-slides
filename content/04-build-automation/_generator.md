@@ -1934,28 +1934,14 @@ Gradle provides two plugins to simplify the assembly and upload of plugins
 ```kotlin
 plugins {
   `java-gradle-plugin`
-  id("com.gradle.plugin-publish") version "0.12.0"
+  id("com.gradle.plugin-publish") version "2.0.0"
 }
 ```
-```kotlin
-pluginBundle { // These settings are set for the whole plugin bundle
-    website = "https://unibo-spe.github.io/"
-    vcsUrl = "https://github.com/unibo-spe/"
-    tags = listOf("example", "greetings", "spe", "unibo")
-}
+
+```gradle
+{{% import-raw path="examples/full-plugin/build.gradle.kts" from=128 %}}
 ```
-```kotlin
-gradlePlugin {
-    plugins {
-        create("") { // One entry per plugin
-            id = "${project.group}.${project.name}"
-            displayName = "SPE Greeting plugin"
-            description = "Example plugin for the SPE course"
-            implementationClass = "it.unibo.spe.firstplugin.GreetingPlugin"
-        }
-    }
-}
-```
+
 They add the `publishPlugins` task
 
 ---
