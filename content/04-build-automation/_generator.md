@@ -900,11 +900,9 @@ $\Rightarrow$ The code was not compiled!
 
 ## Gradle: task dependencies
 
-Run with the dependency correctly set:
+`gradle runJava` with the dependency correctly set:
 
 ```bash
- ./gradlew runJava                                                                                                                                                                                1 ✘  3.4.7  
-
 > Task :compileJava
 [/home/danysk/LocalProjects/spe-slides/examples/run-java-deps/src/HelloMath.java]
 
@@ -2106,7 +2104,7 @@ Adds the `detekt` task, failing in case of violation
 
 ---
 
-# DRY!
+## DRY!
 
 You know how to build and publish Gradle plugins: **factorize the common part!**
 
