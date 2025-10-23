@@ -1775,7 +1775,7 @@ Targeting a portable runtime (such as the JVM) *helps a lot*.
 
 Define the reference toolchain version (*compilation target*):
 
-```kotlin
+```gradle
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(11))
@@ -1787,7 +1787,7 @@ java {
 
 Create tasks for running tests on specific environments:
 
-```kotlin
+```gradle
 tasks.withType<Test>().toList().takeIf { it.size == 1 }?.let{ it.first }.run {
     // If there exist a "test" task, run it with some specific JVM version
     javaLauncher.set(javaToolchains.launcherFor { languageVersion.set(JavaLanguageVersion.of(8)) })
@@ -1809,7 +1809,7 @@ We now know how to build a plugin, we know how to test it,
 *we don't know how to make it available to other projects!*
 
 We want something like:
-```groovy
+```gradle
 plugins {
     id("our.plugin.id") version "our.plugin.version"
 }
