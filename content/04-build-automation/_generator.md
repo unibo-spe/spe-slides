@@ -1893,7 +1893,7 @@ OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 
 ---
 
-# Maven style packaging
+# Maven-style packaging
 
 JVM artifacts are normally shipped in form of jar archives
 <br>
@@ -1912,7 +1912,7 @@ the de-facto convention is *inherited from Maven*:
 
 ---
 
-# Setting the details
+## Setting the details
 
 In order to create Maven-compatible artifacts, we need first to set the **groupId**:
 ```kotlin
@@ -1965,11 +1965,9 @@ gradle.publish.secret=YOUR_SECRET
 ./gradlew -Pgradle.publish.key=<key> -Pgradle.publish.secret=<secret> publishPlugins
 ```
 
----
+The result is a published plugin:
 
-# Actual publication
-
-```plain
+```text
 ❯ ./gradlew publishPlugins
 > Task :publishPlugins
 Publishing plugin it.unibo.spe.greetings-plugin version 0.1.0-archeo+ea6b9d7
@@ -1980,129 +1978,42 @@ Publishing artifact build/publish-generated-resources/pom.xml
 Activating plugin it.unibo.spe.greetings-plugin version 0.1.0-archeo+ea6b9d7
 ```
 
-[The result is a published plugin](https://plugins.gradle.org/plugin/it.unibo.spe.greetings-plugin)
-
 ---
 
-# Quality control
+# Quality control beyond testing
 
-It is a good practice to set up some tools to validate the quality of the source code and testing.
+### Static analysis
 
-In the case of Kotlin, there are three useful tools:
-1. Setting the **compiler** into a "*warnings as errors*" mode
-2. Enabling a *coverage* tool such as **Jacoco**
-2. Configuring **Ktlint**, a Pinterest-made tool similar to Checkstyle
-3. Configuring **Detekt**, a *static code analysis* tool similar to PMD
+Static analysis is the **automatic inspection of source code** to detect potential problems, without executing it.
+* If you execute your code, it is called *dynamic analysis* (or, more frequently, *testing*)
 
-* All quality control tasks are dependencies of the `check` task
+### Test coverage
 
-Moreover, we need a way to *inspect the results* of executing these controls, besides of course failing if too many things go wrong.
+Test coverage tools measure **how much of the code is executed while running tests**.
+* Helps identifying *untested* parts of the codebase
+* {{% fragment %}} Coverage cannot tell anything about the **covered** code, it can only spot **uncovered** fragments {{% /fragment %}}
 
-(note: under Kotlin and Scala, I do not recommend to use Spotbugs: even though it works, it generates *way* too many false positives)
+## Quality control in Gradle
 
+If the `lifecycle` plugin is applied (it is auto-applied by most language-specific plugins), then a `check` task is available
+* `check` is meant to run all quality control tasks
+* any additional quality-control task should be made a dependency of `check`
+* by default, `check` depends on `test`
 
----
-
-## Build reports in Gradle
-
-Tasks with a report module usually publish their results under `$buildDir/reports/$reportName`
-
-* For instance, *test results* are published in `$buildDir/reports/tests`
-* Other tools follow the same convention
+QA tasks normally produce *reports* that can be inspected to understand what went wrong (if anything)
+* Typically under `build/reports/`
+    * For instance, *test results* are published in `$buildDir/reports/tests`
 * If you want to write a reporting task, extend from `AbstractReportTask`
 
 ---
 
-## Using Jacoco with Kotest
+## QA in Kotlin+Gradle
 
-Jacoco works with Kotest out of the box
-```kotlin
-plugins {
-    // Some plugins
-    jacoco
-    // Some plugins
-}
-```
-
-The plugin introduces two tasks:
-* `jacocoTestCoverageVerification`
-* `jacocoTestReport`
-
-The latter must be configured to produce readable reports:
-
-```kotlin
-tasks.jacocoTestReport {
-    reports {
-        // xml.isEnabled = true // Useful for processing results automatically
-        html.isEnabled = true // Useful for human inspection
-    }
-}
-```
-
-Note: Jacoco does not work with the Gradle test kit, but [there are plugins](https://github.com/koral--/jacoco-gradle-testkit-plugin) to work this around.
-
----
-
-## Aggressive compiler settings
-
-Can be configured for every `KotlinCompile` task
-
-```groovy
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
-        allWarningsAsErrors = true
-    }
-}
-```
-
----
-
-## Ktlint
-
-* Linter with *minimal configuration* options
-* Configuration happens in a `.editorconfig` file
-* Also *checks build files*
-
-```kotlin
-plugins {
-    id("org.jlleitschuh.gradle.ktlint") version "9.4.1"
-}
-```
-
-Adds the following tasks:
-* `ktlintApplyToIdea`, `ktlintApplyToIdeaGlobally` -- Change the IntelliJ Idea configuration to adhere to the rules
-* `ktlintCheck`, `ktlintKotlinScriptCheck`, `ktlint<SourceSetName>SourceSetCheck`, -- Apply rules and report errors
-* `ktlintFormat`, `ktlintKotlinScriptFormat`, `ktlint<SourceSetName>SourceSetFormat` -- Lint code automatically
-
----
-
-## Detekt
-
-* Configurable static source code analyzer
-
-```kotlin
-plugins {
-    id("io.gitlab.arturbosch.detekt") version "1.14.1"
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    // Adds a configuration "detektPlugins"
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.14.1")
-}
-detekt {
-    failFast = true // fail build on any finding
-    buildUponDefaultConfig = true // preconfigure defaults
-    config = files("$projectDir/config/detekt.yml") // Custom additional rules
-}
-```
-
-Adds the `detekt` task, failing in case of violation
-
----
+Useful Kotlin tools:
+1. The **Kotlin compiler** can be set aggressively: "*warnings as errors*" mode
+2. The preferred *coverage* tool is **Kover**, but **Jacoco** also supports Kotlin
+3. **Ktlint** is an opinionated style checker originally from Pinterest
+4. **Detekt** runs further verification (e.g., known suboptimal programming patterns)
 
 ## DRY!
 
@@ -2121,51 +2032,37 @@ plugins {
 
 ---
 
-# Code documentation
+## Code documentation
 
 It is a good practice to automate the generation of the API documentation.
-* The `java[-library]` plugin adds a `javadoc` task for the Javadoc
+* The `java[-library]` plugin adds a `javadoc` task to generate the Javadoc
 * The `scala` plugin includes a task of type `ScalaDoc`
-* Documentation for Kotlin is generated by using the **Dokka** tool
-    * Jetbrains provides a plugin!
+* Documentation for Kotlin can be generated using [**Dokka**]()
+    * A Gradle plugin is available: !
 
-```kotlin
-plugins { id("org.jetbrains.dokka") version "1.4.10" }
-```
-Adds four tasks:
-* `dokkaGfm`, `dokkaHtml`, `dokkaJavadoc`, `dokkaJekyll`
-* They differ by kind of documentation they generate
-
----
-
-# Creating artifacts
-
-The `java-library` and `java` plugins (applied behind the scenes by the `kotlin-jvm` plugin as well) automatically create an `assemble` task which generates a task of type `Jar` creating a non-executable jar with the project contents.
-
-* Further tasks of the same type can be defined for other archives
-    * e.g., containing sources or documentation
-
-```kotlin
-val javadocJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("javadoc")
-    from(tasks.dokkaJavadoc.get().outputDirectory) // Automatically makes it depend on dokkaJavadoc
-}
-val sourceJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("source")
-    from(tasks.compileKotlin.get().outputDirectory)
-    from(tasks.processResources.get().outputDirectory)
-}
-```
-
-generates a jar file with classifier `javadoc` inside the `build/libs` folder
+In general:
+* documentation generation tasks produce artifacts that can be shipped along the main artifact
+* most languages do provide tools for documentation generation
+* well-maintained plugins may exist $\Rightarrow$ use them
+* if they don't, write them!
 
 ---
+
+## Creating artifacts
+
+Software products are usually shipped as (possibly executable) **archives** of some sort.
+
+In the JVM world, the de-facto standard format is **jar** (Java ARchive)
+* Gradle provides a task of type `Jar` to create such archives
+* The `java-library` and `java` plugins (applied behind the scenes by the `kotlin-jvm` plugin as well) 
+  automatically create an `assemble` task which generates a task of type `Jar`
+  creating a non-executable jar with the project contents.
+* Runnable Jars can be created via the "shadowJar" third-party plugin
+* Runnable software including the Java runtime can be created using JPackage
 
 ## Signing artifacts
 
 Many repositories require artifacts to be **signed** in order for them to be delivered/deployed
-* e.g. Bintray, Maven Central
-
 If you do not have a signature yet, [time to create one](https://central.sonatype.org/pages/working-with-pgp-signatures.html)
 * Creation: `gpg --gen-key`
 * List: `gpg --list-keys`
@@ -2183,125 +2080,57 @@ signing.secretKeyRingFile = <your user home>/.gnupg/secring.gpg
 
 ---
 
-## Maven Central and other software repositories
+## Software repositories
 
-[Maven Central](https://search.maven.org/) is one of the de-facto standard repositories for JVM (artifacts)
-* It actually hosts any artifact compatible with the Maven conventional format
-* **No-retract policy**
-    * **Errors** [stay there forever](https://search.maven.org/artifact/commons-io/commons-io)
-* *Requires* both *sources* and *Javadoc* artifacts to get shipped
-* Artifacts on Central should only depend from other artifacts on Central
-* "Old" deployment management, requires some machinery
+Software repositories are services hosting software artifacts for distribution
+* They usually provide file hosting and metadata management in a format compatible with some build automation tool
+* There's typically one reference (de jure or de facto) such service per programming language/ecosystem
+* It is important to learn the *retraction* and *update*/*yanking* policies before publishing
 
-Other notable repositories:
-* ~~*Bintray JCenter*: superset of Maven Central~~ (**dismissed**)
-* *Jitpack*: code hosting with (semi-)automatic packaging
-* *NPM*: for Javascript code
+### Prominent examples
+
+* [Maven Central](https://search.maven.org/) is the de-facto standard repository for JVM artifacts
+  * It can host any artifact compatible with the Maven format, including non-JVM artifacts, as far as packaged as jars
+  * **No-retract**, **no-yanking** policy
+      * **Errors** [stay there forever](https://central.sonatype.com/artifact/commons-io/commons-io/versions)
+  * *Requires* both *sources* and *Javadoc* artifacts
+  * Artifacts on Central *should* only depend from other artifacts on Central
+    * Not really enforced, but strongly recommended
+* *NPM* for Javascript
+  * Supports package **retraction** within *72-hours *if* there are *no dependents*, or after only if:
+    * there are no dependents, fewer than 300 downloads last wee, and a single owner.
+    * retracted versions are banned
 * *PyPI*: for Python code
+  * Supports **yanking** (preferred), deletion is being discussed.
+     * Yanked versions must be ignored by dependency resolvers when a non-yanked version satisfies the constraints
 * *RubyGems.org*: for Ruby code
+    * `gem yank` retracts a package
 
 ---
 
 ## Publishing artifacts on Maven Central
 
 **Requirements**
-* A valid public signature
+* A valid *public signature*
 * A registered **groupId**
-    * Registration is handled manually, [open an issue](https://issues.sonatype.org/secure/CreateIssue.jspa?issuetype=21&pid=10134)
-    * You could register `io.github.yourghusername` as group id
-* Complete project metadata in a `pom.xml` file
+    * Registration of GitHub (`io.github.yourghusername`) domains is semi-automatic
+        * The system verifies identity by asking for the creation of a repository named as a token
+    * Custom domains are handled manually, contact service
+* Complete *project metadata* in a `pom.xml` file
     * Including developers, urls, project description, etc.
 
-**Procedure**
-* *Sign* artifacts with your registered signature
-* *Upload* them to `oss.sonatype.org`
-* *Close* the repository
-    * Automatically checks contents, structure, and signatures
-* Double check and then *Release*
-    * There is *no turning back* after a mistake!
+The submission procedures has been greatly simplified recently with the Gradle plugin portal:
+1. Create all artifact in a maven-repository-compatible layout
+2. Sign all artifacts
+3. Create a zip archive including the repository layout
+4. Upload to Maven Central Portal
+
+* Gradle plugins are available for automating publications via Gradle!
+  * https://central.sonatype.org/publish/publish-portal-gradle/
 
 ---
 
-## The Gradle publish plugin
-
-Gradle provides a `maven-publish` *plugin for automated delivery* to Maven repositories
-
-Requires some manual configuration:
-* Explicit creation of a publication task
-* Generation and attachment of sources and javadoc jars
-* Configuration of the repository credentials
-* Configuration of the `pom.xml` metadata
-* Configuration of the signature
-
-If a publication `pubName` is created for a repository `RepoName`, then these tasks get created:
-* `publish<PubName>PublicationTo<RepoName>Repository`
-* `publish<PubName>PublicationToMavenLocal`
-
-
----
-
-## The Gradle publish plugin: Maven Central example
-
-```kotlin
-plugins { `maven-publish` }
-val javadocJar by ...
-val sourceJar by ...
-publishing {
-    maven {
-        url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-        val mavenCentralPwd: String? by project // Pass the pwd via -PmavenCentralPwd='yourPassword'
-        credentials {
-            username = "danysk"
-            password = mavenCentralPwd
-        }
-    }
-    publications {
-        val publicationName by creating(MavenPublication::class) {
-            from(components["java"]) // add the jar produced by the java plugin
-            // Warning: the gradle plugin-publish plugin already adds them to the java SoftwareComponent
-            artifact(javadocJar) // add the javadoc jar to this publication
-            artifact(sourceJar) // add the source jar to this publication
-            pom {
-                name.set("My Library")
-                description.set("A concise description of my library")
-                url.set("http://www.example.com/library")
-                licenses { license { name.set("...") } }
-                developers { developer { name.set("...") } }
-                scm {
-                    url.set("...")
-                    url.set("...")
-                }
-            }
-        }
-        signing { sign(publicationName) }
-    }
-}
-```
-
----
-
-## Preconfigured Central publication
-
-I produced a plugin that pre-configures `maven-publish` to point to Maven Central
-
-* Reacts to the application of `java`, `maven-publish`, and `signing` plugins
-* Defines task types `SourcesJar` and `JavadocJar`
-    * Supports both Javadoc and Dokka
-* Creates tasks to create the archives before delivery
-* Requires credentials to be set as environment variables
-    * `MAVEN_CENTRAL_USERNAME`
-    * `MAVEN_CENTRAL_PASSWORD`
-
----
-
-## Preconfigured Central publication
-
-{{< github owner="DanySK" repo="publish-on-central" path="build.gradle.kts" from=20 to=24 >}}
-{{< github owner="DanySK" repo="publish-on-central" path="build.gradle.kts" from=79 to=103 >}}
-
----
-
-# Inspecting dependencies
+## Inspecting dependencies
 
 In rich projects, most of the build-related issues are due to pesky stuff going on with *dependencies*
 * Transitive conflicts
@@ -2319,7 +2148,7 @@ Inspecting multiple large trees can be difficult
 
 ---
 
-# Inspecting dependencies *among tasks*
+## Inspecting dependencies *among tasks*
 
 When developing plugins or rich builds, the issue of dependencies also affect **tasks**
 
@@ -2331,7 +2160,7 @@ Generates a `taskTree` task printing the task tree of the tasks listed along wit
 
 ---
 
-# Build reporting
+## Build scans
 
 * As any software, complex builds need rich inspection tools
     * Performance issues may arise
@@ -2359,3 +2188,6 @@ In `settings.gradle.kts`:
 
 ---
 
+# Build Automation
+
+{{% import path="reusable/header.md" %}}
