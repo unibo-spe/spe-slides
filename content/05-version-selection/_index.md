@@ -391,3 +391,9 @@ https://github.com/semantic-release/semantic-release
 
 * Configuration for conventional commits: https://www.npmjs.com/package/semantic-release-preconfigured-conventional-commits
 * Usage with a non-JS software: https://github.com/AlchemistSimulator/Alchemist/blob/master/release.config.js
+
+---
+
+# Selecting a version number
+
+{{% import path="reusable/header.md" %}}

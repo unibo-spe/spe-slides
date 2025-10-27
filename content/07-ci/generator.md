@@ -335,7 +335,7 @@ $\Rightarrow$ *write __workflows__*, *use __jobs__*
 
 ---
 
-# Stale builds
+## Stale builds
 
 1. Stuff *works*
 2. *Nobody touches it* for months
@@ -357,7 +357,17 @@ $\Rightarrow$ *Automatically run the build every some time* even if nobody touch
 
 ---
 
-## Additional checks and reportings
+# GitHub CLI
+
+---
+
+<!-- write-here "shared-slides/ci/ghcli.md" -->
+
+<!-- end-write -->
+
+---
+
+## Additional checks and reporting
 
 There exist a number of recommended services that provide additional QA and reports.
 
@@ -385,6 +395,10 @@ The [Linux Foundation](https://www.linuxfoundation.org/) [Core Infrastructure In
 * *Self-certification*: no need for bureaucracy
 * Provides a nice *TODO list* for a high quality product
 * Releases a *badge* that can be added e.g. to the project homepage
+
+---
+
+# Advanced workflow automation
 
 ---
 
@@ -417,6 +431,58 @@ They are usually integrated with the repository hosting provider
 * Dependabot (Multiple)
 * Gemnasium (Ruby)
 * Greenkeeper (NPM)
+
+---
+
+## Copilot coding agent: what it is
+
+* Cloud-hosted *autonomous LLM agent* inside GitHub.
+  * Can be *assigned issues*
+  * Spins up an isolated runner, clones the repo, makes changes, builds, and proceeds iteratively until the issue is solved.
+     * (or Copilot *"thinks"* it is solved)
+  * Responds with *a draft PR* for review.
+* Operates through GitHub Actions with full audit trail in commits and logs (consuming actions minutes).
+
+## How to use it
+
+* Start from: **assign an Issue to Copilot**.
+* It **opens a draft PR**, and requests your review.
+    * At the first assignment on a new repo, it will ask for an **onboarding procedure**
+       * When onboarding, Copilot runs through the repository and prepares a document
+         in `.github/copilot-instructions.md`
+         for his future self with a summary of the codebase.
+       * On subsequent runs, this summary is used as context for Copilot, speeding up its understanding of the codebase.
+* Tag `@Copilot` in PR comments to guide it.
+
+### Impact
+
+The literature is emerging, initial results are mixed.
+* GenAI seems to *speed up unexperieced* developers in *small and simple projects*.
+* *Experienced developers* on *large projects* seem to be *slowed down* (**-19%**) by the need to review AI-generated code.
+    * https://arxiv.org/abs/2507.09089, https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/
+
+---
+
+## Productivity evidence
+
+* RCT: developers completed a JS task **55.8% faster** with Copilot. Note: classic inline Copilot, not the coding agent, but directionally relevant. ([arxiv.org][7])
+* Field experiments across **1,974** devs at Microsoft and Accenture report positive productivity effects from GenAI coding tools. Preprint. ([An MIT Exploration of Generative AI][8])
+* Industry case study in a large automotive firm found productivity gains with Copilot in daily work. ([aisel.aisnet.org][9])
+* GitHub’s own mixed-methods study reports faster completion times and reduced cognitive load. Non-peer-reviewed. ([github.blog][10])
+
+*Caveat*: peer-reviewed results focus on autocomplete Copilot. Rigorous studies on the cloud coding agent are emerging.
+
+[1]: https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent?utm_source=chatgpt.com "About GitHub Copilot coding agent"
+[2]: https://github.blog/ai-and-ml/github-copilot/github-copilot-coding-agent-101-getting-started-with-agentic-workflows-on-github/?utm_source=chatgpt.com "GitHub Copilot coding agent 101: Getting started with agentic workflows ..."
+[3]: https://github.blog/developer-skills/github/less-todo-more-done-the-difference-between-coding-agent-and-agent-mode-in-github-copilot/?utm_source=chatgpt.com "The difference between coding agent and agent mode in GitHub Copilot"
+[4]: https://github.blog/changelog/2025-08-27-copilot-coding-agent-is-now-available-in-github-enterprise-cloud-with-data-residency/?utm_source=chatgpt.com "Copilot coding agent is now available in GitHub Enterprise Cloud with ..."
+[5]: https://www.theverge.com/news/669339/github-ai-coding-agent-fix-bugs?utm_source=chatgpt.com "GitHub's new AI coding agent can fix bugs for you"
+[6]: https://code.visualstudio.com/docs/copilot/copilot-coding-agent?utm_source=chatgpt.com "GitHub Copilot coding agent - Visual Studio Code"
+[7]: https://arxiv.org/pdf/2302.06590v1?utm_source=chatgpt.com "The Impact of AI on Developer Productivity: Evidence from GitHub Copilot"
+[8]: https://mit-genai.pubpub.org/pub/v5iixksv?utm_source=chatgpt.com "The Productivity Effects of Generative AI: Evidence from a Field ..."
+[9]: https://aisel.aisnet.org/amcis2024/ai_aa/ai_aa/10/?utm_source=chatgpt.com "AIS Electronic Library (AISeL) - AMCIS 2024 Proceedings: The impact of ..."
+[10]: https://github.blog/news-insights/research/research-quantifying-github-copilots-impact-on-developer-productivity-and-happiness/?utm_source=chatgpt.com "Research: quantifying GitHub Copilot’s impact on developer productivity ..."
+
 
 ---
 
@@ -511,3 +577,12 @@ assignees: someone, someoneelse
     with a pre-populated text area
     * They can also be used to build *forms* with checkboxes and some forms of validation
     * Reference syntax: https://bit.ly/3yvrXqE
+
+---
+
+
+# Continuous Integration
+
+<!-- write-here "reusable/header.md" -->
+
+<!-- end-write -->

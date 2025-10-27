@@ -26,3 +26,10 @@ enableSourceMap = true
 <!-- write-here "shared-slides/licenses.md" -->
 
 <!-- end-write -->
+
+---
+
+# Software licensing
+
+{{% import path="reusable/header.md" %}}
+

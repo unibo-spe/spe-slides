@@ -1618,7 +1618,7 @@ Gradle provides a **test kit**, to launch Gradle programmatically and inspect th
 
 ---
 
-## Importing Gradle test kit and Kotest
+## Importing the Gradle dependencies and the test kit
 
 It's just matter of pulling the right dependencies
 
@@ -1626,7 +1626,7 @@ It's just matter of pulling the right dependencies
 dependencies {
     implementation(gradleApi())
     implementation(gradleKotlinDsl())
-    testImplementation(gradleTestKit()) // Test implementation: available for testing compile and runtime
+    testImplementation(gradleTestKit()) // Test implementation: available for testing compile and testing runtime
 }
 ```
 
@@ -1638,7 +1638,7 @@ We want to inject our plugin into the distribution:
 3. Make sure that the list is always up to date and ready before test execution
 2. Use such list as our classpath for running Gradle
 
-This operation is now build-in the test kit:
+This operation is now built-in the test kit:
 
 ```kotlin
 // Configure a Gradle runner
@@ -1656,7 +1656,7 @@ runner.output shouldContain "Hello from Gradle"
 
 ## DRY with dependencies declaration
 
-Look at the following code:
+Look at the following example code:
 
 ```kotlin
 dependencies {
@@ -1666,10 +1666,6 @@ dependencies {
 }
 ```
 It is *repetitive* and *fragile* (what if you change the version of a single kotest module?)
-
----
-
-## DRY with dependencies declaration
 
 Let's patch all this fragility:
 
@@ -2155,7 +2151,7 @@ When developing plugins or rich builds, the issue of dependencies also affect **
 
 Gradle *does not* provide tools to ispect the task graph graphically, but a plugin exists.
 
-{{< github owner="dorongold" repo="gradle-task-tree" from=18 to=20 language=kotlin >}}
+{{< github owner="dorongold" repo="gradle-task-tree" from=20 to=22 language=kotlin >}}
 
 Generates a `taskTree` task printing the task tree of the tasks listed along with `taskTree`.
 
