@@ -1589,7 +1589,7 @@ inside `src/main/kotlin/<package-path>/`:
 
 ---
 
-## Notes on plugins
+## Plugin application from plugins and reaction to plugin applications
 
 * The `Plugin` configures the project as needed for the tasks and the extension to work
 * Plugins can forcibly *apply* other plugins
@@ -1598,6 +1598,7 @@ inside `src/main/kotlin/<package-path>/`:
 * Plugins can *react* to the application of other plugins
     * e.g., enable additional features or provide compatibility
     * doing so is possible by the `plugins` property of `Project`, e.g.:
+
 ```kotlin
 project.plugins.withType(JavaPlugin::class.java) {
     // Stuff you want to do only if someone enables the Java plugin for the current project
