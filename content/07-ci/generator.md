@@ -463,29 +463,6 @@ The literature is emerging, initial results are mixed.
 
 ---
 
-## Productivity evidence
-
-* RCT: developers completed a JS task **55.8% faster** with Copilot. Note: classic inline Copilot, not the coding agent, but directionally relevant. ([arxiv.org][7])
-* Field experiments across **1,974** devs at Microsoft and Accenture report positive productivity effects from GenAI coding tools. Preprint. ([An MIT Exploration of Generative AI][8])
-* Industry case study in a large automotive firm found productivity gains with Copilot in daily work. ([aisel.aisnet.org][9])
-* GitHub’s own mixed-methods study reports faster completion times and reduced cognitive load. Non-peer-reviewed. ([github.blog][10])
-
-*Caveat*: peer-reviewed results focus on autocomplete Copilot. Rigorous studies on the cloud coding agent are emerging.
-
-[1]: https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent?utm_source=chatgpt.com "About GitHub Copilot coding agent"
-[2]: https://github.blog/ai-and-ml/github-copilot/github-copilot-coding-agent-101-getting-started-with-agentic-workflows-on-github/?utm_source=chatgpt.com "GitHub Copilot coding agent 101: Getting started with agentic workflows ..."
-[3]: https://github.blog/developer-skills/github/less-todo-more-done-the-difference-between-coding-agent-and-agent-mode-in-github-copilot/?utm_source=chatgpt.com "The difference between coding agent and agent mode in GitHub Copilot"
-[4]: https://github.blog/changelog/2025-08-27-copilot-coding-agent-is-now-available-in-github-enterprise-cloud-with-data-residency/?utm_source=chatgpt.com "Copilot coding agent is now available in GitHub Enterprise Cloud with ..."
-[5]: https://www.theverge.com/news/669339/github-ai-coding-agent-fix-bugs?utm_source=chatgpt.com "GitHub's new AI coding agent can fix bugs for you"
-[6]: https://code.visualstudio.com/docs/copilot/copilot-coding-agent?utm_source=chatgpt.com "GitHub Copilot coding agent - Visual Studio Code"
-[7]: https://arxiv.org/pdf/2302.06590v1?utm_source=chatgpt.com "The Impact of AI on Developer Productivity: Evidence from GitHub Copilot"
-[8]: https://mit-genai.pubpub.org/pub/v5iixksv?utm_source=chatgpt.com "The Productivity Effects of Generative AI: Evidence from a Field ..."
-[9]: https://aisel.aisnet.org/amcis2024/ai_aa/ai_aa/10/?utm_source=chatgpt.com "AIS Electronic Library (AISeL) - AMCIS 2024 Proceedings: The impact of ..."
-[10]: https://github.blog/news-insights/research/research-quantifying-github-copilots-impact-on-developer-productivity-and-happiness/?utm_source=chatgpt.com "Research: quantifying GitHub Copilot’s impact on developer productivity ..."
-
-
----
-
 # Issue and PR templating
 
 ---
