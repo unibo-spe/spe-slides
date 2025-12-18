@@ -78,7 +78,7 @@ it is meant to support *reliable* and *scalable* software systems.
 ## Key features
 - Immutability
 - Everything is a declarative configuration object
-- Broader range of object to create, and manage, the production environment with respect to Docker Swarm
+- Broader range of objects to create, and manage, the production environment with respect to Docker Swarm
 - Automatic scaling of resources (horizontal, vertical, increasing and decreasing)
 - Built-in monitoring
 - Security
@@ -96,7 +96,7 @@ Just like Docker Swarm, Kubernetes is a container orchestrator.
 
 __Why Docker Swarm is not enough?__
 
-Docker Swarm do support large production deployments at scale, 
+Docker Swarm does not support large production deployments at scale, 
 while Kubernetes natively support it.
 
 ---
