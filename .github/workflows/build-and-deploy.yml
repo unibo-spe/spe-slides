@@ -62,7 +62,7 @@ jobs:
           config-file: config.toml
       - name: Deploy website
         if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
-        uses: JamesIves/github-pages-deploy-action@v4.7.6
+        uses: JamesIves/github-pages-deploy-action@v4.8.0
         with:
           token: ${{ secrets.DEPLOYMENT_TOKEN }}
           branch: master
