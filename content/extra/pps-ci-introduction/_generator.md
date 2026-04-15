@@ -1043,10 +1043,10 @@ jobs:
       TERM: dumb # Sets the environment variable TERM to "dumb"
     steps:
       - name: Checkout # custom name Checkout the repository
-        uses: actions/checkout@v2 # Action implemented in this repository, tag "2"
-      - uses: joschi/setup-jdk@v2.3.0 # Action implemented in repository "joschi/setup-jdk" tag "2.3.0"
+        uses: actions/checkout@v6 # Action implemented in this repository, tag starting with "v6"
+      - uses: actions/setup-java@v5 # Action implemented in repository "actions/setup-java" tag starting with "v5"
         with: # Actions parameters (action name omitted)
-          java-version: 15
+          java-version: 25
       - name: Build
         run: ./gradlew check
 ```
