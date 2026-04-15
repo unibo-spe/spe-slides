@@ -516,7 +516,7 @@ The __choice__ of a _platform_ impacts developers during:
 
 + The abstraction gap is likely lower
 
-+ More third party libraries are likey available
++ More third party libraries are likely available
 
 + The potential audience is wider
   * implies the SW project is more valuable
@@ -678,7 +678,7 @@ The __choice__ of a _platform_ impacts developers during:
 
 - Assumptions:
   * one "super-language" exists, having:
-    1. a code-generator targetting multiple platforms
+    1. a code-generator targeting multiple platforms
         + e.g. compiler, transpiler, etc.
     2. the same standard library implemented for all those platforms
 
@@ -946,7 +946,7 @@ Defines several aspects of the project:
 - which repositories should Gradle use when looking for dependencies
     ```kotlin
     repositories { 
-        mavenCentral() // use MCR for downloading dependencies (recommneded)
+        mavenCentral() // use MCR for downloading dependencies (recommended)
 
         // other custom repositories here (discouraged)
     } 
@@ -967,7 +967,7 @@ Defines several aspects of the project:
         }
         // declares JavaScript as target
         js {
-            useCommonJs() // use CommonJS for JS depenencies management
+            useCommonJs() // use CommonJS for JS dependencies management
             // or useEsModules() 
             binaries.executable() // enables tasks for Node packages generation
             // the target will consist of a Node project (with NodeJS's stdlib)
@@ -2337,7 +2337,7 @@ In the `jsMain` source set
     * via the various `*Jar` or `assemble` tasks
 
 - The `jsMain` source set is compiled into either
-    * a Kotlin library (`.klib`), enabling imporing the project tas dependency in Kotlin/JS projects
+    * a Kotlin library (`.klib`), enabling importing the project as dependency in Kotlin/JS projects
         + via the various `*Jar` or `assemble` tasks
     * a NodeJS project
         + via the `compileProductionExecutableKotlinJs` task
@@ -2383,7 +2383,7 @@ In the `jsMain` source set
 - Kotlin code can be called from the target platforms' main languages
     + e.g. Java, JavaScript, etc.
 
-- Understading the mapping among Kotlin and other languages is key
+- Understanding the mapping among Kotlin and other languages is key
     + it impacts the usability of Kotlin libraries for ordinary platform users
 
 > How are Kotlin's syntactical categories mapped to other platforms/languages?
@@ -3451,7 +3451,7 @@ For all __public types__ in the wrapped _Java library_:
     header1 = jcsv.header("column1", "column2", "column3") 
     header2 = jcsv.header(3) # anonymous header with 3 columns
     columns = (f"column{i}" for i in range(1, 4)) # generator expression
-    header3 = jcsv.header(columns) # same as header1, but passing an interable
+    header3 = jcsv.header(columns) # same as header1, but passing an iterable
     ```
 
 - Function `iterable_or_varargs` aims at _simulating_ **multiple overloads**:

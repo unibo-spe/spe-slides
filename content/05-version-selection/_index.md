@@ -124,7 +124,7 @@ The version is represented one or more sequences, separately incremented, that
 
 Combination of all the techniques:
 * *Dates* (Windows 9x, 2001)
-* *Codenames* (NT, Vista, XP, Millenium Edition)
+* *Codenames* (NT, Vista, XP, Millennium Edition)
 * Pre-release codenames (Longhorn)
 * Dates for internal builds
 * Incremental versions on *multiple levels*
