@@ -207,7 +207,7 @@ runs:
   using: "composite"
   steps:
     - run: '[[ -n "${{ inputs.token }}" ]] || false'
-      name: Fail if the toke is unset
+      name: Fail if the token is unset
 ```
 
 * ~~No conditional steps (ouch...)~~
@@ -341,7 +341,7 @@ $\Rightarrow$ *write __workflows__*, *use __jobs__*
 2. *Nobody touches it* for months
 3. Untouched stuff is now *borked*!
 
-Ever happenend?
+Ever happened?
 
 * Connected to the issue of **build reproducibility**
     * The higher the build *reproducibility*, the higher its *robustness*

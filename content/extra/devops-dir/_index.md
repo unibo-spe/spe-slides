@@ -235,7 +235,7 @@ $\Rightarrow$
 ## *Continuous Integration / Deployment / Delivery*
 
 * Adding **CI** to existing projects
-  * Needs a *committment to* the *DevOps* philosophy
+  * Needs a *commitment to* the *DevOps* philosophy
 * *Multiplatform* testing
   * OS type and version
   * Platform (JDK, CLR, Python interpreter) version

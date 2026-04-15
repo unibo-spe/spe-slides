@@ -105,10 +105,10 @@ file(COPY ${data} DESTINATION resources)
 
 ---
 
-Depedency management, imperative:
+Dependency management, imperative:
 
 ```cmake
-# This defines the variables Boost_LIBRARIES that containts all library names
+# This defines the variables Boost_LIBRARIES that contains all library names
 # that we need to link into the program.
 find_package(Boost 1.36.0 COMPONENTS filesystem system REQUIRED)
 
@@ -1088,7 +1088,7 @@ for gradle to mark it as an *input* or an *output*.
 #### Why?
 
 1. **Performance**
-    * Gradle caches intermediate build results, using input and output markers to undersand whether or not some task is *up to date*
+    * Gradle caches intermediate build results, using input and output markers to understand whether or not some task is *up to date*
     * This allows for *much* faster builds while working on large projects
         * Time to build completion can decrease a dozen minutes to seconds!
 2. **Continuous build**
@@ -1694,7 +1694,7 @@ dependencies {
 ```
 
 Uhmm...
-* it's still repetitive (can be furter factorized by bundling the kotest modules)
+* it's still repetitive (can be further factorized by bundling the kotest modules)
 * the function and version could be included in `buildSrc`
 * custom solutions can be nice, but:
     1. they can be hard to understand, as they are not standard
@@ -1741,10 +1741,10 @@ We now have three different runtimes at play:
     * In case of native projects, the target OS / architecture
 2. One or more **runtime targets**
     * In case of JVM or .NET projects the virtual machines we want to support
-3. A **built-time runtime**
+3. A **build-time runtime**
     * In case of Gradle, the JVM running the build system
 
-These toolchains *should be controlled indipendently*!
+These toolchains *should be controlled independently*!
 
 You may want to use Java 17 to run Gradle, but compile in a Java 8-compatible bytecode, and then test on Java 11.
 
@@ -2095,7 +2095,7 @@ Software repositories are services hosting software artifacts for distribution
     * Not really enforced, but strongly recommended
 * *NPM* for Javascript
   * Supports package **retraction** within *72-hours *if* there are *no dependents*, or after only if:
-    * there are no dependents, fewer than 300 downloads last wee, and a single owner.
+    * there are no dependents, fewer than 300 downloads last week, and a single owner.
     * retracted versions are banned
 * *PyPI*: for Python code
   * Supports **yanking** (preferred), deletion is being discussed.

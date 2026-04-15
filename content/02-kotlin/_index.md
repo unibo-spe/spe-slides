@@ -505,7 +505,7 @@ printall("Lorem", "ipsum", "dolor", "sit", "amet")
 
 Kotlin is less permissive than Scala:
 * Arbitrary symbols are not accepted as valid function names
-* ...unless you explicitly surround them with backtics
+* ...unless you explicitly surround them with backticks
 
 ```scala
 def ##°@??%&@^^() = 1 // Super ok for Scala: def $hash$hash$u00B0$at$qmark$qmark$percent$amp$at$up$up(): Int
@@ -669,7 +669,7 @@ outerloop@ for (i in 1..100) {
 * Similar to Scala, the keyword `class` introduces a class definition
 * Object construction does not require `new`
     * `new` is not a Kotlin keyword at all
-* Objecs get built from classes by just invoking the class name:
+* Objects get built from classes by just invoking the class name:
 
 ```Kotlin
 class Foo
@@ -1182,7 +1182,7 @@ This will turn useful in future...
 | `x %= y` | `remAssign` | `x.remAssign(y)` |
 
 * Assignment functions *can be defined only if their arithmetic equivalent is undefined*.
-* If an aritmetic operator `op` is defined, the compiler infers the assign version as:
+* If an arithmetic operator `op` is defined, the compiler infers the assign version as:
     * `a op= b` $\Rightarrow$ `a = a op b`
 
 
@@ -1326,7 +1326,7 @@ fun <T, P, A, L, R, N, E> navigationStrategy()
 
 Kotlin supports (co/contro)variance using:
 * `<out T>` to mark covariance (similar to Java's `<? extends T>`)
-* `<in T>` to mark controvariance (similar to Java's `<? super T>`)
+* `<in T>` to mark contravariance (similar to Java's `<? super T>`)
 * `<*>` to mark that only the bound is known for the type (similar to Java's `<?>`)
 
 Type variant in Kotlin is expressed *at declaration site*!
@@ -1616,7 +1616,7 @@ some delegates are built-in, e.g. `lazy`
 ```kotlin
 val someLazyString by lazy {
     println("I'm initializing myself")
-    "I'm intialized"
+    "I'm initialized"
 }
 println("Doing stuff")
 println(someLazyString) // "I'm initializing myself" gets printed here
@@ -1969,7 +1969,7 @@ mutableListOf<String>().configure {
 
 ## Extension members and implicit receivers
 
-When extensions are defined as members, there are multiple *implicit recevers*:
+When extensions are defined as members, there are multiple *implicit receivers*:
 1. **dispatch receiver**: the `object` or instance of the `class` in which the extension is declared
 2. **extension receiver** the instance of the *receiver type* of the extension is called
 
@@ -2129,7 +2129,7 @@ A lot of language details have been left out of this guide, non complete list:
 * spread operator
 * annotations
 * coroutines
-* interoperatibility with Java, Javscript, and C
+* interoperability with Java, Javascript, and C
 * `value class`es
 * context parameters
 

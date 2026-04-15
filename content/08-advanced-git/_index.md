@@ -31,7 +31,7 @@ Git supports two types of tags:
     * simply a name for an object (usually a commit)
     * meant for creating **private** or **temporary** annotations!
 * **annotated** tags
-    * Produced with `-a` (unsigend), `-s`, or `-u` options
+    * Produced with `-a` (unsigned), `-s`, or `-u` options
     * Creates a *new object*
     * Contain *message*, *creation date*, *tagger name* and *email*, and an optional *signature*
     * Annotated tags are **meant for release**
