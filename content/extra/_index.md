@@ -23,10 +23,6 @@ enableSourceMap = true
 
 ### [Danilo Pianini](mailto:danilo.pianini@unibo.it)
 
----
-
-# Extra goodies
-
 * [Course presentation for master students](course-presentation)
 * [Introduction to DevOps for "Programming and Development paradigms"](pps-ci-introduction)
 * [Introduction to DevOps for the **DIR** (Distretto Informatico Romagnolo)](devops-dir)
