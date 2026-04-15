@@ -22,6 +22,10 @@ jobs:
       # Checkout the repository
       - name: Checkout
         uses: danysk/checkout-classic@1.0.0
+        with:        
+          fetch-depth: 0
+          submodules: recursive
+          token: ${{ secrets.DEPLOYMENT_TOKEN }}
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1.301.0
         with:
