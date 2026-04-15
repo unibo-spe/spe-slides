@@ -356,6 +356,7 @@ Discussed in **{{< course_name >}}**
 
 * The **CLI** is your *truth*
   * Beware of the GUIs
+  * **Do not** blindly copy-paste commands you do not understand from LLMs
 * Prepare an *ignore list* early
   * And *maintain it*
   * And maybe prepare it manually and don't copy/paste it
