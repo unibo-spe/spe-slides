@@ -43,7 +43,7 @@ enableSourceMap = true
 
 # {{< course_name >}}
 
-## Intoduction to Kubernetes
+## Introduction to Kubernetes
 
 ### [Martina Baiardi - m.baiardi@unibo.it](mailto:m.baiardi@unibo.it)
 
@@ -244,7 +244,7 @@ And the list goes on...
   - there are external Metrics Servers which can be adopted instead of it. 
 - There are mainly three kinds of metrics: 
   - **Resource Metrics**: concerning *memory* and *cpu* of Kubernetes' resource objects.
-  - **Custom Metrics**: other information about Kubernetes' resource objecs.
+  - **Custom Metrics**: other information about Kubernetes' resource objects.
   - **External Metrics**: metrics not related with Kubernetes' resources (i.e. number of incoming HTTP requests)
 
 --- 
@@ -309,9 +309,9 @@ And the list goes on...
 
 ### Kubernetes smallest deployable unit.
 - Runs one (or more) containers
-  - Pods allow to deploy toghether two different containers that are symbiotic between themself
+  - Pods allow to deploy together two different containers that are symbiotic between themselves
     - for example, a web server container and the git synchronizer one that keeps it updated 
-    - this is not the case of a web server and its database, which can be deployed in two different nodess
+    - this is not the case of a web server and its database, which can be deployed in two different nodes
 
 {{% /col %}}
 {{% /multicol %}}

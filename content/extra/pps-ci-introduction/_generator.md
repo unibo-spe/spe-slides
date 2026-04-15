@@ -32,7 +32,7 @@ enableSourceMap = true
 
 ---
 
-# Worflow organization
+# Workflow organization
 
 * Design a workflow that **fits the team**
   * Delicate balance between *chaotic organization* and *excessive bureaucracy*
@@ -700,7 +700,7 @@ The Gradle wrapper is *__the__ correct way* to use gradle, and we'll be using it
   * runs the specified main class passing the `runtimeClasspath` to the `-cp` option of `java`
   * `./gradlew` run
 
-**Note**: exectution requires a valid OMDB API Key stored as an environment variable `OMDB_API_KEY`
+**Note**: execution requires a valid OMDB API Key stored as an environment variable `OMDB_API_KEY`
 
 ---
 

@@ -150,7 +150,7 @@ interface Element {
 }
 ```
 
-* `TextElement`s are composed of simple `text`, possibly rendered with intentation
+* `TextElement`s are composed of simple `text`, possibly rendered with indentation
 ```kotlin
 interface TextElement : RepeatableElement {
     val text: String

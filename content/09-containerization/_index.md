@@ -1048,7 +1048,7 @@ To exemplify the usage of IP:
 3. open your browser and browse to `http://172.17.0.2:8080`
     * you should see a page of the form: `[$SERVER_ID@$HOST_NAME:PORT] Hit $VIEW_COUNT times`
     * the page is served by the container, contacted by IP
-    * so containes attached to `bridge`-like networks can be contacted by IP, from the host
+    * so containers attached to `bridge`-like networks can be contacted by IP, from the host
 
 4. try to contact the container:
     * by host name, from the host
@@ -1881,7 +1881,7 @@ class TestMariaDBCustomerRepository {
 
 {{% /col %}}
 {{% col %}}
-- Unit thest for the `SqlCustomerRepository` class
+- Unit test for the `SqlCustomerRepository` class
 
 - Requires an instance of MariaDB to be tested
 
@@ -1930,7 +1930,7 @@ class TestMariaDBCustomerRepository {
 
 ## Building the cluster (practice)
 
-1. On one node running the Docker deamon (say, the teacher's machine), initialise Swarm mode as follows:
+1. On one node running the Docker daemon (say, the teacher's machine), initialise Swarm mode as follows:
     * `docker swarm init`
     * this will output a command to be run on other nodes to join the cluster:
         ```
@@ -2132,7 +2132,7 @@ Upon environment selection, one is presented with the _dashboard_, showing the _
 
 After selecting the only environment available, one may observe:
 - which and how many __nodes__ compose the cluster (_Dashboard_ section)
-    + you may use the _cluster visualiser_ to spot your machien in the cluster
+    + you may use the _cluster visualiser_ to spot your machine in the cluster
         * (assuming that you managed to join the cluster)
 
 - which __stacks__ are running on the cluster (_Services_ section)
