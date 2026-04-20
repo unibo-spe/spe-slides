@@ -1047,6 +1047,7 @@ jobs:
       - uses: actions/setup-java@v5 # Action implemented in repository "actions/setup-java" tag starting with "v5"
         with: # Actions parameters (action name omitted)
           java-version: 25
+          distribution: temurin
       - name: Build
         run: ./gradlew check
 ```
