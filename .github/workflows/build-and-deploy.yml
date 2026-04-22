@@ -27,7 +27,7 @@ jobs:
           submodules: recursive
           token: ${{ secrets.DEPLOYMENT_TOKEN }}
       - name: Setup Ruby
-        uses: ruby/setup-ruby@v1.303.0
+        uses: ruby/setup-ruby@v1.305.0
         with:
           working-directory: shared-slides
       - name: Compute the version of Hugo
