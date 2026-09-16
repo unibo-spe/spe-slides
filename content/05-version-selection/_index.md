@@ -191,7 +191,7 @@ It is *the* way Python software should be versioned
 Format: `[N!]N(.N)*[{a|b|rc}N][.postN][.devN]`
 * Epoch segment: `N!`
 * *Mandatory* Release segment: `N(.N)*`
-* Pre-release segment: `{a|b|rc}`
+* Pre-release segment: `{a|b|rc}N`
 * Post-release segment: `.postN`
 * Development release segment: `.devN`
 
