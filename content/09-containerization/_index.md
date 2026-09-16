@@ -1002,7 +1002,7 @@ Other drivers are available as well, cf. https://docs.docker.com/network/drivers
 - __No isolation__ between the container and the host
     + the container uses the host's networking facilities _directly_
 
-- The main consequence is that the container will be assigned with the __same IP address as the host__
+- The main consequence is that the container will be assigned the __same IP address as the host__
     + the layer-4 ports used by the container are __also busy__ for the host
         * high __collision__ probability
 
@@ -1020,12 +1020,12 @@ Other drivers are available as well, cf. https://docs.docker.com/network/drivers
 
 {{< figure src="./bridge-network.png" width="30%" >}}
 
-- __Virtual network__ spanning through _one or more containers_ on the _same host_
+- __Virtual network__ spanning _one or more containers_ on the _same host_
     + containers attached to the _same_ network can __communicate__ with each other via _TCP/IP_
     + each container may be attached to __multiple networks__
         * e.g. one for internal communication, one for external communication
 
-- Each container gets assigned with a __private IP address__ on the network
+- Each container gets assigned a __private IP address__ on the network
     + commonly in the range `172.x.y.z`
     + the IP address is contactable from the host
 
@@ -1060,7 +1060,7 @@ To exemplify the usage of IP:
 
 ## Bridge network (pt. 3)
 
-Let's create a non-trivial scenario with 2 container attached to the same network:
+Let's create a non-trivial scenario with 2 containers attached to the same network:
 1. one container (host name: `dind`) will run the Docker daemon (Docker-in-Docker)
 2. the other container (host name: `cli`) will run the Docker CLI
 3. let's call the shared network `my-network`
@@ -1097,8 +1097,8 @@ Let's create a non-trivial scenario with 2 container attached to the same networ
 ## Bridge network (pt. 5)
 
 5. let's restart a Docker-in-Docker daemon, using the `docker` hostname:
-    * `docker run --privileged -d --rm --network my-network --name dind --hostname docker:dind dockerd --host=tcp://0.0.0.0:2375`
-    * in general, it would be better to both `--name X` and `--hostname X`
+    * `docker run --privileged -d --rm --network my-network --name dind --hostname docker docker:dind dockerd --host=tcp://0.0.0.0:2375`
+    * in general, it would be better to specify both `--name X` and `--hostname X`
         + same name and hostname to avoid confusion!
     * `dockerd --host=tcp://0.0.0.0:2375` is necessary to force the port the daemon will listen on
         + and to disable TLS security (not recommended in production)
@@ -1132,10 +1132,10 @@ Let's create a non-trivial scenario with 2 container attached to the same networ
 
 ## Exposing ports (pt. 2)
 
-- When _running_ a Docker _container_, the exposed port can be mapped to host's ports via `-P` option
+- When _running_ a Docker _container_, the exposed port can be mapped to the host's ports via the `-P` option
     + this would make any `EXPOSE`d port in the image mapped to some _random_ port of the host
     + e.g. `docker run -d --rm -P my-service; docker ps`
-    + the actual port mapping you should run `docker ps`
+    + to discover the actual port mapping, run `docker ps`
 
     ```
     CONTAINER ID   IMAGE        COMMAND                  CREATED         STATUS         PORTS                                         NAMES
