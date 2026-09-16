@@ -980,7 +980,7 @@ Other drivers are available as well, cf. https://docs.docker.com/network/drivers
 
 {{< figure src="./none-network.png" width="20%" >}}
 
-- __No__ networking facilities are provided to the container __at all__, which is then _isolated_ w.r.t the external world
+- __No__ networking facilities are provided to the container __at all__, which is then _isolated_ w.r.t. the external world
 
 - This is useful for containers that do not need to communicate via the network
     + i.e. they _expose no service_, and they __must not access__ the Internet
