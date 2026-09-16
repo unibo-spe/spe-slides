@@ -238,7 +238,7 @@ A bug fix is defined as an internal change that fixes incorrect behavior.
     * It **MAY** include patch level changes.
     * Patch version **MUST** *be reset to 0* when minor version is incremented.
 * Major version `X` **MUST** be incremented if any *backwards incompatible changes* are introduced to the *public API*.
-    * It `MAY` *include minor and patch level changes*.
+    * It **MAY** *include minor and patch level changes*.
     * Patch and minor version **MUST** *be reset to 0* when major version is incremented.
 * Major version zero (`0.y.z`) is for *initial development*.
 *Anything may change at any time*.
