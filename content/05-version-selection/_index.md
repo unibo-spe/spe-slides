@@ -367,8 +367,8 @@ Assuming a conventional way to commit, use the information to understand *when* 
 
 1. Decide *which branch* should be looked at for triggering releases
 2. Define which *kind of release should be associated with which kind of commit*
-    * Rules can be custom per-project, as far as they are consistent
-    * e.g., `fix` and `docs` are `PATCH`, `feat` are `MINOR`, **Breaking changes** are `MAJOR`
+    * Rules can be custom per project, as long as they are consistent
+    * e.g., `fix` and `docs` are `PATCH`, `feat` is `MINOR`, **Breaking changes** are `MAJOR`
     * Usually the commit *type* is relied upon, but the *scope* may be used as well
 3. Scan all commits from the *last tag*, searching for the "largest" version change
 4. If *at least one* version change was found, and this is still the *last commit* on the branch triggering releases,
