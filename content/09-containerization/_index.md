@@ -1201,7 +1201,7 @@ The example application is composed of the following parts:
 {{< multicol >}}
 {{% col class="col-6" %}}
 ```yaml
-version: 3.9                    # version of the specification
+version: "3.9"                  # version of the specification
 
 services:                       # section defining services composing the stack
   frontend:                     # name of the first service (frontend)
