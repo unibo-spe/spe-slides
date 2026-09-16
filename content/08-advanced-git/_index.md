@@ -754,11 +754,11 @@ If the repository has been cloned plainly, then submodules can be initialized ma
 ## Working with submodules
 
 `git submodule update --remote --recursive`
-* Recursively updates all submbodules
+* Recursively updates all submodules
 * It *must* be executed also **after a pull**
     * *Pulling does not update submodules by default*
 
-Changes into submodules are dealt with as if they were on a *separate repository*
+Changes in submodules are dealt with as if they were in a *separate repository*
 
 `foreach` can be used to *run some command on all modules*
 * e.g., `git submodule foreach git pull`
