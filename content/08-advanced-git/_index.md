@@ -784,7 +784,7 @@ No single built-in command in old versions of git {{< emoji "expressionless" >}}
 
 `git submodule deinit -f -- sub/module/path`
 
-2. Cleanup the submodule worktree (otherwise, it will be impossible to re-add the module in future, as the repository will appear corrupted)
+2. Cleanup the submodule worktree (otherwise, it will be impossible to re-add the module in the future, as the repository will appear corrupted)
 
 `rm -rf .git/modules/sub/module/path`
 
