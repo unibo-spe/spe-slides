@@ -475,7 +475,7 @@ flowchart RL
   class C1,C2,C3,C4,C5,C6,C7,C8,C9,C10 commit;
 ```
 
-Use a branch to "keep alive" the commit discarded by the `reset`
+Use a branch to "keep alive" the commits discarded by the `reset`
 
 `git branch target`
 
