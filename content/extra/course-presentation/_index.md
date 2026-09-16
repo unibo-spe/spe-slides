@@ -37,7 +37,7 @@ enableSourceMap = true
     * Including using DSLs to define builds
     * Including reproducibility
     * Gradle as reference tool, but others are discussed
-* Containerisation and orchestration
+* Containerization and orchestration
 * Continuous integration and delivery
     * With GitHub Actions as reference tool
 * Bug hunting and performance engineering
@@ -53,7 +53,7 @@ enableSourceMap = true
 
 * Shows you can **design the process**, not just code
     * You learn to move from domain analysis to running systems using *DDD/MDD*, supported by *DSLs* and *generators*.
-    * *set up and evolve agile pipelines* with build, test, CI, and CD.
+    * You learn to *set up and evolve agile pipelines* with build, test, CI, and CD.
 * You practice build automation, containerization, and orchestration so your code runs **reproducibly** in teams and production
      * Employers value engineers who ship *reliably*.
 * Proves **version-control mastery** beyond basics, including complex histories and multi-repo work.
@@ -62,7 +62,7 @@ enableSourceMap = true
 * You build **habits** of **automated quality and delivery**.
     * *reduces repetitive* work
     * *reduces* incident *risk* across any stack
-* It converts theory into **end-to-end engineering practice** (a the gap most graduates need to close):
+* It converts theory into **end-to-end engineering practice** (the gap most graduates need to close):
     * domain analysis → DSLs → builds → tests → CI/CD → deploy
 
 
