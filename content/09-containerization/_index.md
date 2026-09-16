@@ -683,7 +683,7 @@ They support several use cases:
 
 ![](./volume-types-named.png)
 
-- __Named volume__: virtual drives managed by Docker
+- __Named volumes__: virtual drives managed by Docker
     + they are created with `docker volume create <name>`
     + they are mounted into containers as `<name>:<guest path>`
     + their content's life span is independent of any container
