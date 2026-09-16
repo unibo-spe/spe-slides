@@ -314,9 +314,9 @@ flowchart RL
   class C1,C2,C3,C4,C5,C6,C7,C8,C9,C10 commit;
 ```
 
-Reads: *pick all commits from `server` (excluded) to `client` (included), remove them and reply them starting from `master`*
+Reads: *pick all commits from `server` (excluded) to `client` (included), remove them and replay them starting from `master`*
 
-Or: *pick all commits from `client`, remove all those in `server`, then and reply them starting from `master`*
+Or: *pick all commits from `client`, remove all those in `server`, then replay them starting from `master`*
 
 ---
 
