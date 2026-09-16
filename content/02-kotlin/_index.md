@@ -2123,13 +2123,13 @@ Used to cause side effects and return the original object
 
 # Extra content
 
-A lot of language details have been left out of this guide, non complete list:
+A lot of language details have been left out of this guide; a non-exhaustive list:
 * arrays
 * enum classes
 * spread operator
 * annotations
 * coroutines
-* interoperability with Java, Javascript, and C
+* interoperability with Java, JavaScript, and C
 * `value class`es
 * context parameters
 
