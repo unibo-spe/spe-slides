@@ -593,7 +593,7 @@ println("Rolled $attempts dice before a lucky shot")
 ### `when`
 Kotlin *does not support pattern matching* as Scala does (unfortunately)
 <br/>
-The `when` block is somewhat a mild surrogate, more similar to a `switch` on steroids
+The `when` block is somewhat of a mild substitute, more similar to a `switch` on steroids
 <br/>
 The base version (without subject) is a more elegant "`if`/`else if`/`else`" chain
 
@@ -611,7 +611,7 @@ fun countBatmans(subject: String) = when {
 # Kotlin 101 -- Flow control
 
 ### `when (subject)`
-Checks if the value of subjects is the same of the expression on the right
+Checks whether the value of the subject is the same as the expression on the right
 
 ```kotlin
 fun baseForSingleDigitOrNull(digit: UInt) = when(digit) {
@@ -706,7 +706,7 @@ Properties and fields are conceptually different
 * *fields* **are** the object's state
 * *properties* are a way to **access/change** the object's state
 
-It's considered a good practice in languages without properties (Java in particular) to hide (*incapsulate*) fields (Object's actual state)
+It's considered a good practice in languages without properties (Java in particular) to hide (*encapsulate*) fields (Object's actual state)
 and provide access only via `get`/`set` methods: the actual state representation may change with no change to the API.
 
 In Kotlin, fields are entirely hidden, and cannot be exposed in any way, enforcing the aforementioned convention at the language level.
@@ -723,7 +723,7 @@ class Foo {
     var baz: String? = null
     val bazLength: Int // Property with no "backing field"
         get() = baz?.length ?: 0 // As its value will be computed every time
-    var stringRepresentation: String = "" // Backing fields is generated
+    var stringRepresentation: String = "" // Backing field is generated
         get() = baz ?: field
         set(value) {
             field = "custom: $value" // Access to backing field via `field` keyword
@@ -838,7 +838,7 @@ class MutableCircle : Shape, Shrinkable {
 
 ## Superclass disambiguation
 
-A call to `super` can be qualified to disambiguate between conflincting interface declarations:
+A call to `super` can be qualified to disambiguate between conflicting interface declarations:
 
 ```kotlin
 interface A {
@@ -909,7 +909,7 @@ class Foo constructor(val bar: String) // OK
 
 It is possible that some `var` property needs to get initialized after the object construction:
 ```kotlin
-class Son(val: Father)
+class Son(val father: Father)
 class Father(var son: Son) // Impossible to build either
 ```
 Solution 1: allow nullability (**BAD**)
@@ -921,7 +921,7 @@ val son = Son(father)
 father.son = son
 father.son.father // error, needs ?.
 ```
-Solution 2: take responsibility from the compiler (*less bad*)
+Solution 2: take responsibility away from the compiler (*less bad*)
 ```kotlin
 class Son(val father: Father)
 class Father { lateinit var son: Son } // lateinit: I will initialize it later, stay cool
