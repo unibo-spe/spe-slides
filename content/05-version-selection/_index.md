@@ -158,9 +158,9 @@ Both the words of the codename begin with the same letter.
 
 Formerly a *pure date*, in ISO format without hyphens, e.g. `20040505`.
 
-The project *switched to a classic versioning* in form of `major.minor`
+The project *switched to classic versioning* in the form `major.minor`
 * The change may give some headaches to dependency managers, since `20040505` is bigger than `3.9` and other subsequent versions.
-* A `0.Date` format for initial development releases would have been advisable with hindsight
+* A `0.Date` format for initial development releases would have been advisable in hindsight
 
 ---
 
