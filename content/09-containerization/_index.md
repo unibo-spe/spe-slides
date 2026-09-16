@@ -1289,12 +1289,12 @@ A __stack__ is a set of _inter-related_ services, networks, volumes, secrets, co
 ### Services
 
 From [Docker Compose documentation](https://docs.docker.com/compose/compose-file/05-services/):
-- a __service__ is an _abstract definition_ of a computing resource within an _application_ which can be __scaled__ or __replaced__ independently from other components
+- a __service__ is an _abstract definition_ of a computing resource within an _application_ which can be __scaled__ or __replaced__ independently of other components
 - they are backed by a _set of_ __containers__, run by the orchestrator according to __replication requirements__ and __placement constraints__
-- they are backed by containers, hence they are defined by an __image__ and set of __runtime arguments__
+- they are backed by containers, hence they are defined by an __image__ and a set of __runtime arguments__
     + all containers within a service are _identically_ created with these arguments
 - they are declared in the `services` section of the `docker-compose.yml` file
-    + for each service, _attributes_ may be spiecified, _overriding_ the default behaviour of the image
+    + for each service, _attributes_ may be specified, _overriding_ the default behaviour of the image
     + further attributes may be specified to declare _dependencies_ on other services, volumes, networks, and so on
         * these must be declared in the same `docker-compose.yml` file
 
