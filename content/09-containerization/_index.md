@@ -640,12 +640,12 @@ Images get published in **registries**
 
 ## Building Docker images in CI
 
-- Of course, as any other software, *custom docker images should get built in CI*
+- Of course, like any other software, *custom docker images should get built in CI*
 
 - Several integrators use _containers_ as __build environments__: 
     * it is possible to *build a container using a container*
 
-- More in general: there is *no inherent limit to nesting containers*
+- More generally: there is *no inherent limit to nesting containers*
 
 - For instance:
     * you may run DIND (Docker-in-Docker) via: `docker run --privileged --rm -it docker:dind`
