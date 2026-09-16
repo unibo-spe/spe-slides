@@ -396,7 +396,7 @@ A paradigmatic example of a hybrid automator:
 * **Configuration** -- A group of dependencies with *three roles*:
     1. *Declare* dependencies
     2. *Resolve* dependency declarations to actual artifacts/resources
-    2. *Present* the dependencies to consumers in a suitable format
+    3. *Present* the dependencies to consumers in a suitable format
 * **Task** -- An atomic operation on the project, which can
   * have input and output files
   * depend on other tasks (can be executed only if those are completed)
@@ -492,7 +492,7 @@ Create a `build.gradle.kts` file as follows:
 {{% import-raw path="examples/broken-task/build.gradle.kts" %}}
 ```
 
-Now launch gradle with `gradle brokenTask`:
+Now launch Gradle with `gradle broken`:
 ```bash
 gradle broken
 this is executed at CONFIGURATION time!
@@ -636,7 +636,7 @@ An example is the [`org.gradle.api.Exec`](https://docs.gradle.org/current/javado
 
 The task type can be specified at task registration time.
 <br>
-Any `open class` implementing [`org.gradle.api.Task`](https://docs.gradle.org/current/javadoc/org/gradle/api/Task.html) can be instanced.
+Any `open class` implementing [`org.gradle.api.Task`](https://docs.gradle.org/current/javadoc/org/gradle/api/Task.html) can be instantiated.
 
 Tasks of unspecified type are plain `DefaultTask`s
 
@@ -681,7 +681,7 @@ Which step should be in configuration, and which in execution?
 
 ## Lazy configuration, inputs, outputs
 
-```java
+```kotlin
 tasks.register<Exec>("compileJava") {
     // Computed at configuration time
     val sources = TODO("assume this is expensive")
