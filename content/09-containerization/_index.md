@@ -305,7 +305,7 @@ Containers provide **runtime isolation** _without_ **operating system replicatio
     + _matching requirements_ on actual capabilities of nodes
 
 - __Infrastructure-as-a-service__ (IaaS) cloud technologies support deploying tasks on clusters, _as VM_
-    + e.g. OpenStack, VSphere, etc.
+    + e.g. OpenStack, vSphere, etc.
 
 - __Container orchestrators__ support deploying tasks on clusters, _as containers_
     + e.g. Kubernetes, Docker Swarm, etc.
