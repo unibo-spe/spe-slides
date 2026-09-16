@@ -1989,7 +1989,7 @@ class TestMariaDBCustomerRepository {
 
 ---
 
-## Troubleshouting example on Windows
+## Troubleshooting example on Windows
 
 ### Opening ports on Windows Defender
 
