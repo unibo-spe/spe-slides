@@ -397,7 +397,7 @@ Spiced up version of Java strings, Groovy-style templating:
 ```kotlin
 val batman = "Batman"
 // Groovy templating and Java-style concatenation both work
-"${Double.NaN}".repeat(10) + " $batman!"{{<comment_frag " // NaNNaNNaNNaNNaNNaNNaNNaNNaNaN Batman!" >}}
+"${Double.NaN}".repeat(10) + " $batman!"{{<comment_frag " // NaNNaNNaNNaNNaNNaNNaNNaNNaNNaN Batman!" >}}
 "Batman is $batman.length characters long"{{<comment_frag " // Batman is Batman.length characters long" >}}
 "Batman is ${batman.length} characters long"{{<comment_frag " // Batman is 6 characters long" >}}
 ```
