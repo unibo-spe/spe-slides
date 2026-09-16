@@ -659,7 +659,7 @@ Volumes are *bridges* between the _host's_ __file system__ and the _container's_
 
 <br/>
 
-Their support several use cases:
+They support several use cases:
 - __sharing__ data between the host and the container
 - __persisting__ containers' data
 - sharing data among containers
