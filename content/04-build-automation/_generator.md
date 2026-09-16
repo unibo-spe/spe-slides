@@ -330,7 +330,7 @@ Subsequent lifecycle phases are managed by the `poetry run` command, and are thu
 
 ## A structured build lifecycle: Apache Maven
 
-A build lifecycle typical of *declarative automators*, composed by *phases*.
+A build lifecycle typical of *declarative automators*, composed of *phases*.
 
 ⚠️ Selecting a phase implies executing all previous phases.
 
@@ -346,7 +346,7 @@ A build lifecycle typical of *declarative automators*, composed by *phases*.
 * **Execution** requires the name of a *phase* or *goal* (dependent goals will get executed)
 * **Convention over configuration**: *sensible defaults*
 
-What if there is no plugin for something peculiar of the project?
+What if there is no plugin for something peculiar to the project?
 
 ---
 
