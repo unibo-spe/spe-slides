@@ -1350,8 +1350,8 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
 
 From [Docker Compose documentation](https://docs.docker.com/compose/compose-file/09-secrets/):
 - __secrets__ are configs containing sensitive data that should be _kept secret_
-- put it simply, Docker makes it harder to inspect the content of secrets both on the host
-- one secret may be either be created __stack-wise__ out of a __local file__ or an __environment variable__ from the _host_...
+- put simply, Docker makes it harder to inspect the content of secrets, both on the host and inside the container
+- one secret may either be created __stack-wise__ out of a __local file__ or an __environment variable__ from the _host_...
     ```yaml
     secrets:                                            secrets:
         secret_name:                                        secret_name:
@@ -1364,7 +1364,7 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
             secret_name:
                 external: true
                 name: "the name used when creating the secret"
-                # this may be different than secret_name
+                # this may be different from secret_name
         ```
 
 - in any case, the secret's mount point should be specified at the service level:
@@ -1382,7 +1382,7 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
 
 ---
 
-## Orchestration-level notions (pt. 4)
+## Orchestration-level notions (pt. 5)
 
 ### About secrets and configs
 
@@ -1395,7 +1395,7 @@ Important remark:
 
 ---
 
-## Orchestration-level notions (pt. 5)
+## Orchestration-level notions (pt. 6)
 
 ### Volumes
 
