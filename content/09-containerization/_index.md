@@ -592,7 +592,7 @@ If so, it reuses the __cached layer__, and skips the execution of the correspond
 
 ## Layers and caching (pt. 3)
 
-When the container is run, the images layers are *read-only*, and the container has a *read-write* layer on top of them
+When the container is run, the image layers are *read-only*, and the container has a *read-write* layer on top of them
 
 ![](./rw-layer.png)
 
