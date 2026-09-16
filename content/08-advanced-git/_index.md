@@ -369,13 +369,13 @@ They tell two stories:
 
 ---
 
-# Compactation: squashing
+# Compaction: squashing
 
 ## Squashing
 
 Squashing is the practice of *reassembling multiple commits into a single one*
-* Allows to forget "experimental" commits
-* Allows to merge temporary changes into a single one
+* Lets you forget "experimental" commits
+* Lets you merge temporary changes into a single one
 * *Simplifies* history
 * *Alters* history
 * Can be performed via `merge` or manually
