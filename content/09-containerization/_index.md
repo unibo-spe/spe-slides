@@ -2232,7 +2232,7 @@ When a service _exposes a port_, and that's deployed on a _Swarm_:
 
 - the service is exposed on __all master nodes__ in the Swarm
 
-- so, the `wordpress` service above could be visited from several URL:
+- so, the `wordpress` service above could be visited from several URLs:
     + http://storage1.stairwai.ce.almaai.unibo.it:8889
     + http://inference1.stairwai.ce.almaai.unibo.it:8889
     + http://inference4.stairwai.ce.almaai.unibo.it:8889
@@ -2244,7 +2244,7 @@ When a service _exposes a port_, and that's deployed on a _Swarm_:
 
 ## Service replication
 
-- Services may be __replicated__ for the sake scalability / load-balancing / fault-tolerance, etc.
+- Services may be __replicated__ for the sake of scalability / load-balancing / fault-tolerance, etc.
 
 - Two types of services:
     + `global`: replicated _exactly_ __once per node__
