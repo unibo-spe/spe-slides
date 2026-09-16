@@ -36,10 +36,10 @@ enableSourceMap = true
 
 * Design a workflow that **fits the team**
   * Delicate balance between *chaotic organization* and *excessive bureaucracy*
-  * The larger the team, the more control is usually needed more control is usually needed
+  * The larger the team, the more control is usually needed
   * Sparse teams and localized teams have different requisites
-* Project progress is marked also by progress **version control system**
-* Select a *branching model* model that matches the organization
+* Project progress is also marked by progress in the **version control system**
+* Select a *branching model* that matches the organization
   * possibly, a *forking model* for certain kinds of organization
 * **Standardize** the development environment
   * Which newlines on which kind of files?
@@ -56,8 +56,8 @@ A system responsible for managing changes to the project files
 * Promotes collaborative workflows
 * **Distributed** vs. *Centralized*
   * **Every developer has a whole copy of the entire history**
-  * *There exist a central point of synchronization*
-* Also called Source Content Management (SCM)
+  * *There exists a central point of synchronization*
+* Also called Source Code Management (SCM)
 
 ---
 
