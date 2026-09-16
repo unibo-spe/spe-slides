@@ -347,7 +347,7 @@ There is no reason for the operation of reconciliation to be `merge`: it could w
 Rebasing *rewrites the project history* and as such generates *incompatible histories*
 * Remote pushes may get *refused*!
 * pushing with `--force` *rewrites history remotely* and **may delete other people's commits**!
-* `git pull --rebase` is safe, if the local commits where never pushed in any remote
+* `git pull --rebase` is safe, if the local commits were never pushed to any remote
     * It is actually a good practice to default to it
     * `git config --global pull.rebase true`
 
@@ -356,10 +356,10 @@ Rebasing *rewrites the project history* and as such generates *incompatible hist
 ## Rebasing or merging?
 
 Select depending on what you *conceptually* want:
-* I want to **record of what actually happened**: then **merge**
+* I want a **record of what actually happened**: then **merge**
     * History is preserved
     * Messy commits are there
-* I want to **tell the story of how your project was made**: then **rebase**
+* I want to **tell the story of how my project was made**: then **rebase**
     * History is *modified*
     * Commits are cleaner
 
