@@ -2329,13 +2329,13 @@ services:
     ```
 {{% /col %}}
 {{% col %}}
-1. Serval replicas of the same service are created:
+1. Several replicas of the same service are created:
     
     ![Deployment with replicas](./portainer-replicated-service.png)
 
 </br>
 
-3. Requests will be forwarded to replicas in a __non-deterministc__ fashion
+3. Requests will be forwarded to replicas in a __non-deterministic__ fashion
 {{% /col %}}
 {{< /multicol >}}
 
