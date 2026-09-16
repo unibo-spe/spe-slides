@@ -470,7 +470,7 @@ val jsonSchema : String
 
 Same as Java, plus aliasing.
 <br/>
-Imports go at the top of file, no locally scoped imports as in Scala
+Imports go at the top of the file, no locally scoped imports as in Scala
 * There are no `implicit`s in Kotlin, the `import` statement does not modify context
 
 
@@ -487,7 +487,7 @@ import org.company.someproduct.Entity as SomeProductEntity // name aliasing
 ## Varargs
 
 Functions can have a parameter marked as `vararg`, accepting multiple entries
-* Typically the last one (but not mandatorily as in Java)
+* Typically the last one (but, unlike in Java, not necessarily)
 * Maps to an `Array<out T>`
 
 ```kotlin
@@ -517,7 +517,7 @@ val `val` = "Hey look I can name things with keywords!"
 val `names can also contain spaces` = 1
 ```
 
-* General rule: **avoid it**, but in tests
+* General rule: **avoid it**, except in tests
 * It might be needed for interoperability with other languages, e.g. if a Java field is named `val`
 * Tests using kotlin.test can use them:
 
@@ -583,7 +583,7 @@ do {
     val draw = Random.nextInt(lucky + 1)
     attempts++
 } while (draw != lucky) // draw is visible here
-println("Launched $attempts dice before a lucky shot")
+println("Rolled $attempts dice before a lucky shot")
 ```
 
 ---
