@@ -47,11 +47,11 @@ enableSourceMap = true
 ---
 
 # What are software platforms?
-## Operative systems (?)
+## Operating systems (?)
 
-- Most software runs on top of an __operative system__ (OS)
+- Most software runs on top of an __operating system__ (OS)
 
-- So yes, all operative systems are platforms
+- So yes, all operating systems are platforms
 
 - Is there more?
   + e.g. [JabRef](https://www.jabref.org/): __Java__ application running on top of __JVM__
@@ -62,7 +62,7 @@ enableSourceMap = true
 ---
 
 # What are software platforms?
-## Operative systems + ???
+## Operating systems + ???
 
 - Programming languages?
   * not that simple
@@ -89,7 +89,7 @@ enableSourceMap = true
 
 # What are API and runtimes?
 
-> [**API**](https://en.wikipedia.org/wiki/API) $\equiv$ application programming interface(s) $\stackrel{\Delta}{=}$ a _formal_ specification of the set of **functionalities** provided by a software (sub-)system for _external_ usage, there including their **input**, **outputs**, and _environmental_ **preconditions** and **effects**
+> [**API**](https://en.wikipedia.org/wiki/API) $\equiv$ application programming interface(s) $\stackrel{\Delta}{=}$ a _formal_ specification of the set of **functionalities** provided by a software (sub-)system for _external_ usage, including their **inputs**, **outputs**, and _environmental_ **preconditions** and **effects**
 - client-server metaphor is implicit
 
 > [**Runtime**](https://en.wikipedia.org/wiki/Runtime_system) [system/environment] $\approx$ the set of computational resources backing the execution of a software (sub-)system
@@ -105,11 +105,11 @@ enableSourceMap = true
   * and their public/protected methods / fields / properties / constructors
     + and their formal arguments, return types, throwable exceptions
 
-- all possible _commands_ a __CLI application__ accept as _input_
+- all possible _commands_ a __CLI application__ accepts as _input_
   * and their admissible sub-commands, options, and arguments
     + and the corresponding outputs, exit values, and side effects
 
-- all possible _routes_ a __Web service__ may accept HTTP request onto
+- all possible _routes_ a __Web service__ may accept HTTP requests on
   * and their admissible HTTP methods
     + and their admissible query / path / body / header parameters
       - and the corresponding status codes, and response bodies
@@ -120,17 +120,17 @@ enableSourceMap = true
 
 ## Examples of runtimes
 
-- any _interpreter_ (JVM, CRL, CPython, V8)
+- any _interpreter_ (JVM, CLR, CPython, V8)
   * and their standard libraries
   * and their type system and internal conventions
-    + eg value/reference types in JVM/CRL, global lock in CPython
+    + e.g. value/reference types in JVM/CLR, global lock in CPython
 
-- any _operative system_ (Win, Mac, Linux)
-  * and their system calls, daemons, package managers, default commands, etc
+- any _operating system_ (Win, Mac, Linux)
+  * and their system calls, daemons, package managers, default commands, etc.
   * and their program memory, access control, file system models
 
 - any _Web service_ 
-  * and the protocols they leverage upon
+  * and the protocols they leverage
   * and their URL structuring model
   * the data schema of their input/output objects
   * the authentication / authorization mechanisms they support
@@ -144,14 +144,14 @@ enableSourceMap = true
 - The __Java Virtual Machine__ (JVM)
   * supported languages: Java, Kotlin, Scala, Clojure, etc.
 
-- .NET's [pronounced "dot NET"] __Common Language Runtime__ (CRL)
+- .NET's [pronounced "dot NET"] __Common Language Runtime__ (CLR)
   * supported languages: C#, VB.NET, F#, etc.
 
 - __Python__ 3
   * supported language: Python
 
 - __NodeJS__ (V8)
-  * supported language: JavaScript, TypeScript, etc.
+  * supported languages: JavaScript, TypeScript, etc.
 
 - Each __browser__ may be considered as a platform per se
   * supported language: JavaScript
@@ -163,7 +163,7 @@ enableSourceMap = true
 # Practical features of platforms
 
 - _standard libraries_
-  * i.e. pre-cooked functionalities developers / users may exploit
+  * i.e. ready-made functionalities developers / users may exploit
 
 - predefined _design decisions_ 
   * e.g. global lock in Python, event loop in JavaScript, etc.
@@ -203,12 +203,12 @@ enableSourceMap = true
 ## Predefined design decisions
 
 - Everything is (indirectly) a _subclass/instance_ of `Object`
-  * except fixed set of primitive types, and static stuff
+  * except a fixed set of primitive types, and static stuff
 
 - Every object is potentially a _lock_
   * useful for concurrency
 
-- Default methods inherited by `Object` class
+- Default methods inherited from the `Object` class
   * e.g. `toString`, `equals`, `hashCode`
 
 - All methods are _virtual by default_
@@ -222,13 +222,13 @@ enableSourceMap = true
 - _Project_ should be organized according to the Maven's [standard directory layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html)
 
 - Official _stylistic conventions_ for most JVM languages
-  * e.g. type names in `PascalCase`, members names in `camelCase`
+  * e.g. type names in `PascalCase`, member names in `camelCase`
   * e.g. getters/setters in Java vs. Kotlin's or Scala's properties
 
 - Many technical conventions:
  * _iterable_ data structures should implement the `Iterable` interface
  * _variadic_ arguments are considered _arrays_
- * _constructors_ for collections subclasses accept `Iterable`s as input
+ * _constructors_ for collection subclasses accept `Iterable`s as input
  * ...
 
 ---
@@ -274,11 +274,11 @@ enableSourceMap = true
 
 ## Standard libraries
 
-- Notably, one the _richest_ __standard libraries__ ever
+- Notably, one of the _richest_ __standard libraries__ ever
 
 - Many nice _functionalities_ covering:
   * all the stuff covered by Java
-  * plus many more, e.g. complex numbers, JSON and CSV parsing, etc
+  * plus many more, e.g. complex numbers, JSON and CSV parsing, etc.
 
 - Many functionalities are provided by community-driven _third party libraries_
   * e.g. _scientific_ or _ML_ libraries
@@ -308,7 +308,7 @@ enableSourceMap = true
 - _Project files_ should be organized according to [Kenneth Reitz's layout](https://docs.python-guide.org/writing/structure/)
 
 - Official _stylistic conventions_ for Python ([PEP8](https://peps.python.org/pep-0008/))
-  * e.g. type names in `PascalCase`, members names in `snake_case`
+  * e.g. type names in `PascalCase`, member names in `snake_case`
   * e.g. _indentation-aware_ syntax, blank line conventions, etc.
   * ...
 
@@ -316,7 +316,7 @@ enableSourceMap = true
  * [duck typing](https://realpython.com/lessons/duck-typing/)
  * iterable data structures should implement the `__iter__` method
  * _variadic_ arguments are considered _tuples_
- * _keyword_ arguments are considered _sets_
+ * _keyword_ arguments are considered _dictionaries_
  * ...
 
 ---
@@ -403,7 +403,7 @@ enableSourceMap = true
 ## Packaging conventions, import mechanisms, and software repositories
 
 * _Project files_ are organized into __modules__
-  - modules are file containing anything
+  - modules are files containing anything
   - and declaring what to export
 
 * Code _archives_ (`.tar.?z`) are compressed _tarball files_ containing JS sources
