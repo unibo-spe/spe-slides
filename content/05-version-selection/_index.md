@@ -2,7 +2,7 @@
 +++
 
 title = "Picking version numbers"
-description = "Assignign meaning to revisions"
+description = "Assigning meaning to revisions"
 outputs = ["Reveal"]
 
 [reveal_hugo]
