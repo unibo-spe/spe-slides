@@ -1911,9 +1911,9 @@ class TestMariaDBCustomerRepository {
 ## Building the cluster (theory)
 
 - In a Docker Swarm cluster, there are two kinds of nodes:
-    + __manager__ nodes, who coordinate the cluster by means of the [RAFT consensus protocol](https://docs.docker.com/engine/swarm/raft/)
+    + __manager__ nodes, which coordinate the cluster by means of the [RAFT consensus protocol](https://docs.docker.com/engine/swarm/raft/)
         * they may also act as worker nodes
-    + __worker__ nodes, who simply run containers
+    + __worker__ nodes, which simply run containers
 
 <br/>
 
@@ -1923,7 +1923,7 @@ class TestMariaDBCustomerRepository {
     2. optionally, let other nodes __join__ the cluster as worker nodes
     3. optionally, __elevate__ some worker nodes to manager nodes
         + this operation can _only_ be done by a client connected to some _manager_ node
-        + it is better to __multiple__ manager nodes for redundancy
+        + it is better to have __multiple__ manager nodes for redundancy
         + it is better to have an __odd__ number of manager nodes
             * e.g. 3, 5, 7, etc.
 
