@@ -215,8 +215,8 @@ Some abstraction is needed to encapsulate applications, and their computational 
 - each container __shares the OS kernel__ of the host, yet having its own runtime(s), storage, and network facilities
     + in the eyes of the user, the container is a _process_ running on top of a _minimal OS_
 
-- each container is _instance_ of an __image__, i.e. a _read-only template_ containing deployment instructions 
-    + differences w.r.t. that image constitute the _state of the container_ (these can be _snapshot_ into file of minimal size)
+- each container is an _instance_ of an __image__, i.e. a _read-only template_ containing deployment instructions 
+    + differences w.r.t. that image constitute the _state of the container_ (these can be _snapshotted_ into a file of minimal size)
 
 - containers are __fine__-grained __encapsulation__ units
     + they are _light_-weight (MBs)
