@@ -716,8 +716,8 @@ Typical use:
     * see e.g. these slides
 * *Aggregation*
     * A "master project" working as container of multiple other projects
-* A *direct dipendency* on an unreleased or in-development library
-* The project cannot be managed with an *integrated hierarchial tool*
+* A *direct dependency* on an unreleased or in-development library
+* The project cannot be managed with an *integrated hierarchical tool*
     * No Gradle or Maven or similar
     * If a build tool can deal with dependencies, then let it do its job
 
@@ -727,7 +727,7 @@ Typical use:
 
 Adding an external submodule:
 * `git submodule add <REPO_URL> <DESTINATION>`
-    * *Prefer HTTPS*: SSH requires public key authorization, and hosts have limitations
+    * *Prefer HTTPS*: SSH requires public key authentication, and hosts have limitations
     * Creates or modifies the `.gitmodules` file in the repository root
     * Creates a new special file `<DESTINATION>`
     * Both `.gitmodules` and `<DESTINATION>` **must be tracked**
