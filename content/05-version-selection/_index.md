@@ -265,7 +265,7 @@ The public API should not be considered stable.
 
 **Think** *before* choosing a versioning schema, and then **be consistent**
 
-* *Semantic versioning is warmly recommended*
+* *Semantic versioning is strongly recommended*
     * Can be *integrated with the DVCS*!
     * Dates can be added (e.g. in the pre-release or build-metadata sections)
 * *Codenames* can be used informally
