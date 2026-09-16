@@ -32,7 +32,7 @@ targetPath = "css/custom-theme.css"
 
 #### Prioritize the forum
 #### [`https://virtuale.unibo.it/mod/forum/view.php?id=1342533`](https://virtuale.unibo.it/mod/forum/view.php?id=1342533)
-  * All technical question
+  * All technical questions
   * Any other non-personal question
 
 <p>
@@ -51,7 +51,7 @@ targetPath = "css/custom-theme.css"
 # Pages of the course
 
 - [Virtual Learning Environment ("Virtuale")](https://virtuale.unibo.it/course/view.php?id=83089)
-  + please enroll if you didn't already
+  + please enrol if you haven't already
 
 - [These slides](https://unibo-spe.github.io)
 
@@ -98,9 +98,9 @@ Changes will be published on the forum
 
 # Prerequisites
 
-* Knowledge of *Java*, *Scala* is a nice to have
+* Knowledge of *Java*; *Scala* is a nice-to-have
 * Minimal ability with `git`
-  * initializing and managing the repository options
+  * initializing a repository and managing its options
   * committing
   * branching and merging
   * fetching and pushing
@@ -138,9 +138,9 @@ Changes will be published on the forum
 
 # "Project work"
 
-The exam's project can be developed a "project work", namely,
+The exam's project can be developed as a "project work", namely,
 a project whose requirements are provided by a real-world company,
-which acts as a commissioner.
+which acts as the client.
 
 * The students will interact with the company to apply Domain-Driven Design on a real piece of software.
 * The project will be open source
@@ -154,7 +154,7 @@ Available project works will be posted on the course site on https://virtuale.un
 
 # Final project quality checklist
 
-It is warmly recommended to check out https://www.bestpractices.dev/en, applying first all the relevant items there.
+It is strongly recommended to check out https://www.bestpractices.dev/en, applying first all the relevant items there.
 
 {{% multicol %}}
 {{% col %}}
@@ -174,7 +174,7 @@ It is warmly recommended to check out https://www.bestpractices.dev/en, applying
 ### Versioning
 
 - Web API specifications (e.g. OpenAPI, [Swagger](https://swagger.io/)), if any, are versioned
-- Web servers routes (if any) are versioned
+- Web server routes (if any) are versioned
 - Releases are versioned
 - Version numbers are computed automatically
 - Multiple releases exist
@@ -199,7 +199,7 @@ It is warmly recommended to check out https://www.bestpractices.dev/en, applying
 ### Licensing
 
 - The project directory includes a LICENSE file, unless it is proprietary
-- The choice of the licence is adequately motivated in the report
+- The choice of the license is adequately motivated in the report
 
 {{% /col %}}
 {{% col %}}
@@ -231,7 +231,7 @@ It is warmly recommended to check out https://www.bestpractices.dev/en, applying
 - CI/CD pipelines in place
 - CI/CD matrices in place
 - The entire test suite is executed in CI/CD
-- Automatic release of software artifacts on target repositories (eg GitHub releases + artifact repositories for the target platforms)
+- Automatic release of software artifacts on target repositories (e.g., GitHub releases + artifact repositories for the target platforms)
 - If the project accepts contributions from third parties, correct pipeline configuration for pull requests coming from external owners
 
 {{% /col %}}
@@ -259,15 +259,15 @@ It is warmly recommended to check out https://www.bestpractices.dev/en, applying
 
 ### Requirements
 
-- _Requirements_ are clearly captured, and categories (e.g. functional vs. non-functional)
+- _Requirements_ are clearly captured and categorized (e.g. functional vs. non-functional)
 - _Scenarios_ are clearly described via __user stories__
 - Definition of 'done' for each requirement
 
 ### Multi-platform
 - The project involves >= 2 target platforms
-- The most dominant platform cannot be used for more than 75% of the overall project size
+- The dominant platform cannot be used for more than 75% of the overall project size
 - The project is organized in such a way that code targeting different platforms is clearly partitioned
-- Core domain entities spanning across multiple platforms are defined so to minimize code duplication, while enforcing design coherence
+- Core domain entities spanning across multiple platforms are defined so as to minimize code duplication, while enforcing design coherence
 
 
 {{% /col %}}
@@ -275,8 +275,8 @@ It is warmly recommended to check out https://www.bestpractices.dev/en, applying
 
 ### AI exploitation
 - The report clearly declares what GenAI has been used for and how (or that it was not used at all)
-- Each repository has an AI-DECLARATION.md file compliant to the convention (https://ai-declaration.md/)
-- Each repository where GenAI was exploited via Agents as an AGENTS.md file compliant to the convention (https://agents.md/)
+- Each repository has an AI-DECLARATION.md file compliant with the convention (https://ai-declaration.md/)
+- Each repository where GenAI was exploited via Agents has an AGENTS.md file compliant with the convention (https://agents.md/)
 - Skills possibly exploited by your agents are documented and motivated in the report
 
 {{% /col %}}
@@ -295,7 +295,7 @@ It is warmly recommended to check out https://www.bestpractices.dev/en, applying
 ## Recommended
 * Kotlin
 * Gradle
-* IntelliJ Idea
+* IntelliJ IDEA
 * Visual Studio Code
 * A decent Unix terminal
     * I recommend a well-configured `zsh` shell
