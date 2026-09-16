@@ -76,7 +76,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 <br>
 
-- It consists of principles, best practices, and patterns leading design
+- It consists of principles, best practices, and patterns guiding design
     + unified under a common _philosophy_
     + focus is on the _design workflow_, other than the result
 
@@ -87,7 +87,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
     + it focuses on delivering a _business-tailored_ model
         * and, therefore, a business-tailored solution
     + it harmonises _communication_ among managers, technicians, and users
-    + it stresses the production of maintanable and _extensible_ software
+    + it stresses the production of maintainable and _extensible_ software
 
 ---
 
