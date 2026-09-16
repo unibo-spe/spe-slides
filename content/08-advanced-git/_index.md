@@ -595,7 +595,7 @@ Squashing alters history *more* than rebase does
 ## Rebase interactive
 
 * Rebase can be used in *interactive* mode (option `-i`) to *rewrite history*
-* Interactive rebase stops after each commit to allow for changes, such as editing the message or add files
+* Interactive rebase stops after each commit to allow for changes, such as editing the message or adding files
 
 `rebase -i <tree-ish>`
 
