@@ -712,7 +712,7 @@ They support several use cases:
 
 1. Let's open a Linux shell in a container: `docker run -it --rm alpine:latest sh`
 
-2. Let's create folder in there: `mkdir -p /data`
+2. Let's create a folder in there: `mkdir -p /data`
 
 3. Let's create a file in there: `echo "Hello world" > /data/hello.txt`
 
