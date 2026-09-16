@@ -816,7 +816,7 @@ They support several use cases:
 
 ### Accessing the volume from another container
 
-1. Let's create yet another _interactice_ container attached to the volume
+1. Let's create yet another _interactive_ container attached to the volume
     * `docker run --rm -it -v my-volume:/data alpine sh`
 2. Let's have a look at the data: `ls -la /data`
     ```
