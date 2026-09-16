@@ -1019,13 +1019,13 @@ on:
 
 ## GitHub Actions: Environment preparation
 
-GitHub actions job run on a *fresh virtual machine*
-* The *operating system* can be selected (Windows, Ubuntu, MacOS X)
+GitHub Actions jobs run on a *fresh virtual machine*
+* The *operating system* can be selected (Windows, Ubuntu, macOS)
   * Multi OS builds $\Rightarrow$ {{< course_name >}}
 * The repository needs to be *cloned manually*
 * Any operation should be *configured manually*
 
-Rather than *convention over configuration*, GHA use **actions** as a form of configuration reuse
+Rather than *convention over configuration*, GHA uses **actions** as a form of configuration reuse
 * Actions can be found on the [GH marketplace](https://github.com/marketplace?type=actions)
 * Developing new actions $\Rightarrow$ {{< course_name >}}
 
@@ -1073,7 +1073,7 @@ it should **sign** and then **deliver** the result.
   * ~~Maven Central + other stuff~~
 
 In [this repository](https://github.com/AlchemistSimulator/Alchemist/tree/3535e1b42097c86c6d5d3662fff554558381e5fc),
-delivery is enabled towards all the aforementioned destinations
+delivery is enabled to all the aforementioned destinations
 
 ---
 
@@ -1085,13 +1085,13 @@ fix it, you will need to *create a new release* with a *different version number
 ### **Why no-retract? An anecdote**
 
 > In March 2016, Azer Koçulu unpublished more than 250 of his modules
-from NPM, which is a popular package manager used by Javascript
+from NPM, which is a popular package manager used by JavaScript
 projects to install dependencies, because he was asked to rename the
-module `Kik`, whose name is the same of an instant messaging app that
+module `Kik`, whose name is the same as that of an instant messaging app that
 wanted to publish a homonym module.
-Unfortunately, one of those dependencies was `left-pad`, a *11-line-long*
-Javascript module, used by *thousands* of projects. This brought
-breackages throughout many Javascript products (most notably Node and
+Unfortunately, one of those dependencies was `left-pad`, an *11-line-long*
+JavaScript module, used by *thousands* of projects. This brought
+breakages throughout many JavaScript products (most notably Node and
 Babel). NPM had to un-unpublish `left-pad`.
 
 ---
