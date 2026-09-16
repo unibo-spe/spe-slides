@@ -53,7 +53,7 @@ targetPath = "css/custom-theme.css"
 
 # Extra
 
-There is some additional material not involving the course, that gets shipped together with it though.
+Some additional material is not part of the course, but is shipped together with it.
 
 Typically, because it's somewhat related.
 
