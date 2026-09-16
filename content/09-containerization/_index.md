@@ -2270,8 +2270,8 @@ When a service _exposes a port_, and that's deployed on a _Swarm_:
 - How to read it:
     + `N` replicas of the service will be deployed
     + each one will be deployed on a __manager node__ having the `mylabel` label set to `myvalue`
-    + replicas will be evenly _spreaded_ among the admissible nodes, possibly _evenly_
-    + no more of `M` replicas will be put on the same node
+    + replicas will be _spread_ among the admissible nodes, as evenly as possible
+    + no more than `M` replicas will be put on the same node
 
 ---
  
