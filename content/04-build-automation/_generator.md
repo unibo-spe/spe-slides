@@ -185,6 +185,7 @@ include(CPack)
 * **Dependency resolution**: Handles dependency resolution and locking via `poetry.lock`.
 * **Virtual environments**: Automatically manages isolated Python environments per project.
 * **Build and publish**: Supports building and publishing packages to PyPI or other repositories.
+
 ---
 
 ## Python's conflicting standards
