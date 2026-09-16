@@ -2032,7 +2032,7 @@ netsh interface portproxy add v4tov4 listenport=4789 listenaddress=$ACTUAL_IP co
     + `docker stack services <STACK_NAME>` to list services in a stack
     + `docker stack rm <STACK_NAME>` to remove a stack
 
-- Semantics of stack _deployment_ on Swarms is __different than Docker Compose__:
+- Semantics of stack _deployment_ on Swarms is __different from Docker Compose__:
     + different services may be __allocated__ on different nodes
     + services may be __replicated__ on different nodes
     + networks must rely on the `overlay` driver, to support inter-node communication among containers
