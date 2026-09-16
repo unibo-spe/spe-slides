@@ -69,14 +69,14 @@ Often for *open source* projects, internal and external versioning *coincide*
 ## Code naming
 
 The version is represented by a (usually pronounceable) *word*, *short phrase* or *acronym*
-* With few exceptions, *does not provide any direct information on the project* (often by purpose)
+* With few exceptions, *does not provide any direct information on the project* (often on purpose)
 * Very frequently used internally to refer to new features
 * Often used to "protect" the corporation from information leaking
 * Often *changed to purposely create confusion*
 * Used to separate pre-release versions from final releases
     * e.g., Project Longhorn only became Windows Vista at release time
-* Often associated for *commercial reasons* to other version numbers
-    * e.g. Ubuntu 18.04 *Bionic Beaver* or MacOS X 10.13.5 *Sierra*
+* Often associated with other version numbers for *commercial reasons*
+    * e.g. Ubuntu 18.04 *Bionic Beaver* or macOS 10.13.5 *High Sierra*
 * Reasons for codenames are often *political and commercial* rather than technical
 
 ---
