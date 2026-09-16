@@ -1151,7 +1151,7 @@ Complex(1.0, 1.0) + 3.4 // 4.4+1.0i
 
 Function invocation is an operator and can be overloaded!
 <br/>
-This will turn useful in future...
+This will come in handy later...
 
 ---
 
