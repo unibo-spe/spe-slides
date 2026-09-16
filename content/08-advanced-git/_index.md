@@ -281,7 +281,7 @@ We want to leave `server` as is, but rebase `client` onto `master`
 Option `--onto` can be used to transplant entire branches
 * `git rebase --onto destination start end`
     * pick commits from `start` to `end`
-    * reply them starting from `destination`
+    * replay them starting from `destination`
 
 {{% /fragment %}}
 
