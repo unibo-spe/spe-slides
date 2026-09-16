@@ -409,7 +409,7 @@ But you must be *explicitly willing* to access an outer receiver
     * Functions with receiver as configuration blocks
     * Member extensions to control scope
     * Reuse by inheritance
-    * Receiver "leakage" via annotations
+    * Prevent receiver "leakage" via annotations
 
 ---
 
