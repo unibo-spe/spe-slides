@@ -275,7 +275,7 @@ App3 [fillcolor=red, width=0.95, pos="1.025,2.3!"]
 }
 {{< /gravizo >}}
 
-Containers provide **runtime isolation** _without_ operating **system replication**
+Containers provide **runtime isolation** _without_ **operating system replication**
 
 ---
 
