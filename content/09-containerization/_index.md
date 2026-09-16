@@ -365,7 +365,7 @@ Containers provide **runtime isolation** _without_ **operating system replicatio
 {{% fragment %}}
 ### Orchestration level
 
-- __Cluster__: a set of machines, joint together by the same container orchestrator 
+- __Cluster__: a set of machines joined together by the same container orchestrator 
 - __Node__: a machine in the cluster (each one acting as a host, and running the container engine)
 - __Service__: a set of replicas of the same container
 - __Stack__: a set of inter-related services
