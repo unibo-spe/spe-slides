@@ -1583,16 +1583,15 @@ networks:
 
 3. `docker compose up` and then inspect the logs
 
+4. open your browser and browse to <http://localhost:8000>
 
-5. open your browser and browse to <http://localhost:8000>
-
-6. `docker ps` and have a look to the running containers
+5. `docker ps` and have a look at the running containers
     + and `docker network ls` 
     + and `docker volume ls`
 
-7. Press `Ctrl+C` to stop the stack
+6. Press `Ctrl+C` to stop the stack
 
-8. `docker compose down --volumes` to delete the stack
+7. `docker compose down --volumes` to delete the stack
 
 
 {{% /col %}}
