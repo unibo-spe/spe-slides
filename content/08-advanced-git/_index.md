@@ -633,7 +633,7 @@ pick 6eb514b chore(deps): update shared-slides digest to 0b573b0
 pick 17743ec migrate from `GetJSON` to `resources.GetRemote` with `transform.Unmarshal`
 ```
 
-Commits are listed listed in the *opposite order* than you normally see them using `git log` command.
+Commits are listed in the *reverse order* compared to `git log`.
 
 * Commands can be *changed*
 * Commits can be *reordered*
@@ -651,7 +651,7 @@ edit 17743ec migrate from `GetJSON` to `resources.GetRemote` with `transform.Unm
 * *save and exit* the editor
 * Git *rewinds you back to the last commit in that list*
 * Git processes the commands, and, if needed, drops you on the command line to make changes
-* There, you have full control, you can even *split* commits by commit multiple times different changes
+* There, you have full control, you can even *split* commits by committing different changes multiple times
 * Once you're satisfied with your changes, run `git rebase --continue`
 
 ---
