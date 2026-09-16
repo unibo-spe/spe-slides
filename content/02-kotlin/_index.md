@@ -1020,7 +1020,7 @@ Simpler than Scala, more coherent than Java
 ## Visibility control
 
 ```kotlin
-class Visibility internal constructor( // constructor is required to apply visibility restrictionss
+class Visibility internal constructor( // constructor is required to apply visibility restrictions
     private val id: Int // Same as Scala
 ) {
     protected var state = 0
