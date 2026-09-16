@@ -579,7 +579,7 @@ flowchart RL
 
 ## Squash, merge, or rebase?
 
-Squashing results in *further alteration* than rebase
+Squashing alters history *more* than rebase does
 
 **Merge** when you want to *retain history*, keeping track of what happened
 
