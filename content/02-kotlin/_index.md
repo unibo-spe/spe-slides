@@ -1757,7 +1757,7 @@ compose({v: Int -> v * v}, {v: Double -> v.toInt()})(3.9) // 9
 
 ## Function references
 
-Functions can be referred by using `::`
+Functions can be referred to by using `::`
 <br/>
 the left operand is the receiver (if present)
 <br/>
@@ -1894,7 +1894,7 @@ mapOf(46 to "Rossi", 4 to "Dovizioso").map { (number, rider) ->
 
 ## Extension functions
 
-Kotlin allows to extend any type capabilities from anywhere
+Kotlin lets you extend the capabilities of any type from anywhere
 <br/>
 via **extension functions**
 
@@ -1943,8 +1943,8 @@ their behaviour is entirely specified by `get` and `set` accessors.
 Extensions functions are... functions, like any other
 <br/>
 as such, their type can be legally expressed by:
-* prefixing the *receiver type
-* following by a `.`
+* prefixing the *receiver type*
+* followed by a `.`
 * then list parameters and return types as for any function type literal
 
 ```kotlin
@@ -1971,9 +1971,9 @@ mutableListOf<String>().configure {
 
 When extensions are defined as members, there are multiple *implicit receivers*:
 1. **dispatch receiver**: the `object` or instance of the `class` in which the extension is declared
-2. **extension receiver** the instance of the *receiver type* of the extension is called
+2. **extension receiver**: the instance of the *receiver type* on which the extension is called
 
-*Extension receivers have priority*, dispatch receivers access requires the *qualified `this`* syntax
+*Extension receivers have priority*, accessing dispatch receivers requires the *qualified `this`* syntax
 <br/>
 
 
@@ -2093,7 +2093,7 @@ Similar to `run`,
 but returns the context object
 <br/>
 Used to cause side effects from a specific context,
-and returning the original object
+and return the original object
 
 ```kotlin
 1.apply { println("${this + 1}1") } // Prints 21, returns 1
@@ -2113,7 +2113,7 @@ Similar to `apply`, but does not change the context,
 <br/>
 the context object is bound to the first lambda parameter
 <br/>
-Used to cause side effects and returning the original object
+Used to cause side effects and return the original object
 
 ```kotlin
 1.also { println("${it + 1}1") } // Prints 21, returns 1
