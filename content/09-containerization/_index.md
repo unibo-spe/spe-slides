@@ -2380,7 +2380,7 @@ volumes:
 
     ![Deployment with replicas](./portainer-fake-simulation-volumes.png)
 
-    - one per replica, on the same node of the replica
+    - one per replica, on the same node as the replica
 
 3. How to share data?
 
