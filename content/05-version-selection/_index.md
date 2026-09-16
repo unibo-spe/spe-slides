@@ -98,7 +98,7 @@ The version is represented by **a string representing the release date**
 ## Unary numbering
 
 The version is represented by a **string whose length grows at each version**
-* Only useful for project that reached *maturity*
+* Only useful for projects that have reached *maturity*
 * Extremely *unlikely* in today’s software world
 * May lead to *version length explosion*
 
@@ -107,15 +107,15 @@ The version is represented by a **string whose length grows at each version**
 # Versioning approaches
 ## Degree of retro compatibility
 
-The version is represented one or more sequences, separately incremented, that
+The version is represented by one or more sequences, separately incremented, that
 <br>
-**reflect incrementally widespread changes in the product**
+**reflect increasingly widespread changes in the product**
 
 * Often used *in conjunction with other techniques*
 * Often used *badly* (see the Linux kernel)
 * *Formal methodologies* for applying it exist
 * Sometimes instead of indicating API-level changes, the version may indicate user-level perceivable changes
-    * Very much depends on who are the clients/customers
+    * Very much depends on who the clients/customers are
 
 ---
 
