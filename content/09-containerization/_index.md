@@ -556,7 +556,7 @@ server.get('/', function (req, res) {
 console.log(`Service ${serverID} listening on ${hostname}:${port}`)
 server.listen(port)
 ```
-i.e. a Web service listening on the port indicated by the `SERIVICE_PORT` env var, showing Web pages of the form 
+i.e. a Web service listening on the port indicated by the `SERVICE_PORT` env var, showing Web pages of the form 
 ```
 [$SERVER_ID@$HOST_NAME:PORT] Hit $VIEW_COUNT times
 ```
