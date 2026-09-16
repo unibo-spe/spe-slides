@@ -170,7 +170,7 @@ The **changes** that will be saved next
 ### `.gitattributes`
 * Defines attributes for path names
 * Can enforce the correct line ending
-* Can provide ways to diff binary file (by conversion to text, needs configuration)
+* Can provide ways to diff binary files (by conversion to text, needs configuration)
 * Example:
 
 ```
