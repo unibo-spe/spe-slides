@@ -2173,7 +2173,7 @@ After selecting the only environment available, one may observe:
 
 - labels can be used to set _placement_ __constraints__ or __preferences__ for services:
     * placement _constraints_: one service can only be deployed onto nodes with given labels
-    * placement _preferences_: one service's _replicas_ will be _spreaded_ among nodes with given labels
+    * placement _preferences_: one service's _replicas_ will be _spread_ among nodes with given labels
 
 ---
  
