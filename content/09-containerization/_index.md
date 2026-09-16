@@ -758,7 +758,7 @@ They support several use cases:
     done
     ```
 
-3. Let's have at the shared directory: `ls -la ./shared`
+3. Let's have a look at the shared directory: `ls -la ./shared`
     ```
     ls -la ./shared 
     totale 56
