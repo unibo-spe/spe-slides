@@ -1377,7 +1377,7 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
                 - secret_name # reference to the secrets section (by YAML name)
                 # long syntax
                 - source: secret_name # reference to the secrets section (by YAML name)
-                    target: /path/to/secret/on/the/container
+                  target: /path/to/secret/on/the/container
     ```
 
 ---
