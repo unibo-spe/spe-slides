@@ -358,7 +358,7 @@ Containers provide **runtime isolation** _without_ **operating system replicatio
 - __Layer__: a single, cacheable, step in the creation of an image
 - __Host__: the machine hosting the containers 
 - __Registry__: a repository of images (possibly external w.r.t. the host)
-- __Network__: a virtual network for connecting containers (among each others and with the host)
+- __Network__: a virtual network for connecting containers (with each other and with the host)
 - __Volume__: a bridge for letting containers share data with the host
 - __Engine__ (a.k.a. __daemon__): the software running on the host, managing containers, images, volumes, layers, and networks
 
