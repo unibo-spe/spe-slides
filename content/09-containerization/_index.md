@@ -1145,7 +1145,7 @@ Let's create a non-trivial scenario with 2 containers attached to the same netwo
 
 - One may control the mapping of ports via the `-p <host port>:<guest port>` option
     + e.g. `docker run -d --rm -p 8888:8080 my-service; docker ps`
-    + this would map the container's port `8080` to the host's port `8080`
+    + this would map the container's port `8080` to the host's port `8888`
 
     ```
     CONTAINER ID   IMAGE        COMMAND                  CREATED         STATUS         PORTS                                       NAMES
