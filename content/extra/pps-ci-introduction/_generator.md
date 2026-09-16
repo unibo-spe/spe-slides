@@ -298,7 +298,7 @@ commit
 ## Distributed version control with git: a recap
 
 ### *Remote*
-* (possibly remote) locations hosting copies of branches of this repository exist
+* A (possibly remote) location hosting copies of the branches of this repository
 
 ### `git remote`
 * Configures the *remotes*
@@ -329,7 +329,7 @@ commit
 * **Shortcut** for `git fetch && git merge FETCH_HEAD`
 
 ### `git push <remote> <branch>`
-* Sends local changes *remote* *branch*
+* Sends local changes to the *remote* *branch*
 * Requires branches to **share a root**
 * If remote and branch are omitted, updates are sent to the *upstream*
 
@@ -373,8 +373,8 @@ Discussed in **{{< course_name >}}**
 * Some limitations for closed source
 * Academic accounts
 * De-facto standard for open source projects
-* One static website per-project, per-user, and per-organization
-  * first-class support for Jellyll (a Ruby framework for static website generation)
+* One static website per project, per user, and per organization
+  * first-class support for Jekyll (a Ruby framework for static website generation)
 
 ---
 
@@ -411,7 +411,7 @@ Discussed in **{{< course_name >}}**
     * That *depends on other software*
         * That *depends on other software*
             * That *depends on other software*, and so on...
-* A normal applications has a **tree** of dependencies
+* A normal application has a **tree** of dependencies
 
 ---
 
@@ -552,7 +552,7 @@ A paradigmatic example of a hybrid automator:
 
 * The Gradle build script is *a valid Kotlin script* (using the Gradle API)
   * (There is actually a kludge concerning the `plugins` and `buildscript` blocks)
-* Anything that has not a valid *Kotlin syntax* is not a valid Gradle build script
+* Anything that does not have valid *Kotlin syntax* is not a valid Gradle build script
 * *Kotlin* and *Groovy* picked as they enable *easy DSL creation*
 * The *feeling* is to just have *to configure* an existing software
     * *Declarative*, much like Maven plugins
@@ -598,7 +598,7 @@ Yes, it's a one-liner
 
 ## Gradle: minimal example execution
 
-* The `gradle` command accepts the names of *tasks*  to execute as parameters
+* The `gradle` command accepts the names of *tasks* to execute as parameters
 * The `java` plugin introduces several tasks:
   * `compile<source set><language name>` (e.g., `compileTestJava`): compiles a specific source set
   * `compile<language name>`: compiles all source sets of a language
@@ -643,7 +643,7 @@ Well known repositories for Java and related technologies (including Scala):
 ## The build system as dependency
 
 
-* *no guarantee*  that automation written with some tool at version `X`, will work at version `Y`!
+* *no guarantee* that automation written with some tool at version `X`, will work at version `Y`!
 * $\Rightarrow$ **The build system is itself a dependency**
 
 * A global dependency on the build tool is **hard to capture**
@@ -657,14 +657,14 @@ Well known repositories for Java and related technologies (including Scala):
 
 Gradle proposes a (partial) solution with the so-called *Gradle wrapper*
 
-* *A minimal program* that simply downloads the version of gradle written in a configuration file
+* *A minimal program* that simply downloads the version of Gradle written in a configuration file
 * *Generable* with the built-in task `wrapper`
     * `gradle wrapper --gradle-version=<VERSION>`
 * Prepares scripts for bash and cmd to run Gradle at the specified version
     * `gradlew`
     * `gradlew.bat`
 
-The Gradle wrapper is *__the__ correct way* to use gradle, and we'll be using it from now on.
+The Gradle wrapper is *__the__ correct way* to use Gradle, and we'll be using it from now on.
 
 ---
 
@@ -744,7 +744,7 @@ The Gradle wrapper is *__the__ correct way* to use gradle, and we'll be using it
 (besides, the very notion of "it works" is rather debatable)
 
 * Software quality should be *continuously assessed*
-* The assessment should *automatic* whenever possible
+* The assessment should be *automatic* whenever possible
 * **QA should be integrated in the build system!**
   * It is fine to *fail the build* if quality criteria are not met
 
@@ -770,7 +770,7 @@ Automated checkers are also called *linters*, often provide an auto-formatting t
 
 **Idiomatic** and **standardized** code:
 * reduces *complexity*
-* improves *understandandability*
+* improves *understandability*
 * prevents *style-changing commits* with *unintelligible diffs*
 * lowers the *maintenance* burden and related *costs*
 * simplifies *code reviews*
@@ -810,7 +810,7 @@ In *Kotlin*:
 [IDEA Inspection](https://github.com/JetBrains/inspection-plugin)
 
 In *Scala*:
-[Scalafix](htthttps://scalacenter.github.io/scalafix/),
+[Scalafix](https://scalacenter.github.io/scalafix/),
 [Wartremover](http://www.wartremover.org/)
 
 ---
@@ -819,7 +819,7 @@ In *Scala*:
 
 Code *replicated* rather than *reused*
 
-* improves *understandandability*
+* improves *understandability*
 * Reduces *maintenance cost*
 * simplifies *code reviews*
 
@@ -837,7 +837,7 @@ Multi-language tool: [Copy/Paste Detector (CPD)](https://pmd.github.io/latest/pm
 * Integration testing
 * End-to-end testing
 
-Extension of testing can be evaluated via **coverage**.
+The extent of testing can be evaluated via **coverage**.
 * Coverage tells you *how much code is **untested**, not how much is tested*
 
 Several frameworks, recommended ones:
@@ -908,11 +908,11 @@ Let's switch *testing framework* and enable *coverage*
 
 ---
 
-## Additional checks and reportings
+## Additional checks and reporting
 
 There exist a number of recommended services that provide additional QA and reports.
 
-Non exhaustive list:
+Non-exhaustive list:
 * [Codecov.io](https://codecov.io/)
     * Code coverage
     * Supports Jacoco XML reports
@@ -945,7 +945,7 @@ Non exhaustive list:
 * *Less mature* than other integrators
   * My personal feeling is that it was built *bottom-up*...
 * Some questionable limitations
-* A lot of parallelism (20 concurrent jobs, 5 for MacOS X)
+* A lot of parallelism (20 concurrent jobs, 5 for macOS)
 
 ---
 
@@ -966,7 +966,8 @@ Non exhaustive list:
 ## CI in GitHub Actions
 
 **job**
-* A *sequence of steps* that run in parallel
+* A *sequence of steps*
+* Multiple jobs run *in parallel*
 * Executed on a *virtual machine*
 * A job is *successful* if all its steps are successful
 * Multiple jobs can be spawned at once via *matrix expansion*
@@ -974,7 +975,7 @@ Non exhaustive list:
   * CI Matrix expansion $\Rightarrow$ {{< course_name >}}
 
 **workflow**
-* A *named sequence of steps*
+* A *named set of jobs*
 * There can be multiple workflows per repository
   * DRY/Reusability in {{< course_name >}}
 * Workflows are *isolated*
