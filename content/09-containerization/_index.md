@@ -2215,7 +2215,7 @@ networks:
     + `db` service on a node with _storage_ capabilities
     + `wordpress` service on a node with _web_ capabilities
 
-- On the `starwai` cluster:
+- On the `stairwai` cluster:
     - node `storage1.stairwai.ce.almaai.unibo.it` has _storage_ capabilities
     - node `inference2.stairwai.ce.almaai.unibo.it` has _web_ capabilities
 
