@@ -1422,6 +1422,7 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
                 # meaning of options: https://wiki.archlinux.org/title/NFS#Mount_using_/etc/fstab
                 o: "addr=NFS_SERVER_ADDRESS,nolock,soft,rw" # cf. nfs
                 device: ":/path/on/the/nfs/server/"
+    ```
 
 ---
 
