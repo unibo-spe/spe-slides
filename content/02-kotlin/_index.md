@@ -1677,7 +1677,7 @@ Any class with a method:
 ```kotlin
 operator fun getValue(thisRef: T, property: KProperty<*>): R
 ```
-is a valid delegate for a `val` is a `class`
+is a valid delegate for a `val` in a `class`
 where T is the "owner" type, and R is the type of the property
 
 A valid delegate for a `var` must also have a `setValue` method:
@@ -1686,7 +1686,7 @@ operator fun setValue(thisRef: T, property: KProperty<*>, value: P): Unit
 ```
 where T and R are the same as in `getValue`, and P is a supertype of R
 
-**Note**: that this is a form of structural typing, exceptional with the Kotlin type system (typically nominal)
+**Note** that this is a form of structural typing, an exception in the Kotlin type system (typically nominal)
 
 ```kotlin
 object OwnName {
@@ -1711,7 +1711,7 @@ Kotlin lambda expression's syntax is inspired by Groovy
 and is similar to Smalltalk / Ceylon / Xtend / Ruby as well
 * Enclosing an expression in curly brackets creates a lambda expression
 * Parameters are listed *inside* the brackets, a `->` separates them from the body
-* If there is one single parameter, it can be unspecified and referred with the keyword `it`
+* If there is one single parameter, it can be left unspecified and referred to with the keyword `it`
 
 ```kotlin
 val myLambda = {
@@ -1733,7 +1733,7 @@ whatsMyReturnType()() // Guess {{<comment_frag "A string" >}}
 
 ## Function type literals
 
-Just as Scala, Kotlin supports function type literals
+Just as in Scala, Kotlin supports function type literals
 <br/>
 No need for verbose interfaces such as `Function<T, R>`, `BiConsumer<T, R>`, etc.
 
