@@ -77,12 +77,10 @@ On [the course webpage]({{< teaching_page >}})
 
 # Organization
 
-Lectures in lab with immediate hands-on.
-
 ## [Timetable]({{< teaching_page >}}/orariolezioni)
 
-* **Thursday 11:00--14:00** (3h) --- Room 2.5
-* **Friday 11:00--14:00** (3h) --- Lab 4.2
+* **Thursday 10:00--13:00** (3h) --- Room 2.5
+* **Friday 9:00--12:00** (3h) --- Lab 4.2
 
 Changes will be published on the forum
 
@@ -151,6 +149,138 @@ which acts as a commissioner.
 It is an opportunity to *learn by doing* in a context closer to the industry.
 
 Available project works will be posted on the course site on https://virtuale.unibo.it/
+
+---
+
+# Final project quality checklist
+
+It is warmly recommended to check out https://www.bestpractices.dev/en, applying first all the relevant items there.
+
+{{% multicol %}}
+{{% col %}}
+
+### DVCS
+
+- Adoption of a DVCS
+- Consistently following some commit convention (e.g. [Conventional Commits](https://www.conventionalcommits.org/))
+- Consistently following some branching/forking convention
+- The branching convention is adequate to the team size and type
+- Commits are consistent and coherent, i.e. only what should be committed together has been committed together
+- reasonable, justified merging strategy
+
+{{% /col %}}
+{{% col %}}
+
+### Versioning
+
+- Web API specifications (e.g. OpenAPI, [Swagger](https://swagger.io/)), if any, are versioned
+- Web servers routes (if any) are versioned
+- Releases are versioned
+- Version numbers are computed automatically
+- Multiple releases exist
+
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+# Final project quality checklist
+
+{{% multicol %}}
+{{% col %}}
+
+### Project structure
+- The project dependencies are formally declared (incl. locking where reasonable)
+- The project dependencies are updated automatically where possible
+- The project directory includes build automation
+- The build automation technology of choice is adequate for all the target platforms
+- All repositories have a clear `README.md` file describing their purpose and content
+
+### Licensing
+
+- The project directory includes a LICENSE file, unless it is proprietary
+- The choice of the licence is adequately motivated in the report
+
+{{% /col %}}
+{{% col %}}
+
+### QA
+
+- The code includes automatic tests
+- The code includes unit tests
+- The code includes integration tests
+- The code includes end-to-end / system tests
+- Integration or system tests exploit containerization (if applicable)
+- Test code supports parallel runs (runs do not conflict with each other)
+- Each test suite can be executed (in principle) even without CI/CD pipelines
+- A procedure for the computation of test coverage is in place, and the final coverage is reported and commented
+- Static analysis is in place
+
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+# Final project quality checklist
+
+{{% multicol %}}
+{{% col %}}
+
+### DevOps
+
+- CI/CD pipelines in place
+- CI/CD matrices in place
+- The entire test suite is executed in CI/CD
+- Automatic release of software artifacts on target repositories (eg GitHub releases + artifact repositories for the target platforms)
+- If the project accepts contributions from third parties, correct pipeline configuration for pull requests coming from external owners
+
+{{% /col %}}
+{{% col %}}
+
+### Domain-driven Design (DDD)
+
+- __Domain__ and __bounded contexts__ have been clearly identified
+- __Entities__, __value-objects,__ and __aggregate roots__ have been adequately modelled according to DDD
+- __Repositories__ have been adequately modelled according to DDD
+- __Services__ have been adequately modelled according to DDD
+- __Factories__ have been adequately modelled according to DDD
+- Exploitation of __model-integrity__ patterns is adequately motivated
+- The overall design of the system reflects the [hexagonal architecture](https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)) (if applicable)
+
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+# Final project quality checklist
+
+{{% multicol %}}
+{{% col %}}
+
+### Requirements
+
+- _Requirements_ are clearly captured, and categories (e.g. functional vs. non-functional)
+- _Scenarios_ are clearly described via __user stories__
+- Definition of 'done' for each requirement
+
+### Multi-platform
+- The project involves >= 2 target platforms
+- The most dominant platform cannot be used for more than 75% of the overall project size
+- The project is organized in such a way that code targeting different platforms is clearly partitioned
+- Core domain entities spanning across multiple platforms are defined so to minimize code duplication, while enforcing design coherence
+
+
+{{% /col %}}
+{{% col %}}
+
+### AI exploitation
+- The report clearly declares what GenAI has been used for and how (or that it was not used at all)
+- Each repository has an AI-DECLARATION.md file compliant to the convention (https://ai-declaration.md/)
+- Each repository where GenAI was exploited via Agents as an AGENTS.md file compliant to the convention (https://agents.md/)
+- Skills possibly exploited by your agents are documented and motivated in the report
+
+{{% /col %}}
+{{% /multicol %}}
 
 ---
 
