@@ -1400,7 +1400,7 @@ Important remark:
 ### Volumes
 
 From [Docker Compose documentation](https://docs.docker.com/compose/compose-file/07-volumes/):
-- volumes in compose are no different than the ones we have already discussed
+- volumes in compose are no different from the ones we have already discussed
 - they are declared in the `volumes` section of the `docker-compose.yml` file
 - one volume may be created __stack-wise__ out of a __local folder__ from the _host_...
     ```yaml
@@ -1426,7 +1426,7 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
 
 ---
 
-## Orchestration-level notions (pt. 6)
+## Orchestration-level notions (pt. 7)
 
 ### Volumes (cont'd)
 
@@ -1437,7 +1437,7 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
             volume_name:
                 external: true
                 name: "the name used when creating the volume"
-                # this may be different than volume_name
+                # this may be different from volume_name
         ```
 
 - in any case, the volume's mount point should be specified at the service level:
@@ -1457,14 +1457,14 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
 
 ---
 
-## Orchestration-level notions (pt. 7)
+## Orchestration-level notions (pt. 8)
 
 ### Networks
 
 From [Docker Compose documentation](https://docs.docker.com/compose/compose-file/06-networks/):
-- networks in compose are no different than the ones we have already discussed
+- networks in compose are no different from the ones we have already discussed
 - they are declared in the `networks` section of the `docker-compose.yml` file
-- one network may be created __stack-wise__ out of a __local folder__ from the _host_...
+- one network may be declared __stack-wise__ in the stack file...
     ```yaml
     networks:
         network_name:
@@ -1480,7 +1480,7 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
             network_name:
                 external: true
                 name: "the name used when creating the network"
-                # this may be different than network_name
+                # this may be different from network_name
         ```
 
 - in any case, the network's mount point should be specified at the service level:
