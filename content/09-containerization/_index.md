@@ -2300,7 +2300,7 @@ services:
 
 2. Try to query it multiple times:
     ```bash
-    while true; do                                                                                                                                                                     INT ✘ 
+    while true; do
         curl http://clusters.almaai.unibo.it:8890; 
         echo 
         sleep 1
