@@ -110,7 +110,7 @@ enableSourceMap = true
 #### **Code must not diverge**
 
 * Working copies are *kept in sync* with the mainline
-    * How its done depends on the workflow organization
+    * How it's done depends on the workflow organization
 * Build and test *automatically* on a fresh machine
 * Build and test *on all the target platforms*
 * Promptly intercept (feedback) failures and issues
@@ -142,7 +142,7 @@ $\Rightarrow$
 
 #### **Every working build should produce a potential release**
 
-* The CI pipeline should produce final artifact
+* The CI pipeline should produce a final artifact
 * Artifacts should be available for quick deployment
 
 <p>
