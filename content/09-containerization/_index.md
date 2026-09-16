@@ -499,7 +499,7 @@ EXPOSE 8080
 CMD npm run service
 ```
 
-to be built by means of the command: `docker build -t PATH`
+to be built by means of the command: `docker build PATH`
 - `PATH` is the host path containing the `Dockerfile`
 
 ---
