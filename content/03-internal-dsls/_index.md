@@ -247,7 +247,7 @@ abstract class AbstractTag(override val name: String, vararg attributes: Attribu
 
 We will now:
 1. Define the language entities
-2. Find out a way to nest them nicely
+2. Find a way to nest them nicely
 
 **Note:** In this example we mix the language and model implementation.
 <br/>
@@ -259,8 +259,8 @@ class HTML(vararg attributes: Attribute = arrayOf()) : AbstractTag("html", *attr
 fun html(vararg attributes: Attribute, init: HTML.() -> Unit): HTML = HTML(*attributes).apply(init)
 ```
 * A top level function to access the DSL
-* Mandatory parameter first (but with a `vararg` they are implicitly optional)
-* Configuration function in form of function with receiver
+* Mandatory parameters first (but with a `vararg` they are implicitly optional)
+* Configuration function in the form of a function with receiver
 * A `class` representing our entry point
 
 ---
