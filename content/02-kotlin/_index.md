@@ -1038,7 +1038,7 @@ Same as Java, but for equality:
 * `==` calls `equals`
 * Java's stack variable comparison (`==`) is Kotlin's `===`
 
-Kotlin does not suffer of Scala's equality issues
+Kotlin does not suffer from Scala's equality issues
 (no automatic conversion of types)
 
 ```scala
@@ -1072,7 +1072,7 @@ Kotlin is less permissive than Scala:
 ```kotlin
 1 equals 1 // error: 'infix' modifier is required on 'equals' in 'kotlin.Int'
 ```
-* Kotlin requires that the `infix` keyword for a method to be usable as infix
+* Kotlin requires the `infix` keyword for a method to be usable as infix
 * `infix` functions have *lower precedence* than operators
 
 ```kotlin
@@ -1093,16 +1093,16 @@ Infix() with "Foo" + "Bar" + Infix() with "Baz" {{<comment_frag " // error: unre
 In Scala, operator names are valid method names, and infix calls are automatic:
 * Very much the whole language philosophy: few concepts, high scalability
 * Easy to abuse, degenerating to esoteric operators
-    * Especially when software is written by people with different background
+    * Especially when software is written by people with different backgrounds
 ```scala
 executer(:/(host, port) / target << reqBody >- { fromRespStr }) // Using Databinder Dispatch
 val graph = Graph((jfc ~+#> fra)(Any()), (fra ~+#> dme)(Any()) // Using ScalaGraph
 ```
 Operators are succinct, but cryptic, and their meaning changes with context
 
-This has been a source of cricism, Kotlin **does not allow to define custom operators**
+This has been a source of criticism; Kotlin **does not allow defining custom operators**
 * At most, back-ticked names, but some characters are disallowed (`>`, `/`, `:`, etc.)
-* Clumsy, defies the reason why one would use them (terse and succinct code)
+* Clumsy, defeats the purpose of using them (terse and succinct code)
 
 ```kotlin
 class A { infix fun `~+#-`(other: A) = "I'm an arcane operator" }
