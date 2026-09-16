@@ -289,11 +289,11 @@ Kotlin considers all foreign values whose nullability is unknown as *platform ty
 Exactly as Java/Scala, but with nullability:
 * `Boolean`: `true`/`false`
 * `Boolean?`: `true`/`false`/`null`
-*  `&&`, `!!`, and `!` operators work for *non-nullable* `Boolean`s.
+*  `&&`, `||`, and `!` operators work for *non-nullable* `Boolean`s.
 
-Likewise Scala, boxing under the JVM is dealt with by the compiler
+As in Scala, boxing under the JVM is dealt with by the compiler
 <br/>
-`Boolean?` are always boxed (to be able to account for `null`)
+`Boolean?` is always boxed (to be able to account for `null`)
 
 ---
 
@@ -312,7 +312,7 @@ Same as Scala, +nullability, +*unsigned experimental types*:
 
 ## Issues of implicit numeric types conversion
 
-Implicit type conversion to "bigger" types is source of nasty errors when automatic boxing is involved.
+Implicit type conversion to "bigger" types is a source of nasty errors when automatic boxing is involved.
 <br/>
 Consider the following Scala code:
 ```scala
@@ -320,7 +320,7 @@ Double.NaN == Double.NaN
 ```
 
 {{% fragment %}}
-`false`, OK, as every sane language
+`false`, OK, like every sane language
 {{% /fragment %}}
 
 {{% fragment %}}
