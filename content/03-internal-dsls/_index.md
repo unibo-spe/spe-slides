@@ -361,7 +361,7 @@ Kotlin provides an annotation used to create scope-blocking annotations:
 ```kotlin
 @DslMarker // I'm defining an annotation that will prevent scope leaking
 annotation class HtmlTagMarker // I'm calling it HtmlTagMarker
-@HtmlTagMarker // All entities whose this should not get called automatically get annotated
+@HtmlTagMarker // All entities whose `this` should not be reachable from inner scopes get annotated
 class HTML(vararg attributes: Attribute = arrayOf()) : AbstractTag("html", *attributes) { ... }
 @HtmlTagMarker
 class Head : AbstractTag("head") { ... }
@@ -371,7 +371,7 @@ abstract class TagWithText(name: String, vararg attributes: Attribute) : Abstrac
 ```
 ---
 
-# Kotlin 202 -- DSLs
+# Kotlin 203 -- DSLs
 
 ## Preventing scope leaking
 
