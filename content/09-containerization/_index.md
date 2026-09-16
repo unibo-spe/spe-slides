@@ -118,9 +118,9 @@ Regardless of their life-span, computational tasks may require __computational r
     + e.g. GPUs for tasks requiring parallelism
     + e.g. primary memory (RAM)
     + e.g. large / quick storage (SSD, HDD, etc.)
-    + e.g. quick networks connection (e.g. optical fiber)
+    + e.g. fast network connections (e.g. optical fibre)
 
-- specific __operative systems__ (Linux, MacOS, Windows, etc.) or specific __architectures__ (x86, ARM, etc.)
+- specific __operating systems__ (Linux, macOS, Windows, etc.) or specific __architectures__ (x86, ARM, etc.)
 
 - specific __runtime platforms__ (e.g. JVM, Python, .NET etc.)
 
