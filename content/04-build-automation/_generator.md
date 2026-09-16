@@ -1297,7 +1297,7 @@ Some build tasks of some module may require build tasks *of other modules* to be
 
 ---
 
-## Hierarchial project
+## Hierarchical project
 
 Let us split our project into two components:
 * A base library
@@ -1306,7 +1306,7 @@ Let us split our project into two components:
 We need to reorganize the build logic to something similar to
 
 ```text
-hierarchial-project
+hierarchical-project
 |__:library
 \__:app
 ```
@@ -1322,9 +1322,9 @@ Desiderata:
 ## Authoring subprojects in Gradle
 
 Gradle (as many other build automators)
-offers built-in support for *hierarchial projects*.
+offers built-in support for *hierarchical projects*.
 <br>
-Gradle is limited to *two levels*, other products such as Maven have no limitation
+Gradle supports arbitrarily deep nesting, e.g. `include(":a:b:c")`
 
 Subprojects are listed in a `settings.gradle.kts` file
 <br>
@@ -1332,7 +1332,7 @@ Incidentally, it's the same place where the project name can be specified
 
 Subprojects *must have their own* `build.gradle.kts`
 <br>
-They can also have their own `settings.gradle.kts`, e.g. for selecting a name different than their folder
+They can also have their own `settings.gradle.kts`, e.g. for selecting a name different from their folder
 
 ---
 
@@ -1347,10 +1347,10 @@ include(":library") // There must be a folder named "library"
 include(":app") // There must be a folder named "app"
 ```
 
-2. In the root project, configure the part common to **all** projects (included the root project) in a `allprojects` block
+2. In the root project, configure the part common to **all** projects (including the root project) in an `allprojects` block
 ```gradle
 allprojects {
-    // Executed for every project, included the root one
+    // Executed for every project, including the root one
     // here, `project` refers to the current project
 }
 ```
@@ -1373,7 +1373,7 @@ dependencies {
 }
 ```
 6. Declare inter-subproject task dependencies
-    * Tasks may fail if ran out of order! Compiling `app` requires `library` to be compiled.
+    * Tasks may fail if run out of order! Compiling `app` requires `library` to be compiled.
 ```gradle
 tasks.compileJava { dependsOn(project(":library").tasks.compileJava) }
 ```
@@ -1382,7 +1382,7 @@ tasks.compileJava { dependsOn(project(":library").tasks.compileJava) }
 
 ## Reusability across multiple projects
 
-We now have a rudimental infrastructure for building and running Java projects
+We now have a rudimentary infrastructure for building and running Java projects
 <br>
 What if we want to reuse it?
 
@@ -1390,13 +1390,13 @@ Of course, copy/pasting the same file across projects is to be avoided whenever 
 
 ## The concept of plugin
 
-Gradle (as many other build systems) allow extensibility via *plugins*
+Gradle (like many other build systems) allows extensibility via *plugins*
 <br>
 A *plugin* is a software component that *extends the API* of the base system
 <br>
 It usually includes:
 * A set of `Task`s
-* An `Extension` -- An object incapsulating the global configuration options
+* An `Extension` -- An object encapsulating the global configuration options
     * leveraging an appropriate *DSL*
 * A `Plugin` object, implementing an `apply(Project)` function
     * Application must create the extension, the tasks, and the rest of the imperative stuff
@@ -1416,13 +1416,13 @@ General approach to a *new* build automation problem:
 **Conquer**: Clearly express the *dependencies* among them
 
 * Build a *pipeline*
-* Implement them Providing a *clean API*
+* Implement them, providing a *clean API*
 
 **Encapsulate**: confine imperative logic, make it an *implementation detail*
 
 **Adorn**: provide a DSL that makes the library *easy and intuitive*
 
-*Not very different than what's usually done in (good) software development*
+*Not very different from what's usually done in (good) software development*
 
 
 ---
@@ -1435,7 +1435,7 @@ General approach to a *new* build automation problem:
         * by default the [Gradle plugin portal](https://plugins.gradle.org/)
 * Plugins need to be **applied**
     * Which actually translates to calling the `apply(Project)` function
-    * Application for *hierarchial* projects is *not automatic*
+    * Application for *hierarchical* projects is *not automatic*
         * You might want your plugin to be applied only in some subprojects!
 
 **Example code**
@@ -1446,7 +1446,7 @@ plugins {
     id("plugin2-name") // Alternative to the former
     id("some-custom-plugin") version "1.2.3" // if not found locally, gets fetched from the Gradle plugin portal
 }
-// In case of non-hierarchial projects, plugins are also "applied"
+// In case of non-hierarchical projects, plugins are automatically "applied"
 // Otherwise, they need to get applied manually, e.g.:
 allprojects {
     apply(plugin = "pluginName")
@@ -1459,15 +1459,15 @@ allprojects {
 
 The default Gradle distribution includes a large number of plugins, e.g.:
 * `java` plugin, for Java written applications
-    * a full fledged version of the custom local plugin we created!
+    * a full-fledged version of the custom local plugin we created!
 * `java-library` plugin, for Java libraries (with no main class)
 * `scala` plugin
 * `cpp` plugin, for C++
-* `kotlin` plugin, supporting Kotlin with multiple targets (JVM, Javascript, native)
+* `kotlin` plugin, supporting Kotlin with multiple targets (JVM, JavaScript, native)
 
 We are going to use the Kotlin JVM plugin to build our first standalone plugin!
 <br>
-(yes we already did write our first one: code in `buildSrc` is *project-local plugin code*)
+(yes, we already wrote our first one: code in `buildSrc` is *project-local plugin code*)
 
 ---
 
@@ -1491,7 +1491,7 @@ First step: we need to set up a Kotlin build, we'll write our plugin in Kotlin
 
 ```gradle
 plugins {
-    // No magic: calls a method running behind the scenes, equivalent to id("org.jetbrains.kotlin-$jvm")
+    // No magic: calls a method running behind the scenes, equivalent to id("org.jetbrains.kotlin.jvm")
     kotlin("jvm") version "2.2.20" // version is necessary
 }
 ```
@@ -1508,7 +1508,7 @@ repositories {
 }
 
 dependencies {
-     // "implementation" is a configuration created by by the Kotlin JVM plugin
+     // "implementation" is a configuration created by the Kotlin JVM plugin
     implementation(...) // we can load libraries here
 }
 ```
@@ -1546,7 +1546,7 @@ implementation-class=it.unibo.spe.firstplugin.GreetingPlugin
 
 Usually, composed of:
 * A *clean API*, if the controlled system is not trivial
-* A set of *tasks* incapuslating the imperative logic
+* A set of *tasks* encapsulating the imperative logic
 * An *extension* containing the DSL for configuring the plugin
 * A *plugin*
     * Creates the extension
