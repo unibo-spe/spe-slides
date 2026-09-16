@@ -398,7 +398,7 @@ __Docker__: the most famous container technology, actually consisting of several
     + log out and log in again
 3. Enable and start the Docker service 
     + on most Linux distributions `sudo systemctl enable docker; sudo systemctl start docker`
-    + on MacOS and Windows, start the Docker Desktop application
+    + on macOS and Windows, start the Docker Desktop application
 4. Test your installation
     + `docker run hello-world`
 5. Explore admissible sub-commands with `docker --help`
@@ -407,7 +407,7 @@ __Docker__: the most famous container technology, actually consisting of several
 
 <br/>
 
-> Subsequent examples work on Linux, but they should work on any platform
+> Subsequent examples are shown on Linux, but they should work on any platform
 > + provided that a `bash` or `zsh` shell is available
 
 ---
