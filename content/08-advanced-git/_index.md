@@ -150,11 +150,11 @@ flowchart RL
 * Merging is not the only way to reunite diverging branches
 * We may want, for instance, to simulate that `4` was developed after `3`
     * For instance, because it was on a separate part of the codebase
-* Merging *forces* to record the creation and reunion of a development line, but in some cases it may be undesirable
+* Merging *forces you* to record the creation and reunion of a development line, but in some cases it may be undesirable
     * Project history *hard to understand* because of too many merges
     * The separation was actually a successful small experiment
 
-**Rebasing** provides a way to alter the project history by *changing the parent*  of (re-base) existing commits
+**Rebasing** provides a way to alter the project history by *changing the parent* (re-base) of existing commits
 
 ---
 
