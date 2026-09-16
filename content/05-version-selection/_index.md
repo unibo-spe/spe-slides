@@ -141,8 +141,8 @@ Combination of all the techniques:
 # Versioning in the real world
 ## Canonical Ubuntu versioning
 
-Association of a *date in format* `YY.MM` and a *two word codename* in form of `Adjective AnimalName`. Both the words of the codename begin with the
-same letter.
+Association of a *date in format* `YY.MM` and a *two-word codename* in the form `Adjective AnimalName`.
+Both the words of the codename begin with the same letter.
 * Version number *does not track changes*
     * The development is arguably linear
     * But actually new versions may bring in substantial novelties, e.g. entirely new desktop environments
