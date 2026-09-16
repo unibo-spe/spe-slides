@@ -1224,7 +1224,7 @@ This will come in handy later...
 | Expression | Method Name | Translation |
 |------------|:-----------:|-------------|
 | `x[y, z]` | `get` | `x.get(y, z)` |
-| `x[y] = z` | `set` | `x.set(y) = z` |
+| `x[y] = z` | `set` | `x.set(y, z)` |
 | `x(y, z)` | `invoke` | `x.invoke(y, z)` |
 
 ---
@@ -1236,7 +1236,7 @@ This will come in handy later...
 | Expression | Method Name | Translation |
 |------------|:-----------:|-------------|
 | `x[y, ..., z]` | `get` | `x.get(y, ..., z)` |
-| `x[y, ..., z] = a` | `set` | `x.set(y, ..., z) = a` |
+| `x[y, ..., z] = a` | `set` | `x.set(y, ..., z, a)` |
 | `x(y, ..., z)` | `invoke` | `x.invoke(y, ..., z)` |
 
 ---
@@ -1324,12 +1324,12 @@ fun <T, P, A, L, R, N, E> navigationStrategy()
 
 ## Variance and type projection
 
-Kotlin supports (co/contro)variance using:
+Kotlin supports (co/contra)variance using:
 * `<out T>` to mark covariance (similar to Java's `<? extends T>`)
 * `<in T>` to mark contravariance (similar to Java's `<? super T>`)
 * `<*>` to mark that only the bound is known for the type (similar to Java's `<?>`)
 
-Type variant in Kotlin is expressed *at declaration site*!
+Type variance in Kotlin is expressed *at declaration site*!
 * In Java type variance is only for methods
 * In Kotlin type variance is only for classes and interfaces
 
@@ -1348,15 +1348,15 @@ interface ProduceAndConsume<in X, out Y> {
 
 ## Type reification
 
-Generics at runtime can be dealt with two strategies:
+Generics at runtime can be handled with two strategies:
 * **erasure**: generic information is used by the compiler, but it's discarded at runtime
     * Java / Scala
-* **monomorphization**: concrete type are emitted when generic types are actually used
+* **monomorphization**: concrete types are emitted when generic types are actually used
     * Rust / C#
 
 Delicate balance between executable size, performance, and usability
 
-Kotlin uses erasure, but allows to control inlining via the `inline` keyword.
+Kotlin uses erasure, but allows inlining to be controlled via the `inline` keyword.
 <br>
 In inlined functions, *types can be locally monomorphized*!
 <br>
