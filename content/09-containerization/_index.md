@@ -606,9 +606,9 @@ In this way, the _space occupied_ by the container is _minimal_
 
 Image naming is done via **tags**
 
-- The easiest way to do so is assigning tags at *build time* with the `-t` options of `docker build`
+- The easiest way to do so is assigning tags at *build time* with the `-t` option of `docker build`
 
-- The option can be repeated multiple times to make multiple tags
+- The option can be repeated to assign multiple tags
 
     ```bash
     docker build -t "myImage:latest" -t "myImage:0.1.0" /path/to/Dockerfile/container
