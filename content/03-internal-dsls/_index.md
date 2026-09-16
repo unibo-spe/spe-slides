@@ -175,7 +175,7 @@ interface Tag : Element {
 * Let's pick a `String` as indentation
 * The abstract domain uses a map to define attributes,
 but working with `Pair`s is not very clean:
-we convey a better meaning to what we are doing by relying on a `typealias Attribute`
+we convey the meaning better by relying on a `typealias Attribute`
 * `TextElement` is trivial to implement, it's just text
 
 ```kotlin
@@ -190,10 +190,10 @@ data class Text(override val text: String) : TextElement
 
 ## Domain implementation: `Tag`
 
-`Tag` is a bit more complex, let's try to factor the common part of all `Tag`s into an `AbtractTag`
+`Tag` is a bit more complex, let's try to factor the common part of all `Tag`s into an `AbstractTag`
 * `name` is easy
 * `Attribute`s get registered at creation time. We use a `vararg` to make the construction nicer
-* We decide for a mutable implementation of `children`
+* We opt for a mutable implementation of `children`
 * Subclasses are allowed to `register` sub elements
     * We can check if an element is `Repeatable` or not
 
