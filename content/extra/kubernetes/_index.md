@@ -53,7 +53,7 @@ enableSourceMap = true
 
 Originally developed by Google, 
 since its introduction in 2014, 
-Kubernetes has grown to be on of the largest and most popular *open source* project in the world.
+Kubernetes has grown to be one of the largest and most popular *open source* projects in the world.
 
 <br/>
 
@@ -63,13 +63,13 @@ Kubernetes has grown to be on of the largest and most popular *open source* proj
 
 ## Long story short
 
-Built for *distributed systems* suitable for *cloud developers* of all scales, 
+Built for *distributed systems*, suitable for cloud deployments of all scales,
 it is meant to support *reliable* and *scalable* software systems.
 
 {{% fragment %}}
 - __Reliability__: Services cannot fail, they must maintain *availability* even during software rollouts
 - __Scalability__: Services can adapt their capacity to keep up with the usage, without redesigning the distributed system. This includes both a *scale-up* and a *scale-down* of the service.
-- __Distributed System__: Pieces of software the service is composed of; they may run on different machines (connected to each-other), and may coordinate their behaviour through the network.
+- __Distributed System__: Pieces of software the service is composed of; they may run on different machines (connected to each other), and may coordinate their behaviour through the network.
 {{% /fragment %}}
 
 
@@ -78,7 +78,7 @@ it is meant to support *reliable* and *scalable* software systems.
 ## Key features
 - Immutability
 - Everything is a declarative configuration object
-- Broader range of objects to create, and manage, the production environment with respect to Docker Swarm
+- Broader range of objects to create and manage the production environment than Docker Swarm
 - Automatic scaling of resources (horizontal, vertical, increasing and decreasing)
 - Built-in monitoring
 - Security
@@ -90,14 +90,14 @@ it is meant to support *reliable* and *scalable* software systems.
 Just like Docker Swarm, Kubernetes is a container orchestrator. 
 - Containers represent a declarative way to package and run applications 
 - Containers can be deployed anywhere
-- They are meant to be stateless, thus changed at any time
+- They are meant to be stateless, and can thus be changed at any time
 
 <br>
 
 __Why Docker Swarm is not enough?__
 
 Docker Swarm does not support large production deployments at scale, 
-while Kubernetes natively support it.
+while Kubernetes natively supports it.
 
 ---
 
@@ -107,9 +107,9 @@ while Kubernetes natively support it.
 {{% col %}}
 
 ### Docker Swarm 
-- makes use of the docker ecosystem:
+- makes use of the Docker ecosystem:
   - it does not support other container runtimes,
-  - relies on docker primitives to be used to manage the environment.
+  - relies on Docker primitives to manage the environment.
 - the environment is managed through the `docker-compose.yml` file.
 
 ### Example with a Docker Stack: 
