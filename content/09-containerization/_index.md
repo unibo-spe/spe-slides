@@ -1344,7 +1344,7 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
 
 ---
 
-## Orchestration-level notions (pt. 3)
+## Orchestration-level notions (pt. 4)
 
 ### Secrets
 
