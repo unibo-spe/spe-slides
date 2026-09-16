@@ -771,7 +771,7 @@ Changes in submodules are dealt with as if they were in a *separate repository*
 * `git mv path/to/submodule`
 * `git rm path/to/submodule`
 
-They allow, respectively, to move/remove an existing submodule
+They allow an existing submodule to be moved and removed, respectively
 * a *modern* version of git is required (introduced in 2022)
 
 ---
