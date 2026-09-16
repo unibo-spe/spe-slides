@@ -1329,7 +1329,7 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
             config_name:
                 external: true
                 name: "the name used when creating the config"
-                # this may be different than config_name
+                # this may be different from config_name
         ```
 
 - in any case, the config's mount point should be specified at the service level:
