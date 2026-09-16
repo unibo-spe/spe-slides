@@ -41,7 +41,7 @@ Git supports two types of tags:
 
 # Signing commits
 
-Nice people *signs* commits, certifying their authorship.
+Nice people *sign* commits, certifying their authorship.
 
 * Signed commits appear with a {{< emoji "white_check_mark" >}} on GitHub
 
