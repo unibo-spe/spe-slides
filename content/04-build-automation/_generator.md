@@ -943,14 +943,14 @@ $\Rightarrow$ *at the **global** level as well!*
 
 Gradle proposes a (partial) solution with the so-called *Gradle wrapper*
 
-* *A minimal program* that simply downloads the version of gradle written in a configuration file
+* *A minimal program* that simply downloads the version of Gradle written in a configuration file
 * *Generable* with the built-in task `wrapper`
     * `gradle wrapper --gradle-version=<VERSION>`
 * Prepares scripts for bash and cmd to run Gradle at the specified version
     * `gradlew`
     * `gradlew.bat`
 
-The Gradle wrapper is ***the** correct way* to use gradle, and we'll be using it from now on.
+The Gradle wrapper is ***the** correct way* to use Gradle, and we'll be using it from now on.
 
 ---
 
@@ -964,10 +964,10 @@ At the moment, we have part of the project that's declarative, and part that's i
     * task dependencies
 * **Imperative**
     * Operations on the file system
-    * some of the actual task logics
+    * some of the actual task logic
     * resolution of configurations
 
-The *declarative* part is the one *for which we had a built-in API for*!
+The *declarative* part is the one *for which we had a built-in API*!
 
 ---
 
@@ -976,9 +976,9 @@ The *declarative* part is the one *for which we had a built-in API for*!
 
 The base mechanism at work here is *hiding imperativity under a clean, declarative API*.
 
-Also *"purely declarative"* build systems, such as Maven, which are driven with markup files, *hide* their imperativity behind a curtain (in the case of Maven, plugins that are configured in the `pom.xml`, but implemented elsewhere).
+Even *"purely declarative"* build systems, such as Maven, which are driven with markup files, *hide* their imperativity behind a curtain (in the case of Maven, plugins that are configured in the `pom.xml`, but implemented elsewhere).
 
-*Usability*, *understandability*, and, ultimately, *maintability*, get increased when:
+*Usability*, *understandability*, and, ultimately, *maintainability*, get increased when:
 * *Imperativity* gets *hidden* under the hood
 * Most (if not all) the operations can be *configured* rather than *written*
 * Configuration can be *minimal for common tasks*
@@ -994,7 +994,7 @@ Let's begin our operation of isolation of imperativity by refactoring our hierar
 
 * We have a number of "Java-related" tasks.
 * All of them have a classpath
-* All of them have an executable that depend on the operation they perform
+* All of them have an executable that depends on the operation they perform
 * One has an output directory and input sources
 * One has a "main class" input
 
@@ -1082,7 +1082,6 @@ for gradle to mark it as an *input* or an *output*.
 * `@Input`, `@InputFile`, `@InputFiles`, `@InputDirectory`, `@InputDirectories`, `@Classpath`
 * `@OutputFile`, `@OutputFiles`, `@OutputDirectory`, `@OutputDirectories`
     * `@Internal` marks *internal* output properties (not reified on the file system)
-    * `@Internal` marks *internal* output properties (not reified on the file system)
 * In practice, these appear in Kotlin code as `@get:Input`, etc.
     * Otherwise, Kotlin would generate the annotation on the *field*, not on the *getter*, and Gradle would ignore it
 
@@ -1091,7 +1090,7 @@ for gradle to mark it as an *input* or an *output*.
 1. **Performance**
     * Gradle caches intermediate build results, using input and output markers to understand whether or not some task is *up to date*
     * This allows for *much* faster builds while working on large projects
-        * Time to build completion can decrease a dozen minutes to seconds!
+        * Time to build completion can drop from a dozen minutes to seconds!
 2. **Continuous build**
     * Re-run tasks upon changes with the `-t` option
     * (In/Out)put markers are used to understand *what* to re-run
@@ -1152,7 +1151,7 @@ and **expose** a purely *declarative API* to the *user*.
 
 Gradle provides a way to define project-wise build APIs using a special `buildSrc` folder
 * Requires a Gradle configuration file
-    * What it actually does will be clearer in future
+    * What it actually does will be clearer in the future
 
 {{% multicol %}}
 {{% col %}}
@@ -1172,7 +1171,7 @@ project-folder
 ```
 {{% /col %}}
 {{% col %}}
-`buildSrc/build.gradle.kts`' contents (clearer in future):
+`buildSrc/build.gradle.kts`' contents (clearer in the future):
 
 ```gradle
 {{% import-raw path="examples/buildsrc/buildSrc/build.gradle.kts" %}}
