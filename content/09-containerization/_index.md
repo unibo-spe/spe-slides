@@ -417,15 +417,15 @@ __Docker__: the most famous container technology, actually consisting of several
 1. Pull an image: `docker pull adoptopenjdk`
 2. Run a container: `docker run adoptopenjdk`
 
-Every image provides a *default command*, running without options runs such default in a *non-interactive* terminal.
+Every image provides a *default command*; running without options runs that default in a *non-interactive* terminal.
 
 Running in interactive mode can be achieved with the `-i` option
 
-Running a custom command *inside the container* can be achieved with writing the command after the image name
+Running a custom command *inside the container* can be achieved by writing the command after the image name
 * e.g., `docker run -i adoptopenjdk bash`
 * parameters for the custom command can follow
-* use the `t` option to run in a *pseudo-tty* (always use it whenever you use `-i`)
-* use the `--rm` to remove the container after use
+* use the `-t` option to run in a *pseudo-tty* (always use it whenever you use `-i`)
+* use `--rm` to remove the container after use
 
 ---
 
