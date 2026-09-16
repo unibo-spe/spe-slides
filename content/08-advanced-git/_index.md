@@ -1003,9 +1003,9 @@ ba8fae0 (tag: 0.1.0-2022-09-08T162354) HEAD@{11}: commit: fix: make the new temp
 
 format: `hash (labels) reference: operation (status): details`
 
-Any of the `tree-ish`es can be used to checkout!
+Any of the `tree-ish`es can be used to check out!
 
-`git checkout HEAD@{6}` would checkout commit `d2b71b0`!
+`git checkout HEAD@{6}` would check out commit `d2b71b0`!
 
 ---
 
