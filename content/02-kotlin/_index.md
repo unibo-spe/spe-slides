@@ -377,8 +377,8 @@ l + i{{<comment_frag " // OK, operators are overloaded" >}}
 0123 // error: unsupported [literal prefixes and suffixes] (no octal)
 0xCAFE // Hex literal Int
 0xCAFEBABE // Hex literal Long (automatic, as it does not fit an Int)
-0x0000000 // Hex literal Int, even it'd fit a Byte
-0b1111111_11111111_11111111_11111111 // Binary Int (Integer.MAX_INT)
+0x0000000 // Hex literal Int, even though it'd fit a Byte
+0b1111111_11111111_11111111_11111111 // Binary Int (Integer.MAX_VALUE)
 0b11111111_11111111_11111111_11111111 // Binary Long
 0b11111111_11111111_11111111_11111111u // Binary UInt!
 0xFFFF_FFFF_FFFFu // ULong
@@ -410,7 +410,7 @@ val batman = "Batman"
 
 Triple-double-quoted strings are considered *raw strings*
 * `\` is a normal character
-* newlines are intended as part of the string
+* newlines are part of the string
 * Very handy for writing regular expressions
 * `$`-templating still works
 
