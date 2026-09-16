@@ -1504,14 +1504,14 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
     + if the stack is already present, and it is up-to-date, nothing happens
     + interesting optional flags (see all with `--help`)
         * `-d` (_detached mode_): run containers in the background
-        * `--wait` wait for services to be running or healthy (implies detached mode)
+        * `--wait` waits for services to be running or healthy (implies detached mode)
 
 - `docker compose down` stops the stack
     + if the stack is not present, nothing happens
     + if the stack is present, it is stopped
     + interesting optional flags (see all with `--help`)
-        * `--remove-orphans` remove containers for services not defined in the Compose file (e.g. residuals from previous versions)
-        * `-v` remove named volumes declared in the "volumes" section of the Compose file and anonymous volumes attached to containers
+        * `--remove-orphans` removes containers for services not defined in the Compose file (e.g. residuals from previous versions)
+        * `-v` removes named volumes declared in the "volumes" section of the Compose file and anonymous volumes attached to containers
 
 > All commands assume a `docker-compose.yml` file is present in the __current working directory__
 
