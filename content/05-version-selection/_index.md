@@ -177,7 +177,7 @@ The project *switched to classic versioning* in the form `major.minor`
 except that the final version numbers to be reported in the “banner” lines of the programs should become:
 `TeX, Version $\pi $` [...].
 From that moment on, all “bugs” will be permanent “features”.
-**<div style="text-align: right"> Donald E. Knuth</span>**
+**<div style="text-align: right">Donald E. Knuth</div>**
 
 ---
 
