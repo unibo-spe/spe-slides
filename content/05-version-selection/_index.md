@@ -382,7 +382,7 @@ An implementation of Semantic release:
 
 https://github.com/semantic-release/semantic-release
 
-* Based on the Angular convention and Javascript, but configurable
+* Based on the Angular convention and JavaScript, but configurable
 * Determines the version number
 * Generates commit-based release notes
 * Runs the publishing steps
