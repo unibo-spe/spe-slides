@@ -180,15 +180,15 @@ Some abstraction is needed to encapsulate applications, and their computational 
 ### Virtual machines and hypervisors (VMH)
 
 - VMH run _on/as_ the _OS_ of a bare-metal machine, __abstracting__ HW and SW peculiarities away
-    * VM have _virtualised HW_ and SW resources, different from the host's ones
+    * VM have _virtualised HW_ and SW resources, different from the host's
 
 - VMH may instantiate __multiple VM__ on the _same physical machine_
     * partitioning actual resources ahead of time
 
 - each VM runs __its own OS__, and may host multiple applications
-    * in the eyes of the user, the VM is _undistinguishable_ from a bare-metal machine
+    * in the eyes of the user, the VM is _indistinguishable_ from a bare-metal machine
 
-- VM may be _paused_, _snapshot_ (into file), _resumed_, and possibly _migrated_
+- VMs may be _paused_, _snapshotted_ (into a file), _resumed_, and possibly _migrated_
     * snapshots are files containing the whole file-system of the VM
 
 - VM are __coarse__-grained __encapsulation__ units
@@ -198,7 +198,7 @@ Some abstraction is needed to encapsulate applications, and their computational 
         + database, server, plus all their runtimes and libraries, etc.
 
 - Many industry-ready __technologies__:
-    * VMWare, VirtualBox, KVM, Xen, Hyper-V, QEMU, Proxmox, etc.
+    * VMware, VirtualBox, KVM, Xen, Hyper-V, QEMU, Proxmox, etc.
 
 ---
 
