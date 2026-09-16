@@ -1960,8 +1960,8 @@ class TestMariaDBCustomerRepository {
     * and it may __demote__ manager nodes to worker nodes via `docker node demote <NODE_ID>`
     * it also may __remove__ nodes from the cluster via `docker node rm <NODE_ID>`
 
-6. Whenever done with this lecture, one may leave the Swarm via `docker swarm leave --force`
-    + _recall to do this after the lecture_, otherwise you won't be able to use Swarm at home!
+5. Whenever done with this lecture, one may leave the Swarm via `docker swarm leave --force`
+    + _remember to do this after the lecture_, otherwise you won't be able to use Swarm at home!
 
 ---
 
@@ -1972,20 +1972,20 @@ class TestMariaDBCustomerRepository {
 1. There may be a firewall blocking the communication among nodes
     * e.g. Windows Defender, the lab's firewall, your home router's firewall, etc.
     * you may notice the presence of a firewall by the fact that `docker swarm join` hangs or fails with a timeout
-        - in lack of a firewall, the command should succeed or fail almost immediately
-    * troubleshouting:
+        - in the absence of a firewall, the command should succeed or fail almost immediately
+    * troubleshooting:
         1. identify which and how many firewalls are in place
         2. ensure that the firewall allows communication for [Docker Swarm ports](https://docs.docker.com/engine/swarm/swarm-tutorial/#open-protocols-and-ports-between-the-hosts)
             + commonly: `2377/tcp`, `7946/tcp`, `7946/udp`, `4789/udp`
 
 2. You use Docker on _Windows or Mac_, hence the Docker daemon runs on a _virtual machine_
-    * in this chase the IP of the virtual machine is different than the IP of your machine
+    * in this case the IP of the virtual machine is different from the IP of your machine
     * the `NODE_ADDRESS` in `docker swarm join --token <SECRET_TOKEN> <NODE_ADDRESS>:2377` returned by `docker swarm init` is the IP of the virtual machine
-    * troubleshouting:
+    * troubleshooting:
         1. find the actual IP of your machine (e.g. `ipconfig` on Windows, `ifconfig` on Mac), let's call it `ACTUAL_IP`
         2. configure your host to redirect Swarm traffic received by `ACTUAL_IP` towards `NODE_ADDRESS`
             + for all ports listed above (`2377`, `7946`, `4789`)
-        3. let other nodes use `ACTUAL_IP` insteaf of `NODE_ADDRESS` in `docker swarm join` when joining the cluster
+        3. let other nodes use `ACTUAL_IP` instead of `NODE_ADDRESS` in `docker swarm join` when joining the cluster
 
 ---
 
