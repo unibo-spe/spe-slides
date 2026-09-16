@@ -822,7 +822,7 @@ Full example:
 
 ## Gradle: task dependencies
 
-Next step: we can compile, why not executing the program as well?
+Next step: we can compile, so why not run the program as well?
 
 1. Let's define a `runtimeClasspath` configuration
     * "inherits" from `compileClasspath`
