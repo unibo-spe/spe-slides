@@ -82,16 +82,16 @@ Note: *armoring* is **not** encryption
 
 ### Step 2: export the key as a CI secret
 
-* In most CI systems, secrets allow **enough space** for an armored GPG private keys to fit in
-    * It is the case for GHA
+* In most CI systems, secrets allow **enough space** for an armored GPG private key to fit
+    * This is the case for GHA
 * In this case, *just export the armored version as a secret*
 
 * Otherwise:
     * Encrypt your secret with a (much shorter) *symmetric* key into a file
     * Store the *key as a secret* (it will fit as it is much smaller than an asymmetric key)
     * *Track the encrypted file* in your repo
-    * Before signing (and *only if needed*), unencrypt the file and load it in-memory
-        * then delete the unencrypted version
+    * Before signing (and *only if needed*), decrypt the file and load it in memory
+        * then delete the decrypted version
         * you want to reduce the probability that the file gets delivered...
 
 ---
@@ -115,7 +115,7 @@ if (System.getenv("CI") == true.toString()) {
 ```
 * The `signingKey` and `signingPassword` properties must get *passed* to Gradle
     * One way is to pass them on the command line:
-        * `./gradlew -PsignigngKey=... -PsigningPassword=... <tasks>`
+        * `./gradlew -PsigningKey=... -PsigningPassword=... <tasks>`
     * Alternatively, they can be stored into environment variables
         * Gradle auto-imports properties named `ORG_GRADLE_PROJECT_<variableName>`
         * So, in GitHub actions:
@@ -134,7 +134,7 @@ Imperative behaviour in GitHub Actions is encapsulated into *actions*
 
 **Actions** are executed as a single logical step, with **inputs** and **outputs**
 
-Their metadata is written in a `actions.yml` file on the repository root
+Their metadata is written in an `action.yml` file in the repository root
 
 GitHub actions stored on GitHub are usable without further deployment steps
 * By using `owner/repo@<tree-ish>` as reference
@@ -174,7 +174,7 @@ runs:
 
 ## Composite actions: example
 
-The action is contained in its metadata descriptor `action.yml`root, e.g.:
+The action is contained in its metadata descriptor `action.yml`, e.g.:
 
 {{< github owner="DanySK" repo="action-checkout" path="action.yml" >}}
 
@@ -220,7 +220,7 @@ runs:
 
 #### Wait, what is a container?
 
-* We might need to deviate for a moment: >> [**click here!**](../09-containerization) <<
+* We might need to digress for a moment: >> [**click here!**](../09-containerization) <<
 
 #### How to
 
@@ -249,7 +249,7 @@ The most flexible way of writing actions
 
 ```yaml
 runs:
-  using: 'node12'
+  using: 'node20'
   main: 'index.js'
 ```
 
@@ -272,8 +272,8 @@ try {
 
 ## Reusable workflows
 
-GitHub actions also allows to configure *reusable workflows*
-* Similar in concept to *composite actions*, but capture larger operations
+GitHub Actions also allows *reusable workflows* to be configured
+* Similar in concept to *composite actions*, but they capture larger operations
     * They can preconfigure *matrices*
     * *Conditional steps* are supported
 * Limitation: can't be used in `workflow_dispatch` if they have more than 10 parameters
@@ -282,7 +282,7 @@ GitHub actions also allows to configure *reusable workflows*
 * Limitation: the callee has *no implicit access* to the caller's *secrets*
     * But they can be passed down
 
-Still, the mechanism enables to some extent the creation of [libraries of reusable workflows](https://github.com/DanySK/workflows)
+Still, the mechanism enables, to some extent, the creation of [libraries of reusable workflows](https://github.com/DanySK/workflows)
 
 ---
 
@@ -295,7 +295,7 @@ on:
     inputs:
       input-name:
         description: optional description
-        default: optional default (otherwise, it is assigned to a previous)
+        default: optional default (otherwise, the input has no value)
         required: true # Or false, mandatory
         type: string # Mandatory: string, boolean, or number
     secrets: # Secrets are listed separately
@@ -303,7 +303,7 @@ on:
         required: true
 jobs:
   Job-1:
-    ... # It can use a matrix, different OSs, and
+    ... # It can use a matrix, different OSs, and so on
   Job-2:
     ... # Multiple jobs are okay!
 ```
@@ -347,11 +347,11 @@ Ever happened?
     * The higher the build *reproducibility*, the higher its *robustness*
 * The default runner configuration may change
 * Some tools may become unavailable
-* Some dependencies may get unavailable
+* Some dependencies may become unavailable
 
 **The sooner the issue is known, the better**
 
-$\Rightarrow$ *Automatically run the build every some time* even if nobody touches the project
+$\Rightarrow$ *Automatically run the build every so often* even if nobody touches the project
 * How often? Depends on the project...
 * **Warning**: GitHub Actions disables `cron` CI jobs if there is no action on the repository, which makes the mechanism less useful
 
@@ -371,7 +371,7 @@ $\Rightarrow$ *Automatically run the build every some time* even if nobody touch
 
 There exist a number of recommended services that provide additional QA and reports.
 
-Non exhaustive list:
+Non-exhaustive list:
 * [Codecov.io](https://codecov.io/)
     * Code coverage
     * Supports Jacoco XML reports
@@ -389,7 +389,7 @@ Non exhaustive list:
 
 The [Linux Foundation](https://www.linuxfoundation.org/) [Core Infrastructure Initiative](https://www.coreinfrastructure.org/) created a checklist for high quality FLOSS.
 
-**[CII Best Practices Badge Program https://bestpractices.coreinfrastructure.org/en](https://bestpractices.coreinfrastructure.org/en)**
+**[CII Best Practices Badge Program https://bestpractices.dev/en](https://www.bestpractices.dev/en)**
 
 
 * *Self-certification*: no need for bureaucracy
@@ -450,14 +450,14 @@ They are usually integrated with the repository hosting provider
     * At the first assignment on a new repo, it will ask for an **onboarding procedure**
        * When onboarding, Copilot runs through the repository and prepares a document
          in `.github/copilot-instructions.md`
-         for his future self with a summary of the codebase.
+         for its future self with a summary of the codebase.
        * On subsequent runs, this summary is used as context for Copilot, speeding up its understanding of the codebase.
 * Tag `@Copilot` in PR comments to guide it.
 
 ### Impact
 
 The literature is emerging, initial results are mixed.
-* GenAI seems to *speed up unexperieced* developers in *small and simple projects*.
+* GenAI seems to *speed up inexperienced* developers in *small and simple projects*.
 * *Experienced developers* on *large projects* seem to be *slowed down* (**-19%**) by the need to review AI-generated code.
     * https://arxiv.org/abs/2507.09089, https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/
 
@@ -481,7 +481,7 @@ However, we may still want these documents to follow a **template**
 * Enforce or propose a structure
     * For instance, semantic PR titles
 
-Most Git hosting services allow to specify a **template**.
+Most Git hosting services let you specify a **template**.
 
 ---
 
@@ -490,7 +490,7 @@ Most Git hosting services allow to specify a **template**.
 Templates in GitHub are special files found in the `.github` folder,
 written in *YAML* or *Markdown*, and *stored on the default branch*.
 
-The descriptor generates a form that users must fill.
+The descriptor generates a form that users must fill in.
 
 They are available for both **issues** and **pull requests**,
 and share most of the syntax.
@@ -512,10 +512,10 @@ and share most of the syntax.
 ```
 
 Any `md` or `yml` file located in `.github/ISSUE_TEMPLATE`
-is considered as a template for *issues*
+is considered a template for *issues*
 
 Any `md` or `yml` file located in `.github/PULL_REQUEST_TEMPLATE`
-is considered as a template for *pull requests*
+is considered a template for *pull requests*
 
 If a single template is necessary,
 a single `.github/ISSUE_TEMPLATE.md` or `.github/PULL_REQUEST_TEMPLATE.md` file
