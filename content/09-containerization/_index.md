@@ -888,7 +888,7 @@ They support several use cases:
 
 ---
 
-## How to retain space from a volume?
+## How to reclaim space from a volume?
 
 Volumes are NOT automatically _cleaned up_ when containers are _deleted_
 
