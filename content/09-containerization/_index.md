@@ -2333,7 +2333,7 @@ services:
     
     ![Deployment with replicas](./portainer-replicated-service.png)
 
-</br>
+<br/>
 
 3. Requests will be forwarded to replicas in a __non-deterministic__ fashion
 {{% /col %}}
@@ -2347,7 +2347,7 @@ services:
 {{% col %}}
 > Volumes are __always local__ w.r.t. the node the current container is deployed onto
 
-</br>
+<br/>
 
 ```yaml
 version: "3.9"
