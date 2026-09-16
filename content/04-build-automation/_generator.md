@@ -221,7 +221,7 @@ multiple tools *proliferated*
     + **Poetry** checks that the right Python version is used, but does not manage Python installations
 
 * `virtualenv` and `venv` create _virtual_ Python installations _on the same system_
-    + `virtualenv` is a _third-party_ tool, `venv` is _built-in_ in Python 3.3 and later
+    + `virtualenv` is a _third-party_ tool, `venv` is _built into_ Python 3.3 and later
     + *tackles Problem 2*
     + **Poetry** automatically creates and manages virtual environments for each project
 
@@ -239,7 +239,7 @@ root-directory/
 │       └── sub_sub_module.py 
 ├── test/
 │   ├── test_something.py
-│   └── test_something_else.py/ 
+│   └── test_something_else.py
 ├── pyproject.toml # File where project configuration (metadata, dependencies, etc.) is stored
 ├── poetry.toml # File where Poetry configuration is stored
 ├── poetry.lock # File where Poetry locks the dependencies
