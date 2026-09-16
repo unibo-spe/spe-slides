@@ -123,13 +123,13 @@ The version is represented by one or more sequences, separately incremented, tha
 ## Microsoft Windows versioning
 
 Combination of all the techniques:
-* *Dates* (Windows 9x, 2001)
+* *Dates* (Windows 9x, 2000)
 * *Codenames* (NT, Vista, XP, Millennium Edition)
 * Pre-release codenames (Longhorn)
 * Dates for internal builds
 * Incremental versions on *multiple levels*
     * e.g., Windows 95 is also MS-DOS 7.0 and Windows 4.00
-* *Separation* between “commercial” versions and “actual” “versions”
+* *Separation* between “commercial” versions and “actual” versions
     * e.g., Windows 7 is actually Windows 6.1, and Windows 10 is actually Windows 6.4
     * One future Windows may actually become Windows 7.0, clashing with the “commercial” version of an older product
 
