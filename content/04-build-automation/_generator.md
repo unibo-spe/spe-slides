@@ -31,7 +31,7 @@ enableSourceMap = true
     * Core concepts and basics
     * Dependency management and configurations
     * The build system as a dependency
-    * Hierarchial organization
+    * Hierarchical organization
     * Isolation of imperativity
     * Declarativity via DSLs
     * Reuse via plug-ins
