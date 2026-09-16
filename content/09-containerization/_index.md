@@ -903,7 +903,7 @@ Volumes are NOT automatically _cleaned up_ when containers are _deleted_
 
 ## Sudo-powered containers
 
-- Sometimes one may be willing to let a container access the _Docker daemon_ __of its host__
+- Sometimes one may want to let a container access the _Docker daemon_ __of its host__
     * this is useful for running containers that will: _create/delete_ other containers, handle images, etc.
 
 - To achieve that one may exploit __bind mounts__
