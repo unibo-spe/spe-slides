@@ -1378,8 +1378,8 @@ checkIsType<Long>(1L) // true
 Note on Java interoperability:
 * `inline` functions get inlined if the caller is Kotlin-compiled code,
 they don't if they are called by other bytecode-targeting compilers (`javac`, `scalac`...)
-* `reified` types *requires* inlining to perform the local monorphization:
-the function code is *copied* on call site, and the compiler must know how to do it
+* `reified` types *require* inlining to perform the local monomorphization:
+the function code is *copied* at the call site, and the compiler must know how to do it
 
 $\Rightarrow$ Can't be used if interoperability is a concern
 * or a wrapper must be provided
@@ -1416,7 +1416,7 @@ Very similar to Scala's `case class`es:
 
 `Pair` and `Triple` provided by the standard library
 <br/>
-(`Tuple4`, `Tuple5`, and so on are not in standard library as opposed as Scala)
+(`Tuple4`, `Tuple5`, and so on are not in the standard library, as opposed to Scala)
 
 ---
 
@@ -1424,7 +1424,7 @@ Very similar to Scala's `case class`es:
 
 ## Destructuring declarations
 
-If a class has `operator` functions named called `componentX` with `X` an integer from `1`,
+If a class has `operator` functions named `componentX` with `X` an integer from `1`,
 they can be "destructured".
 <br>
 This feature is *way* less powerful than Scala's pattern matching.
@@ -1461,7 +1461,7 @@ val (a, b, c) = A()
 Similar to Scala's `sealed trait`s:
 * ~~`class`es, not supported for `interface`s~~ Supported since [Kotlin 1.5.0](https://kotlinlang.org/docs/whatsnew15.html#sealed-interfaces)
 * subtypes must be defined inside the sealed class
-* sealed hierarchies proved *exhaustive checking* inside `where` clauses
+* sealed hierarchies provide *exhaustive checking* inside `when` clauses
 
 ```kotlin
 sealed interface Booze {
@@ -1484,7 +1484,7 @@ goGetMeSome(Booze.Rum)
 ## Nested and inner classes
 
 * Nesting a class inside another does not allow access to outer members
-    * It's equivalent to a Java's `static` inner class
+    * It's equivalent to a Java `static` nested class
 * To create an inner class, the `inner` modifier must be explicit
 
 ```kotlin
@@ -1569,14 +1569,14 @@ which means `A` should hold a reference of `B` and *expose a simpler API*.
 **Delegation** is one of the mechanisms to implement composition,
 see the [delegation pattern](https://en.wikipedia.org/wiki/Delegation_pattern)
 <br/>
-Delegation is often verbose and very mechanic in implementation
+Delegation is often verbose and very mechanical to implement
 
 ```kotlin
 data class Student(val name: String, val surname: String, val id: String)
 class Exam : MutableCollection<Student> {
     private val representation = mutableListOf<Student>()
-    override fun add(e E) = representation.add(e)
-    override fun addAll(e E) = representation.addAll(e)
+    override fun add(e: Student) = representation.add(e)
+    override fun addAll(e: Collection<Student>) = representation.addAll(e)
     override fun clear() = representation.clear()
     ... // BOOOOOOORING
 }
