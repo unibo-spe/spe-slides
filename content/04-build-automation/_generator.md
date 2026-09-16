@@ -1635,10 +1635,10 @@ dependencies {
 By default, the Gradle test kit just runs Gradle.
 We want to inject our plugin into the distribution:
 1. Create the list of files composing our *runtime classpath*
-3. Make sure that the list is always up to date and ready before test execution
-2. Use such list as our classpath for running Gradle
+2. Make sure that the list is always up to date and ready before test execution
+3. Use that list as our classpath for running Gradle
 
-This operation is now built-in the test kit:
+This operation is now built into the test kit:
 
 ```kotlin
 // Configure a Gradle runner
@@ -1687,9 +1687,9 @@ Still, quite repetitive...
 dependencies {
     val kotestVersion = "4.2.5"
     fun kotest(module: String) = "io.kotest:kotest-$module:$kotestVersion"
-    testImplementation(kotest("runner-junit5")
-    testImplementation(kotest("assertions-core")
-    testImplementation(kotest("assertions-core-jvm")
+    testImplementation(kotest("runner-junit5"))
+    testImplementation(kotest("assertions-core"))
+    testImplementation(kotest("assertions-core-jvm"))
 }
 ```
 
@@ -1737,7 +1737,7 @@ Also for the plugins:
 We now have three different runtimes at play:
 1. One or more **compilation targets**
     * In case of JVM projects, the target bytecode version
-    * In case of .NET projects, the target .NET
+    * In case of .NET projects, the target .NET version
     * In case of native projects, the target OS / architecture
 2. One or more **runtime targets**
     * In case of JVM or .NET projects the virtual machines we want to support
@@ -1746,7 +1746,7 @@ We now have three different runtimes at play:
 
 These toolchains *should be controlled independently*!
 
-You may want to use Java 17 to run Gradle, but compile in a Java 8-compatible bytecode, and then test on Java 11.
+You may want to use Java 17 to run Gradle, but compile to Java 8-compatible bytecode, and then test on Java 11.
 
 ---
 
@@ -1783,14 +1783,14 @@ java {
 Create tasks for running tests on specific environments:
 
 ```gradle
-tasks.withType<Test>().toList().takeIf { it.size == 1 }?.let{ it.first }.run {
-    // If there exist a "test" task, run it with some specific JVM version
+tasks.withType<Test>().singleOrNull()?.run {
+    // If a "test" task exists, run it with some specific JVM version
     javaLauncher.set(javaToolchains.launcherFor { languageVersion.set(JavaLanguageVersion.of(8)) })
 }
 // Register another test task, with a different JVM
 val testWithJVM17 by tasks.registering<Test> { // Also works with JavaExec
     javaLauncher.set(javaToolchains.launcherFor { languageVersion.set(JavaLanguageVersion.of(17)) })
-} // You can pick JVM's not yet supported by Gradle!
+} // You can pick JVMs not yet supported by Gradle!
 tasks.findByName("check")?.configure { it.dependsOn(testWithJVM17) } // make it part of the QA suite
 ```
 
@@ -1892,7 +1892,7 @@ OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 
 # Maven-style packaging
 
-JVM artifacts are normally shipped in form of jar archives
+JVM artifacts are normally shipped in the form of JAR archives
 <br>
 the de-facto convention is *inherited from Maven*:
 * Each distribution has a **groupId**, an **artifactId**, and a **version**
@@ -1901,7 +1901,7 @@ the de-facto convention is *inherited from Maven*:
         * artifactId: `guava`
         * version: `29.0-jre`
 * Further **metadata** is stored in a `pom.xml` file
-* Multiple artifacts in the same distributions are identified by a **classifier**
+* Multiple artifacts in the same distribution are identified by a **classifier**
     * e.g., a project having executables, sources, and javadoc, may have:
         * `guava-29.0-jre.jar`
         * `guava-29.0-jre-javadoc.jar`
