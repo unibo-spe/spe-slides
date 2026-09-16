@@ -59,10 +59,10 @@ Once you have a private key to sign with, you can configure Git to use it for si
 # Stashing
 
 Classic situation:
-1. Work on some project, have the project in inconsistent state
+1. Work on some project, have the project in an inconsistent state
 2. Something needs to be fixed on another branch
 
-$\Rightarrow$ You don't want to have commits half-way, but you can't lose what you have done...
+$\Rightarrow$ You don't want to commit half-finished work, but you can't lose what you have done...
 
 ## `git stash` to the rescue
 
