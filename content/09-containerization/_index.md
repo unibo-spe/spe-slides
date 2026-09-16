@@ -2261,7 +2261,7 @@ When a service _exposes a port_, and that's deployed on a _Swarm_:
           placement:
             constraints: 
               - node.role == manager
-              - node.labels.mylabel=myvalue
+              - node.labels.mylabel==myvalue
             preferences:
               - spread: node.labels.mylabel
             max_replicas_per_node: M      # this should be a number!
