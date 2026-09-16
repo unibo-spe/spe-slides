@@ -339,7 +339,7 @@ Containers provide **runtime isolation** _without_ **operating system replicatio
 
 - __Containerisation__ $\approx$ the process of _encapsulating_ an application into a _container_
 
-- __Orchestration__ $\approx$ the process of _deploying_ one or more container onto _one or more_ machines
+- __Orchestration__ $\approx$ the process of _deploying_ one or more containers onto _one or more_ machines
 
 - __Containerisation__ is a _pre-requisite_ for __orchestration__
 
