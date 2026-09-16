@@ -62,10 +62,10 @@ Key features for building DSLs:
 
 ## a.k.a. Type safe builders
 
-Domain-specific languages require, as first step, to have a **domain model**.
+Domain-specific languages require a **domain model** as a first step.
 <br/>
 Once the domain entities are available,
-they will be elegantly instanced via DSL.
+they will be elegantly instantiated via the DSL.
 <br/>
 The business logic will then be bound to the domain model inextricably.
 
