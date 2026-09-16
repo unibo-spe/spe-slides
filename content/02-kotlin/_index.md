@@ -165,7 +165,7 @@ foo = null // error: null can not be a value of a non-null type String
 # Kotlin 101
 ## Accessing nullable types
 
-Nullable types members can't be accessed by `.`.
+Members of nullable types can't be accessed with `.`.
 ```kotlin
 var baz: String? = "foo"
 baz.length // error: only safe (?.) or non-null asserted (!!.) calls are allowed...
@@ -191,8 +191,8 @@ baz?.length // returns null, return type is still "Int?"
 Also known as: *I want my code to break badly at runtime*
 <br/>
 * Invalidates the whole point of having nullable types by asserting that the nullable object is not `null` at runtime
-* It should be **never** used
-    * In fact its ugly syntax is so *ugly by purpose*
+* It should **never** be used
+    * In fact, its syntax is *ugly on purpose*
 
 ```kotlin
 var baz: String? = "foo"
@@ -243,7 +243,7 @@ Kotlin considers all foreign values whose nullability is unknown as *platform ty
 * At first use, their type is *implicitly disambiguated* (either nullable or non-nullable)
     * Namely, platform types can be used as non-nullable...
 * Runtime nullability checks are put in place by the compiler (*fail fast!*)
-    * ...but their actual nullablity is checked at use-site
+    * ...but their actual nullability is checked at the use site
 * Platform types *can't be created* in Kotlin! They only come from interaction with "platform code"
 * If the target platform offers some way to assert nullability, Kotlin tries to use it
     * e.g., if a Java method/parameter is annotated with `@NotNull` (or similar common alternatives) it will be interpreted as a non-nullable type
