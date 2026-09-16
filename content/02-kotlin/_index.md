@@ -29,7 +29,7 @@ enableSourceMap = true
 JetBrains-made modern programming language
 * Focused on "practical use"
 
-Gaining momentum since Google adopted is as *official Android language*
+Gaining momentum since Google adopted it as the *official Android language*
 * initially along with Java and C++
 * now Android is Kotlin-first
 
@@ -49,7 +49,7 @@ Clearly inspired by a mixture of Java, C#, Scala, and Groovy
     * Type lambdas
     * macros
 
-**Kotlin** is somewhat *a better java*
+**Kotlin** is somewhat *a better Java*
 * Born in industry, for the industry
 * Many more "core" constructs and keywords than Scala
 * Focused on getting productive quickly and reducing programming errors
@@ -59,14 +59,14 @@ Clearly inspired by a mixture of Java, C#, Scala, and Groovy
 ---
 
 # Kotlin 101
-## Defining functions, constant, variables
+## Defining functions, constants, variables
 
 Similar to Scala. The keyword `def` is replaced by `fun`
 ```kotlin
 val x = 10 // constant
 var y = 20 // variable, can be reassigned
 fun foo() = 20 // function definition, single expression
-fun bar(): Int { // same as above with multiple expression
+fun bar(): Int { // same as above with multiple expressions
     return 20 // requires a return in this form...
 }
 fun baz() { } // Unless it returns Unit
