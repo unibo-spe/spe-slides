@@ -197,7 +197,7 @@ multiple tools *proliferated*
 
 * The Python Packaging Authority (PyPA) is inconsistent in its suggestions:
     * Recommends [`venv`](https://docs.python.org/3/library/venv.html)
-    * Also recommends [Pipenv](https://pipenv.pypa.io/en/latest/) , which uses [`virtualenv`](https://virtualenv.pypa.io/en/latest/)
+    * Also recommends [Pipenv](https://pipenv.pypa.io/en/latest/), which uses [`virtualenv`](https://virtualenv.pypa.io/en/latest/)
     * Also endorses [Poetry](https://python-poetry.org/)
 
 * Many Python developers also rely on [PyEnv](https://github.com/pyenv/pyenv)
