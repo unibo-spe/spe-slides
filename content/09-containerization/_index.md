@@ -1174,7 +1174,7 @@ Let's create a non-trivial scenario with 2 containers attached to the same netwo
     + while _creating_ all required _networks_ and _volumes_
     + and __gracefully shut__ them __down__ upon need
 
-- The only thing the user must do is: creating a `docker-compose.yml` file
+- The only thing the user must do is create a `docker-compose.yml` file
     + a [YAML](https://yaml.org/) file describing the stack
     + following the [official specification](https://docs.docker.com/compose/compose-file/)
 
@@ -1206,8 +1206,8 @@ version: 3.9                    # version of the specification
 services:                       # section defining services composing the stack
   frontend:                     # name of the first service (frontend)
     image: example/webapp       # image to use for the first service
-    depends_on:                 # section for def
-       - backend                # this should be started AFTER the backend service is healthy
+    depends_on:                 # section for dependencies
+       - backend                # short-form depends_on waits for start, not for health
     environment:                # section for environment variables
       SERVICE_PORT: 8043        # env var dictating the port the service will listen on
       DB_HOST: backend          # env variable dictating the hostname of the backend service 
@@ -1218,12 +1218,12 @@ services:                       # section defining services composing the stack
     networks:                   # section for networks to be attached to
       - front-tier              # attaching the service to the front-tier network (referenced by name)
       - back-tier               # attaching the service to the back-tier network (referenced by name)
-    # configs are files to be copied in the service' container, without needing to create a new image
+    # configs are files to be copied into the service's container, without needing to create a new image
     configs:                    # section for configuration files to be injected in the container
       - source: httpd-config    # reference to the configuration file (by name)
         target: /etc/httpd.conf # path on the container where the config file will be mounted as read-only
     # secrets are reified as read-only files in /run/secrets/<secret_name>
-    secrets:                    # section for secrets to be injected in the service' container
+    secrets:                    # section for secrets to be injected into the service's container
       - server-certificate      # reference to the secret (by name)
       - db-credentials          # reference to the secret (by name)
     
