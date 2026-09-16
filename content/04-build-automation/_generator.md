@@ -723,7 +723,7 @@ Gradle supports the construction of *lazy* properties and providers:
     * Configuration happens *before* execution, some values are unknown
     * yet their provider is known at configuration time
 
-#### In the gradle API
+#### In the Gradle API
 
 `Provider` -- a value that can only be queried and cannot be changed
 * Transformable through a `map` method
