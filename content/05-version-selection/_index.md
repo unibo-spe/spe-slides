@@ -323,7 +323,7 @@ But this is what **semantic versioning is about**!
 {{% fragment %}}
 ### Idea
 
-find a way to write *conventional* commit messages such that some automatic tool can understand whether a new version should be released
+Find a way to write *conventional* commit messages such that some automatic tool can understand whether a new version should be released
 {{% /fragment %}}
 
 {{% fragment %}}
