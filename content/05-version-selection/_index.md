@@ -28,8 +28,8 @@ enableSourceMap = true
 The process of assigning a **unique identifier** to a **unique state** of some software
 * Used to *distinguish* different software states
 * Used to *refer* to different states of the same software
-* The identifier is normally a sequence of alfanumeric characters spaced by dots, slashes, and dashes
-* Assigning IDs in a *predictable* way could help gathering *information* on the software itself
+* The identifier is normally a sequence of alphanumeric characters spaced by dots, slashes, and dashes
+* Assigning IDs in a *predictable* way could help gather *information* on the software itself
 
 ---
 
@@ -37,7 +37,7 @@ The process of assigning a **unique identifier** to a **unique state** of some s
 
 Versioning can happen at different levels, for instance:
 
-* *Version system automatic versioning*
+* *Version control system automatic versioning*
     * Fine grained
     * Automatic
     * Non progressive
