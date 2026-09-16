@@ -140,7 +140,7 @@ __Instruction valid for every resource in the Kubernetes ecosystem__
 
 ---
 
-### An example of existing Kubernetes resources types
+### An example of existing Kubernetes resource types
 
 <div class="custom">
 
@@ -199,7 +199,7 @@ And the list goes on...
 ### Kubernetes
 - Can scale up and down replicas of a resource,
   - both automatically and with a manual intervention,
-  - the automatic scaling can be configured on the observation of *metrics* (i.e. the usage of the CPU/Memory). 
+  - the automatic scaling can be configured on the observation of *metrics* (e.g. CPU/memory usage). 
 - The cluster can grow its capacity, 
   - *automatically* and after a manual intervention.
   - supported only when running on [some](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler#faqdocumentation) cloud providers.
@@ -226,9 +226,9 @@ And the list goes on...
 {{% /col %}} {{% col %}}
 
 ### Kubernetes
-- A basic monitoring is provided built-in with the cluster,
-  - is necessary to install the `Metrics Server` plugin to enable the monitoring,
-  - this comprehends the usage of the *CPU* and *Memory* of the cluster nodes and containers
+- Basic monitoring is built into the cluster,
+  - but it is necessary to install the `Metrics Server` plugin to enable it,
+  - this covers the usage of *CPU* and *memory* on the cluster nodes and containers
 - The monitoring can be extended using third-party tools,
   - such as *Prometheus*, *Grafana*, etc.
 
@@ -239,13 +239,13 @@ And the list goes on...
 
 ## Metrics in Kubernetes
 
-- *Metrics Registry* is the component of the Kubernetes' Control Plane that exposes **API** to watch for cluster's metrics.
+- *Metrics Registry* is the component of the Kubernetes' Control Plane that exposes an **API** for watching the cluster's metrics.
   - *Metrics Server* is the built-in implementation of this service
   - there are external Metrics Servers which can be adopted instead of it. 
 - There are mainly three kinds of metrics: 
   - **Resource Metrics**: concerning *memory* and *cpu* of Kubernetes' resource objects.
   - **Custom Metrics**: other information about Kubernetes' resource objects.
-  - **External Metrics**: metrics not related with Kubernetes' resources (i.e. number of incoming HTTP requests)
+  - **External Metrics**: metrics not related to Kubernetes resources (e.g. the number of incoming HTTP requests)
 
 --- 
 
