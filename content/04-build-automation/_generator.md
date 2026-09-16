@@ -283,7 +283,7 @@ pytest = "^8.1.0"
 coverage = "^7.4.0"
 mypy = "^1.9.0"
 
-# executable commands that will be created then installing this package
+# executable commands that will be created when installing this package
 [tool.poetry.scripts]
 calculator-gui = "calculator.ui.gui:start_app"
 calculator = "calculator.ui.cli:start_app"
