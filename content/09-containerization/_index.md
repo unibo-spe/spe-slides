@@ -2143,8 +2143,8 @@ After selecting the only environment available, one may observe:
     + you may observe that the `portainer` stack is composed of two services: `agent` and `webservice`
 
 - which __containers__ are running on the cluster (_Containers_ section)
-    + you may observe that the `portainer_agent` service is composed by _one container per node_
-    + you may observe that the `portainer_webservice` service is composed by _one container_ which is _running on some master node_
+    + you may observe that the `portainer_agent` service is composed of _one container per node_
+    + you may observe that the `portainer_webservice` service is composed of _one container_ which is _running on some master node_
 
 - which __volumes__ are present on the cluster (_Volumes_ section)
     + you may observe that the `portainer_portainer_data` volume is present _on the same master node_ of `portainer_webservice`
