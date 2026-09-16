@@ -1092,6 +1092,7 @@ Let's create a non-trivial scenario with 2 containers attached to the same netwo
         + `-q` (_quiet_), only display container IDs
         + `--filter ancestor=X` selects containers whose image is `X`
     - next time let's give an explicit name to the container via `--name`
+
 ---
 
 ## Bridge network (pt. 5)
