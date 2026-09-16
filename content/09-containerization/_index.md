@@ -2296,7 +2296,7 @@ services:
           - spread: node.labels.capabilities.cpu
 ```
 
-</br>
+<br/>
 
 2. Try to query it multiple times:
     ```bash
