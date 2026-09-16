@@ -1915,7 +1915,7 @@ In order to create Maven-compatible artifacts, we need first to set the **groupI
 ```kotlin
 group = "it.unibo.firstplugin"
 ```
-Many repositories require to register the group and associate developer identities to it
+Many repositories require you to register the group and associate developer identities with it
 
 The project name set in `settings.gradle.kts` is usually used as **artifactId**
 * In case of hierarchical projects, each subproject is a separate artifact and its name is used as artifactId
@@ -1950,7 +1950,7 @@ This is most frequently done via authentication tokens, and more rarely by usern
 It is first required to [register](https://plugins.gradle.org/user/register),
 once done, an **API Key** will be available from the web interface, along with a **secret**.
 
-These data is required to be able to publish, and can be fed to Gradle in two ways:
+This data is required in order to publish, and can be fed to Gradle in two ways:
 
 1. By editing the `~/.gradle/gradle.properties` file, adding:
 ```plain
@@ -1987,12 +1987,12 @@ Static analysis is the **automatic inspection of source code** to detect potenti
 ### Test coverage
 
 Test coverage tools measure **how much of the code is executed while running tests**.
-* Helps identifying *untested* parts of the codebase
+* Helps identify *untested* parts of the codebase
 * {{% fragment %}} Coverage cannot tell anything about the **covered** code, it can only spot **uncovered** fragments {{% /fragment %}}
 
 ## Quality control in Gradle
 
-If the `lifecycle` plugin is applied (it is auto-applied by most language-specific plugins), then a `check` task is available
+If the `lifecycle-base` plugin is applied (it is auto-applied by most language-specific plugins), then a `check` task is available
 * `check` is meant to run all quality control tasks
 * any additional quality-control task should be made a dependency of `check`
 * by default, `check` depends on `test`
@@ -2034,11 +2034,11 @@ plugins {
 It is a good practice to automate the generation of the API documentation.
 * The `java[-library]` plugin adds a `javadoc` task to generate the Javadoc
 * The `scala` plugin includes a task of type `ScalaDoc`
-* Documentation for Kotlin can be generated using [**Dokka**]()
-    * A Gradle plugin is available: !
+* Documentation for Kotlin can be generated using [**Dokka**](https://kotl.in/dokka)
+    * A Gradle plugin is available: `org.jetbrains.dokka`
 
 In general:
-* documentation generation tasks produce artifacts that can be shipped along the main artifact
+* documentation generation tasks produce artifacts that can be shipped alongside the main artifact
 * most languages do provide tools for documentation generation
 * well-maintained plugins may exist $\Rightarrow$ use them
 * if they don't, write them!
@@ -2052,7 +2052,7 @@ Software products are usually shipped as (possibly executable) **archives** of s
 In the JVM world, the de-facto standard format is **jar** (Java ARchive)
 * Gradle provides a task of type `Jar` to create such archives
 * The `java-library` and `java` plugins (applied behind the scenes by the `kotlin-jvm` plugin as well) 
-  automatically create an `assemble` task which generates a task of type `Jar`
+  automatically create an `assemble` task which depends on a task of type `Jar`
   creating a non-executable jar with the project contents.
 * Runnable Jars can be created via the "shadowJar" third-party plugin
 * Runnable software including the Java runtime can be created using JPackage
@@ -2087,14 +2087,14 @@ Software repositories are services hosting software artifacts for distribution
 ### Prominent examples
 
 * [Maven Central](https://search.maven.org/) is the de-facto standard repository for JVM artifacts
-  * It can host any artifact compatible with the Maven format, including non-JVM artifacts, as far as packaged as jars
+  * It can host any artifact compatible with the Maven format, including non-JVM artifacts, as long as they are packaged as JARs
   * **No-retract**, **no-yanking** policy
       * **Errors** [stay there forever](https://central.sonatype.com/artifact/commons-io/commons-io/versions)
   * *Requires* both *sources* and *Javadoc* artifacts
-  * Artifacts on Central *should* only depend from other artifacts on Central
+  * Artifacts on Central *should* only depend on other artifacts on Central
     * Not really enforced, but strongly recommended
-* *NPM* for Javascript
-  * Supports package **retraction** within *72-hours *if* there are *no dependents*, or after only if:
+* *NPM* for JavaScript
+  * Supports package **retraction** within *72 hours* if there are *no dependents*; afterwards, only if:
     * there are no dependents, fewer than 300 downloads last week, and a single owner.
     * retracted versions are banned
 * *PyPI*: for Python code
@@ -2112,12 +2112,12 @@ Software repositories are services hosting software artifacts for distribution
 * A registered **groupId**
     * Registration of GitHub (`io.github.yourghusername`) domains is semi-automatic
         * The system verifies identity by asking for the creation of a repository named as a token
-    * Custom domains are handled manually, contact service
+    * Custom domains are handled manually -- contact the service
 * Complete *project metadata* in a `pom.xml` file
     * Including developers, urls, project description, etc.
 
-The submission procedures has been greatly simplified recently with the Gradle plugin portal:
-1. Create all artifact in a maven-repository-compatible layout
+The submission procedure has been greatly simplified recently with the Maven Central Portal:
+1. Create all artifacts in a Maven-repository-compatible layout
 2. Sign all artifacts
 3. Create a zip archive including the repository layout
 4. Upload to Maven Central Portal
@@ -2141,15 +2141,15 @@ Gradle allows for **inspection** of the dependencies:
 Inspecting multiple large trees can be difficult
 * A single dependency inspection is available
 * `./gradlew dependencyInsight --dependency <DepName> `
-    * Optionally, fiterable by configuration: `--configuration <ConfName>`
+    * Optionally, filterable by configuration: `--configuration <ConfName>`
 
 ---
 
 ## Inspecting dependencies *among tasks*
 
-When developing plugins or rich builds, the issue of dependencies also affect **tasks**
+When developing plugins or rich builds, the issue of dependencies also affects **tasks**
 
-Gradle *does not* provide tools to ispect the task graph graphically, but a plugin exists.
+Gradle *does not* provide tools to inspect the task graph graphically, but a plugin exists.
 
 {{< github owner="dorongold" repo="gradle-task-tree" from=20 to=22 language=kotlin >}}
 
