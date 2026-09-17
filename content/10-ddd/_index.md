@@ -612,7 +612,7 @@ CustomerFactory -u-> Customer: creates
 
 - _Non-trivial_ implementations should take care of
     + enforcing _consistency_, in spite of _concurrent_ access 
-    + support complex _transactions_
+    + supporting complex _transactions_
 
 ---
 
