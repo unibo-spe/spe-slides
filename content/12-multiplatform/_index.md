@@ -2961,13 +2961,13 @@ f(["a", "b", "c"])
 Conceptual workflow:
 1. Check style (e.g. via [KtLint](https://ktlint.github.io/)) of all Kotlin sources
 2. Automatic bug detection (e.g. via [Detekt](https://github.com/detekt/detekt))
-3. For each operative system `O` (e.g. Win, Mac, Linux):
+3. For each operating system `O` (e.g. Win, Mac, Linux):
     - for each target platform `T`:
         + for each relevant version `V` of the platform `T` (e.g. LTS releases + latest)
             1. ensure main code compiles (e.g. via Gradle task `<T>MainClasses`)
             2. ensure test code compiles (e.g. via Gradle task `<T>TestClasses`)
             3. ensure test passes (e.g. via Gradle task `<T>Test`)
-4. If need to release (e.g. commit on `master` branch)
+4. If a release is needed (e.g. commit on `master` branch)
     - for each target platform `T` $\cup$ `kotlin-multiplatform`:
         1. assemble compiled code into archive
         2. push archive on main repository `R` of platform `T`
