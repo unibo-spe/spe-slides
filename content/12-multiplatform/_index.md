@@ -2511,7 +2511,7 @@ fun f() {}
 {{% /col %}}
 {{% col %}}
 ```java
-public static class MyFileKt {
+public final class MyFileKt {
     public static void f() {}
 }
 ```
