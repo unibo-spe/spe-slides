@@ -2879,7 +2879,7 @@ MyClass.prototype.method = function () {
 - Primitive type mappings are non-trivial (cf. [documentation](https://kotlinlang.org/docs/js-to-kotlin-interop.html#kotlin-types-in-javascript))
     + Kotlin numeric types, except for `kotlin.Long`, are mapped to JavaScript `Number`
     
-    + `kotlin.Char` is mapped to JS `Number` representing character code.
+    + `kotlin.Char` is mapped to a JS `Number` representing the character code.
 
     + Kotlin preserves overflow semantics for `kotlin.Int`, `kotlin.Byte`, `kotlin.Short`, `kotlin.Char` and `kotlin.Long`
 
