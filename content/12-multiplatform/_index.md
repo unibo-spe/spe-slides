@@ -3172,9 +3172,9 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
 
 - Java's `Collection`s are __mapped__ to Python containers by overriding `__len__`
 
-- Java's `Map`s support Python's __dictionaries__ syntax by overriding `__getitem__` and `__setitem__`
+- Java's `Map`s support Python's __dictionary__ syntax by overriding `__getitem__` and `__setitem__`
 
-- Java's `List`s support Python's __lists__ syntax by overriding `__getitem__` and `__setitem__`
+- Java's `List`s support Python's __list__ syntax by overriding `__getitem__` and `__setitem__`
 
 {{< figure src="jpype-collections.png" width="50%" alt="Java collections vs. Python collections in JPype" >}}
 
