@@ -447,18 +447,18 @@ The __choice__ of a _platform_ impacts developers during:
 
 ---
 
-## How platform affects the **design** phase
+## How the platform affects the **design** phase
 
 - One may choose the platform which minimizes the __abstraction gap__ w.r.t. the problem at hand
 
-> __Abstraction gap__ $\approx$ the space among the __problem__ and the prior functionalities offered by a __platform__. 
-> Ideally, the bigger the space the more _effort_ is required to build the solution 
+> __Abstraction gap__ $\approx$ the space between the __problem__ and the pre-existing functionalities offered by a __platform__. 
+> Intuitively, the bigger the space, the more _effort_ is required to build the solution 
 
 {{< figure src="abstraction-gap.svg" width="70%" >}}
 
 ---
 
-## How platform affects the **implementation** phase
+## How the platform affects the **implementation** phase
 
 - Developers _write_ solutions by leveraging the _API_ of the __platform__
 
@@ -468,19 +468,19 @@ The __choice__ of a _platform_ impacts developers during:
 
 ---
 
-## How platform affects the **testing** phase
+## How the platform affects the **testing** phase
 
 - _Test suites_ are a __"project in the project"__
   * so remarks are similar w.r.t. the implementation phase
 
 - One may test the system against _as many versions as possible_ of the underlying platforms
 
-- One may test the system against _as many OS_ as possible
+- One may test the system against _as many OSs_ as possible
   * virtual platforms may behave differently depending on the OS
 
 ---
 
-## How platform affects the **release** phase
+## How the platform affects the **release** phase
 
 > __Release__ $\approx$ publishing some packaged software system onto a repository, hence enabling its import and exploitation
 
@@ -501,13 +501,13 @@ The __choice__ of a _platform_ impacts developers during:
 
 - However, choosing the platform is a business decision as well
   + platforms have user communities
-  + SW project benefit from wide(r) user communities
+  + SW projects benefit from wide(r) user communities
 
 - Business decision: which user communities to target?
-  + what are the most relevant platforms for that communities?
+  + what are the most relevant platforms for those communities?
 
 - Coherency is key for success in platform selection
-  1. coherently choose the target community w.r.t SW goal
+  1. coherently choose the target community w.r.t. the SW goal
   2. coherently choose the platform w.r.t. target community
   
 ---
@@ -537,7 +537,7 @@ The __choice__ of a _platform_ impacts developers during:
 
 2. to create in-silico experiments
 
-3. to study software system
+3. to study software systems
 
 4. to create software tools improving their research
 
@@ -572,7 +572,7 @@ The __choice__ of a _platform_ impacts developers during:
 > Research-oriented software development should maximise audience and impact, while minimising development and maintenance effort
 
 - Science requires reproducibility
-  * wide(r) user base is a facilitator for reproducility
+  * a wide(r) user base is a facilitator for reproducibility
 
 - The wider the community, the wider the impact of community-driven research software
   * more potential citations
@@ -584,7 +584,7 @@ The __choice__ of a _platform_ impacts developers during:
 
 ## General benefits of coherence, __for researchers__
 
-> Choosing the right community / platform is strategical for research-oriented software
+> Choosing the right community / platform is strategic for research-oriented software
 
 + The abstraction gap is likely lower
   * less development effort
@@ -610,7 +610,7 @@ The __choice__ of a _platform_ impacts developers during:
 ## About technological silos
 
 > __Silos__ (in IT) are software components / systems / ecosystems having poor external interoperability 
-> (i.e. software from silos A hardly interoperates with software from silos B)
+> (i.e. software from silo A hardly interoperates with software from silo B)
 
 - Platforms are (pretty wide) software silos
   * making software from any two platforms interoperate is non-trivial
@@ -624,7 +624,7 @@ The __choice__ of a _platform_ impacts developers during:
 
 ## Open research communities vs. technological silos
 
-- Research communities in CS / AI may overlap with platforms communities:
+- Research communities in CS / AI may overlap with platform communities:
   * e.g. neural networks researchers $\rightarrow$ Python
   * e.g. data science $\rightarrow$ Python | R
   * e.g. symbolic AI $\rightarrow$ JVM | Prolog
@@ -633,7 +633,7 @@ The __choice__ of a _platform_ impacts developers during:
 
 - What about inter-community research efforts?
   * they may need interoperability among different silos
-  * in lack of which, research is slowed down
+  * without which, research is slowed down
 
 > Multi-platform programming is an enabler for inter-community research
 
@@ -647,7 +647,7 @@ The __choice__ of a _platform_ impacts developers during:
 > let the same software tool run on multiple platforms
 
 - More reasonable goal:
-> Create multiple artifacts, one per each supported platform, sharing the same design and functioning
+> Create multiple artifacts, one for each supported platform, sharing the same design and functioning
 
 - Practical goal: 
 > design and write the software once, then port it to several platforms
@@ -698,9 +698,9 @@ The __choice__ of a _platform_ impacts developers during:
 
 ## Write once, build anywhere (analysis)
 
-Let `N` be the amount of supported platforms
+Let `N` be the number of supported platforms
 
-- Platform-agnostic functionalities require effort which is independent from `N`
+- Platform-agnostic functionalities require effort which is independent of `N`
 
 - Platform-specific functionalities require effort proportional to `N`
 
@@ -765,7 +765,7 @@ Whenever a new functionality needs to be developed:
 
 ## Write first, wrap elsewhere (analysis)
 
-Let `N` be the amount of supported platforms
+Let `N` be the number of supported platforms
 
 - Clear separation of API code from implementation code is quintessential
 
@@ -797,14 +797,14 @@ Let `N` be the amount of supported platforms
 - JetBrains-made modern programming language
     * focused on "practical use" (whatever that means)
 
-- Gaining momentum since Google adopted is as *official Android language*
+- Gaining momentum since Google adopted it as the *official Android language*
     * along with Java and C++
 
 - Clearly inspired by a mixture of Java, C#, Scala, and Groovy
-    * standard library clearly inspired to Java's one
+    * standard library clearly inspired by Java's
 
 - Born in industry, for the industry
-    * initially considered *a better java*
+    * initially considered *a better Java*
     * focused on getting productive quickly and reducing programming errors
 
 - Acts as the "super language" supporting the "write once, build anywhere" approach
@@ -837,7 +837,7 @@ Reference: https://kotlinlang.org/docs/reference/mpp-dsl-reference.html
 
 - Win by [MinGW](https://sourceforge.net/projects/mingw), Linux
     + must pay attention to architecture
-    + MinGW is not exactly "vanilla" Windows environment
+    + MinGW is not exactly a "vanilla" Windows environment
 
 - iOS, macOS
     + requires Apple facilities (e.g. XCode)
@@ -905,8 +905,8 @@ Kotlin enforces strong segregation of the platform-agnostic and platform-specifi
 │
 └── src/
     ├── commonMain/
-    │   └── kotlin/         # platform-agnostic Kotlin code here	font-weight: normal;
-
+    │   └── kotlin/         # platform-agnostic Kotlin code here
+    │
     ├── commonTest/
     │   └── kotlin/         # platform-agnostic test code written in Kotlin here
     │
@@ -943,7 +943,7 @@ Defines several aspects of the project:
     }
     ```
 
-- which repositories should Gradle use when looking for dependencies
+- which repositories Gradle should use when looking for dependencies
     ```kotlin
     repositories { 
         mavenCentral() // use MCR for downloading dependencies (recommended)
