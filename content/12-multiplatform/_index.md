@@ -2282,7 +2282,7 @@ In the `jsMain` source set
 
     actual fun createTempFile(name: String, extension: String, content: String): String {
         val tag = Math.random().toString().replace(".", "")
-        val path = "$tmpDirectory/$name-$tag.$extension"
+        val path = "${tmpdir()}/$name-$tag.$extension"
         writeFileSync(path, content)
         return path
     }
