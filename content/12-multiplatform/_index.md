@@ -2411,7 +2411,7 @@ public interface MyType {}
 {{% /col %}}
 {{% /multicol %}}
 
-- No syntactical difference among primitive and reference types
+- No syntactical difference between primitive and reference types
     + `Int` $\leftrightarrow$ `int` / `Integer`, `Short` $\leftrightarrow$ `short` / `Short`, etc.
 
 {{% multicol %}}
