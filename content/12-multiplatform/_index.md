@@ -3014,11 +3014,11 @@ Conceptual workflow:
 
 - `Linux` $\rightarrow$ depends on the distro   
     * e.g. [Arch Linux](https://archlinux.org/) $\rightarrow$ [AUR](https://aur.archlinux.org/)
-    * inter-distro: [Flatpack](https://flatpak.org/) $\rightarrow$ [Flathub](https://flathub.org/home) 
+    * inter-distro: [Flatpak](https://flatpak.org/) $\rightarrow$ [Flathub](https://flathub.org/home) 
 
 - `Python` $\rightarrow$ [PyPI](https://pypi.org/)
 
-- `.Net` $\rightarrow$ [NuGet](https://www.nuget.org/)
+- `.NET` $\rightarrow$ [NuGet](https://www.nuget.org/)
 
 ---
 
