@@ -2602,8 +2602,7 @@ MyType x = MyType.Companion.of();
 {{% col %}}
 ```kotlin
 import kotlin.jvm.JvmStatic
-class MyType {
-    private constructor()
+class MyType private constructor() {
     companion object {
         @JvmStatic
         fun of(): MyType = MyType()
