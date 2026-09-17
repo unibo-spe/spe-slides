@@ -2820,7 +2820,7 @@ var myFunction = module.my.package.myFunction;
 ## Kotlin--JavaScript Mapping (pt. 2)
 
 - Kotlin supports __overloading__, JS does not
-    + class / interface members names are __mengled__ to avoid clashes
+    + class / interface member names are __mangled__ to avoid clashes
     + the `@JsName` annotation can be used to control the name of a member 
         * to be used on API types and functions
 
