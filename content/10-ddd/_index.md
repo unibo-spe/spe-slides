@@ -698,7 +698,7 @@ interface Order {
     + void setCustomer(Customer customer)
     + Date getTimestamp()
     + void setTimestamp(Date timestamp)
-    + Map<Product, long> Amounts getAmounts()
+    + Map<Product, long> getAmounts()
 }
 
 interface OrderID
