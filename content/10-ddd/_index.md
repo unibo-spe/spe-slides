@@ -941,7 +941,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 <br><br>
 
-*trust $\approx$ willingness to collaborate + seek for stability
+*trust $\approx$ willingness to collaborate + seek stability
 
 ---
 
@@ -1004,10 +1004,10 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
     + poor communication 
     + poor trust
 
- - If upstream cannot be trusted, and interaction is pointless...
+- If upstream cannot be trusted, and interaction is pointless...
     + e.g. legacy code, poorly maintained library, etc.
 
-- ... downstream must defend from unexpected / unanticipated change
+- ... downstream must defend itself against unexpected / unanticipated change
 
 - The upstream's model is then reverse engineered & __adapted__
     + e.g. often, repository types are anti-corruption layers for DB technologies
@@ -1022,7 +1022,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 - DDD does not enforce a particular architecture
 
-- Any is fine as long the model is integer
+- Any is fine as long as the model keeps its integrity
 
 - Layered architectures are well suited to preserve models' integrity
 
@@ -1035,8 +1035,8 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ![Hexagonal architecture concept](./layered-architecture.png)
 
-- outer layers depend on innermost ones
-    + the vice versa is not true
+- outer layers depend on inner ones
+    + the converse is not true
 
 ---
 
@@ -1044,7 +1044,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 1. __Domain layer__: contains the domain model (entities, values, events, aggregates, etc.)
     - must support a wide range of applications
-    - has no dependency from any other layer
+    - has no dependency on any other layer
 
 2. __Application layer__: contains services providing business logic
     - supports a particular use case via services
@@ -1131,10 +1131,10 @@ product -u-|> mq
 ### Benefits
 
 - Historical data can be analysed, to serve several purposes
-    + e.g. predictive maintenance, optimization, analyse & anticipate faults
+    + e.g. predictive maintenance, optimisation, analysing & anticipating faults
 
 - Past situations can be replayed
-    + e.g. which improves debugging, enables measurements
+    + it improves debugging and enables measurements
 
 - Enables complex event detection & reaction
 
@@ -1151,10 +1151,10 @@ product -u-|> mq
 
 - Advanced pattern for building _highly-scalable_ applications
 
-- It leverages upon _event sourcing_ and _layered architecture_...
+- It leverages _event sourcing_ and _layered architecture_...
 
 - ... to deliver **reactive**, **eventual-consistent** solutions where:
-    + contexts boundaries can be easily enforced
+    + context boundaries can be easily enforced
     + single responsibility principle is applied extensively
 
 ---
@@ -1179,7 +1179,7 @@ product -u-|> mq
 
 ## CQRS workflow (writing)
 
-Whenever users are willing to _perform an action_ into the system:
+Whenever users want to _perform an action_ in the system:
 1. they create a __command__ and forward it to the __write model__
   - i.e. an object describing a _variation_ to be applied to some domain aspect
 
@@ -1193,7 +1193,7 @@ Whenever users are willing to _perform an action_ into the system:
 
 ## CQRS workflow (reading)
 
-Whenever users are willing to _inspect/observe the system_ at time $t$:
+Whenever users want to _inspect/observe the system_ at time $t$:
 1. they perform a __query__ on the __read model__
     - asking for the state of the system _at time $t$_
     - e.g. $t$ $\equiv$ now
@@ -1207,7 +1207,7 @@ Whenever users are willing to _inspect/observe the system_ at time $t$:
 
 ## CQRS -- When are commands reified?
 
-> __Reification__: is the process of computing the state of the system at time $t$ by applying of commands recorded up to time $t$
+> __Reification__ is the process of computing the state of the system at time $t$ by applying the commands recorded up to time $t$
 <br>
 
 - If queries and commands are stored on different databases
@@ -1218,7 +1218,7 @@ Whenever users are willing to _inspect/observe the system_ at time $t$:
 - Several, non-mutually-exclusive strategies:
     + __eager__: commands are reified as soon as they are received
     + __pull__: commands are reified upon reading queries
-    + __push__: commands are reified in background, periodically
+    + __scheduled__: commands are reified in the background, periodically
 
 ---
 
@@ -1268,14 +1268,14 @@ A simple domain keeping track of: _customers_, _products_, and _orders_.
 
 - Currencies are represented by a name, a symbol and an acronym
     - e.g. Euro, EUR, €
-    - e.g. USA Dollar, USD, $
+    - e.g. US Dollar, USD, $
 
 - Exchange rates keep track of the conversion rate
     + from a source currency
     + to a destination currency
-    + in a particular moment
+    + at a particular moment
 
-- Information about exchange rates can be attained from the Internet
+- Information about exchange rates can be obtained from the Internet
 
 - We can compute the price of each product, in any currency, at any moment
 
@@ -1287,8 +1287,8 @@ A simple domain keeping track of: _customers_, _products_, and _orders_.
 
 - Orders are identified by a serial number
 
-- They keep track of the many products ordered by a customer
-    * and the amount of copies ordered for each product
+- They keep track of the products ordered by a customer
+    * and the number of copies ordered for each product
 
 - Also, orders keep track of when they have been performed
 
@@ -1297,7 +1297,7 @@ A simple domain keeping track of: _customers_, _products_, and _orders_.
 - When a new order is registered, many actions should be performed in reaction
 
 - It must be possible to compute the actual total price of an order
-    * in a particular moment, using a particular currency
+    * at a particular moment, using a particular currency
 
 ---
 
@@ -1316,7 +1316,7 @@ A simple domain keeping track of: _customers_, _products_, and _orders_.
     - value object 
     - factory
     - repository
-    - value object
+    - service
 
 {{% /section %}}
 
@@ -1341,7 +1341,7 @@ A simple domain keeping track of: _customers_, _products_, and _orders_.
 1. Switch the design towards __event sourcing__, by memorising variations instead of snapshots.
 2. Implement the __CQRS pattern__ by splitting the repository into 2 parts:
   - a __write-model__ for storing variations
-  - a __read-model__ for retrieving a snapshot of the counter's value in a given moment
+  - a __read-model__ for retrieving a snapshot of the counter's value at a given moment
 
 <br>
 
@@ -1355,7 +1355,7 @@ In practice:
 
 {{% section %}}
 
-## Exercise 3 -- Anti corruption layer (pt. 1)
+## Exercise 3 -- Anti-corruption layer (pt. 1)
 
 - Very simple domain: `Table`s
     + i.e. 2-D containers of `Row`s...
@@ -1369,7 +1369,7 @@ In practice:
 
 ---
 
-## Exercise 3 -- Anti corruption layer (pt. 2)
+## Exercise 3 -- Anti-corruption layer (pt. 2)
 
 ### TO-DO
 
