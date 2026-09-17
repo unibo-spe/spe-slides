@@ -2566,8 +2566,7 @@ public final class MySingleton {
 {{% multicol %}}
 {{% col %}}
 ```kotlin
-class MyType {
-    private constructor()
+class MyType private constructor() {
     companion object {
         fun of(): MyType = MyType()
     }
