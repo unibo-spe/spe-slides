@@ -991,7 +991,7 @@ Defines several aspects of the project:
 
 ## Kotlin multi-platform build configuration (pt. 3)
 
-- which third-party library should each target depend upon
+- which third-party libraries each target should depend upon
     ```kotlin
     kotlin {
         sourceSets {
@@ -1166,8 +1166,8 @@ Let `T` denote the target name (e.g. `jvm`, `js`, etc.)
     * requires the `js` target to be enabled
     * requires the `binaries.executable()` configuration to be enabled
 
-- `assemble` creates all JARs (hence compiling for main code for all platforms)
-    + it also generates documentation and sources JAR
+- `assemble` creates all JARs (hence compiling the main code for all platforms)
+    + it also generates documentation and sources JARs
         * if publishing is configured
 
 - `test` executes tests for all platforms
@@ -1184,7 +1184,7 @@ Let `T` denote the target name (e.g. `jvm`, `js`, etc.)
 
 - When in `common`:
     + only the platform-agnostic std-lib can be used
-        * API reference [here](https://kotlinlang.org/api/latest/jvm/stdlib/) (recall to disable all targets except `Common`)
+        * API reference [here](https://kotlinlang.org/api/latest/jvm/stdlib/) (remember to disable all targets except `Common`)
     + one may use third-party libraries, as long as they are __multi-platform__ too
     + one may use the [`expect` keyword](https://kotlinlang.org/docs/multiplatform-connect-to-apis.html)
     + one may use platform-specific annotations 
@@ -1222,8 +1222,8 @@ Let `T` denote some target platform
 
 1. Draw a platform-agnostic design for your domain entities
     + keep in mind that you can only rely on a very small std-lib / runtime
-    + keep in mind that some API may be missing in the common std-lib:
-        - e.g. file system API 
+    + keep in mind that some APIs may be missing from the common std-lib:
+        - e.g. file system APIs
     + try to reason in a platform-agnostic way
         - e.g. file system makes no sense for in-browser JS
     + separate interfaces from classes
@@ -1251,9 +1251,9 @@ Let `T` denote some target platform
     ```bash
     # HEADER_1, HEADER_2, HEADER_3, ...
     # character '#' denotes the beginning of a single-line comment
-    # first line conventionally denotes columns names (headers)
+    # first line conventionally denotes column names (headers)
 
-    field1, filed2, field3, ...
+    field1, field2, field3, ...
     # character ',' acts as field separator
     
     "field with spaces", "another field, with comma", "yet another field", ...
@@ -1328,7 +1328,7 @@ package "io github gciatto csv" {
 
     Row <|-- Record
 
-    Record "1" *-right- "*" Header
+    Record "*" *-right- "1" Header
 
     interface Table {
         + header: Header
@@ -1337,7 +1337,7 @@ package "io github gciatto csv" {
         + size: Int
     }
     
-    Table "1" *-u- "*" Header
+    Table "*" *-u- "1" Header
     Table "*" o-u- "*" Record
     Table -u----|> Iterable: //T// = Row
 }
@@ -1544,7 +1544,7 @@ internal class DefaultRecord(override val header: Header, values: Iterable<Strin
 
     init {
         require(header.size == super.values.size) {
-            "Inconsistent amount of values (${super.values.size}) w.r.t. to header size (${header.size})"
+            "Inconsistent number of values (${super.values.size}) w.r.t. header size (${header.size})"
         }
     }
 
@@ -1600,7 +1600,7 @@ internal class DefaultTable(override val header: Header, records: Iterable<Recor
 
 ## Need for factory methods
 
-- To enforce separation among API and implementation code, it's better:
+- To enforce separation between API and implementation code, it's better:
     * to keep interfaces public, and classes internal
     * to provide factory methods for creating instances of the interfaces
 
@@ -1632,22 +1632,22 @@ internal class DefaultTable(override val header: Header, records: Iterable<Recor
 ## The `Csv.kt` file
 
 ```kotlin
-// Headers creation from columns names
+// Header creation from column names
 fun headerOf(columns: Iterable<String>): Header = DefaultHeader(columns)
 fun headerOf(vararg columns: String): Header = headerOf(columns.asIterable())
 
 // Creates anonymous headers, with columns named after their index
 fun anonymousHeader(size: Int): Header = headerOf((0 ..< size).map { it.toString() })
 
-// Records creation from header and values
+// Record creation from header and values
 fun recordOf(header: Header, columns: Iterable<String>): Record = DefaultRecord(header, columns)
 fun recordOf(header: Header, vararg columns: String): Record = recordOf(header, columns.asIterable())
 
-// Tables creation from header and records
+// Table creation from header and records
 fun tableOf(header: Header, records: Iterable<Record>): Table = DefaultTable(header, records)
 fun tableOf(header: Header, vararg records: Record): Table = tableOf(header, records.asIterable())
 
-// Tables creation from rows (anonymous header if none is provided)
+// Table creation from rows (anonymous header if none is provided)
 fun tableOf(rows: Iterable<Row>): Table {
     val records = mutableListOf<Record>()
     var header: Header? = null
@@ -1664,7 +1664,7 @@ fun tableOf(rows: Iterable<Row>): Table {
 
 - Notice that each factory method is __overloaded__
     + to support both `Iterable` and `vararg` arguments
-    + this is convenient for Kotlin programmers that will use our library
+    + this is convenient for Kotlin programmers who will use our library
 
 ---
 
@@ -1728,7 +1728,7 @@ fun tableOf(rows: Iterable<Row>): Table {
 
 ## How much platform-specific code is needed?
 
-- I/O functionalities are supported by fairly different API in JVM and JS
+- I/O functionalities are supported by fairly different APIs in the JVM and JS
     * e.g. JVM's [`java.io` package](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/package-summary.html) vs. JS' [`fs` module](https://nodejs.org/docs/latest-v20.x/api/fs.html)
     * sadly, Kotlin std-lib does not provide a common API for I/O
 
@@ -1838,7 +1838,7 @@ interface Formatter {
     // The configuration of this formatter (i.e. the characters to be used).
     val configuration: Configuration
 
-    // Formats the source of this formatter into a sequence of strings (one per each row in the source)
+    // Formats the source of this formatter into a sequence of strings (one for each row in the source)
     fun format(): Iterable<String>
 }
 ```
@@ -1855,7 +1855,7 @@ interface Parser {
     // The configuration of this parser (i.e. the characters to be used).
     val configuration: Configuration
 
-    // Parses the source of this parser into a sequence of rows (one per each row in the source)
+    // Parses the source of this parser into a sequence of rows (one for each row in the source)
     fun parse(): Iterable<Row>
 }
 ```
