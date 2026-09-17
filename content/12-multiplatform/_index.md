@@ -2990,7 +2990,7 @@ Conceptual workflow:
 
 ## Repositories by platform (pt. 1)
 
-> __Takeaway__: each platform has some preferred main repository where users expect to find packages onto
+> __Takeaway__: each platform has some preferred main repository where users expect to find packages
 
 - `JVM` $\rightarrow$ [Maven Central Repository](https://central.sonatype.com) (MCR)
     + other Maven repositories exist, but they are more fragile
