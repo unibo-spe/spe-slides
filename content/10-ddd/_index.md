@@ -646,7 +646,7 @@ CustomerRegistry --> CustomerID: exploits
 ## Services
 
 > _Functional_ objects encapsulating the _business logic_ of the software 
-> <br> e.g. operations spanning through _several_ entities, objects, aggregates, etc.
+> <br> e.g. operations spanning _several_ entities, objects, aggregates, etc.
 
 ### Purpose
 
@@ -654,12 +654,12 @@ CustomerRegistry --> CustomerID: exploits
 - _Wiring_ aggregates, entities, and value objects _together_ 
 - Exposing _coarse-grained functionalities_ to the users
 - Providing a _façade_ for the domain
-- Make the business logic evolvable, interchangeable, replaceable
+- Making the business logic evolvable, interchangeable, replaceable
 
 ### Remarks
 
-- Services may be _exposed_ via ReSTful API
-- Should be designed keeping _current uses cases_ into account (i.e. design services to be _purpose-specific_)
+- Services may be _exposed_ via RESTful APIs
+- Should be designed taking _current use cases_ into account (i.e. design services to be _purpose-specific_)
     + entities/objects should support _future use cases_, too (i.e. design entities/objects to be _general purpose_)
 
 ---
