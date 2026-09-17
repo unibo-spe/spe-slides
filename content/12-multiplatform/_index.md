@@ -3086,7 +3086,7 @@ Conceptual workflow:
 
 Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/quickguide.html#classes-objects)
 
-- Java __classes__ are __presented__ wherever possible _similar_ to Python classes
+- Java __classes__ are __presented__ as similarly to Python classes as possible
 
 - the only major difference is that __Java classes__ and objects are _closed_ and __cannot be modified__
 
