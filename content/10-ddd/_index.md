@@ -588,7 +588,7 @@ CustomerFactory -u-> Customer: creates
 ### Remarks
 
 - They may exploit _factories_ for turning retrieved data into objects
-- If properly engineered, _avoids lock-in_ effect for database technologies 
+- If properly engineered, they avoid the _lock-in_ effect for database technologies 
 - Design & implementation may require thinking about:
     - the architecture, 
     - the infrastructure, 
