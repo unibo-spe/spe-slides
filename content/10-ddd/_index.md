@@ -464,7 +464,7 @@ Customer *-r- CustomerID
 - They are usually _compound_ entities
 
 - They can be or exploit _collections_ to contain composing items
-    + they may leverage on the [composite pattern](https://en.wikipedia.org/wiki/Composite_pattern)
+    + they may leverage the [composite pattern](https://en.wikipedia.org/wiki/Composite_pattern)
 
 - May be better implemented as _classes_ in most programming languages
 
