@@ -2754,7 +2754,7 @@ void f(int a, int b) { f(a, b, 3); }
 void f(int a) { f(a, 2, 3); }
 void f() { f(1, 2, 3); }
 
-// missing overloads:
+// overloads that cannot be generated (same erasure):
 // void f(int a, int c) { f(a, 2, c); }
 // void f(int b, int c) { f(1, b, c); }
 // void f(int c) { f(1, 2, c); }
