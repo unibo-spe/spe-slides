@@ -334,7 +334,7 @@ Model
 
 - __Aggregate Root__: compound objects
 
-- __Domain Event__: objects modelling relevant event (notifications)
+- __Domain Event__: objects modelling relevant events (notifications)
 
 - __Service__ objects: providing stateless functionalities
 
