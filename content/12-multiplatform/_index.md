@@ -2329,15 +2329,15 @@ In the `jsMain` source set
 ## Output of a multi-platform build
 
 - Kotlin multi-platform projects can be assembled as JARs
-    * enabling importing the project as dependency in other multi-platform projects
+    * enabling importing the project as a dependency in other multi-platform projects
 
-- The `jvmMain` source set is compiled into a JVM-compliant JARs
-    * enabling importing the project as dependency in JVM projects
+- The `jvmMain` source set is compiled into a JVM-compliant JAR
+    * enabling importing the project as a dependency in JVM projects
     * enabling the creation of runnable JARs
     * via the various `*Jar` or `assemble` tasks
 
 - The `jsMain` source set is compiled into either
-    * a Kotlin library (`.klib`), enabling importing the project as dependency in Kotlin/JS projects
+    * a Kotlin library (`.klib`), enabling importing the project as a dependency in Kotlin/JS projects
         + via the various `*Jar` or `assemble` tasks
     * a NodeJS project
         + via the `compileProductionExecutableKotlinJs` task
