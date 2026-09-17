@@ -677,7 +677,7 @@ CustomerRegistry --> CustomerID: exploits
         * ... which does <u>not</u> support the operation directly through its methods
             - (maybe because the operation is use-case specific)
     + e.g. __proxying__ an external service
-    + e.g. a complex operation spanning through __several aggregates__, repositories, factories, etc.
+    + e.g. a complex operation spanning __several aggregates__, repositories, factories, etc.
 
 - _Non-trivial_ implementations should take care of
     + supporting _concurrent access_ to the service’s facilities 
