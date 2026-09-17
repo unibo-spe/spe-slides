@@ -2632,7 +2632,7 @@ MyType x = MyType.of();
 {{% col %}}
 ```kotlin
 fun f(vararg xs: Int) {
-    val ys: Array<Int> = xs
+    val ys: IntArray = xs
 }
 ```
 {{% /col %}}
