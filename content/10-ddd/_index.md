@@ -909,7 +909,7 @@ note right of OrderManagementService: service
 
 - _Minimise_ the potential _impact_ / _reach_ of changes
     + each context should be as independent as possible
-    + each change affect as few contexts as possible
+    + each change affects as few contexts as possible
 
 --- 
 
