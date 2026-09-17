@@ -114,7 +114,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 - Examples of domains and the contexts composing them
     + some __university__ (department, faculty, HR, etc.)
     + some given __company__ (manufacturing, marketing, HR, etc.)
-    + __linear algebra__ (matrices, complex numbers, polynoms, etc.)
+    + __linear algebra__ (matrices, complex numbers, polynomials, etc.)
     + __machine learning__ (classification, regression, feature selection, etc.)
 
 ---
