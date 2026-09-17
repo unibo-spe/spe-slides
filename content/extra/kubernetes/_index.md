@@ -996,7 +996,7 @@ users:
 
 <div class="custom">
 
-```bash
+```yaml
 apiVersion: v1
 clusters:
 - cluster:
