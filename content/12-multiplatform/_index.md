@@ -1939,7 +1939,7 @@ class DefaultFormatter(override val source: Iterable<Row>, override val configur
 ## The `AbstractParser` class
 
 ```kotlin
-class AbstractParser(override val source: Any, override val configuration: Configuration) : Parser {
+abstract class AbstractParser(override val source: Any, override val configuration: Configuration) : Parser {
 
     // Empty methods to be overridden by sub-classes to initialize/finalise parsing.
     protected open fun beforeParsing() { /* does nothing by default */ }
