@@ -69,7 +69,7 @@ cf. <https://www.omg.org/ocup-2/documents/Meta-ModelingAndtheMOF.pdf>
 - __Meta-models__ are the very first thing you should try to identify whenever approaching a new __technology__
 
 - If you grasp the meta-model, you grasp the __essence__ of the technology
-    + which may be same for many other technologies
+    + which may be the same for many other technologies
 
 - E.g. after you learned the _basics of OOP_ (classes, methods, objects, etc.) you may easily learn _any_ __other OOP language__
     + by simply asking yourself how _each meta-model element_ is __expressed__ in the new language
@@ -82,12 +82,12 @@ cf. <https://www.omg.org/ocup-2/documents/Meta-ModelingAndtheMOF.pdf>
 
 ## Model-driven whatever
 
-- Several, slightly similar names, make create _confusion_
+- Several slightly similar names may create _confusion_
     * e.g. model-driven engineering / development / architecture / etc.
 
 - Please read _Martin Fowler_'s article on [Model-Driven Software Architecture](https://martinfowler.com/bliki/ModelDrivenArchitecture.html) to clarify
 
-- Despite the name the key ideas can be summarised as follow:
+- Despite the name, the key ideas can be summarised as follows:
     1. _software engineering_ workflow should start by __modelling the domain__ at hand carefully
         * e.g. with DDD
         * as opposed to focussing on algorithms and data structures
@@ -121,7 +121,7 @@ cf. <https://www.omg.org/ocup-2/documents/Meta-ModelingAndtheMOF.pdf>
 
 ## Towards domain specific languages
 
-- __Domain-specific Languages__ (DSL) are _programming_ / _description_ / _specification languages_ targetting one __particular__ class of problems
+- __Domain-specific Languages__ (DSL) are _programming_ / _description_ / _specification languages_ targeting one __particular__ class of problems
     * e.g. they are _not_ meant to address all possible problems, but just the ones they are designed for
 
 - As opposed to __general-purpose languages__ (GPL) which are targetting __as many__ classes of problems __as possible__
@@ -133,9 +133,9 @@ cf. <https://www.omg.org/ocup-2/documents/Meta-ModelingAndtheMOF.pdf>
     + _regular expressions_ for text processing
     + _SQL_ for database querying
     + _CSS_ for styling web pages
-    + _HTML_ for describing web pages content
+    + _HTML_ for describing the content of web pages
     + _DOT_ for graph visualisation
-    + _PlantUML_ for UML diagrams visualisation
+    + _PlantUML_ for visualising UML diagrams
     + _Gherkin_ for Behavior-Driven Development (BDD)
     + _VHDL_ for hardware description
 
