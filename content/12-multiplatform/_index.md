@@ -3030,11 +3030,11 @@ Conceptual workflow:
 
 ## Write first, wrap elsewhere: the case of [JPype](https://jpype.readthedocs.io/)
 
-- In the end of the day, the Python interpreter is C++ software
+- At the end of the day, the Python interpreter is C software
 
-- Most commonly, efficient Python code is written in C++ and then wrapped into Python
+- Most commonly, efficient Python code is written in C and then wrapped into Python
 
-- Put it simply, the JVM too is C++ software
+- Put simply, the JVM too is C++ software
 
 - Can Python code be written in Java and then wrapped into Python?
 
@@ -3046,7 +3046,7 @@ Conceptual workflow:
     * and many others...
 
 - Why exactly JPype?
-    * still maintained, works with vanilla CPython, good documentation, good interoperabilty with JVM types
+    * still maintained, works with vanilla CPython, good documentation, good interoperability with JVM types
 
 ---
 
