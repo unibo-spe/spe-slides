@@ -3186,9 +3186,9 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
 
 - Java _interfaces_ can be __implemented__ in Python, via JPype's __decorators__
 
-- Java's open / abstract classes __cannot be extended__ in Python
+- Java's non-final / abstract classes __cannot be extended__ in Python
 
-- Python __lambda expressions__ can be cast'd to Java's __functional interfaces__
+- Python __lambda expressions__ can be cast to Java's __functional interfaces__
 
 {{< figure src="jpype-implements.png" width="50%" alt="Implementing Java interfaces in Python" >}}
 
