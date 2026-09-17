@@ -254,19 +254,19 @@ Customer *-r- CustomerID
 ```gherkin
 Scenario: Verify withdraw at the ATM works correctly
 Given John has 500$ on his account
-When John ask to withdraw 200$
+When John asks to withdraw 200$
 And John inserts the correct PIN
 Then 200$ are dispensed by the ATM
 And John has 300$ on his account
 ```
 
 - Gherkin is a language that can describe __behavioural tests__ for software systems
-    * i.e. what system should do in given scenario
+    * i.e. what the system should do in a given scenario
 
-- Syntax if very flexible and it seems like _natural language_
+- Syntax is very flexible and it seems like _natural language_
 
-- Stakeholders and engineer will agree on a set of __behavioural specifications__ for the system
-    + written in Gherking
+- Stakeholders and engineers will agree on a set of __behavioural specifications__ for the system
+    + written in Gherkin
 
 - The most common implementation is [Cucumber](https://cucumber.io/)
     + allowing the semi-automated translation of Gherkin specifications into __executable tests__
@@ -349,7 +349,7 @@ pension contribution InpsGLA paid by employer 2/3 and employee 1/3 {
 - DSLs are __not__ a replacement for GPLs
     + they are __complementary__
 
-- Yet the difference is fuzzy, so lets try to clarify:
+- Yet the difference is fuzzy, so let's try to clarify:
 
 |                            |            **GPL**           |               **DSL**               |
 |:--------------------------:|:----------------------------:|:-----------------------------------:|
@@ -357,7 +357,7 @@ pension contribution InpsGLA paid by employer 2/3 and employee 1/3 {
 | **Syntactical constructs** |      many and composable     |            few and static           |
 |     **Expressiveness**     |        Turing-complete       | possibly, less than Turing-complete |
 |     **Customisability**    |           maximised          |    minimised / confined / absent    |
-|       **Defined by**       |    companies or committees   |       teams of domain expertes      |
+|       **Defined by**       |    companies or committees   |       teams of domain experts      |
 |        **User base**       | large, anonymous, widespread |       small, accessible, local      |
 |        **Evolution**       |     slow, well-structured    |              fast-paced             |
 |       **Deprecation**      |           very slow          |        feasible, often abrupt       |
@@ -380,10 +380,10 @@ pension contribution InpsGLA paid by employer 2/3 and employee 1/3 {
 - Intuitively, __semantics__ is given to languages by writing the machinery supporting their execution
     + three main aspects:
         1. __conversion__ into _runnable code_ (e.g. _translation_ or _interpretation_) ...
-        2. ... leveraging onto a __execution engine__ (i.e. _library functionalities_ supporting the runnable code) ...
+        2. ... leveraging an __execution engine__ (i.e. _library functionalities_ supporting the runnable code) ...
         3. ... in turn relying on a __software platform__ (e.g. JVM, .NET, etc.)
 
-> The role of _DSL engineers_ mostly focuses on __steps 1__ & __2__ (other than defining the __syntax__)
+> The role of _DSL engineers_ mostly focuses on __steps 1__ & __2__ (besides defining the __syntax__)
 
 ---
 
@@ -394,11 +394,11 @@ Two main approaches:
 - __Translation__: translates a DSL script into a language for which an _execution engine_ on a given _target platform_ exists
     * a.k.a. __code generation__ or _transpilation_ if the target language is high-level (e.g. Java, JS, or C#)
         + e.g. [Xtend](https://eclipse.dev/Xtext/xtend/), or [TypeScript](https://www.typescriptlang.org/), despite being GPL, are transpiled into Java and JS respectively
-    * a.k.a. __compilation__ if the target language is low-level (e.g. assembly, JVM bytecode, CRL, etc.)
+    * a.k.a. __compilation__ if the target language is low-level (e.g. assembly, JVM bytecode, CIL, etc.)
         + e.g. Java is compiled into JVM bytecode (despite being a GPL)
 
 - __Interpretation__: the execution engine is able to _parse and execute_ the DSL script _directly_
-    * a.k.a. __runtime interpretation__ or _runtime compilation_ if the execution engine is able to compile the DSL script into a runnable code
+    * a.k.a. __runtime interpretation__ or _runtime compilation_ if the execution engine is able to compile the DSL script into runnable code
         + e.g. [2P-Kt](https://github.com/tuProlog/2p-kt) is a GPL interpreted by a custom execution engine, written in Kotlin, running on the JVM
 
 <br>
@@ -418,7 +418,7 @@ In both cases, there are technical __prerequisites__:
 
 - As opposed to __internal__ (a.k.a. _embedded_) __DSLs__
     + i.e. where the syntax is a subset of some pre-existing GPL...
-    + ... whose syntax is __flexible__ enough to allow _costimisation_
+    + ... whose syntax is __flexible__ enough to allow _customisation_
 
 - Creating _internal_ DSL is a recent trend enabled by the wide adoption of flexible GPL
     + e.g. Kotlin, Groovy, or Scala, which come with _ad-hoc constructs_
@@ -478,19 +478,19 @@ tasks {
 
 ## Key aspects of _internal_ DSL
 
-- Internal DSL may __ease adoption__ of the DSL it self
+- Internal DSL may __ease adoption__ of the DSL itself
     + users may _already know_ the GPL
         + hence they may be able to use the DSL _without learning a new language_
         + hence they may use the same __toolkits__ _available for the GPL_ (e.g. debugger, IDE, etc.)
 
 
-- Internal DSL __simplify__ the __DSL engineering__ process
+- Internal DSLs __simplify__ the __DSL engineering__ process
     + _no need_ to write and maintain a __custom parser__
         * as the parser is _already_ provided by the GPL
     + _no need_ to write and maintain __custom toolkits__
         * as the GPL toolkits may be _reused_
 
-- The __integration__ among the GPL and the DSL is __tight__
+- The __integration__ between the GPL and the DSL is __tight__
     + the DSL may exploit the __constructs of the GPL__, and this is commonly _desired_
     + the DSL is __technologically__ and __syntactically bound__ to the GPL, and this is commonly _undesired_
 
@@ -503,7 +503,7 @@ tasks {
 
 - This is _no different_ from __any other library__ supporting some given domain
 
-- Except that hacks could exploit to ease the adoption of the __target DSL syntax__
+- Except that hacks can be exploited to ease the adoption of the __target DSL syntax__
 
 {{% /section %}}
 
@@ -523,7 +523,7 @@ tasks {
 
 ### Other relevant tools for language engineering
 
-- [ANTLR](https://www.antlr.org/) only parser generation for Java, JS, Python, .Net, C++
+- [ANTLR](https://www.antlr.org/) only parser generation for Java, JS, Python, .NET, C++
 
 - [Language Server Protocol](https://microsoft.github.io/language-server-protocol/overviews/lsp/overview/) (LSP)
 
@@ -561,8 +561,8 @@ tasks {
     + scoping (with pluggable rules)
     + IDE support via LSP
     + syntax colouring
-    + etc.
     + test stubs
+    + etc.
 
 - Exercises and examples about MDD will be based on Xtext
 
@@ -570,13 +570,13 @@ tasks {
 
 ## Running example: the **task scheduling** domain
 
-- Users may be willing to __schedule__ custom _tasks_ on a machine
+- Users may want to __schedule__ custom _tasks_ on a machine
 
 - __Task__ $\equiv$ running any _command_ available on the OS
     + via some _shell_ (e.g. `bash`, `cmd`, `powershell`, etc.) of choice
 
-- __Scheduling__ implied defining _when_ the task should be executed
-    + _relatively_ to now: e.g. _**in** 5 minutes_, _**in** 1 hour_, etc.
+- __Scheduling__ implies defining _when_ the task should be executed
+    + _relative_ to now: e.g. _**in** 5 minutes_, _**in** 1 hour_, etc.
     + _absolutely_: e.g. _today **at** 10:00_, _tomorrow **at** 12:00_, _**on** 2023/11/23 **at** 13:16_ etc.
     + _before_ or _after_ __some other task__
     + _periodically_: e.g. _**every** 5 minutes_, _**every** 48 hours_, etc.
@@ -610,12 +610,12 @@ Code: <https://github.com/unibo-spe/sheduler-lang>
 
 1. Clone with Git the `exercises` branch
 
-2. The cloned repository is and [Ecplise](https://www.eclipse.org/downloads/) project
+3. The cloned repository is an [Eclipse](https://www.eclipse.org/downloads/) project
     + please install [Eclipse for DSL developers](https://eclipse.dev/Xtext/download.html) from Xtext's website
 
 4. In Eclipse, import the _repository root_ directory as a __Gradle project__
 
-5. You may also use __IntelliJ__, in that case just import the `sheduler-lang/` directory as _Gradle project_
+5. You may also use __IntelliJ__; in that case just import the `sheduler-lang/` directory as a _Gradle project_
     + no syntax colouring or Xtext support on IntelliJ or VSCode
 
 ---
@@ -669,7 +669,7 @@ sheduler-lang/
 ## Relevant Gradle tasks for Xtext
 
 - `generateXtextLanguage` generates the language infrastructure
-    * there including:
+    * including:
         + domain model interfaces / classes
         + parser
         + validator stub
@@ -886,8 +886,8 @@ Task *-- RelativeTime
 Task *-- AbsoluteTime
 RelativeTime *-- TimeSpan
 TimeSpan *-- TimeUnit
-RelativeTime *-- Date
-RelativeTime *-- ClockTime
+AbsoluteTime *-- Date
+AbsoluteTime *-- ClockTime
 @enduml
 {{< /plantuml >}}
 
@@ -957,7 +957,7 @@ Classes are generated too!
 ## About validation rules (pt. 2)
 
 Remarks:
-* the name of the validation method is meaning-less
+* the name of the validation method is meaningless
 * only the __type__ of the parameter matters
 * plus the presence of the `@Check` annotation
 * the `@CheckType` annotation is optional, and defaults to `CheckType.NORMAL`
@@ -983,7 +983,7 @@ Write custom validation rules covering the following constraints:
     + cf. `LocalDateTime.now()`
     + cf. `LocalDateTime.isBefore()`
 
-4. Error is some `ClockTime` is invalid
+4. Error if some `ClockTime` is invalid
     - hour must be between 0 and 23
     - minute must be between 0 and 59
     - second must be between 0 and 59
@@ -996,7 +996,7 @@ Write custom validation rules covering the following constraints:
 
 5. Error if some `TimeSpan` is invalid
     - negative duration
-    - 1000 or more when the unit is nano/milli seconds
+    - 1000 or more when the unit is nano/milliseconds
     - 60 or more when the unit is minutes/seconds
     - 24 or more when the unit is hours
 
@@ -1010,13 +1010,13 @@ Write custom validation rules covering the following constraints:
 
 ## About scoping rules
 
-- Validation rules are defined in the `ShedulerScopeProvider` class
+- Scoping rules are defined in the `ShedulerScopeProvider` class
     * package: `it.unibo.spe.mdd.sheduler.scoping`
     * Gradle sub-project: `sheduler-lang/`__`it.unibo.spe.mdd.sheduler`__
 
 - Stub class is generated by Xtext when running the `generateXtextLanguage` task
 
-- Content of the stub and validation rule example:
+- Content of the stub and scoping rule example:
     ```java
     public class ShedulerScopeProvider extends AbstractShedulerScopeProvider {
         @Override
@@ -1033,7 +1033,7 @@ Write custom validation rules covering the following constraints:
     + it should return an `IScope` object, for each `EObject` containing some `EReference`
     + in our case, this could only happen in `Task`s' `before` and `after` properties
     + the scope is essentially a container of `EObject`s, which are the possible values for the `EReference`
-        + the implementer of the scope provide should select which `EObject`s to include in the scope
+        + the implementer of the scope provider should select which `EObject`s to include in the scope
 
 ---
 
@@ -1056,7 +1056,7 @@ Documentation here: <https://www.eclipse.org/Xtext/documentation/303_runtime_con
 
 - Two approaches:
     * __interpretation__: the DSL is interpreted by some __execution engine__
-    * __translation__: the DSL is translated into some _executable code_, leveraging on the API of some __execution engine__
+    * __translation__: the DSL is translated into some _executable code_, leveraging the API of some __execution engine__
 
 - Both approaches require the definition of an __execution engine__
     * i.e. a library providing the __functionalities__ of the DSL
@@ -1081,7 +1081,7 @@ Documentation here: <https://www.eclipse.org/Xtext/documentation/303_runtime_con
         + optionally, the tasks to be executed _before/after_
         + the functionalities for __executing__ the command via `ProcessBuilder`s
     2. we may define some custom notion of `ShedulerRuntime`
-        + leveraging on the `ScheduledExecutorService` API...
+        + leveraging the `ScheduledExecutorService` API...
         + ... to schedule the `ShedulerTask`s for execution
 
 ---

@@ -3287,7 +3287,7 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
 
 ## Customising Java types in Python (pt. 2)
 
-Consider for instance the following customisations, allowing to use _Java collections_ with __Python syntax__
+Consider for instance the following customisations, allowing _Java collections_ to be used with __Python syntax__
 
 ```python
 from typing import Iterable, Sequence
@@ -3379,7 +3379,7 @@ For all __public types__ in the wrapped _Java library_:
 
 - The `jcsv` package is a Pythonic wrapper for our JVM-based `io.github.gciatto.csv` library
 
-- Java's type definition are brought to Python in `jcsv/__init__.py`:
+- Java's type definitions are brought to Python in `jcsv/__init__.py`:
 
     ```python
     import jpype
@@ -3404,6 +3404,7 @@ For all __public types__ in the wrapped _Java library_:
     ```python
     from jcsv import Table, Record, Header
     ```
+
 ---
 
 ## Example: the `jcsv` package (pt. 2)
@@ -3535,7 +3536,7 @@ For all __public types__ in the wrapped _Java library_:
 
 ## Example: the `jcsv` package (pt. 6)
 
-- The `Header` shall inherit all customisation for `Row`, plus the following ones:
+- The `Header` shall inherit all customisations of `Row`, plus the following ones:
     ```python
     @jpype.JImplementationFor("io.github.gciatto.csv.Header")
     class _Header:
@@ -3558,7 +3559,7 @@ For all __public types__ in the wrapped _Java library_:
 
 ## Example: the `jcsv` package (pt. 7)
 
-- The `Record` shall inherit all customisation for `Row`, plus the following ones:
+- The `Record` shall inherit all customisations of `Row`, plus the following ones:
     ```python
     @jpype.JImplementationFor("io.github.gciatto.csv.Record")
     class _Record:
@@ -3614,7 +3615,6 @@ For all __public types__ in the wrapped _Java library_:
     + supporting the syntax `len(table)` instead of `table.getSize()`
     + supporting the syntax `table[i]` instead of `table.get(i)`
     + supporting the syntax `table[-i]` instead of `table.get(table.getSize() - i - 1)`
-    + supporting the syntax `record in table` instead of `table.contains(record)`
     + supporting the syntax `table.records` instead of `table.getRecords()`
 
 ---
@@ -3628,7 +3628,7 @@ csv-python/
 │   ├── __init__.py
 │   ├── jvm
 │   │   ├── __init__.py         # this is where JPype is loaded
-│   │   └── csv.jar             # this the Fat-JAR of the JVM-based library
+│   │   └── csv.jar             # this is the Fat-JAR of the JVM-based library
 │   └── python.py
 ├── requirements.txt
 └── test
@@ -3638,14 +3638,14 @@ csv-python/
 ```
 
 1. We need to __ensure__ that the _JVM-based library_ is available on the system where `jcsv` is installed
-    + why not including it in the Python package?
+    + why not include it in the Python package?
 
-1. The `build.gradle.kts` file automates the generation of the `csv.jar` file
+2. The `build.gradle.kts` file automates the generation of the `csv.jar` file
     + it is a _Fat-JAR_ containing all the dependencies of the JVM-based library
     + such JAR is placed in the `jcsv/jvm` directory
     + it is part of Python sources, so that it can be distributed with the Python library
 
-2. The `jcsv/jvm/__init__.py` file loads JPype and the `csv.jar` file
+3. The `jcsv/jvm/__init__.py` file loads JPype and the `csv.jar` file
 
 ---
 
@@ -3734,6 +3734,7 @@ csv-python/
 
     jpype.startJVM(jvmpath=jvmlib())
     ```
+
 ---
 
 ## About unit testing
@@ -3745,5 +3746,5 @@ csv-python/
     + `test/test_parsing.py`
     + `test/test_python_api.py`
 
-- It is important to __test__ all the _costumisations_ and _factory methods_
+- It is important to __test__ all the _customisations_ and _factory methods_
     + because these are __not covered__ by the unit tests of the _JVM-based library_
