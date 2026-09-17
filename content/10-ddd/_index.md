@@ -204,7 +204,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 ## The _Ubiquitous Language_
 
 > - A _language_ structured around the domain model
->   + _used by all people_ involved into the domain
+>   + _used by all people_ involved in the domain
 >   + which should be _used in the software_
 >   + in such a way that their _semantics is preserved_
 
