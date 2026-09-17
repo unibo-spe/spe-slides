@@ -2265,7 +2265,7 @@ In the `jsMain` source set
     ```kotlin
     import java.io.File
 
-    actual fun createTempFile(name: String, extension: String, content: String): String
+    actual fun createTempFile(name: String, extension: String, content: String): String {
         val file = File.createTempFile(name, extension)
         file.writeText(content)
         return file.absolutePath
