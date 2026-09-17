@@ -3246,7 +3246,7 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
 
     csv = jpype.JPackage("io.github.gciatto.csv.Csv")
 
-    csv.headerOf(["filed", "another field"])
+    csv.headerOf(["field", "another field"])
     ```
 
 - This would raise the following __error__:
