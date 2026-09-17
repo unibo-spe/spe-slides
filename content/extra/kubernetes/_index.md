@@ -262,16 +262,16 @@ And the list goes on...
 
 ### Docker Swarm
 - Simple access control based on TLS, 
-  - requires the direct access to a cluster node, and,
-  - it is not configurable for the single use case.
-- For a better access control is necessary to use a third-party management dashboard,
-  - i.e. *Portainer*, etc.
+  - requires direct access to a cluster node, and,
+  - it is not configurable for individual use cases.
+- For better access control it is necessary to use a third-party management dashboard,
+  - e.g. *Portainer*.
 
 {{% /col %}} {{% col %}}
 
 ### Kubernetes
 - Fine grained access control based on RBAC,
-  - configurable for the single use case
+  - configurable for individual use cases
 
 - Resources are externally managed with `kubectl` tool,
   - it connects remotely to a cluster => no need to access a cluster node
@@ -281,7 +281,7 @@ And the list goes on...
 
 - Cluster resources can be split logically into *namespaces*
   - resources not visible between namespaces
-  - each one have its own RBAC configuration
+  - each one has its own RBAC configuration
   - each one is assigned to a different team
 
 {{% /col %}}
@@ -309,9 +309,9 @@ And the list goes on...
 
 ### Kubernetes smallest deployable unit.
 - Runs one (or more) containers
-  - Pods allow to deploy together two different containers that are symbiotic between themselves
-    - for example, a web server container and the git synchronizer one that keeps it updated 
-    - this is not the case of a web server and its database, which can be deployed in two different nodes
+  - Pods allow two symbiotic containers to be deployed together
+    - for example, a web-server container and a git-synchronizer container that keeps it updated
+    - this is not the case for a web server and its database, which can be deployed in two different nodes
 
 {{% /col %}}
 {{% /multicol %}}
@@ -336,7 +336,7 @@ And the list goes on...
   - host name,
   - storage (volumes), 
   - inter-process communication (IPC),
-  - Process identifiers (PIDs).
+  - process identifiers (PIDs).
 
 {{% /col %}}
 {{% /multicol %}}
@@ -552,7 +552,7 @@ spec:
 {{% col %}}
 <div class="custom">
 
-```bash
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -581,7 +581,7 @@ spec:
 <br>
 <br>
 
-`Pods` are not directly managed by the user, but through higher-level objects called `Deployment`.
+`Pods` are not directly managed by the user, but through higher-level objects called `Deployment`s.
 - They exist to manage the release of a new version of the application
 - Avoid downtime during the update process of a Pod
 - Ties together `ReplicaSets` and `Pods`
@@ -596,7 +596,7 @@ spec:
 {{% col %}}
 <div class="custom">
 
-```bash
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -625,8 +625,8 @@ spec:
 <br>
 <br>
 
-The connection between `Deployments` and `Pods` is done using the `selector` field
- - they are unique labels that identify the `Pods` that the `Deployment` will manage
+The connection between `Deployments` and `Pods` is made through the `selector` field
+ - it holds unique labels that identify the `Pods` the `Deployment` will manage
 
 {{% /col %}}
 {{% /multicol %}}
@@ -637,14 +637,14 @@ The connection between `Deployments` and `Pods` is done using the `selector` fie
 
 The object that manages the `Pod` number
  - usually not directly managed by the user, but through a `Deployment`
- - allows to scale the number of `Pods` up and down
+ - lets you scale the number of `Pods` up and down
 
 
 <br>
 <br>
 
 <div class="center">
-Since a <code>Deployment</code> object manages a <code>ReplicaSet</code>, users can scale dynamically the <code>Pod</code>'s number using:
+Since a <code>Deployment</code> object manages a <code>ReplicaSet</code>, users can dynamically scale the number of <code>Pod</code>s using:
 </div>
 
 <div class="custom">
@@ -679,7 +679,7 @@ Service discovery in Kubernetes is done with *Service* objects.
 <br>
 
 **How do they work?**
-They exploit the labels selectors.
+They exploit label selectors.
 
 {{% /col %}}
 {{% /multicol %}}
@@ -698,7 +698,7 @@ There are three main types of Services:
 | --- | --- |
 | `ClusterIP` | Exposes the Service on a cluster-internal IP, only reachable <br> from within the cluster. This is the *default* value. |
 | `NodePort` | Exposes the Service on the Node’s IP with a fixed port. |
-| `LoadBalancer` | Exposes the server *externally* using a load balancer. <br> This type of Service is not offered directly from Kubernetes.  |
+| `LoadBalancer` | Exposes the Service *externally* using a load balancer. <br> This type of Service is not offered directly by Kubernetes. |
 
 ---
 
@@ -708,7 +708,7 @@ There are three main types of Services:
 {{% col %}}
 ## Job 
 Object that runs short-lived, one-off tasks.
-Useful to for things to do once, and then stop, for example a database migration.
+Useful for things to do once, and then stop, for example a database migration.
 
 {{% /col %}}{{% col %}}
 ## CronJob
@@ -721,7 +721,7 @@ CronJob is meant for performing regular scheduled actions such as backups, repor
 ## StatefulSet
 Like a Deployment, a StatefulSet manages Pods that are based on an identical container spec. 
 Unlike a Deployment, a StatefulSet maintains a sticky identity for each of its Pods. 
-These pods are created from the same spec, but are not interchangeable: each has a persistent identifier that it maintains across any rescheduling.
+These Pods are created from the same spec, but are not interchangeable: each has a persistent identifier that it maintains across any rescheduling.
 {{% /col %}}{{% col %}}
 ## DaemonSet
 A DaemonSet ensures that all (or some) Nodes run a copy of a Pod. 
@@ -737,7 +737,7 @@ As nodes are removed from the cluster, those Pods are garbage collected.
 Enforced through the `Service Account` resource object, which:
 - represents a distinct identity in the cluster
 - is *bound* to a specific `Namespace`
-- grants access to the Kubernetes' API server
+- grants access to the Kubernetes API server
 - grants permissions with *RBAC* to users
 - can be used to configure the authentication within `kubectl`
 
@@ -757,7 +757,7 @@ Enforced through the `Service Account` resource object, which:
 
 ## Installation of Kubernetes
 
-- Several tools support the installation of a *production-ready Kubernetes cluster*, because is a **complex** process
+- Several tools support the installation of a *production-ready Kubernetes cluster*, because it is a **complex** process
   - [kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/)
   - [kubespray](https://kubernetes.io/docs/setup/production-environment/tools/kubespray/)
   - [kops](https://kubernetes.io/docs/setup/production-environment/tools/kops/)
@@ -767,7 +767,7 @@ Enforced through the `Service Account` resource object, which:
 - For testing purposes, Kubernetes can be installed on a single machine using [minikube](https://minikube.sigs.k8s.io/docs/start/)
   - single-node Kubernetes cluster 
   - works on Windows, Linux and macOS
-  - runs inside a VM, a container, or on the bare-metal, on your choice
+  - runs inside a VM, a container, or on bare metal, as you prefer
   - not suitable for production environments
   - comes with a set of built-in plugins to be installed, for example: 
     - Metrics Server
@@ -793,7 +793,7 @@ minikube start --driver='virtualbox' --extra-config=kubelet.housekeeping-interva
 
 <blockquote>
 
-The driver specifies where to install the kubernetes infrastructure, in this case inside a virtual machine managed by VirtualBox 
+The driver specifies where to install the Kubernetes infrastructure, in this case inside a virtual machine managed by VirtualBox 
 
 (that is pre-installed on the machine).
 
@@ -807,7 +807,7 @@ The `--extra-config` param is used to configure Kubernetes' `kubelet` during the
 
 The flag `kubelet.housekeeping-interval` specifies the frequency at which the kubelet evaluates eviction thresholds, 
 
-we need it to execute correctly the example provided in the next slides.
+we need it to run the example in the next slides correctly.
 
 </blockquote>
 
@@ -859,8 +859,8 @@ Useful commands:
 | `minikube stop` | Stop the cluster |
 | `minikube delete` | Delete the cluster |
 | `minikube status` | Show the status of the cluster |
-| `minikube dashboard` | Expose the builtin dashboard in localhost |
-| `minikube addons list/enable/disable` | Lists/Enables/Disables available plugins into the cluster |
+| `minikube dashboard` | Expose the built-in dashboard on localhost |
+| `minikube addons list/enable/disable` | Lists/enables/disables available plugins in the cluster |
 
 ---
 
@@ -870,7 +870,7 @@ The Kubernetes command-line tool, `kubectl`, allows you to run commands against 
 
 - You can install it following the official [guide](https://kubernetes.io/docs/tasks/tools/#kubectl).
 
-After a successful installation, you can verify that kubectl is correctly connected to our minikube cluster
+After a successful installation, you can verify that kubectl is correctly connected to your minikube cluster
 
 <br>
 <div class="custom">
@@ -950,7 +950,7 @@ users:
 
 <div class="custom">
 
-```bash
+```yaml
 apiVersion: v1
 clusters:
 - cluster:
@@ -1042,7 +1042,7 @@ users:
 
 - Contexts declare the user to use to connect to a specific cluster.
 - You can define multiple contexts to connect to clusters.
-- You can connect to a single context at a time, 
+- You can be connected to a single context at a time,
   - and switch between them using the `kubectl config use-context` command.
 <div class="custom">
 
@@ -1098,7 +1098,7 @@ First of all, we need to enable the `metrics-server`, which is disabled by defau
 <br>
 <div class="center">
 
->Until the command <code>kubectl top</code> does not work properly, the metrics server is not enabled yet.<br>The operation may take a while.
+>Until <code>kubectl top</code> works properly, the metrics server is not yet enabled.<br>The operation may take a while.
 
 </div>
 
@@ -1107,10 +1107,10 @@ First of all, we need to enable the `metrics-server`, which is disabled by defau
 ## Let's test the Kubernetes autoscaling
 
 Now we can deploy our first Application
-  - it's a simple php web server that answer "OK!" to every request
+  - it's a simple PHP web server that answers "OK!" to every request
 
 
-#### **What kubernetes objects should we use to deploy it?**
+#### **What Kubernetes objects should we use to deploy it?**
 
 ---
 
@@ -1125,7 +1125,7 @@ Two objects: A <code>Deployment</code> and a <code>Service</code>
 
 <div class="custom">
 
-```bash
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -1157,7 +1157,7 @@ spec:
 
 <div class="custom">
 
-```bash
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -1196,20 +1196,20 @@ kubectl apply -f https://k8s.io/examples/application/php-apache.yaml
 ## Let's test the Kubernetes autoscaling
 
 <div class="center">
-We need to create an <code>Horizontal Pod Autoscaler</code>
+We need to create a <code>Horizontal Pod Autoscaler</code>
 </div>
 
 <div class="custom">
 
 ```bash
-kubectl autoscale deployment php-apache --cpu=50% --min=1 --max=10
+kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10
 ```
 </div>
 
 <br>
 
 <div class="center">
-It observes the CPU usage of the Pods and scales them <em>up</em> and <em>down</em> to maintain an <em>average CPU usage</em> of each Pod of <em>50%</em>. <br> 
+It observes the CPU usage of the Pods and scales them <em>up</em> and <em>down</em> to keep the <em>average CPU usage</em> of the Pods at <em>50%</em>. <br> 
 The minimum number of replicas that can be deployed is <em>1</em>, and the maximum is <em>10</em>.
 </div>
 
@@ -1218,8 +1218,8 @@ The minimum number of replicas that can be deployed is <em>1</em>, and the maxim
 ## Let's test the Kubernetes autoscaling
 
 Now, we have to simulate a huge workload
-  - for doing that we can use a Pod that continuously sends requests to the web server
-  - `kubectl run` allows to create a Pod on-the-fly
+  - to do that, we can use a Pod that continuously sends requests to the web server
+  - `kubectl run` lets you create a Pod on the fly
 
 <div class="custom">
 
