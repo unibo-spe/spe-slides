@@ -2383,7 +2383,7 @@ In the `jsMain` source set
 - Kotlin code can be called from the target platforms' main languages
     + e.g. Java, JavaScript, etc.
 
-- Understanding the mapping among Kotlin and other languages is key
+- Understanding the mapping between Kotlin and other languages is key
     + it impacts the usability of Kotlin libraries for ordinary platform users
 
 > How are Kotlin's syntactical categories mapped to other platforms/languages?
