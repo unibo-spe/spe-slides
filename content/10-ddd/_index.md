@@ -309,7 +309,7 @@ Model
 
 (continued)
 
-7. _Chose_ the most adequate __building block__ for each concept
+7. _Choose_ the most adequate __building block__ for each concept
     - depending on the nature of the concept
     - ... or the properties of its instances
 
@@ -320,7 +320,7 @@ Model
     - e.g. entities may need value objects as identifiers
     - e.g. entities may need repositories to be stored
     - e.g. entities may need factories to be created
-    - e.g. aggregates may be composed by entities or value objects
+    - e.g. aggregates may be composed of entities or value objects
 
 ---
 
