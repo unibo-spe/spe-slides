@@ -165,7 +165,7 @@ digraph G {
 ```
 {{% /col %}}
 {{% col %}}
-![Graphical representation of the DOT code on the left](./dot-examle.svg)
+![Graphical representation of the DOT code on the left](./dot-example.svg)
 {{% /col %}}
 {{% /multicol %}}
 
