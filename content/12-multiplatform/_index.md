@@ -2093,9 +2093,9 @@ class StringParser(override val source: String, configuration: Configuration)
 
     * notice the `expect` keyword, and the lack of function body
     * we're just declaring the signature of a platform-specific function
-    * there is no type for representing paths is Kotlin's common std-lib
+    * there is no type for representing paths in Kotlin's common std-lib
         + hence we're using `String` as a platform-agnostic representation of paths
-            - this is suboptimal choice
+            - this is a suboptimal choice
 
 --- 
 
