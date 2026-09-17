@@ -3154,7 +3154,7 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
 
 - reading a __slice__ from a Java array returns a _view_ of the array, __not a copy__
 
-- passing a __slide__ of a Python list to Java will create a __copy__ of the sub-list
+- passing a __slice__ of a Python list to Java will create a __copy__ of the sub-list
 
 {{< figure src="jpype-arrays.png" width="50%" alt="Java arrays vs. Python lists in JPype" >}}
 
