@@ -80,7 +80,7 @@ On [the course webpage]({{< teaching_page >}})
 ## [Timetable]({{< teaching_page >}}/orariolezioni)
 
 * **Thursday 10:00--13:00** (3h) --- Room 2.5
-* **Friday 9:00--12:00** (3h) --- Lab 4.2
+* **Friday 14:00--17:00** (3h) --- Lab 4.2
 
 Changes will be published on the forum
 
