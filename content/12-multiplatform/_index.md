@@ -3182,7 +3182,7 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
 
 ## JPype's Bridging Model (pt. 7)
 
-Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/quickguide.html#mplements-and-extension)
+Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/quickguide.html#implements-and-extension)
 
 - Java _interfaces_ can be __implemented__ in Python, via JPype's __decorators__
 
