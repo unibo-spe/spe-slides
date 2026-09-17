@@ -2201,8 +2201,8 @@ In the `jsMain` source set
     external fun writeFileSync(file: String, data: String, options: dynamic = definedExternally)
     ```
 
-    * the `@JsModule` annotation instructs the compiler about where to look up for the `fs` module
-    * `external` declarations are Kotlin signatures of JS function
+    * the `@JsModule` annotation instructs the compiler about where to look up the `fs` module
+    * `external` declarations are Kotlin signatures of JS functions
     * `dynamic` is a special type that can be used to represent any JS object
         + it overrides Kotlin's type system, hence it should be used with care
         + it prevents developers from declaring too much `external` stuff
@@ -2228,8 +2228,8 @@ In the `jsMain` source set
     * notice the usage of `readFileSync` to read a file as a string in one shot
     * notice the exploitation of common code for parsing the string into a `Table` (namely, `parseAsCSV`)
     * notice the `js("...")` magic function
-        + it allows to write JS code directly in Kotlin
-        + the provided string should contain bare JS code, the compiler will output "as-is"
+        + it allows JS code to be written directly in Kotlin
+        + the provided string should contain bare JS code, which the compiler will output as-is
         + it's a way to fill the abstraction gap on JS
         + we use it to create a JS object on the fly, to provide optional parameters to `readFileSync`
 
