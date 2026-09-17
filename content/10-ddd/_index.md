@@ -362,7 +362,7 @@ Model
 
 #### Classroom
 
-- Seats in classroom may be modelled as value-objects
+- Seats in a classroom may be modelled as value objects
 
 - Attendees of a class may be modelled as entities
 
