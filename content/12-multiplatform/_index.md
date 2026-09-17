@@ -2553,7 +2553,7 @@ object MySingleton {}
 {{% /col %}}
 {{% col %}}
 ```java
-public static class MySingleton {
+public final class MySingleton {
     private MySingleton() {}
     public static final MySingleton INSTANCE = new MySingleton();
 }
