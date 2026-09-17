@@ -2167,13 +2167,13 @@ In the `jvmMain` source set
     * the [`fs.readFileSync` function](https://nodejs.org/api/fs.html#fsreadfilesyncpath-options)
     * the [`fs.writeFileSync` function](https://nodejs.org/api/fs.html#fswritefilesyncfile-data-options)
 
-- These function supports reading / writing a file __in one shot__
+- These functions support reading / writing a file __in one shot__
     * i.e. they return / generate the _whole_ content of the file as a string
     * quite inefficient if the file is big
 
 - On Kotlin/JS, Node's std-lib is __not__ directly available
     * one must instruct the compiler about
-        1. __where__ to look up for std-lib function (module name)
+        1. __where__ to look up std-lib functions (module name)
         2. __how__ to map JS functions to Kotlin functions (`external` declarations)
     * the abstraction gap is non-negligible
 
