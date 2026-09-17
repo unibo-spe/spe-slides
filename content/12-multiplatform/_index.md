@@ -2355,7 +2355,7 @@ In the `jsMain` source set
 
 - The JAR does not contain dependencies
 
-- Ad-hoc Gradle plugins/code is needed for creating [fat Jar](https://www.baeldung.com/gradle-fat-jar)
+- Ad-hoc Gradle plugins or code are needed to create a [fat JAR](https://www.baeldung.com/gradle-fat-jar)
 
 --- 
 
