@@ -2293,7 +2293,7 @@ In the `jsMain` source set
 
 ## Multi-platform testing (actual tests)
 
-- file `CsvFiles.kt` in `commonMain`:
+- file `CsvFiles.kt` in `commonTest`:
     ```kotlin
     object CsvFiles {
         // Path of the temporary file containing the string CsvStrings.iris
