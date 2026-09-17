@@ -2298,12 +2298,12 @@ In the `jsMain` source set
     object CsvFiles {
         // Path of the temporary file containing the string CsvStrings.iris
         // (file lazily created upon first usage).
-        val iris: String by lazy { createTempFile("iris.csv", CsvStrings.iris) }
+        val iris: String by lazy { createTempFile("iris", ".csv", CsvStrings.iris) }
 
         // Path of the temporary file containing the string CsvStrings.irisWellFormatted
         // (file lazily created upon first usage).
         val irisWellFormatted: String by lazy {
-            createTempFile("irisWellFormatted.csv", CsvStrings.irisWellFormatted)
+            createTempFile("irisWellFormatted", ".csv", CsvStrings.irisWellFormatted)
         }
 
         // other paths here, corresponding to other constants in CsvStrings
