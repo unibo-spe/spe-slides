@@ -3058,10 +3058,10 @@ Conceptual workflow:
 2. Ensure your compiled Java code is available as a `.jar` file
     + say, in `/path/to/my.jar`
 
-2. Install the JPype package via `pip install JPype1`
+3. Install the JPype package via `pip install JPype1`
 
-3. You first need JPype to start a JVM instance in your Python process
-    + tby default, JVM location is inferred from the `JAVA_HOME` environment variable
+4. You first need JPype to start a JVM instance in your Python process
+    + by default, the JVM location is inferred from the `JAVA_HOME` environment variable
 
     ```python
     import jpype
@@ -3070,7 +3070,7 @@ Conceptual workflow:
     jpype.startJVM(classpath=["/path/to/my.jar"])
     ```
 
-4. Once the JVM is started, one can import Java classes and call their methods as if they were Python objects
+5. Once the JVM is started, one can import Java classes and call their methods as if they were Python objects
 
     ```python
     import jpype.imports # this is necessary to import Java classes
