@@ -2733,10 +2733,10 @@ f(1, 5, 3);
 ## Kotlin--Java Mapping (pt. 6)
 
 - practical consequence: 
-    + arguments are handy in Kotlin, but...
+    + optional arguments are handy in Kotlin, but...
     + ... they are painful to use in Java
     + mitigation strategy: use `@JvmOverloads` to generate overloaded methods for Java
-        * sadly, the does not take into account all possible ordered combinations of arguments
+        * sadly, the annotation does not take into account all possible ordered combinations of arguments
 
 {{% multicol %}}
 {{% col %}}
