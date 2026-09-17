@@ -2639,7 +2639,7 @@ fun f(vararg xs: Int) {
 {{% col %}}
 ```java
 void f(int... xs) {
-    Integer[] ys = xs;
+    int[] ys = xs;
 }
 ```
 {{% /col %}}
