@@ -887,10 +887,10 @@ note right of OrderManagementService: service
 - Yet, the domain rarely changes as a whole
     + more commonly, it changes in a __context-specific__ way
 
-- Contexts-are bounded, but __not isolated__
+- Contexts are bounded, but __not isolated__
     + so are models, which may _depend_ on each other
 
-- Changes to a context, and its model may __propagate__ to other context / models
+- Changes to a context and its model may __propagate__ to other contexts / models
 
 > Domain / model __changes are critical__ and should be done carefully
 
