@@ -170,7 +170,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ## The _Domain_
 
-> A well established sphere of knowledge, influence or activity
+> A well-established sphere of knowledge, influence or activity
 
 - e.g. some university (department, faculty, HR, etc.), linear algebra, etc.
 
