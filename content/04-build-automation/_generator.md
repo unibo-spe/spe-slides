@@ -448,6 +448,7 @@ Tasks runnable from root project
 Build Setup tasks
 -----------------
 init - Initializes a new Gradle build.
+updateDaemonJvm - Generates or updates the Gradle Daemon JVM criteria.
 wrapper - Generates Gradle wrapper files.
 ```
 
