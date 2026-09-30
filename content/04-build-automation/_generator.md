@@ -378,6 +378,7 @@ A paradigmatic example of a hybrid automator:
 * Written mostly in Java
 * with an outer Groovy layer and DSL
 * ...and, more recently, a Kotlin layer and DSL
+    * the Kotlin DSL is the *default* for new builds since Gradle 8.2
 
 ### Our approach to Gradle
 
@@ -403,6 +404,8 @@ A paradigmatic example of a hybrid automator:
     1. *Declare* dependencies
     2. *Resolve* dependency declarations to actual artifacts/resources
     3. *Present* the dependencies to consumers in a suitable format
+    * Modern Gradle can create configurations with a *single role*:
+      `configurations.dependencyScope(...)`, `resolvable(...)`, `consumable(...)`
 * **Task** -- An atomic operation on the project, which can
   * have input and output files
   * depend on other tasks (can be executed only if those are completed)
@@ -885,22 +888,18 @@ FAILURE: Build failed with an exception.
 
 * What went wrong:
 A problem was found with the configuration of task ':runJava' (type 'Exec').
-  - Type 'org.gradle.api.tasks.Exec' property '$1' specifies directory '/home/danysk/LocalProjects/spe-slides/examples/run-java-deps/build/bin' which doesn't exist.
-    
-    Reason: An input file was expected to be present but it doesn't exist.
-    
+Input file does not exist
+  Type 'org.gradle.api.tasks.Exec' property '$1' specifies directory '/home/danysk/LocalProjects/spe-slides/examples/run-java-deps/build/bin' which doesn't exist
+    An input file was expected to be present but it doesn't exist
+    For more information, please refer to https://docs.gradle.org/9.8.0/userguide/validation_problems.html#input_file_does_not_exist in the Gradle documentation.
     Possible solutions:
       1. Make sure the directory exists before the task is called.
       2. Make sure that the task which produces the directory is declared as an input. # <<<< OUR PROBLEM!!
-    
-    For more information, please refer to https://docs.gradle.org/8.14/userguide/validation_problems.html#input_file_does_not_exist in the Gradle documentation.
 
 * Try:
-> Make sure the directory exists before the task is called
-> Make sure that the task which produces the directory is declared as an input
-> Run with --scan to get full insights.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
 
-BUILD FAILED in 752ms
+BUILD FAILED in 436ms
 1 actionable task: 1 executed
 ```
 
@@ -960,6 +959,9 @@ Gradle proposes a (partial) solution with the so-called *Gradle wrapper*
 * Prepares scripts for bash and cmd to run Gradle at the specified version
     * `gradlew`
     * `gradlew.bat`
+* The downloaded distribution can (should!) be *verified* against a checksum
+    * `gradle wrapper --gradle-version=<VERSION> --gradle-distribution-sha256-sum=<SHA256>`
+    * the wrapper `jar` itself should be validated in CI (e.g., with `gradle/actions/wrapper-validation`)
 
 The Gradle wrapper is ***the** correct way* to use Gradle, and we'll be using it from now on.
 
@@ -1090,9 +1092,11 @@ Gradle supports the definition of new task types:
 In recent Gradle versions, it is mandatory
 to _annotate every public property's **getter**_ of a task with a marker annotation 
 for gradle to mark it as an *input* or an *output*.
-* `@Input`, `@InputFile`, `@InputFiles`, `@InputDirectory`, `@InputDirectories`, `@Classpath`
+* `@Input`, `@InputFile`, `@InputFiles`, `@InputDirectory`, `@Classpath`, `@Nested` (and `@Optional`)
 * `@OutputFile`, `@OutputFiles`, `@OutputDirectory`, `@OutputDirectories`
-    * `@Internal` marks *internal* output properties (not reified on the file system)
+* `@Internal` marks properties that are *neither inputs nor outputs* (they do not affect up-to-date checks)
+    * `@Console` and `@LocalState` are further specialized markers
+* File inputs can be refined with `@PathSensitive`, tasks whose outputs can be reused across builds with `@CacheableTask`
 * In practice, these appear in Kotlin code as `@get:Input`, etc.
     * Otherwise, Kotlin would generate the annotation on the *field*, not on the *getter*, and Gradle would ignore it
 
@@ -1229,6 +1233,10 @@ our new `build.gradle.kts`:
 
 we can use all types defined in `buildSrc/src/main/kotlin/` in the main project's `build.gradle.kts`!
 
+*Alternative*: a regular Gradle build (conventionally named `build-logic`) included via `includeBuild("build-logic")`
+in the `pluginManagement` block of `settings.gradle.kts`: same idea, but it behaves like any other build
+(and changes to it do not invalidate the whole project)
+
 ---
 
 ## Isolation of imperativity
@@ -1358,24 +1366,19 @@ include(":library") // There must be a folder named "library"
 include(":app") // There must be a folder named "app"
 ```
 
-2. In the root project, configure the part common to **all** projects (including the root project) in an `allprojects` block
+2. Put the logic shared among subprojects into *convention plugins* (in `buildSrc` or `build-logic`)
 ```gradle
-allprojects {
-    // Executed for every project, including the root one
-    // here, `project` refers to the current project
+// buildSrc/src/main/kotlin/java-convention.gradle.kts, as seen before
+```
+
+3. In each subproject's `build.gradle.kts`, *apply* the conventions and add further customization as necessary
+```gradle
+plugins {
+    id("java-convention")
 }
 ```
 
-3. Put the part shared by *solely the sub-projects* into a `subprojects` block
-```gradle
-subprojects {
-    // Executed for all subprojects
-    // here, `project` refers to the current project
-}
-```
-
-4. In each subproject's `build.gradle.kts`, add further customization as necessary
-5. Connect configurations to each other using dependencies
+4. Connect configurations to each other using dependencies
 ```gradle
 dependencies {
     compileClasspath(project(":library")) { // My compileClasspath configuration depends on project library
@@ -1383,11 +1386,34 @@ dependencies {
     }
 }
 ```
-6. Declare inter-subproject task dependencies
+
+5. Make sure that the artifacts carry *the tasks that build them*, so that task dependencies are inferred
     * Tasks may fail if run out of order! Compiling `app` requires `library` to be compiled.
 ```gradle
-tasks.compileJava { dependsOn(project(":library").tasks.compileJava) }
+dependencies { // in the convention plugin
+    runtimeClasspath(files(compilationDestination).builtBy("compileJava")) // consumers will depend on compileJava
+}
 ```
+
+---
+
+## Cross-project configuration: don't
+
+Older Gradle builds (and many tutorials) configure subprojects *from the outside*:
+
+```gradle
+allprojects { /* executed for every project, including the root one */ }
+subprojects { /* executed for all subprojects */ }
+tasks.compileJava { dependsOn(project(":library").tasks.compileJava) } // reaching into another project
+```
+
+This style is **discouraged**:
+* it *couples* projects: the configuration of a project depends on code in some other project
+* it prevents configuring projects *in parallel* and caching their configuration independently
+    * it is incompatible with [**Isolated Projects**](https://docs.gradle.org/current/userguide/isolated_projects.html),
+      the upcoming Gradle execution mode (incubating since Gradle 9.7)
+
+$\Rightarrow$ *Convention plugins* applied by each project, and *dependencies* between configurations, instead
 
 ---
 
@@ -1413,6 +1439,7 @@ It usually includes:
     * Application must create the extension, the tasks, and the rest of the imperative stuff
 * A **manifest** file declaring which of the classes implementing `Plugin` is the entry point of the declared plugin
     * located in `META-INF/gradle-plugins/<plugin-name>.properties`
+    * typically *generated* by the `java-gradle-plugin` plugin
 
 ---
 
@@ -1457,10 +1484,17 @@ plugins {
     id("plugin2-name") // Alternative to the former
     id("some-custom-plugin") version "1.2.3" // if not found locally, gets fetched from the Gradle plugin portal
 }
-// In case of non-hierarchical projects, plugins are automatically "applied"
-// Otherwise, they need to get applied manually, e.g.:
-allprojects {
-    apply(plugin = "pluginName")
+```
+
+In *hierarchical* projects, a plugin can be *resolved* once in the root, and *applied* only where needed:
+```kotlin
+// root build.gradle.kts
+plugins {
+    id("some-custom-plugin") version "1.2.3" apply false // loaded, but not applied
+}
+// subproject/build.gradle.kts
+plugins {
+    id("some-custom-plugin") // applied here, version inherited from the root
 }
 ```
 
@@ -1473,8 +1507,13 @@ The default Gradle distribution includes a large number of plugins, e.g.:
     * a full-fledged version of the custom local plugin we created!
 * `java-library` plugin, for Java libraries (with no main class)
 * `scala` plugin
-* `cpp` plugin, for C++
-* `kotlin` plugin, supporting Kotlin with multiple targets (JVM, JavaScript, native)
+* `groovy` plugin
+* `cpp-application` and `cpp-library` plugins, for C++
+* `java-gradle-plugin`, for writing Gradle plugins
+* `kotlin-dsl`, for writing Gradle plugins and conventions in Kotlin
+
+Many more are *third party*, e.g., the Kotlin plugins (`org.jetbrains.kotlin.jvm`, `org.jetbrains.kotlin.multiplatform`, ...)
+are developed by JetBrains and fetched from the Gradle plugin portal.
 
 We are going to use the Kotlin JVM plugin to build our first standalone plugin!
 <br>
@@ -1503,7 +1542,7 @@ First step: we need to set up a Kotlin build, we'll write our plugin in Kotlin
 ```gradle
 plugins {
     // No magic: calls a method running behind the scenes, equivalent to id("org.jetbrains.kotlin.jvm")
-    kotlin("jvm") version "2.2.20" // version is necessary
+    kotlin("jvm") version "2.4.10" // version is necessary: it is not a built-in plugin
 }
 ```
 
@@ -1529,9 +1568,10 @@ Third step, we need the Gradle API
 ```groovy
 dependencies {
     implementation(gradleApi()) // Built-in method, returns a `Dependency` to the current Gradle version
-    api(gradleKotlinDsl()) // Built-in method, returns a `Dependency` to the Gradle Kotlin DSL library
+    implementation(gradleKotlinDsl()) // Built-in method, returns a `Dependency` to the Gradle Kotlin DSL library
 }
 ```
+(the `java-gradle-plugin` plugin adds `gradleApi()` automatically)
 
 ---
 
@@ -1549,6 +1589,18 @@ e.g., `it.unibo.spe.greetings`
 The file content is just a pointer to the class implementing `Plugin`, for instance:
 ```properties
 implementation-class=it.unibo.spe.firstplugin.GreetingPlugin
+```
+
+In practice, the `java-gradle-plugin` plugin *generates* the manifest from a declarative configuration:
+```kotlin
+gradlePlugin {
+    plugins {
+        create("greetings") {
+            id = "it.unibo.spe.greetings"
+            implementationClass = "it.unibo.spe.firstplugin.GreetingPlugin"
+        }
+    }
+}
 ```
 
 ---
@@ -1604,7 +1656,7 @@ inside `src/main/kotlin/<package-path>/`:
 
 * The `Plugin` configures the project as needed for the tasks and the extension to work
 * Plugins can forcibly *apply* other plugins
-    * e.g., the Kotlin plugin applies the `java-library` plugin behind the scenes
+    * e.g., the Kotlin JVM plugin applies the `java` plugin behind the scenes
     * although it is generally preferred to *react* to the application of other plugins
 * Plugins can *react* to the application of other plugins
     * e.g., enable additional features or provide compatibility
@@ -1671,9 +1723,9 @@ Look at the following example code:
 
 ```kotlin
 dependencies {
-    testImplementation("io.kotest:kotest-runner-junit5:4.2.5")
-    testImplementation("io.kotest:kotest-assertions-core:4.2.5")
-    testImplementation("io.kotest:kotest-assertions-core-jvm:4.2.5")
+    testImplementation("io.kotest:kotest-runner-junit5:6.2.3")
+    testImplementation("io.kotest:kotest-assertions-core:6.2.3")
+    testImplementation("io.kotest:kotest-assertions-core-jvm:6.2.3")
 }
 ```
 It is *repetitive* and *fragile* (what if you change the version of a single kotest module?)
@@ -1682,7 +1734,7 @@ Let's patch all this fragility:
 
 ```kotlin
 dependencies {
-    val kotestVersion = "4.2.5"
+    val kotestVersion = "6.2.3"
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
@@ -1696,7 +1748,7 @@ Still, quite repetitive...
 
 ```groovy
 dependencies {
-    val kotestVersion = "4.2.5"
+    val kotestVersion = "6.2.3"
     fun kotest(module: String) = "io.kotest:kotest-$module:$kotestVersion"
     testImplementation(kotest("runner-junit5"))
     testImplementation(kotest("assertions-core"))
@@ -1715,7 +1767,7 @@ Uhmm...
 
 ## Declaring dependencies in a *catalog*
 
-Gradle 7 introduced the *catalogs*, a standardized way to collect and bundle dependencies.
+Gradle 7 introduced the *catalogs* (stable since 7.4), a standardized way to collect and bundle dependencies.
 
 Catalogs can be declared in:
 * the `build.gradle.kts` file (they are API, of course)
@@ -1757,7 +1809,7 @@ We now have three different runtimes at play:
 
 These toolchains *should be controlled independently*!
 
-You may want to use Java 17 to run Gradle, but compile to Java 8-compatible bytecode, and then test on Java 11.
+You may want to use Java 25 to run Gradle (Gradle 9 requires *at least* Java 17), but compile to Java 8-compatible bytecode, and then test on Java 11 and 21.
 
 ---
 
@@ -1784,9 +1836,8 @@ Define the reference toolchain version (*compilation target*):
 ```gradle
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
-        vendor.set(JvmVendorSpec.ADOPTOPENJDK) // Optionally, specify a vendor
-        implementation.set(JvmImplementation.J9) // Optionally, select an implementation
+        languageVersion = JavaLanguageVersion.of(11)
+        vendor = JvmVendorSpec.ADOPTIUM // Optionally, specify a vendor
     }
 }
 ```
@@ -1794,17 +1845,39 @@ java {
 Create tasks for running tests on specific environments:
 
 ```gradle
-tasks.withType<Test>().singleOrNull()?.run {
-    // If a "test" task exists, run it with some specific JVM version
-    javaLauncher.set(javaToolchains.launcherFor { languageVersion.set(JavaLanguageVersion.of(8)) })
+tasks.test {
+    // Run the default "test" task with some specific JVM version
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(8) }
 }
 // Register another test task, with a different JVM
-val testWithJVM17 by tasks.registering<Test> { // Also works with JavaExec
-    javaLauncher.set(javaToolchains.launcherFor { languageVersion.set(JavaLanguageVersion.of(17)) })
+val testWithJVM21 = tasks.register<Test>("testWithJVM21") { // Also works with JavaExec
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(21) }
+    // Custom Test tasks must be told what to test (mandatory since Gradle 9)
+    testClassesDirs = sourceSets.test.get().output.classesDirs
+    classpath = sourceSets.test.get().runtimeClasspath
 } // You can pick JVMs not yet supported by Gradle!
-tasks.findByName("check")?.configure { it.dependsOn(testWithJVM17) } // make it part of the QA suite
+tasks.check { dependsOn(testWithJVM21) } // make it part of the QA suite
 ```
 
+---
+
+## Toolchain provisioning and the build runtime
+
+**Where do the JVMs come from?**
+* Gradle *detects* locally installed JVMs (`./gradlew javaToolchains` lists them)
+* Missing toolchains can be *downloaded automatically*, if a *toolchain resolver* is configured
+    * e.g., in `settings.gradle.kts`:
+```gradle
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
+```
+
+**What about the JVM running Gradle itself?**
+* The *Daemon JVM criteria* capture the build-time runtime *as part of the build*
+    * `./gradlew updateDaemonJvm --jvm-version=25` generates `gradle/gradle-daemon-jvm.properties`
+    * Gradle then runs its daemon on a matching JVM, regardless of the one used to launch it
+* Together with the wrapper, the *build runtime* becomes a declared, versioned dependency
 
 ---
 
@@ -1940,7 +2013,7 @@ Gradle provides two plugins to simplify the assembly and upload of plugins
 ```kotlin
 plugins {
   `java-gradle-plugin`
-  id("com.gradle.plugin-publish") version "2.0.0"
+  id("com.gradle.plugin-publish") version "2.2.1"
 }
 ```
 
@@ -2010,8 +2083,8 @@ If the `lifecycle-base` plugin is applied (it is auto-applied by most language-s
 
 QA tasks normally produce *reports* that can be inspected to understand what went wrong (if anything)
 * Typically under `build/reports/`
-    * For instance, *test results* are published in `$buildDir/reports/tests`
-* If you want to write a reporting task, extend from `AbstractReportTask`
+    * For instance, *test results* are published in `build/reports/tests` (`layout.buildDirectory.dir("reports/tests")`)
+* If you want to write a reporting task, implement the `Reporting` interface
 
 ---
 
@@ -2032,9 +2105,9 @@ You know how to build and publish Gradle plugins: **factorize the common part!**
 ```groovy
 plugins {
     // Just applies and pre-configures jacoco, detekt, and ktlint
-    id("org.danilopianini.gradle-kotlin-qa") version "0.2.1"
+    id("org.danilopianini.gradle-kotlin-qa") version "1.10.0"
     // Just applies and pre-configures jacoco, Spotbugs, PMD, and checkstyle
-    id("org.danilopianini.gradle-java-qa") version "0.2.1"
+    id("org.danilopianini.gradle-java-qa") version "1.197.0"
 }
 ```
 
@@ -2062,7 +2135,7 @@ Software products are usually shipped as (possibly executable) **archives** of s
 
 In the JVM world, the de-facto standard format is **jar** (Java ARchive)
 * Gradle provides a task of type `Jar` to create such archives
-* The `java-library` and `java` plugins (applied behind the scenes by the `kotlin-jvm` plugin as well) 
+* The `java-library` and `java` plugins (`java` is applied behind the scenes by the `kotlin-jvm` plugin as well) 
   automatically create an `assemble` task which depends on a task of type `Jar`
   creating a non-executable jar with the project contents.
 * Runnable Jars can be created via the "shadowJar" third-party plugin
@@ -2078,13 +2151,19 @@ If you do not have a signature yet, [time to create one](https://central.sonatyp
 
 Once you have a key, you can use the `signing` plugin to have Gradle generate signatures
 
-To set a default signatory, add to your `~/.gradle/gradle.properties`:
-
-```properties
-signing.keyId = <your key id>
-signing.password = <redacted>
-signing.secretKeyRingFile = <your user home>/.gnupg/secring.gpg
+The key can be provided in several ways:
+* *In memory* (preferred, CI-friendly), e.g., reading it from environment variables:
+```kotlin
+signing {
+    val signingKey = providers.gradleProperty("signingKey").orNull // ORG_GRADLE_PROJECT_signingKey env var
+    val signingPassword = providers.gradleProperty("signingPassword").orNull // ORG_GRADLE_PROJECT_signingPassword
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign(publishing.publications)
+}
 ```
+* Delegating to the local `gpg` agent: `signing { useGpgCmd() }`
+* (legacy) via `signing.keyId`/`signing.password`/`signing.secretKeyRingFile` properties,
+  which require an old-style `secring.gpg` file (not produced by GnuPG 2.1+)
 
 ---
 
@@ -2109,8 +2188,9 @@ Software repositories are services hosting software artifacts for distribution
     * there are no dependents, fewer than 300 downloads last week, and a single owner.
     * retracted versions are banned
 * *PyPI*: for Python code
-  * Supports **yanking** (preferred), deletion is being discussed.
+  * Supports **yanking** ([PEP 592](https://peps.python.org/pep-0592/), preferred)
      * Yanked versions must be ignored by dependency resolvers when a non-yanked version satisfies the constraints
+  * Owners can also **delete** releases, but the same file name can *never* be uploaded again
 * *RubyGems.org*: for Ruby code
     * `gem yank` retracts a package
 
@@ -2127,7 +2207,8 @@ Software repositories are services hosting software artifacts for distribution
 * Complete *project metadata* in a `pom.xml` file
     * Including developers, urls, project description, etc.
 
-The submission procedure has been greatly simplified recently with the Maven Central Portal:
+The submission procedure is handled by the [Central Portal](https://central.sonatype.com/)
+(the legacy OSSRH service was shut down in June 2025):
 1. Create all artifacts in a Maven-repository-compatible layout
 2. Sign all artifacts
 3. Create a zip archive including the repository layout
@@ -2160,11 +2241,35 @@ Inspecting multiple large trees can be difficult
 
 When developing plugins or rich builds, the issue of dependencies also affects **tasks**
 
-Gradle *does not* provide tools to inspect the task graph graphically, but a plugin exists.
+Since Gradle 9.1, the task graph can be printed *without executing the tasks*:
 
-{{< github owner="dorongold" repo="gradle-task-tree" from=20 to=22 language=kotlin >}}
+```text
+❯ ./gradlew runJava --task-graph
+Tasks graph for: runJava
+\--- :runJava (org.gradle.api.tasks.Exec)
+     \--- :compileJava (org.gradle.api.tasks.Exec)
+```
 
-Generates a `taskTree` task printing the task tree of the tasks listed along with `taskTree`.
+(on older versions, the third-party [`task-tree`](https://github.com/dorongold/gradle-task-tree) plugin offered a similar `taskTree` task)
+
+---
+
+## Locking and verifying dependencies in Gradle
+
+**Dependency locking**: Gradle can lock *dynamic* and *ranged* versions (including transitive ones)
+```kotlin
+dependencyLocking {
+    lockAllConfigurations()
+}
+```
+* `./gradlew dependencies --write-locks` writes the `gradle.lockfile` (to be committed)
+* subsequent builds *fail* if the resolution would diverge from the lock
+* `--update-locks <group>:<module>` updates selectively
+
+**Dependency verification**: Gradle can check *checksums* and *signatures* of every downloaded artifact
+* `./gradlew --write-verification-metadata sha256,pgp help` generates `gradle/verification-metadata.xml`
+* any artifact not matching the metadata *fails the build*
+* protects against compromised repositories and *supply chain attacks*
 
 ---
 
