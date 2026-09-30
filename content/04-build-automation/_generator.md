@@ -496,6 +496,7 @@ Now launch Gradle with `gradle broken`:
 ```bash
 gradle broken
 this is executed at CONFIGURATION time!
+> Task :brokenTask UP-TO-DATE
 
 BUILD SUCCESSFUL in 378ms
 ```
