@@ -195,14 +195,20 @@ include(CPack)
 Since there were no standard management systems originally,
 multiple tools *proliferated*
 
-* The Python Packaging Authority (PyPA) is inconsistent in its suggestions:
-    * Recommends [`venv`](https://docs.python.org/3/library/venv.html)
-    * Also recommends [Pipenv](https://pipenv.pypa.io/en/latest/), which uses [`virtualenv`](https://virtualenv.pypa.io/en/latest/)
-    * Also endorses [Poetry](https://python-poetry.org/)
+* The [Python Packaging User Guide](https://packaging.python.org/en/latest/guides/tool-recommendations/)
+  lists several tools, without picking a winner:
+    * [`venv`](https://docs.python.org/3/library/venv.html) and [`pip`](https://pip.pypa.io/) (built-in)
+    * [Pipenv](https://pipenv.pypa.io/en/latest/), [Poetry](https://python-poetry.org/), [PDM](https://pdm-project.org/), [Hatch](https://hatch.pypa.io/), [uv](https://docs.astral.sh/uv/)...
 
 * Many Python developers also rely on [PyEnv](https://github.com/pyenv/pyenv)
 
 * Many data scientists use [Anaconda](https://www.anaconda.com/)
+
+**The ecosystem is converging on shared standards**, implemented by all modern tools:
+* [PEP 517](https://peps.python.org/pep-0517/)/[518](https://peps.python.org/pep-0518/): pluggable *build backends*, declared in `pyproject.toml`
+* [PEP 621](https://peps.python.org/pep-0621/): project *metadata* in the `[project]` table
+* [PEP 735](https://peps.python.org/pep-0735/): *dependency groups* (e.g., development dependencies)
+* [PEP 751](https://peps.python.org/pep-0751/): a standard *lock file* format
 
 ---
 
