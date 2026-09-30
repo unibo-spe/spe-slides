@@ -2178,7 +2178,8 @@ Generates a `taskTree` task printing the task tree of the tasks listed along wit
 
 Gradle supports a reporting system called *Gradle build scans*
 * Executable by appending `--scan` to the build
-* Requires terminal interaction (or use of the [enterprise plugin](https://docs.gradle.com/enterprise/gradle-plugin/))
+* Requires accepting the terms of service interactively
+  (or configuring the [Develocity plugin](https://docs.gradle.com/develocity/gradle-plugin/))
 
 Example scans:
 * [https://scans.gradle.com/s/5i6ai7gz6qzmc](https://scans.gradle.com/s/5i6ai7gz6qzmc)
