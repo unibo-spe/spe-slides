@@ -587,10 +587,12 @@ BUILD SUCCESSFUL in 231ms
 ## Gradle: configuration avoidance
 
 While task execution happens only for those tasks that are invoked (or their dependencies),
-task configuration happens for *all* tasks declared in the build script.
+*eagerly created* tasks (`tasks.create(...)`, or accessed via eager APIs) are configured in *every* build.
 * This can lead to *performance issues* in large builds
 
-In Gradle, tasks are registered lazily, and can be configured lazily as well, using the `configure` and `configureEach` methods.
+In Gradle, tasks can be *registered* lazily (`tasks.register(...)`), and configured lazily as well,
+using the `configure`, `named`, and `configureEach` methods:
+the configuration block runs *only if the task is actually needed*.
 
 {{% multicol %}}
 {{% col %}}
