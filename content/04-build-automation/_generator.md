@@ -778,7 +778,7 @@ Let's see a use case: compiling a Java source with a dependency
 Conceptually, we want something like:
 ```kotlin
 // Gradle way to create a configuration
-val compileClasspath ... // Delegation!
+val compileClasspath = configurations.create("compileClasspath")
 dependencies {
     compileClasspath.add(dir("libs").files.filter { it.extension == "jar" })
 }
