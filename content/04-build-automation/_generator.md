@@ -470,16 +470,17 @@ Let's ignore them for now.
 ```bash
 Help tasks
 ----------
+artifactTransforms - Displays the Artifact Transforms that can be executed in root project '00-empty'.
 buildEnvironment - Displays all buildscript dependencies declared in root project '00-empty'.
-components - Displays the components produced by root project '00-empty'. [incubating]
 dependencies - Displays all dependencies declared in root project '00-empty'.
 dependencyInsight - Displays the insight into a specific dependency in root project '00-empty'.
-dependentComponents - Displays the dependent components of components in root project '00-empty'. [incubating]
 help - Displays a help message.
-model - Displays the configuration model of root project '00-empty'. [incubating]
+javaToolchains - Displays the detected java toolchains.
+kotlinDslAccessorsReport - Prints the Kotlin code for accessing the currently available project extensions.
 outgoingVariants - Displays the outgoing variants of root project '00-empty'.
 projects - Displays the sub-projects of root project '00-empty'.
 properties - Displays the properties of root project '00-empty'.
+resolvableConfigurations - Displays the configurations that can be resolved in root project '00-empty'.
 tasks - Displays the tasks runnable from root project '00-empty'.
 ```
 
