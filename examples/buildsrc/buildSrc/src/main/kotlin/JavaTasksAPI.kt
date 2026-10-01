@@ -22,7 +22,7 @@ interface JavaRunTask : TaskWithClasspath {
 }
 
 abstract class AbstractJvmExec : TaskWithClasspath, Exec() {
-    @Classpath
+    @get:Classpath
     override val classpath: Property<FileCollection> = project.objects.property()
 
     init {

@@ -1,6 +1,6 @@
 import org.gradle.internal.jvm.Jvm
 
-val compileClasspath: Configuration by configurations.creating // Delegation!
+val compileClasspath: Configuration = configurations.create("compileClasspath") // Built-in API
 
 dependencies { // built-in in Gradle
     AllFiles.inFolder("libs").withExtension("jar").forEach { // Not Gradle: defined below

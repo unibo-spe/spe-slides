@@ -1,4 +1,4 @@
-import org.gradle.internal.jvm.Jvm // Jvm is part of the Gradle API
+import org.gradle.internal.jvm.Jvm // Jvm is an *internal* Gradle class: handy for teaching, not a stable API
 tasks.register<Exec>("printJavaVersion") { // Do you Recognize this? inline function with reified type!
     // Configuration action is of type T.() -> Unit, in this case Exec.T() -> Unit
     val javaExecutable = Jvm.current().javaExecutable.absolutePath

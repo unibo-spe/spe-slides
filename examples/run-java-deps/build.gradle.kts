@@ -1,7 +1,7 @@
 import org.gradle.internal.jvm.Jvm
 
-val compileClasspath: Configuration by configurations.creating
-val runtimeClasspath: Configuration by configurations.creating {
+val compileClasspath: Configuration = configurations.create("compileClasspath")
+val runtimeClasspath: Configuration = configurations.create("runtimeClasspath") {
     extendsFrom(compileClasspath)
 }
 
