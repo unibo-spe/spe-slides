@@ -404,8 +404,6 @@ A paradigmatic example of a hybrid automator:
     1. *Declare* dependencies
     2. *Resolve* dependency declarations to actual artifacts/resources
     3. *Present* the dependencies to consumers in a suitable format
-    * Modern Gradle can create configurations with a *single role*:
-      `configurations.dependencyScope(...)`, `resolvable(...)`, `consumable(...)`
 * **Task** -- An atomic operation on the project, which can
   * have input and output files
   * depend on other tasks (can be executed only if those are completed)
