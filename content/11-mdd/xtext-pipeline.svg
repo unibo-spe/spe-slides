@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 330" font-family="Helvetica, Arial, sans-serif" font-size="20">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#888"/>
+    </marker>
+  </defs>
+  <rect width="1500" height="330" fill="#ffffff"/>
+  <!-- input -->
+  <g text-anchor="middle" fill="#222">
+    <rect x="10" y="60" width="150" height="90" rx="10" fill="#eeeeee" stroke="#888" stroke-width="2"/>
+    <text x="85" y="100" font-weight="bold">.shed file</text>
+    <text x="85" y="128" font-size="18">(text)</text>
+  </g>
+  <!-- stages -->
+  <g text-anchor="middle" fill="#222">
+    <rect x="210" y="60" width="200" height="90" rx="10" fill="#fff8e1" stroke="#c9a227" stroke-width="2"/>
+    <text x="310" y="100" font-weight="bold">1. parse</text>
+    <text x="310" y="128" font-size="18">text → model (AST)</text>
+
+    <rect x="460" y="60" width="200" height="90" rx="10" fill="#fff8e1" stroke="#c9a227" stroke-width="2"/>
+    <text x="560" y="100" font-weight="bold">2. link</text>
+    <text x="560" y="128" font-size="18">resolve [Task] refs</text>
+
+    <rect x="710" y="60" width="200" height="90" rx="10" fill="#fff8e1" stroke="#c9a227" stroke-width="2"/>
+    <text x="810" y="100" font-weight="bold">3. validate</text>
+    <text x="810" y="128" font-size="18">well-formedness</text>
+
+    <rect x="1000" y="10" width="230" height="90" rx="10" fill="#e3f2fd" stroke="#1e88e5" stroke-width="2"/>
+    <text x="1115" y="50" font-weight="bold">4a. generate</text>
+    <text x="1115" y="78" font-size="18">model → Java code</text>
+
+    <rect x="1000" y="115" width="230" height="90" rx="10" fill="#e3f2fd" stroke="#1e88e5" stroke-width="2"/>
+    <text x="1115" y="155" font-weight="bold">4b. interpret</text>
+    <text x="1115" y="183" font-size="18">model → runtime objects</text>
+
+    <rect x="1290" y="60" width="200" height="90" rx="10" fill="#e8f5e9" stroke="#43a047" stroke-width="2"/>
+    <text x="1390" y="100" font-weight="bold">execution</text>
+    <text x="1390" y="128" font-size="18">engine (runtime)</text>
+  </g>
+  <g stroke="#888" stroke-width="3" fill="none" marker-end="url(#a)">
+    <line x1="162" y1="105" x2="206" y2="105"/>
+    <line x1="412" y1="105" x2="456" y2="105"/>
+    <line x1="662" y1="105" x2="706" y2="105"/>
+    <line x1="912" y1="95" x2="996" y2="60"/>
+    <line x1="912" y1="115" x2="996" y2="155"/>
+    <line x1="1232" y1="60" x2="1286" y2="95"/>
+    <line x1="1232" y1="155" x2="1286" y2="115"/>
+  </g>
+  <!-- who does what -->
+  <g text-anchor="middle" font-size="18" fill="#555" font-style="italic">
+    <text x="310" y="250">generated from</text>
+    <text x="310" y="275">Sheduler.xtext</text>
+    <text x="560" y="250">ShedulerScopeProvider</text>
+    <text x="560" y="275">(Exercise 2)</text>
+    <text x="810" y="250">ShedulerValidator</text>
+    <text x="810" y="275">(Exercise 1)</text>
+    <text x="1115" y="250">ShedulerGenerator (Ex. 3)</text>
+    <text x="1115" y="275">ShedulerInterpreter (Ex. 4)</text>
+    <text x="1390" y="250">ShedulerRuntime,</text>
+    <text x="1390" y="275">ShedulerTask (Ex. 5)</text>
+  </g>
+  <g stroke="#ccc" stroke-width="2" stroke-dasharray="6 5">
+    <line x1="310" y1="152" x2="310" y2="228"/>
+    <line x1="560" y1="152" x2="560" y2="228"/>
+    <line x1="810" y1="152" x2="810" y2="228"/>
+    <line x1="1115" y1="207" x2="1115" y2="228"/>
+    <line x1="1390" y1="152" x2="1390" y2="228"/>
+  </g>
+  <text x="750" y="318" text-anchor="middle" font-size="18" fill="#222">errors from stages 1–3 are shown in the editor (via LSP); stage 4 only runs on error-free models</text>
+</svg>

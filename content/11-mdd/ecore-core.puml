@@ -1,0 +1,37 @@
+@startuml
+skinparam backgroundColor white
+skinparam defaultFontName Helvetica
+hide empty members
+skinparam classAttributeIconSize 0
+class EPackage {
+  nsURI : String
+}
+abstract class EClassifier {
+  name : String
+}
+class EClass {
+  abstract : boolean
+}
+class EDataType
+class EEnum
+abstract class EStructuralFeature {
+  name : String
+  lowerBound : int
+  upperBound : int
+}
+class EAttribute
+class EReference {
+  containment : boolean
+}
+EPackage *-- "*" EClassifier : eClassifiers
+EClassifier <|-- EClass
+EClassifier <|-- EDataType
+EDataType <|-- EEnum
+EClass --> "*" EClass : eSuperTypes
+EClass *-- "*" EStructuralFeature : eStructuralFeatures
+EStructuralFeature <|-- EAttribute
+EStructuralFeature <|-- EReference
+EAttribute --> "1" EDataType : eAttributeType
+EReference --> "1" EClass : eReferenceType
+EReference --> "0..1" EReference : eOpposite
+@enduml

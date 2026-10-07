@@ -1,0 +1,54 @@
+@startuml
+skinparam backgroundColor white
+skinparam defaultFontName Helvetica
+left to right direction
+hide empty members
+skinparam classAttributeIconSize 0
+class TaskPoolSet
+class TaskPool {
+  name : String [0..1]
+}
+class Task {
+  name : String [0..1]
+  command : String
+  entrypoint : String [0..1]
+}
+class AbsoluteTime
+class Date {
+  year : int
+  month : int
+  day : int
+}
+class ClockTime {
+  hour : int
+  minute : int
+  second : int
+  millisecond : int
+  nanosecond : int
+}
+class RelativeTime
+class TimeSpan {
+  duration : int
+  unit : TimeUnit
+}
+enum TimeUnit {
+  NANOSECONDS
+  MILLISECONDS
+  SECONDS
+  MINUTES
+  HOURS
+  DAYS
+  WEEKS
+  YEARS
+}
+TaskPoolSet *-- "1..*" TaskPool : pools
+TaskPool *-- "1..*" Task : tasks
+Task *-- "0..1" RelativeTime : relative
+Task *-- "0..1" RelativeTime : period
+Task *-- "0..1" AbsoluteTime : absolute
+Task --> "0..1" Task : before
+Task --> "0..1" Task : after
+RelativeTime *-- "1..*" TimeSpan : timeSpans
+AbsoluteTime *-- "1" Date : date
+AbsoluteTime *-- "1" ClockTime : time
+@enduml
