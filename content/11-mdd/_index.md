@@ -14,9 +14,28 @@ enableSourceMap = true
 .reveal blockquote {
     font-family: 'Georgia';
 }
+
+.reveal blockquote::before{
+    content: "";
+}
+
+.reveal blockquote::after{
+    content: "";
 </style>
 
 # Model Driven Development
+
+## {{< course_name >}}
+
+<br>
+
+### [Giovanni Ciatto --- `giovanni.ciatto@unibo.it`](mailto:giovanni.ciatto@unibo.it)
+
+<br>
+
+Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> printable version](?print-pdf&pdfSeparateFragments=false)
+
+[<i class="fa fa-undo" aria-hidden="true"></i> back](..)
 
 ---
 
@@ -28,23 +47,41 @@ enableSourceMap = true
 
 ---
 
+## Outline
+
+1. [Meta-modelling](#/metamodelling): _models, meta-models, meta-meta-models_
+2. [Model-driven development](#/mdd): _modelling first, automation of implementation_
+3. [Domain-specific languages](#/dsl): _what they are, examples, DSL vs. GPL_
+4. [DSL engineering](#/dsl-engineering): _semantics, translation vs. interpretation, internal vs. external DSLs_
+5. [MDD in practice](#/mdd-practice): _tools, LSP, Xtext_
+6. [Running example: Sheduler](#/running-example): _grammar, validation, scoping, execution engine, generator, interpreter_
+
+<br>
+
+> Main references: [Völter et al., _DSL Engineering_, 2013](http://dslbook.org/), [Fowler, _Domain-Specific Languages_, 2010](https://martinfowler.com/books/dsl.html)
+
+---
+
+{{< slide id="metamodelling" >}}
+
 ## Meta-modelling nomenclature
 
 0. (Abstract) __Language__ $\approx$ (abstract) _syntax_ + _semantics_
 
-1. __Model__ $\approx$ the abstract language by which we describe the possible entities involved in a __domain__
+1. __Model__ $\approx$ an abstract description of the possible entities involved in a __domain__, and their relations
     + the model __abstracts__ a number of similar systems rooted in the domain
     + each system is an _instance_ of the model it has been designed from
     + a model is a _template_ for several systems
 
 2. In which _language_ is the model __expressed__?
-    + __Meta-model__ $\approx$ the abstract language by which we describe __models__
-    + for instance __UML__ is the meta-model behind __object-oriented programming__
-        * UML $\equiv$ [Unified Modeling Language](https://www.uml.org/)
+    + __Meta-model__ $\approx$ the definition of the concepts (and rules) available for writing __models__ in a given language
+    + for instance __UML__ is a modelling language commonly used to describe _object-oriented_ designs
+        * its meta-model defines concepts such as _class_, _attribute_, _operation_, _association_
+        * UML $\equiv$ [Unified Modeling Language](https://www.omg.org/spec/UML)
 
 3. In which language is the _meta_-model expressed?
-    + __Meta-meta-model__ $\approx$ the abstract language by which we describe __meta-models__
-    + for instance __MOF__ is the meta-meta-model behind __UML__ according to __OMG__
+    + __Meta-meta-model__ $\approx$ the language by which we describe __meta-models__
+    + for instance, according to __OMG__, the meta-model of __UML__ is defined in __MOF__
         * MOF $\equiv$ [Meta-Object Facility](https://www.omg.org/spec/MOF)
         * OMG $\equiv$ [Object Management Group](https://www.omg.org/)
 
@@ -52,15 +89,27 @@ enableSourceMap = true
 
 ## Meta-model hierarchy
 
-cf. <https://www.omg.org/ocup-2/documents/Meta-ModelingAndtheMOF.pdf>
+{{% multicol %}}
+{{% col class="col-6" %}}
+![Four stacked layers, M3 meta-metamodel, M2 metamodel, M1 model, M0 instances: each layer describes the one below and is an instance of the one above; M3 describes, and is an instance of, itself](metamodelling-architecture.png)
+{{% /col %}}
+{{% col class="col-6" %}}
+OMG's four-layer architecture (cf. [MOF specification](https://www.omg.org/spec/MOF)):
 
-![Meta-modelling architecture concept](metamodelling-architecture.png)
+- __M3__: _meta-meta-model_ (e.g. MOF), defining itself
+- __M2__: _meta-model_ (e.g. UML), instance of M3
+- __M1__: _model_ (e.g. a UML class diagram of your domain), instance of M2
+- __M0__: _instances_ (e.g. actual customers, or the objects representing them at run-time), instances of M1
+
+> Each layer is described by the language of the layer above
+{{% /col %}}
+{{% /multicol %}}
 
 ---
 
 ## Meta-model hierarchy example
 
-![Meta-modelling architecture example](metamodelling-architecture-example.png)
+![Example of the four layers: MOF at M3 (instance of itself); UML, UML profiles, and custom domain-specific modelling languages at M2, all instances of MOF; models A and B at M1, instances of UML or of the custom DSML; real-world objects at M0, instances of model A](metamodelling-architecture-example.png)
 
 ---
 
@@ -80,12 +129,14 @@ cf. <https://www.omg.org/ocup-2/documents/Meta-ModelingAndtheMOF.pdf>
 
 ---
 
+{{< slide id="mdd" >}}
+
 ## Model-driven whatever
 
 - Several slightly similar names may create _confusion_
     * e.g. model-driven engineering / development / architecture / etc.
 
-- Please read _Martin Fowler_'s article on [Model-Driven Software Architecture](https://martinfowler.com/bliki/ModelDrivenArchitecture.html) to clarify
+- Please read _Martin Fowler_'s article on [Model Driven Architecture](https://martinfowler.com/bliki/ModelDrivenArchitecture.html) to clarify
 
 - Despite the name, the key ideas can be summarised as follows:
     1. _software engineering_ workflow should start by __modelling the domain__ at hand carefully
@@ -118,6 +169,8 @@ cf. <https://www.omg.org/ocup-2/documents/Meta-ModelingAndtheMOF.pdf>
 ---
 
 {{% section %}}
+
+{{< slide id="dsl" >}}
 
 ## Towards domain specific languages
 
@@ -279,11 +332,11 @@ And John has 300$ on his account
 ```vhdl
 DFF : process(RST, CLK) is
 begin
-if RST = '1' then
-Q <= '0';
-elsif rising_edge(CLK) then
-Q <= D;
-end if;
+    if RST = '1' then
+        Q <= '0';
+    elsif rising_edge(CLK) then
+        Q <= D;
+    end if;
 end process DFF;
 ```
 
@@ -295,7 +348,7 @@ end process DFF;
     * "functions" are indeed circuits
 
 - Technologies exist to __automatically translate__ VHDL into __hardware circuits__
-    + e.g. [Xilinx Vivado](https://www.xilinx.com/products/design-tools/vivado.html)
+    + e.g. [AMD (formerly Xilinx) Vivado](https://www.amd.com/en/products/software/adaptive-socs-and-fpgas/vivado.html)
 
 - ... or to __simulate__ the behaviour of the circuit (either _in software_ or _in FPGA_)
 
@@ -349,7 +402,7 @@ pension contribution InpsGLA paid by employer 2/3 and employee 1/3 {
 - DSLs are __not__ a replacement for GPLs
     + they are __complementary__
 
-- Yet the difference is fuzzy, so let's try to clarify:
+- Yet the difference is fuzzy, so let's try to clarify (cf. [Völter et al., _DSL Engineering_, 2013](http://dslbook.org/)):
 
 |                            |            **GPL**           |               **DSL**               |
 |:--------------------------:|:----------------------------:|:-----------------------------------:|
@@ -363,6 +416,8 @@ pension contribution InpsGLA paid by employer 2/3 and employee 1/3 {
 |       **Deprecation**      |           very slow          |        feasible, often abrupt       |
 
 ---
+
+{{< slide id="dsl-engineering" >}}
 
 # DSL Engineering
 
@@ -420,7 +475,7 @@ In both cases, there are technical __prerequisites__:
     + i.e. where the syntax is a subset of some pre-existing GPL...
     + ... whose syntax is __flexible__ enough to allow _customisation_
 
-- Creating _internal_ DSL is a recent trend enabled by the wide adoption of flexible GPL
+- Internal DSLs are an old idea (e.g. in Lisp, Smalltalk, Ruby), now widespread thanks to flexible mainstream GPLs
     + e.g. Kotlin, Groovy, or Scala, which come with _ad-hoc constructs_
         * e.g. trailing-lambda convention, infix notation, operator overloading, etc.
 
@@ -428,7 +483,7 @@ In both cases, there are technical __prerequisites__:
     - [Kotlin DSL for Gradle](https://docs.gradle.org/current/userguide/kotlin_dsl.html)
     - [SBT](https://www.scala-sbt.org/1.x/docs/sbt-by-example.html)
 
-- More on this topic in prof. Pianini's slides
+- More on this topic in the [lecture on internal DSLs in Kotlin](../03-internal-dsls/)
 
 ---
 
@@ -440,9 +495,9 @@ plugins {
 }
 
 dependencies {
-    api("junit:junit:4.13")
-    implementation("junit:junit:4.13")
-    testImplementation("junit:junit:4.13")
+    implementation("com.google.guava:guava:33.7.2-jre")
+    testImplementation("org.junit.jupiter:junit-jupiter:6.1.3")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 configurations {
@@ -458,20 +513,22 @@ sourceSets {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 tasks {
     test {
         testLogging.showExceptions = true
-        useJUnit()
+        useJUnitPlatform()
     }
 }
 ```
 + domain: build-automation
 + this is pure Kotlin + Gradle library (containing an "_execution engine_")
 + Gradle library is designed to be used as Kotlin DSL
++ details in the [lecture on build automation](../04-build-automation/)
 
 
 ---
@@ -509,23 +566,26 @@ tasks {
 
 ---
 
+{{< slide id="mdd-practice" >}}
+
 # MDD in Practice
 
 ---
 
 ## Tools for MDD
 
-- Eclipse's [Xtext](https://eclipse.dev/Xtext/) widespread tool for MDD
+| Tool | Approach | Platform | Docs |
+|------|----------|----------|------|
+| Eclipse __Xtext__ | _parser-based_: textual grammar $\rightarrow$ parser, meta-model (EMF), IDE support | JVM (Java / Xtend) | [eclipse.dev/Xtext](https://eclipse.dev/Xtext/) |
+| JetBrains __MPS__ | _projectional_: users edit the syntax tree directly, no parser | JVM, own IDE | [jetbrains.com/mps](https://www.jetbrains.com/mps/) |
+| Eclipse __Langium__ | _parser-based_, inspired by Xtext, LSP-first | TypeScript / Node.js | [langium.org](https://langium.org) |
+| __ANTLR__ | _parser generation only_ (no meta-model, no IDE support) | Java, JS, Python, C#, C++, Go, ... | [antlr.org](https://www.antlr.org/) |
 
-- JetBrains' [MPS](https://www.jetbrains.com/mps/) main competitor of Xtext
+<br>
 
-- [Langium](https://langium.org) clone of Xtext, but based on TypeScript
+- [Language Server Protocol](https://microsoft.github.io/language-server-protocol/overviews/lsp/overview/) (LSP): relevant for any of the above, see next slide
 
-### Other relevant tools for language engineering
-
-- [ANTLR](https://www.antlr.org/) only parser generation for Java, JS, Python, .NET, C++
-
-- [Language Server Protocol](https://microsoft.github.io/language-server-protocol/overviews/lsp/overview/) (LSP)
+- Maturity note: Xtext is mature and widely used, yet its own [release notes for 2.44 (Aug. 2026)](https://eclipse.dev/Xtext/releasenotes.html) state that its _future maintenance is at risk_ due to declining contributions (cf. [discussion](https://github.com/eclipse-xtext/xtext/issues/1721))
 
 ---
 
@@ -568,6 +628,8 @@ tasks {
 
 ---
 
+{{< slide id="running-example" >}}
+
 ## Running example: the **task scheduling** domain
 
 - Users may want to __schedule__ custom _tasks_ on a machine
@@ -598,7 +660,7 @@ tasks {
 2. We will then add __scoping__ and __validation__ rules to the DSL, via the Xtext framework
 
 3. The next step is designing and implementing the __execution engine__ for the DSL
-    + we shall exploit Java's [`ScheduledExecutorService`s](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ScheduledExecutorService.html) for this purpose
+    + we shall exploit Java's [`ScheduledExecutorService`s](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/ScheduledExecutorService.html) for this purpose
 
 4. Finally, we will create a __code generator__ creating Java code from the DSL
 
@@ -615,7 +677,7 @@ Code: <https://github.com/unibo-spe/sheduler-lang>
 
 4. In Eclipse, import the _repository root_ directory as a __Gradle project__
 
-5. You may also use __IntelliJ__; in that case just import the `sheduler-lang/` directory as a _Gradle project_
+5. You may also use __IntelliJ__; in that case just import the _repository root_ directory as a _Gradle project_
     + no syntax colouring or Xtext support on IntelliJ or VSCode
 
 ---
@@ -631,13 +693,17 @@ sheduler-lang/
 ├── gradlew.bat
 ├── it.unibo.spe.mdd.sheduler/
 │   ├── build.gradle
-│   └── src/
-│       └── main/
-│           └── java/
-│               └── it/unibo/spe/mdd/sheduler/
-│                   └── sheduler
-│                       ├── GenerateSheduler.mwe2
-│                       └── Sheduler.xtext
+│   └── src/
+│       ├── main/
+│       │   └── java/
+│       │       └── it/unibo/spe/mdd/sheduler/
+│       │           ├── GenerateSheduler.mwe2
+│       │           ├── Sheduler.xtext
+│       │           ├── TimeUtils.java
+│       │           ├── generator/ShedulerGenerator.java
+│       │           ├── scoping/ShedulerScopeProvider.java
+│       │           └── validation/ShedulerValidator.java
+│       └── test/
 ├── it.unibo.spe.mdd.sheduler.ide/
 │   └── build.gradle
 ├── it.unibo.spe.mdd.sheduler.web/
@@ -678,8 +744,10 @@ sheduler-lang/
     * this task is automatically executed by Gradle before compilation
     * you may run it manually if you want to force the generation of the language infrastructure
 
-- `shadowJar` generates the runnable Jar for the LSP server
-    * this task should be run manually if you want to deploy the LSP server
+- `shadowJar` generates runnable Jars
+    * in the `ide` sub-project: the LSP server (`*-ls.jar`)
+    * in the `sheduler` sub-project: the command-line compiler (`*-compiler.jar`)
+    * this task should be run manually if you want to deploy them
 
 - `jettyRun` starts the Web-playground for the Sheduler language
     * this task should be run manually during manual testing of the language
@@ -882,16 +950,17 @@ enum TimeUnit  {
 
 TaskPoolSet *-- TaskPool
 TaskPool *-- Task
-Task *-- RelativeTime
+Task *-- RelativeTime : relative / period
 Task *-- AbsoluteTime
+Task --> "0..1" Task : before / after
 RelativeTime *-- TimeSpan
-TimeSpan *-- TimeUnit
+TimeSpan ..> TimeUnit
 AbsoluteTime *-- Date
 AbsoluteTime *-- ClockTime
 @enduml
 {{< /plantuml >}}
 
-Classes are generated too!
+Classes are generated too! (notice that `before` / `after` are _references_ to other `Task`s, not containment)
 
 ---
 
@@ -950,7 +1019,7 @@ Classes are generated too!
     }
     ```
 
-    + documentation here: <https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation>
+    + documentation here: <https://eclipse.dev/Xtext/documentation/303_runtime_concepts.html#validation>
 
 ---
 
@@ -972,10 +1041,10 @@ Remarks:
 
 Write custom validation rules covering the following constraints:
 
-1. Warning if attempting to represent some `RelativeTime` as [`java.time.Duration`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html) object would result in an overflow
+1. Warning if attempting to represent some `RelativeTime` as [`java.time.Duration`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html) object would result in an overflow
     + cf. the utility methods in class `TimeUtils`
 
-2. Warning if attempting to represent some `AbsoluteTime` as [`java.time.LocalDateTime`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/LocalDateTime.html) object would result in an overflow
+2. Warning if attempting to represent some `AbsoluteTime` as [`java.time.LocalDateTime`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/LocalDateTime.html) object would result in an overflow
     + cf. the utility methods in class `TimeUtils`
 
 3. Warning if some `AbsoluteTime` is in the past or in the present (only future admitted)
@@ -995,10 +1064,7 @@ Write custom validation rules covering the following constraints:
 ## Exercise 1: custom validation rules (pt. 2)
 
 5. Error if some `TimeSpan` is invalid
-    - negative duration
-    - 1000 or more when the unit is nano/milliseconds
-    - 60 or more when the unit is minutes/seconds
-    - 24 or more when the unit is hours
+    - zero or negative duration
 
 6. Error if any two tasks from the same pool have the same name
 
@@ -1026,7 +1092,7 @@ Write custom validation rules covering the following constraints:
     }
     ```
 
-    + Documentation here: <https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#scoping>
+    + Documentation here: <https://eclipse.dev/Xtext/documentation/303_runtime_concepts.html#scoping>
 
 - Remarks
     + only one method should be overridden
@@ -1048,7 +1114,7 @@ Write a custom scoping policy for the `before` and `after` properties of `Task`s
 
 <br>
 
-Documentation here: <https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#scoping>
+Documentation here: <https://eclipse.dev/Xtext/documentation/303_runtime_concepts.html#scoping>
 
 ---
 
@@ -1067,10 +1133,10 @@ Documentation here: <https://www.eclipse.org/Xtext/documentation/303_runtime_con
 
 1. Is there functionality in the JDK which supports the __scheduling__ of tasks in the future?
     - if _yes_: let's use it! _otherwise_, let's look for some _third-party library_, or _implement_ it ourselves
-    - luckily, we may use [`ScheduledExecutorService`s](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ScheduledExecutorService.html) !
+    - luckily, we may use [`ScheduledExecutorService`s](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/ScheduledExecutorService.html) !
 
 2. Same question for the __execution__ of custom __commands__ via some _shell_?
-    - luckily, we may use [`ProcessBuilder`s](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ProcessBuilder.html)!
+    - luckily, we may use [`ProcessBuilder`s](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/ProcessBuilder.html)!
 
 3. Design insights:
     1. we may define some _custom_ notion of `ShedulerTask` encapsulating:
@@ -1098,9 +1164,9 @@ public class ShedulerRuntime {
         this.delegate = Objects.requireNonNull(delegate);
     }
 
-    public void schedule(SheduleTask task) {
+    public void schedule(ShedulerTask task) {
         if (task.isPeriodic()) {
-            delegate.scheduleWithFixedDelay(
+            delegate.scheduleAtFixedRate(
                 task.asRunnable(),
                 task.getDelay().toMillis(),
                 task.getPeriod().toMillis(),
@@ -1127,11 +1193,13 @@ public class ShedulerTask {
     public String getEntrypoint() { /*...*/ }
     public Duration getPeriod() { /*...*/ }
     public boolean isPeriodic() { /*...*/ }
-    public SheduleTask setPeriod(Duration period) { /*...*/ }
+    public ShedulerTask setPeriod(Duration period) { /*...*/ }
     public Duration getDelay() { /*...*/ }
 
     public Process executeAsync() throws IOException {
-        return new ProcessBuilder(entrypoint, command).inheritIO().start();
+        List<String> cmd = new ArrayList<>(List.of(entrypoint.split("\\s+")));
+        cmd.add(command); // e.g. ["/bin/sh", "-c", "echo hello"]
+        return new ProcessBuilder(cmd).inheritIO().start();
     }
 
     public Runnable asRunnable() {
@@ -1143,7 +1211,6 @@ public class ShedulerTask {
             }
         };
     }
-
 
     public static ShedulerTask in(String name, String command, String entrypoint, Duration delay) { /*...*/ }
     public static ShedulerTask in(String command, String entrypoint, Duration delay) { /*...*/ }
@@ -1157,7 +1224,7 @@ public class ShedulerTask {
 
 ---
 
-### Usage example:
+## Usage example
 
 {{% multicol %}}
 {{% col %}}
@@ -1194,7 +1261,7 @@ public static void main(String[] args) {
 
 private static void pool_myPool(ShedulerRuntime runtime) {
     ShedulerTask task0 = ShedulerTask.in("greetFrequently", "echo hello", "/bin/sh -c", Duration.parse("PT5M"));
-    task0.setPeriodic(Duration.parse("PT1H"));
+    task0.setPeriod(Duration.parse("PT1H"));
     runtime.schedule(task0);
     ShedulerTask task1 = ShedulerTask.at("greetOnce", "echo hello", "/bin/bash -c", LocalDateTime.parse("2030-10-11T12:13"));
     runtime.schedule(task1);
@@ -1265,6 +1332,13 @@ public class ShedulerInterpreter {
         // Load the resource
         ResourceSet set = resourceSetProvider.get();
         Resource resource = set.getResource(URI.createFileURI(string), true);
+
+        // Validate the resource, and abort in case of errors
+        List<Issue> issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
+        issues.forEach(System.err::println);
+        if (issues.stream().anyMatch(i -> i.getSeverity() == Severity.ERROR)) {
+            return;
+        }
 
         TaskPoolSet taskPools = (TaskPoolSet) resource.getContents().get(0);
         ShedulerRuntime runtime = new ShedulerRuntime(Executors.newScheduledThreadPool(1));
