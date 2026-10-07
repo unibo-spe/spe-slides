@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" font-family="Helvetica, Arial, sans-serif" font-size="22">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2f6fd0"/>
+    </marker>
+  </defs>
+  <rect width="900" height="460" fill="#ffffff"/>
+  <!-- layer bands -->
+  <g fill="#fbe5d6">
+    <rect x="200" y="10" width="640" height="95"/>
+    <rect x="200" y="120" width="640" height="95"/>
+    <rect x="200" y="230" width="640" height="95"/>
+    <rect x="200" y="340" width="640" height="95"/>
+  </g>
+  <g fill="#cfe5f7">
+    <rect x="10" y="10" width="185" height="95"/>
+    <rect x="10" y="120" width="185" height="95"/>
+    <rect x="10" y="230" width="185" height="95"/>
+    <rect x="10" y="340" width="185" height="95"/>
+  </g>
+  <g text-anchor="middle">
+    <g fill="#c00000" font-weight="bold" font-size="28">
+      <text x="102" y="52">M3</text><text x="102" y="162">M2</text>
+      <text x="102" y="272">M1</text><text x="102" y="382">M0</text>
+    </g>
+    <text x="102" y="86">meta-metamodel</text>
+    <text x="102" y="196">metamodel</text>
+    <text x="102" y="306">model</text>
+    <text x="102" y="416">real-world objects</text>
+  </g>
+  <!-- nodes -->
+  <g fill="#dbe9f9" stroke="#2f5597" stroke-width="2">
+    <ellipse cx="520" cy="62" rx="70" ry="28"/>
+    <ellipse cx="340" cy="167" rx="75" ry="34"/>
+    <ellipse cx="520" cy="167" rx="70" ry="28"/>
+    <ellipse cx="710" cy="167" rx="75" ry="34"/>
+    <ellipse cx="440" cy="277" rx="80" ry="28"/>
+    <ellipse cx="660" cy="277" rx="80" ry="28"/>
+    <ellipse cx="350" cy="387" rx="75" ry="28"/>
+    <ellipse cx="540" cy="387" rx="75" ry="28"/>
+  </g>
+  <g text-anchor="middle" fill="#1f3864">
+    <text x="520" y="70">MOF</text>
+    <text x="340" y="162">UML</text><text x="340" y="188">Profile</text>
+    <text x="520" y="175">UML</text>
+    <text x="710" y="162">Custom</text><text x="710" y="188">DSML</text>
+    <text x="440" y="285">model A</text>
+    <text x="660" y="285">model B</text>
+    <text x="350" y="395">object 1</text>
+    <text x="540" y="395">object 2</text>
+    <text x="270" y="285">…</text><text x="790" y="285">…</text><text x="680" y="395">…</text>
+  </g>
+  <!-- instanceOf arrows (pointing to the upper layer) -->
+  <g stroke="#2f6fd0" stroke-width="2" fill="none" marker-end="url(#a)">
+    <path d="M500,35 C490,0 550,0 540,35"/>
+    <line x1="385" y1="140" x2="470" y2="82"/>
+    <line x1="520" y1="139" x2="520" y2="92"/>
+    <line x1="660" y1="140" x2="570" y2="82"/>
+    <line x1="417" y1="167" x2="448" y2="167"/>
+    <line x1="470" y1="251" x2="505" y2="195"/>
+    <line x1="675" y1="250" x2="700" y2="202"/>
+    <line x1="370" y1="360" x2="420" y2="304"/>
+    <line x1="530" y1="360" x2="465" y2="304"/>
+    <!-- abstraction axis -->
+    <line x1="870" y1="435" x2="870" y2="14"/>
+  </g>
+  <text x="862" y="225" fill="#2f6fd0" font-size="18" text-anchor="middle" transform="rotate(-90 862 225)">abstraction</text>
+</svg>

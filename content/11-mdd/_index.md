@@ -91,7 +91,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 {{% multicol %}}
 {{% col class="col-6" %}}
-![Four stacked layers, M3 meta-metamodel, M2 metamodel, M1 model, M0 instances: each layer describes the one below and is an instance of the one above; M3 describes, and is an instance of, itself](metamodelling-architecture.png)
+![Four stacked layers, M3 meta-metamodel, M2 metamodel, M1 model, M0 instances: each layer describes the one below and is an instance of the one above; M3 describes, and is an instance of, itself](metamodelling-architecture.svg)
 {{% /col %}}
 {{% col class="col-6" %}}
 OMG's four-layer architecture (cf. [MOF specification](https://www.omg.org/spec/MOF)):
@@ -109,7 +109,7 @@ OMG's four-layer architecture (cf. [MOF specification](https://www.omg.org/spec/
 
 ## Meta-model hierarchy example
 
-![Example of the four layers: MOF at M3 (instance of itself); UML, UML profiles, and custom domain-specific modelling languages at M2, all instances of MOF; models A and B at M1, instances of UML or of the custom DSML; real-world objects at M0, instances of model A](metamodelling-architecture-example.png)
+![Example of the four layers: MOF at M3 (instance of itself); UML, UML profiles, and custom domain-specific modelling languages at M2, all instances of MOF; models A and B at M1, instances of UML or of the custom DSML; real-world objects at M0, instances of model A](metamodelling-architecture-example.svg)
 
 ---
 
@@ -591,7 +591,7 @@ tasks {
 
 ## Key idea behind LSP
 
-![LSP concept](./lsp.png)
+![Without LSP, each of N languages (TypeScript, Python, Kotlin) needs a dedicated integration with each of M editors (IntelliJ IDEA, Neovim, VSCodium), i.e. N × M integrations; with LSP, each language and each editor implements the protocol once (completion, diagnostics, hover, formatting, definition, ...), i.e. N + M integrations](./lsp.svg)
 
 - de-facto standard protocol among IDEs
 
@@ -600,6 +600,8 @@ tasks {
 - making it easier to support multiple IDEs for the same language
 
 - must-have feature for any MDD tool we may consider for our DSL
+
+<!-- <small>Logos: <a href="https://simpleicons.org">Simple Icons</a> (CC0; Neovim logo CC-BY-SA-3.0); trademarks of their respective owners</small> -->
 
 ---
 

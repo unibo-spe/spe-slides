@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 600" font-family="Helvetica, Arial, sans-serif" font-size="20">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#444"/>
+    </marker>
+  </defs>
+  <rect width="520" height="600" fill="#ffffff"/>
+  <g fill="#fdf6d8" stroke="#444" stroke-width="2">
+    <rect x="110" y="70" width="300" height="60" rx="6"/>
+    <rect x="110" y="220" width="300" height="60" rx="6"/>
+    <rect x="110" y="370" width="300" height="60" rx="6"/>
+    <rect x="110" y="520" width="300" height="60" rx="6"/>
+  </g>
+  <g text-anchor="middle" font-weight="bold" font-size="22">
+    <text x="260" y="108">M3: Meta-metamodel</text>
+    <text x="260" y="258">M2: Metamodel</text>
+    <text x="260" y="408">M1: Model</text>
+    <text x="260" y="558">M0: Instances</text>
+  </g>
+  <g stroke="#444" stroke-width="2" fill="none" marker-end="url(#a)">
+    <!-- describes (down, left side) -->
+    <line x1="170" y1="130" x2="170" y2="218"/>
+    <line x1="170" y1="280" x2="170" y2="368"/>
+    <line x1="170" y1="430" x2="170" y2="518"/>
+    <!-- instanceOf (up, right side) -->
+    <line x1="350" y1="220" x2="350" y2="132"/>
+    <line x1="350" y1="370" x2="350" y2="282"/>
+    <line x1="350" y1="520" x2="350" y2="432"/>
+    <!-- self loops on M3 -->
+    <path d="M150,70 C150,20 220,20 220,68"/>
+    <path d="M300,70 C300,20 370,20 370,68"/>
+  </g>
+  <g font-style="italic" fill="#222">
+    <text x="160" y="182" text-anchor="end">describes</text>
+    <text x="160" y="332" text-anchor="end">describes</text>
+    <text x="160" y="482" text-anchor="end">describes</text>
+    <text x="360" y="182">instanceOf</text>
+    <text x="360" y="332">instanceOf</text>
+    <text x="360" y="482">instanceOf</text>
+    <text x="120" y="22">describes</text>
+    <text x="300" y="22">instanceOf</text>
+  </g>
+</svg>
