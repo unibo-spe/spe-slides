@@ -41,6 +41,34 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ---
 
+## Lecture goals
+
+- Understand how __domain-driven design__ guides the derivation of a software _model_ from a _domain_
+- Know the DDD __building blocks__ (tactical design) and __integration patterns__ (strategic design)
+- Map a DDD model onto a __layered architecture__
+- Understand __event sourcing__ and __CQRS__
+- Practice on the exercises
+
+---
+
+## Outline
+
+1. [Motivation](#/motivation): _why a structured design process_
+2. [Main notions](#/notions): _domain, subdomains, bounded contexts, model, ubiquitous language_
+3. [Building blocks](#/building-blocks): _entities, value objects, aggregates, factories, repositories, services, domain events_
+4. [Strategic design](#/strategic-design): _bounded contexts, context maps, integration patterns_
+5. [Layered architecture](#/architecture): _layers, ports & adapters, modules_
+6. [Event sourcing and CQRS](#/advanced): _storing changes, segregating reads and writes_
+7. [Exercises](#/exercises)
+
+<br>
+
+> Main references: [Evans, _Domain-Driven Design_, 2003](https://www.domainlanguage.com/ddd/), [Vernon, _Implementing Domain-Driven Design_, 2013](https://www.informit.com/store/implementing-domain-driven-design-9780321834577)
+
+---
+
+{{< slide id="motivation" >}}
+
 # Motivation and Context
 
 ---
@@ -91,7 +119,9 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ---
 
-#  Main notions of DDD
+{{< slide id="notions" >}}
+
+# Main notions of DDD
 
 ---
 
@@ -160,7 +190,9 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 - __Domain__: the reference area of knowledge
 
-- __Context__: a portion of the domain
+- __Subdomain__: a portion of the domain (problem space)
+
+- __Bounded context__: the boundary within which a model and its language are consistent (solution space)
 
 - __Model__: a reification of the domain in software
 
@@ -168,28 +200,31 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ---
 
-## The _Domain_
+## _Subdomains_ and _Bounded Contexts_
 
-> A well-established sphere of knowledge, influence or activity
-
-- e.g. some university (department, faculty, HR, etc.), linear algebra, etc.
-
----
-
-## _Contexts_
-
-> A _portion_ of the domain with a clear _boundary_:
+> A bounded context is a _boundary_ within which a model and its language are consistent:
 > - relying on a sub-set of the concepts of the domain
 > - where words/names have a unique, precise meaning
 > - clearly distinguishable from other contexts
 
-- e.g. departments, divisions, complex numbers, etc.
+- ideally 1 subdomain $\approx$ 1 bounded context, but not necessarily
+
+---
+
+## Kinds of subdomains
+
+- _core_: where the business differentiates itself $\rightarrow$ invest most modelling effort here
+- _supporting_: needed, specific to the business, not differentiating
+- _generic_: common to many businesses (e.g. authentication, invoicing) $\rightarrow$ buy / reuse
+- e.g. for a university: teaching may be core, course scheduling supporting, authentication generic
+
+(cf. [Evans, 2003](https://www.domainlanguage.com/ddd/); [Evans, _DDD Reference_, 2015](https://www.domainlanguage.com/ddd/reference/))
 
 --- 
 
-## Domain _vs._ Context
+## Domain _vs._ Subdomains _vs._ Contexts
 
-![Domain and context](./domain.png)
+![A domain containing payment, offer, customer, and shipping subdomains; each subdomain contains an e-commerce bounded context and its services](./domain.png)
 
 ---
 
@@ -243,7 +278,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
     - especially when talking about the domain / model / software
     - design/sketch code mirroring the language
 
-5. Draw a __context map__ tracking
+5. Draw a __context map__ (defined [later](#/context-map)) tracking
     - the main contexts and their junctions
     - words whose meaning varies across contexts
 
@@ -252,22 +287,18 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ---
 
-## Example of context map
+## Discovering the domain: Event Storming
 
-{{% multicol %}}
-{{% col %}}
-Abstract context map:
-![Abstract context map](./context-map.jpg)
-{{% /col %}}
-{{% col %}}
-Actual context map:
-![Actual context map](./bounded-contexts.png)
-{{% /col %}}
-{{% /multicol %}}
+- Collaborative workshop with domain experts and developers (cf. [Brandolini](https://www.eventstorming.com/))
+- Put _domain events_ (past tense) on a timeline, then add commands, actors, aggregates, and policies
+- Boundaries between clusters of events suggest _bounded contexts_
+- Domain events are introduced [later](#/domain-events)
 
 {{% /section %}}
 
 ---
+
+{{< slide id="building-blocks" >}}
 
 # DDD Building Blocks
 
@@ -332,7 +363,7 @@ Model
 
 - __Value Object__: objects without identity
 
-- __Aggregate Root__: compound objects
+- __Aggregate__: cluster of entities/value objects with a consistency boundary, accessed via its __root__ entity
 
 - __Domain Event__: objects modelling relevant events (notifications)
 
@@ -346,7 +377,7 @@ Model
 
 ## Building blocks (concept)
 
-![Building blocks graphical overview](./building-blocks.png)
+![A concept map linking model-driven design to services, entities, value objects, aggregates, factories, and repositories; entities act as aggregate roots and repositories access aggregates](./building-blocks.png)
 
 ---
 
@@ -380,7 +411,7 @@ Model
 
 - Identified by their _attributes_
     + equality compares attributes alone
-- Must be _stateless_ $\Rightarrow$ better to use _immutable_ design
+- Must be _immutable_: their state is their attributes, which never change
     + read-only properties
     + lack of state-changing methods
 - May be implemented as 
@@ -444,11 +475,13 @@ Customer *-r- CustomerID
 
 ---
 
-## Aggregate Root
+## Aggregates and Aggregate Roots
 
 ### Definition
 
-- A _composite_ entity, _aggregating_ related entities/value objects
+- An _aggregate_ is a cluster of entities/value objects treated as a unit for consistency and changes
+
+- The _aggregate root_ is the single entity in the aggregate that outside objects may reference
 
 - It _guarantees_ the _consistency_ of the objects it contains
 
@@ -457,9 +490,11 @@ Customer *-r- CustomerID
 
 - Outside objects should _avoid_ holding _references_ to composing objects
 
+(cf. [Evans, 2003](https://www.domainlanguage.com/ddd/); [Vernon, 2013](https://www.informit.com/store/implementing-domain-driven-design-9780321834577))
+
 ---
 
-## Aggregate Root (constraints)
+## Aggregate Roots (constraints)
 
 - They are usually _compound_ entities
 
@@ -469,19 +504,19 @@ Customer *-r- CustomerID
 - May be better implemented as _classes_ in most programming languages
 
 - _Must_ implement `equals()` and `hashCode()` on JVM (as any other entity)
-    + implementation may take _composing_ items into account
+    + equality compares the root's identity, as for any entity
 
 - Components of an aggregate should _not_ hold **references** to components of _other_ aggregates
     + that's why they are called aggregate _roots_
     + notable exception: _references_ to _identifiers_ of other aggregates
 
-    ![Aggregate roots should not hold references to other aggregates' components](./aggregate-references.png)
+    ![Three separate aggregates, each with an aggregate root and internal components; a prohibition symbol marks that internal components must not be referenced across aggregate boundaries](./aggregate-references.png)
 
 ---
 
 ## Aggregate Root (example)
 
-![Two aggregates with inter-dependencies](./aggregate-root.png)
+![A Buyer aggregate containing a Buyer aggregate root, and an Order aggregate containing an Order root, Address value object, and OrderItem child entity; Order refers to Buyer through BuyerID](./aggregate-root.png)
 
 (notice the link between `Order` and `Buyer` implemented by letting the `Order` hold a reference to the `BuyerID`)
 
@@ -493,7 +528,7 @@ Customer *-r- CustomerID
 
 <br>
 
-![Concept of factory](./factories.png)
+![A client delegates entity creation to a factory, which hides the complexity of creating the entity](./factories.png)
 
 ---
 
@@ -548,20 +583,20 @@ VatNumber -u-|> CustomerID
 TaxCode -u-|> CustomerID
 
 interface CustomerFactory {
-    + VatNumber computeVatNumber(String name, String surname, Date birthDate, String birthPlace)
+    + TaxCode computeTaxCode(String name, String surname, Date birthDate, String birthPlace)
     ..
-    + Customer newCustomerPerson(TaxCode code, String fullName, string email)
+    + Customer newCustomerPerson(TaxCode code, String fullName, String email)
     + Customer newCustomerPerson(String name, String surname, Date birthDate, String birthPlace, String email)
     ..
     + Customer newCustomerCompany(VatNumber code, String fullName, String email)
 }
 note bottom of CustomerFactory
-- method for creating VAT numbers
+- method for computing tax codes
 - methods for creating person customers
 - methods for creating company customers
 end note
 
-CustomerFactory -r-> VatNumber: creates
+CustomerFactory -r-> TaxCode: creates
 CustomerFactory -u-> Customer: creates
 {{< /plantuml >}}
 
@@ -571,7 +606,7 @@ CustomerFactory -u-> Customer: creates
 
 > Objects mediating the _persistent_ __storage/retrieval__ of other objects
 
-![Concept of repositories](./repositories.png)
+![A client retrieves and saves an aggregate through a repository, which hydrates and persists the aggregate in a database](./repositories.png)
 
 ---
 
@@ -629,8 +664,8 @@ interface CustomerRegistry {
     + Iterable<Customer> getAllCustomers()
     ..
     + Customer findCustomerById(CustomerID id)
-    + Iterable<Customer> findCustomerByName(string name)
-    + Iterable<Customer> findCustomerByEmail(string email)
+    + Iterable<Customer> findCustomerByName(String name)
+    + Iterable<Customer> findCustomerByEmail(String email)
     ..
     + void addNewCustomer(Customer customer)
     + void updateCustomer(Customer customer)
@@ -645,8 +680,7 @@ CustomerRegistry --> CustomerID: exploits
 
 ## Services
 
-> _Functional_ objects encapsulating the _business logic_ of the software 
-> <br> e.g. operations spanning _several_ entities, objects, aggregates, etc.
+> Operations that do not naturally belong to any entity or value object
 
 ### Purpose
 
@@ -655,6 +689,10 @@ CustomerRegistry --> CustomerID: exploits
 - Exposing _coarse-grained functionalities_ to the users
 - Providing a _façade_ for the domain
 - Making the business logic evolvable, interchangeable, replaceable
+
+- _domain service_: domain logic spanning several aggregates; lives in the domain layer
+- _application service_: orchestrates a use case (loads aggregates via repositories, calls them, saves, publishes events); lives in the application layer
+- Rule of thumb: put behaviour on entities/aggregates first; a model of only getters/setters plus services is an _anemic domain model_ (cf. [Fowler](https://martinfowler.com/bliki/AnemicDomainModel.html))
 
 ### Remarks
 
@@ -698,7 +736,7 @@ interface Order {
     + void setCustomer(Customer customer)
     + Date getTimestamp()
     + void setTimestamp(Date timestamp)
-    + Map<Product, long> getAmounts()
+    + Map<Product, Long> getAmounts()
 }
 
 interface OrderID
@@ -731,6 +769,8 @@ OrderID -d[hidden]- Customer
 
 ---
 
+{{< slide id="domain-events" >}}
+
 ## Domain Events (definition)
 
 > A value-like object capturing some domain-related _event_ 
@@ -738,7 +778,7 @@ OrderID -d[hidden]- Customer
 
 - actually, only the event _notification_/description is reified to a type
 
-![Concept of domain events](./domain-events.png)
+![A Basket aggregate publishes a Product Added Event after a product is added; a Recommendation Service consumes it to update a Recommendations aggregate](./domain-events.png)
 
 ---
 
@@ -774,11 +814,8 @@ OrderID -d[hidden]- Customer
 - _Infrastructural components_ may be devoted to _propagate_ events across contexts
     + e.g. a message broker, a message queue, etc.
 
-- \[Teacher's Suggestion\]: prefer _neutral_ names for event classes in the model
-    * e.g. `OrderEventArgs` instead of `OrderPerformedEventArgs`
-    * e.g. `OrderEvent` instead of `OrderPerformedEvent`
-    * the reason: the same OOP type may be used to represent different events:
-        + e.g. `orderIssued`, `orderConfirmed`, `orderCancelled`, etc.
+- Common convention: one type per event, named in the _past tense_ (e.g. `OrderPlaced`, `OrderCancelled`) (cf. [Vernon, 2013](https://www.informit.com/store/implementing-domain-driven-design-9780321834577))
+- \[Teacher's Suggestion\]: use a neutral type (e.g. `OrderEvent`) plus a kind/discriminator field when many events share the same payload
 
 ---
 
@@ -788,14 +825,14 @@ OrderID -d[hidden]- Customer
 interface OrderManagementService {
     + void performOrder(Order order)
     ..
-    + void **notifyOrderPerformed**(OrderEventArgs event)
+    + void **notifyOrderPerformed**(OrderEvent event)
 }
 
-interface OrderEventArgs {
+interface OrderEvent {
     + OrderID getID()
     + CustomerID getCustomer()
     + Date **getTimestamp**()
-    + Dictionary<ProductID, long> getAmounts()
+    + Map<ProductID, Long> getAmounts()
 }
 
 interface OrderID
@@ -804,13 +841,13 @@ interface CustomerID
 
 interface ProductID
 
-OrderEventArgs "1" *-u- "1" OrderID
-OrderEventArgs "1" *-r- "1" CustomerID
-OrderEventArgs "1" *-d- "N" ProductID
+OrderEvent "1" *-u- "1" OrderID
+OrderEvent "1" *-r- "1" CustomerID
+OrderEvent "1" *-d- "N" ProductID
 
-OrderEventArgs .. OrderManagementService
+OrderEvent .. OrderManagementService
 
-note left of OrderEventArgs: domain event
+note left of OrderEvent: domain event
 note left of OrderID: value object
 note left of ProductID: value object
 note right of CustomerID: value object
@@ -821,7 +858,9 @@ note right of OrderManagementService: service
 
 --- 
 
-# DDD Patterns
+{{< slide id="strategic-design" >}}
+
+# Strategic Design
 
 ---
 
@@ -834,6 +873,8 @@ note right of OrderManagementService: service
 - __Context Map__: providing a _global view_ on the domain and its contexts
 
 ---
+
+{{< slide id="context-map" >}}
 
 ## Actual definitions
 
@@ -858,7 +899,9 @@ note right of OrderManagementService: service
 
 ## Example of bounded context map
 
-![Context map](./bounded-contexts.png)
+![A sales context containing Opportunity, Pipeline, Territory, and Sales Person, connected by Customer and Product to a support context containing Ticket, Defect, and Product Version](./bounded-contexts.png)
+
+(source: [Fowler](https://martinfowler.com/bliki/BoundedContext.html))
 
 ---
 
@@ -899,7 +942,7 @@ note right of OrderManagementService: service
 ## Model integrity patterns
 
 - __Shared kernel__: sharing a common model among contexts
-- __Customer--supplier__: the consumer model's team requests changes in the supplier model
+- __Customer--supplier__: the downstream (customer) team requests changes in the supplier model
 - __Conformist__: one model's team reacts to changes of some model they depend on
 - __Anti-corruption layer__: a model's team isolates itself from another model
 
@@ -915,7 +958,7 @@ note right of OrderManagementService: service
 
 ## Model integrity patterns (background, pt. 1)
 
-![Context maps concept](./context-map.jpg)
+![Three oval contexts, A, B, and Legacy, each enclosing a model; lines between the ovals mark contact points between contexts](./context-map.jpg)
 
 - Context maps highlight relations among contexts
     + yet, _not_ __all relations are equal__, nor symmetric
@@ -924,7 +967,7 @@ note right of OrderManagementService: service
 
 ## Model integrity patterns (background, pt. 2)
 
-![Upstream and downstream roles](./provider-consumer.jpg)
+![A downstream Search Page Context and an upstream Search API Context connected by a line indicating their roles](./provider-consumer.jpg)
 
 Each relation among 2 contexts usually involves 2 ends/roles:
 - __upstream__ end, i.e. the one _providing_ functionalities
@@ -947,7 +990,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ## Shared Kernel
 
-![Shared kernel concept](./shared-kernel.jpg)
+![Catalog and Inventory contexts overlap around a shared supplier model used by both contexts](./shared-kernel.jpg)
 
 - Best when: multiple contexts _share_ the __same team__ / organization / product
 
@@ -962,7 +1005,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ## Customer--Supplier
 
-![Customer--supplier concept](./customer-supplier.jpg)
+![A downstream Search Page Context and upstream Search API Context connected by a customer-supplier relationship](./customer-supplier.jpg)
 
 - Best when: 
     + multiple teams
@@ -982,7 +1025,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ## Conformist
 
-![Conformist concept](./conformist.jpg)
+![A Search Page Context downstream of a Search API Context, while an External Context conforms downstream to the Search API Context](./conformist.jpg)
 
 - Best when: 
     + multiple teams
@@ -997,7 +1040,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ## Anti-corruption layer
 
-![Anti-corruption layer concept](./anti-corruption-layer.jpg)
+![A Search Context isolates its model from an upstream Catalog Context through an anti-corruption translation layer with no business logic](./anti-corruption-layer.jpg)
 
 - Best when: 
     + multiple teams
@@ -1012,9 +1055,73 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 - The upstream's model is then reverse engineered & __adapted__
     + e.g. often, repository types are anti-corruption layers for DB technologies
 
+---
+
+## Partnership
+
+- Best when: contexts are __peers__ and their teams can cooperate closely
+
+- Key idea: teams __coordinate__ development, releases, and operational decisions
+    + neither team is a supplier or customer of the other
+
+- Trade-off: the relationship works only while communication and shared commitment remain strong
+
+---
+
+## Open Host Service
+
+- Best when: one __upstream__ context serves many different downstream contexts
+
+- Key idea: expose a __stable protocol__ that all downstream contexts can use
+    + avoid a separate, bespoke integration for every consumer
+
+- Keep the protocol explicit and evolve it compatibly
+
+---
+
+## Published Language
+
+- Best when: contexts exchange information through a __shared interchange language__
+
+- Key idea: publish and document the language independently of either internal model
+    + e.g. a versioned message schema or API representation
+
+- An open host service often uses a published language
+
+---
+
+## Separate Ways
+
+- Best when: integration would cost more than the value it provides
+
+- Key idea: keep contexts __independent__; duplicate or recreate only the information each needs
+
+- Reconsider when duplicated work or inconsistent information becomes costly
+
+---
+
+## Integration patterns (summary)
+
+| Pattern | Upstream/downstream relation | Key idea |
+| --- | --- | --- |
+| Shared Kernel | peers | Keep a small shared part of the model |
+| Customer--Supplier | customer influences supplier | Collaborate on the supplier's evolution |
+| Conformist | downstream accepts upstream | Adapt the downstream model to the upstream |
+| Anti-corruption Layer | downstream shields itself | Translate the upstream model at the boundary |
+| Partnership | peers | Coordinate development and releases |
+| Open Host Service | one upstream, many downstreams | Offer a stable protocol for integration |
+| Published Language | shared interchange language | Publish a documented integration language |
+| Separate Ways | no integration | Decouple when integration is not worth its cost |
+
+- _Big Ball of Mud_ is a descriptive label for an unstructured system, not an integration pattern.
+
+(cf. [Evans, _DDD Reference_, 2015](https://www.domainlanguage.com/ddd/reference/))
+
 --- 
 
-# Layered Architecture
+{{< slide id="architecture" >}}
+
+# Layered (onion) Architecture
 
 ---
 
@@ -1026,21 +1133,21 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 - Layered architectures are well suited to preserve models' integrity
 
-- Here we focus on the __hexagonal architecture__, a particular case of layered architecture
-    + well suited to DDD
+- The same dependency rule (outer depends on inner, never the converse) underlies _hexagonal_ (ports & adapters, cf. [Cockburn, 2005](https://alistair.cockburn.us/hexagonal-architecture/)), _onion_, and _clean_ architectures
+    + in hexagonal terms, domain/application define _ports_ (e.g. repository interfaces); outer layers provide _adapters_ (e.g. DB-backed repositories, REST controllers)
 
 ---
 
-## Hexagonal architecture (concept)
+## Layered (onion) architecture (concept)
 
-![Hexagonal architecture concept](./layered-architecture.png)
+![Concentric layers: Domain at the centre, Application and Presentation around it, and Messages, REST API, and Storage as outer adapters](./layered-architecture.svg)
 
 - outer layers depend on inner ones
     + the converse is not true
 
 ---
 
-## Hexagonal architecture (explanation)
+## Layered (onion) architecture (explanation)
 
 1. __Domain layer__: contains the domain model (entities, values, events, aggregates, etc.)
     - must support a wide range of applications
@@ -1057,7 +1164,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 4. __Storage layer__: supports persistent storage/retrieval of domain data
     - this is where repositories are implemented
     - may involve some DB technology
-    - depends on the domain layer (and, possibly, on the presentation layer)
+    - depends on the domain layer (and, possibly, on the application layer)
 
 5. __Interface layers__ (e.g. ReST API, MOM, View): let external entities access the software
     - via a GUI, or via some remote interface such as HTTP
@@ -1087,20 +1194,22 @@ component ":message-queue" as mq
 component ":command-line" as cli
 component product
 
-domain <|-- application
-application <|-- presentation
-presentation <|-- server
-presentation <|-- mq
-application <|-- storage
-presentation -r-|> gson
-presentation <|-- cli
-db <|-l- storage  
-product -u-|> server
-product -u-|> storage
-product -u-|> mq    
+application ..> domain
+presentation ..> application
+server ..> presentation
+mq ..> presentation
+cli ..> presentation
+storage ..> application
+presentation ..> gson
+storage ..> db
+product ..> server
+product ..> storage
+product ..> mq
 {{< /plantuml >}}
 
 ---
+
+{{< slide id="advanced" >}}
 
 # Advanced aspects of DDD
 
@@ -1114,7 +1223,7 @@ product -u-|> mq
     + one may track the __current state__
     + or the __flow__ of __variations__
 
-![Flow vs. state representation](./state-vs-flow.svg)
+![Two timelines for a counter: state snapshots record values 0, 1, 2, while a flow records initial value 0 followed by increment events that reconstruct those values](./state-vs-flow.svg)
 
 ---
 
@@ -1123,6 +1232,8 @@ product -u-|> mq
 > A pattern where _domain events_ are reified into _time-stamped data_ and the whole _evolution_ of a system is persistently _stored_
 
 - perfect match with DDD as domain events are first-class citizens
+
+(cf. [Fowler, Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html))
 
 ---
 
@@ -1151,9 +1262,9 @@ product -u-|> mq
 
 - Advanced pattern for building _highly-scalable_ applications
 
-- It leverages _event sourcing_ and _layered architecture_...
+- It is _often combined_ with event sourcing, but does not require it (cf. [Fowler, CQRS](https://martinfowler.com/bliki/CQRS.html))
 
-- ... to deliver **reactive**, **eventual-consistent** solutions where:
+- It can deliver **reactive**, **eventually consistent** solutions where:
     + context boundaries can be easily enforced
     + single responsibility principle is applied extensively
 
@@ -1162,6 +1273,8 @@ product -u-|> mq
 ## CQRS definition
 
 > __Split__ the _domain_ and _application_ layers to _segregate_ __read/write__ responsibilities
+
+(cf. [Fowler, CQRS](https://martinfowler.com/bliki/CQRS.html); [Fowler, Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html))
 
 - __Read__ model (a.k.a. _view_ or _query_ model)
     + accepts queries aimed at __observing__ the state of the system
@@ -1173,7 +1286,9 @@ product -u-|> mq
 
 ## CQRS concept
 
-![CQRS concept](./cqrs.png)
+![A UI sends commands to a command model and queries to a query model; the command model updates a database and propagates changes to the query model, which serves read results](./cqrs.png)
+
+(source: [Fowler](https://martinfowler.com/bliki/CQRS.html))
 
 ---
 
@@ -1185,8 +1300,8 @@ Whenever users want to _perform an action_ in the system:
 
 <br>
 
-2. the command is possibly _validated_ & __stored__ onto some database
-  - an ad-hoc __database__ is available in the model for storing commands
+2. the command is validated by the __write model__; if accepted, it produces one or more _domain events_
+  - with event sourcing, the _events_ (not commands) are appended to an _event store_
 
 
 ---
@@ -1200,27 +1315,28 @@ Whenever users want to _inspect/observe the system_ at time $t$:
 
 <br>
 
-2. commands up to time $t$ are assumed to be __reified__ when reading
-    - a __snapshot__ of the system state _at time $t$_ is returned to users
+2. the read model is a _projection_ built from the events up to time $t$
+    - it returns a read-optimised representation of the system state at time $t$
 
 ---
 
-## CQRS -- When are commands reified?
+## CQRS -- When is the read model updated?
 
-> __Reification__ is the process of computing the state of the system at time $t$ by applying the commands recorded up to time $t$
-<br>
+> A _projection_ computes a read model by applying the events recorded up to time $t$
 
-- If queries and commands are stored on different databases
-    + reification implies updating the query database
+- If read and write data are stored on different databases
+    + projecting events updates the query database
     + the query database should be __read-efficient__
-    + the commands database should be __write-efficient__
+    + the event store should be __write-efficient__
 
 - Several, non-mutually-exclusive strategies:
-    + __eager__: commands are reified as soon as they are received
-    + __pull__: commands are reified upon reading queries
-    + __scheduled__: commands are reified in the background, periodically
+    + __eager__: events are projected as soon as they are received
+    + __on read__: events are projected when a query is read
+    + __scheduled__: events are projected in the background, periodically
 
 ---
+
+{{< slide id="exercises" >}}
 
 # Exercises
 
@@ -1364,7 +1480,7 @@ In practice:
 - Functionalities for __CSV__ _import/export_ are missing and need to be implemented via _third-party libraries_
     + [Apache Commons CSV](https://commons.apache.org/proper/commons-csv/)
         * Guide here: <https://www.baeldung.com/apache-commons-csv>
-    + [OpenCSV](http://opencsv.sourceforge.net/)
+    + [OpenCSV](https://opencsv.sourceforge.net/)
         * Guide here: <https://www.baeldung.com/opencsv>
 
 ---
