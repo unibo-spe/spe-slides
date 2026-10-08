@@ -140,8 +140,8 @@ OMG's four-layer architecture (cf. [MOF specification](https://www.omg.org/spec/
 ## Inside a meta-meta-model: Ecore
 
 {{% multicol %}}
-{{% col %}}
-<img src="./ecore-core.svg" alt="Core of the Ecore meta-meta-model: an EPackage contains EClassifiers; EClass and EDataType are EClassifiers, EEnum is an EDataType; an EClass has super-types and contains EStructuralFeatures (with name, lowerBound, upperBound), which are either EAttributes typed by an EDataType or EReferences (with a containment flag and an optional opposite) typed by an EClass" style="width: 100%; max-height: 80vh; object-fit: contain;">
+{{% col class="col-4" %}}
+<img src="./ecore-core.svg" alt="Core of the Ecore meta-meta-model: an EPackage contains EClassifiers; EClass and EDataType are EClassifiers, EEnum is an EDataType; an EClass has super-types and contains EStructuralFeatures (with name, lowerBound, upperBound), which are either EAttributes typed by an EDataType or EReferences (with a containment flag and an optional opposite) typed by an EClass" style="width: 100%; max-height: 60vh; object-fit: contain;">
 {{% /col %}}
 {{% col %}}
 - MOF is large: its practical core is __EMOF__ (_Essential MOF_)
@@ -173,34 +173,31 @@ OMG's four-layer architecture (cf. [MOF specification](https://www.omg.org/spec/
 
 {{% multicol %}}
 {{% col %}}
-Textual (`.shed` file, for humans):
-```
-pool myPool {
-    schedule task greetOnce {
-        command "echo hello"
-        at 2030/10/11 12:13
-    }
-}
+Meta-model (abstract syntax):
+<img src="./book-metamodel.svg" alt="Meta-model of the example: a Book (title: String, year: int) contains one or more Authors (name: String) via the authors reference" style="max-height: 35vh; object-fit: contain;">
+{{% /col %}}
+{{% col %}}
+[YAML](https://yaml.org):
+```yaml
+title: Domain-Specific Languages
+year: 2010
+authors:
+  - name: Martin Fowler
+  - name: Rebecca Parsons
 ```
 {{% /col %}}
 {{% col %}}
-[XMI](https://www.omg.org/spec/XMI) (OMG's XML interchange format, for tools):
+[XML](https://www.w3.org/XML/):
 ```xml
-<sheduler:TaskPoolSet xmlns:sheduler="http://www.unibo.it/spe/mdd/sheduler/Sheduler">
-  <pools name="myPool">
-    <tasks name="greetOnce" command="echo hello">
-      <absolute>
-        <date year="2030" month="10" day="11"/>
-        <time hour="12" minute="13"/>
-      </absolute>
-    </tasks>
-  </pools>
-</sheduler:TaskPoolSet>
+<book title="Domain-Specific Languages" year="2010">
+  <author name="Martin Fowler"/>
+  <author name="Rebecca Parsons"/>
+</book>
 ```
 {{% /col %}}
 {{% /multicol %}}
 
-- Both _conform_ to the same meta-model, and they are parsed into the __same__ in-memory model
+- Different _notations_, __same__ abstract structure: both _conform_ to the meta-model on the left
 
 ---
 
@@ -209,15 +206,16 @@ pool myPool {
 - Structural meta-models only capture __types__ and __multiplicities__
 
 - Many rules of a domain are _not_ structural, e.g.:
-    + "two tasks in the same pool cannot have the same name"
-    + "a month is a number between 1 and 12"
-    + "a task cannot be scheduled after itself, not even indirectly"
+    + "two authors of the same book cannot have the same name"
+    + "the title of a book cannot be empty"
+    + "a book cannot be published in the future"
 
 - These are called __static semantics__ (or _well-formedness rules_)
     + OMG's way: constraints written in [OCL](https://www.omg.org/spec/OCL) (_Object Constraint Language_), attached to the meta-model
         ```
-        context TaskPool
-        inv uniqueTaskNames: self.tasks->select(t | t.name <> null)->isUnique(t | t.name)
+        context Book
+        inv uniqueAuthorNames: self.authors->isUnique(a | a.name)
+        inv nonEmptyTitle: self.title.size() > 0
         ```
     + Xtext's way: __validation rules__ written in a GPL (Java), see [Exercise 1](#/exercise-1)
 

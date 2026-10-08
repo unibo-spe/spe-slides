@@ -1,0 +1,15 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor white
+skinparam defaultFontName Helvetica
+hide empty members
+skinparam classAttributeIconSize 0
+class Book {
+  title : String
+  year : int
+}
+class Author {
+  name : String
+}
+Book *-- "1..*" Author : authors
+@enduml
