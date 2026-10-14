@@ -224,7 +224,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ## Domain _vs._ Subdomains _vs._ Contexts
 
-![A domain containing payment, offer, customer, and shipping subdomains; each subdomain contains an e-commerce bounded context and its services](./domain.png)
+![An e-commerce domain split into payment (generic), offer (core), customer (supporting), and shipping (supporting) subdomains; each subdomain is realised by one bounded context with its services, except shipping, which is realised by two contexts (shipping and tracking)](./domain.svg)
 
 ---
 
@@ -377,7 +377,7 @@ Model
 
 ## Building blocks (concept)
 
-![A concept map linking model-driven design to services, entities, value objects, aggregates, factories, and repositories; entities act as aggregate roots and repositories access aggregates](./building-blocks.png)
+![A concept map linking model-driven design to services, entities, value objects, aggregates, factories, and repositories; entities act as aggregate roots and repositories access aggregates](./building-blocks.svg)
 
 ---
 
@@ -510,13 +510,13 @@ Customer *-r- CustomerID
     + that's why they are called aggregate _roots_
     + notable exception: _references_ to _identifiers_ of other aggregates
 
-    ![Three separate aggregates, each with an aggregate root and internal components; a prohibition symbol marks that internal components must not be referenced across aggregate boundaries](./aggregate-references.png)
+    ![Three aggregates, each with an aggregate root and internal components; references from one aggregate to another aggregate's root are allowed, while a reference to another aggregate's internal component is forbidden](./aggregate-references.svg)
 
 ---
 
 ## Aggregate Root (example)
 
-![A Buyer aggregate containing a Buyer aggregate root, and an Order aggregate containing an Order root, Address value object, and OrderItem child entity; Order refers to Buyer through BuyerID](./aggregate-root.png)
+![A Buyer aggregate containing a Buyer aggregate root, and an Order aggregate containing an Order root, Address value object, and OrderItem child entity; Order refers to Buyer through BuyerID](./aggregate-root.svg)
 
 (notice the link between `Order` and `Buyer` implemented by letting the `Order` hold a reference to the `BuyerID`)
 
@@ -528,7 +528,7 @@ Customer *-r- CustomerID
 
 <br>
 
-![A client delegates entity creation to a factory, which hides the complexity of creating the entity](./factories.png)
+![A client delegates entity creation to a factory, which hides the complexity of creating the entity](./factories.svg)
 
 ---
 
@@ -606,7 +606,7 @@ CustomerFactory -u-> Customer: creates
 
 > Objects mediating the _persistent_ __storage/retrieval__ of other objects
 
-![A client retrieves and saves an aggregate through a repository, which hydrates and persists the aggregate in a database](./repositories.png)
+![A client gets an aggregate from a repository, modifies it, and saves it back; the repository rebuilds (hydrates) the aggregate from data loaded from the database, and stores it there, dealing with whole aggregates only](./repositories.svg)
 
 ---
 
@@ -778,7 +778,7 @@ OrderID -d[hidden]- Customer
 
 - actually, only the event _notification_/description is reified to a type
 
-![A Basket aggregate publishes a Product Added Event after a product is added; a Recommendation Service consumes it to update a Recommendations aggregate](./domain-events.png)
+![A customer adds a product to the Basket aggregate, which publishes a ProductAdded domain event after saving; the event notifies a Recommendation Service, which updates the Recommendations aggregate](./domain-events.svg)
 
 ---
 
@@ -899,7 +899,7 @@ note right of OrderManagementService: service
 
 ## Example of bounded context map
 
-![A sales context containing Opportunity, Pipeline, Territory, and Sales Person, connected by Customer and Product to a support context containing Ticket, Defect, and Product Version](./bounded-contexts.png)
+![A sales context containing Opportunity, Pipeline, Territory, and Sales Person, connected by Customer and Product to a support context containing Ticket, Defect, and Product Version](./bounded-contexts.svg)
 
 (source: [Fowler](https://martinfowler.com/bliki/BoundedContext.html))
 
@@ -958,7 +958,7 @@ note right of OrderManagementService: service
 
 ## Model integrity patterns (background, pt. 1)
 
-![Three oval contexts, A, B, and Legacy, each enclosing a model; lines between the ovals mark contact points between contexts](./context-map.jpg)
+![Three contexts, A, B, and Legacy, each enclosing one or more models; lines between models of different contexts mark contact points between contexts](./context-map.svg)
 
 - Context maps highlight relations among contexts
     + yet, _not_ __all relations are equal__, nor symmetric
@@ -967,7 +967,7 @@ note right of OrderManagementService: service
 
 ## Model integrity patterns (background, pt. 2)
 
-![A downstream Search Page Context and an upstream Search API Context connected by a line indicating their roles](./provider-consumer.jpg)
+![A downstream Search Page Context and an upstream Search API Context connected by a line, marked D and U at the two ends](./provider-consumer.svg)
 
 Each relation among 2 contexts usually involves 2 ends/roles:
 - __upstream__ end, i.e. the one _providing_ functionalities
@@ -990,7 +990,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ## Shared Kernel
 
-![Catalog and Inventory contexts overlap around a shared supplier model used by both contexts](./shared-kernel.jpg)
+![Catalog and Inventory contexts overlap around a shared supplier model used by both contexts](./shared-kernel.svg)
 
 - Best when: multiple contexts _share_ the __same team__ / organization / product
 
@@ -1005,7 +1005,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ## Customer--Supplier
 
-![A downstream Search Page Context and upstream Search API Context connected by a customer-supplier relationship](./customer-supplier.jpg)
+![A downstream Search Page Context and upstream Search API Context connected by a customer-supplier relationship](./customer-supplier.svg)
 
 - Best when:
     + multiple teams
@@ -1025,7 +1025,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ## Conformist
 
-![A Search Page Context downstream of a Search API Context, while an External Context conforms downstream to the Search API Context](./conformist.jpg)
+![A Search Page Context downstream of a Search API Context, while an External Context conforms downstream to the Search API Context](./conformist.svg)
 
 - Best when:
     + multiple teams
@@ -1040,7 +1040,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ## Anti-corruption layer
 
-![A Search Context isolates its model from an upstream Catalog Context through an anti-corruption translation layer with no business logic](./anti-corruption-layer.jpg)
+![A Search Context isolates its model from an upstream Catalog Context through an anti-corruption translation layer with no business logic](./anti-corruption-layer.svg)
 
 - Best when:
     + multiple teams
@@ -1224,7 +1224,7 @@ product ..> mq
 
 ## CQRS concept
 
-![A UI sends commands to a command model and queries to a query model; the command model updates a database and propagates changes to the query model, which serves read results](./cqrs.png)
+![A UI sends commands to the command model, which validates them, applies domain logic, and writes to the database; the query model reads from the database and serves query results to the UI](./cqrs.svg)
 
 (source: [Fowler](https://martinfowler.com/bliki/CQRS.html))
 
