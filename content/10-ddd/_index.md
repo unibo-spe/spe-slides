@@ -55,7 +55,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 1. [Motivation](#/motivation): _why a structured design process_
 2. [Main notions](#/notions): _domain, subdomains, bounded contexts, model, ubiquitous language_
-3. [Building blocks](#/building-blocks): _entities, value objects, aggregates, factories, repositories, services, domain events_
+3. [Building blocks](#/building-blocks): _entities, value objects, aggregates, factories, repositories, services, dependency injection, domain events_
 4. [Strategic design](#/strategic-design): _bounded contexts, context maps, integration patterns_
 5. [Layered architecture](#/architecture): _layers, ports & adapters, modules_
 6. [Event sourcing and CQRS](#/advanced): _storing changes, segregating reads and writes_
@@ -397,6 +397,7 @@ Model
 - __Repository__: objects providing storage facilities
 
 - __Factory__: objects creating other objects
+    + they enable _dependency injection_ (and, hence, testability)
 
 ---
 
@@ -845,6 +846,211 @@ OrderID -d[hidden]- CustomerID
 
 ---
 
+{{< slide id="dependency-injection" >}}
+
+## Factories enable Dependency Injection
+
+- Services depend on _repositories_ and _factories_ (and possibly on other services)
+    + e.g. `OrderManagementService` needs an `OrderStore` to save orders
+- __Who creates__ these dependencies?
+    + if the service calls `new SqlOrderStore()` itself, it is _bound_ to that implementation
+    + ... and it can hardly be tested without a real database
+
+![Left: without DI, the service itself creates a SqlOrderStore, so the implementation choice is hard-coded in the client. Right: with DI, a factory first creates the SqlOrderStore and then injects it into the service, which only uses it through the OrderStore interface](./di-motivation.svg)
+
+- Factories already _hide_ the implementation choice
+    + __Dependency Injection__ (DI) goes one step further: the client does not create its dependencies, it _receives_ them
+
+---
+
+## Dependency inversion
+
+> Goal: _minimise_ dependencies among types, to make implementations _interchangeable_
+
+- Let _interfaces_ depend on _interfaces_ only
+- Let _classes_ depend on _interfaces_, never on other _classes_
+    + built-in types (e.g. `String`, `LocalDate`) are tolerated exceptions
+- _Delay_ the choice of the actual implementation of each interface as much as possible
+- Do not _leak_ implementation types into public APIs
+
+![Before: OrderManagementServiceImpl depends directly on the SqlOrderStore class. After: OrderManagementServiceImpl depends on the OrderStore interface, which is implemented by both SqlOrderStore and InMemoryOrderStore, so the arrows towards the implementation are inverted](./dependency-inversion.svg)
+
+---
+
+## Dependency Injection (concept)
+
+> Interfaces are separated from classes; the __wiring__ between them is _delayed_ and performed _outside_ the classes using them
+
+1. __Design & segregate interfaces__
+    - interface members only expose interface (or built-in) types: natural after DDD
+    - interfaces and implementations in _separate_ modules (e.g. `:domain` vs. `:storage`)
+2. __Implement classes relying on interfaces only__
+    - fields, parameters, return types: interfaces (private members too)
+    - expose a mechanism to _inject_ the actual implementations:
+        + _constructor injection_: dependencies are constructor parameters
+            * the object is always complete and consistent $\rightarrow$ __preferred__
+        + _setter injection_: one setter per dependency
+            * more flexible, yet objects may be left in _inconsistent_ states
+3. __Wire interfaces and classes__ at runtime
+    - choosing the most adequate implementation for the situation at hand (production, test, etc.)
+
+---
+
+## Inversion of Control
+
+- Without DI, an object _controls_ the creation of its own dependencies
+- With DI, this control is _inverted_: some external entity creates the dependencies and passes them in
+    + the _composition root_: the (only) place where implementations are chosen and wired
+        * e.g. the `main` method, or an application-level factory
+    + or a _DI container_ (a.k.a. _IoC container_), i.e. a library doing the wiring for us
+- _Hollywood principle_: "don't call us, we'll call you"
+- Dependency Injection is a particular form of __Inversion of Control__ (IoC)
+    + cf. [Fowler, _Inversion of Control Containers and the Dependency Injection pattern_, 2004](https://martinfowler.com/articles/injection.html)
+
+### Remark
+
+- A factory _alone_ just moves the `new` somewhere else: the client now depends on the factory
+- It becomes DI when the factory is _the composition root_, i.e. it creates the objects __and__ injects them into each other
+
+---
+
+## DI in Java (example, pt. 1): implementation
+
+```java
+public interface OrderStore { void add(Order order); /* ... */ }
+
+class OrderManagementServiceImpl implements OrderManagementService {
+    private final OrderStore store;          // interface
+    private final CustomerFactory customers; // interface
+
+    // constructor injection: dependencies are received, not created
+    OrderManagementServiceImpl(OrderStore store, CustomerFactory customers) {
+        this.store = Objects.requireNonNull(store);
+        this.customers = Objects.requireNonNull(customers);
+    }
+
+    @Override
+    public void performOrder(Order order) {
+        // ... validate the order, possibly via customers ...
+        store.add(order);
+    }
+}
+```
+
+- The service only mentions _interfaces_: `OrderStore`, `CustomerFactory`, `Order`
+- No `new` for any dependency $\rightarrow$ the implementation choice is somebody else's business
+
+---
+
+## DI in Java (example, pt. 2): the composition root
+
+```java
+public class ApplicationFactory { // the composition root
+    public OrderStore orderStore() {
+        return new SqlOrderStore(System.getenv("DB_URL"));
+    }
+    public CustomerFactory customerFactory() {
+        return new CustomerFactoryImpl();
+    }
+    public OrderManagementService orderManagementService() {
+        return new OrderManagementServiceImpl(orderStore(), customerFactory());
+    }
+}
+
+// in main():
+OrderManagementService service = new ApplicationFactory().orderManagementService();
+```
+
+- The factory is the _only_ class mentioning _implementation_ classes
+    + which can stay package-private (not leaked into the API)
+- __A hand-written factory is a minimal DI container__
+    + one method per interface, specifying _which_ implementation and _how_ to initialise it
+- In a layered architecture, this is the job of the outermost module (cf. [modules](#/enforcing-architecture))
+
+---
+
+## DI eases testability
+
+- The class under test does not create its dependencies $\rightarrow$ the _test_ decides what to pass in
+    + no need to edit production code, nor to patch it with static mocking tricks
+
+{{< multicol >}}
+{{% col %}}
+__Unit tests__: inject _test doubles_ (stubs, fakes, mocks)
+
+```java
+@Test
+void performOrderStoresTheOrder() {
+    OrderStore store = mock(OrderStore.class); // Mockito
+    var service = new OrderManagementServiceImpl(
+        store, new CustomerFactoryImpl());
+    service.performOrder(order);
+    verify(store).add(order);
+}
+```
+
+- tests the service in _isolation_, no DB needed
+{{% /col %}}
+{{% col %}}
+__Integration tests__: inject _real_ (yet lightweight) components
+
+```java
+@Test
+void orderIsActuallyStored() {
+    var store = new InMemoryOrderStore();
+    var service = new OrderManagementServiceImpl(
+        store, new CustomerFactoryImpl());
+    service.performOrder(order);
+    assertTrue(store.contains(order));
+}
+```
+
+- or a `SqlOrderStore` on a throw-away DB (e.g. via [Testcontainers](https://testcontainers.com/))
+{{% /col %}}
+{{< /multicol >}}
+
+- Each test acts as a _test-specific composition root_
+
+---
+
+## DI eases testability (overview)
+
+![The same OrderManagementServiceImpl code receives an OrderStore via its constructor in three different set-ups: in production it is wired by ApplicationFactory with a SqlOrderStore; in unit tests it is wired by the test with a Mockito mock; in integration tests it is wired by the test with an InMemoryOrderStore or a SqlOrderStore on a test database run with Testcontainers](./di-testing.svg)
+
+- Only the _wiring_ changes across production, unit tests, and integration tests
+    + the production code is tested _as is_
+- Dependencies that are hard to control in tests (DB, network, clock, randomness) should be _injected_ as well
+    + e.g. inject a `java.time.Clock` instead of calling `LocalDateTime.now()`
+
+---
+
+## DI technologies
+
+- Hand-written factories become tedious as the dependency graph grows
+- _DI containers_ automate the wiring. They let developers:
+    1. _register_ the chosen implementation for each interface (a.k.a. _binding_)
+    2. specify its _lifetime_: _singleton_ (one shared instance), _transient_ (new instance per request), _scoped_ (one per scope, e.g. per HTTP request)
+    3. _retrieve_ (or have injected) an object for a given interface
+
+<div style="font-size: 0.7em">
+
+| Technology | Language | Notes | Docs |
+|---|---|---|---|
+| Jakarta Dependency Injection (ex JSR-330) | Java | standard annotations (`@Inject`, `@Singleton`), no container | [spec](https://jakarta.ee/specifications/dependency-injection/) |
+| Jakarta CDI | Java | standard container of Jakarta EE (e.g. Quarkus) | [spec](https://jakarta.ee/specifications/cdi/) |
+| Spring Framework | Java, Kotlin | the most widespread container, runtime reflection | [docs](https://docs.spring.io/spring-framework/reference/core/beans.html) |
+| Google Guice | Java | bindings declared in _modules_, runtime | [docs](https://github.com/google/guice/wiki) |
+| Dagger 2 / Hilt | Java, Kotlin (Android) | wiring code generated at _compile time_ | [docs](https://dagger.dev/) |
+| Koin | Kotlin (multiplatform) | Kotlin DSL, no reflection | [docs](https://insert-koin.io/) |
+| `Microsoft.Extensions.DependencyInjection` | C# | `IServiceCollection` + `IServiceProvider` | [docs](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection) |
+
+</div>
+
+- Containers support _overriding_ bindings in tests too
+    + e.g. Spring's `@MockitoBean`, Guice's `Modules.override(...)`
+
+---
+
 {{< slide id="domain-events" >}}
 
 ## Domain Events (definition)
@@ -1185,6 +1391,8 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ---
 
+{{< slide id="enforcing-architecture" >}}
+
 ## Enforcing the architecture in the code
 
 - Layering may be enforced in the code
@@ -1220,6 +1428,8 @@ product ..> server
 product ..> storage
 product ..> mq
 {{< /plantuml >}}
+
+- `product` is the _composition root_: it wires implementations from all modules (cf. [Dependency Injection](#/dependency-injection))
 
 ---
 
@@ -1447,6 +1657,8 @@ A simple domain keeping track of: _customers_, _products_, and _orders_.
     - factory
     - repository
     - service
+6. __Wire__ services, repositories, and factories via _constructor injection_
+    - write at least one _integration test_ injecting an in-memory repository
 
 {{% /section %}}
 

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="340" viewBox="0 0 1000 340" font-family="Helvetica, Arial, sans-serif"><defs><marker id="a-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b2b2b"/></marker><marker id="a-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b5332e"/></marker><marker id="a-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6f55a0"/></marker></defs>
+<rect width="1000" height="340" fill="#ffffff"/>
+<line x1="500" y1="20" x2="500" y2="320" stroke="#999" stroke-width="1.5" stroke-dasharray="6 5"/>
+<text x="250" y="40" font-size="20" fill="#2b2b2b" font-weight="bold" text-anchor="middle">without DI: the client pulls</text>
+<text x="750" y="40" font-size="20" fill="#2b2b2b" font-weight="bold" text-anchor="middle">with DI: dependencies are pushed</text>
+<rect x="30" y="150" width="170" height="70" rx="10" fill="#e3edf8" stroke="#2f6db5" stroke-width="2"/><text x="115" y="191" font-size="18" fill="#2f6db5" font-weight="bold" text-anchor="middle">Service</text>
+<rect x="300" y="150" width="170" height="70" rx="10" fill="#f9e1e0" stroke="#b5332e" stroke-width="2"/><text x="385" y="191" font-size="18" fill="#b5332e" font-weight="bold" text-anchor="middle">SqlOrderStore</text>
+<path d="M200,185 L298,185" fill="none" stroke="#b5332e" stroke-width="2.5" marker-end="url(#a-red)"/>
+<text x="250" y="140" font-size="16" fill="#6b6b6b" font-style="italic" text-anchor="middle">new SqlOrderStore()</text>
+<text x="250" y="280" font-size="17" fill="#6b6b6b" font-style="italic" text-anchor="middle">the implementation choice is hard-coded in the client</text>
+<rect x="670" y="75" width="160" height="60" rx="10" fill="#ece4f5" stroke="#6f55a0" stroke-width="2"/><text x="750" y="111" font-size="18" fill="#6f55a0" font-weight="bold" text-anchor="middle">Factory</text>
+<rect x="530" y="200" width="170" height="70" rx="10" fill="#e3edf8" stroke="#2f6db5" stroke-width="2"/><text x="615" y="241" font-size="18" fill="#2f6db5" font-weight="bold" text-anchor="middle">Service</text>
+<rect x="800" y="200" width="170" height="70" rx="10" fill="#f9e1e0" stroke="#b5332e" stroke-width="2"/><text x="885" y="241" font-size="18" fill="#b5332e" font-weight="bold" text-anchor="middle">SqlOrderStore</text>
+<path d="M800,135 L872,198" fill="none" stroke="#6f55a0" stroke-width="2.5" marker-end="url(#a-purple)"/><text x="870" y="160" font-size="16" fill="#6b6b6b" font-style="italic" text-anchor="start">1. creates</text>
+<path d="M700,135 L628,198" fill="none" stroke="#6f55a0" stroke-width="2.5" marker-end="url(#a-purple)"/><text x="630" y="160" font-size="16" fill="#6b6b6b" font-style="italic" text-anchor="end">2. injects it</text>
+<path d="M700,235 L798,235" fill="none" stroke="#2b2b2b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a-ink)"/><text x="750" y="225" font-size="15" fill="#6b6b6b" font-style="italic" text-anchor="middle">uses</text>
+<text x="750" y="300" font-size="17" fill="#6b6b6b" font-style="italic" text-anchor="middle">the client only sees an OrderStore interface</text>
+</svg>
