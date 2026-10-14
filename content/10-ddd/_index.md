@@ -222,9 +222,34 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ---
 
+{{< slide id="domain-subdomains-contexts" >}}
+
 ## Domain _vs._ Subdomains _vs._ Contexts
 
-![An e-commerce domain split into payment (generic), offer (core), customer (supporting), and shipping (supporting) subdomains; each subdomain is realised by one bounded context with its services, except shipping, which is realised by two contexts (shipping and tracking)](./domain.svg)
+![An e-commerce domain split into payment (generic), offer (core), customer (supporting), and shipping (supporting) subdomains, each realised by one bounded context with its services, except shipping, realised by a shipping and a tracking context. Every context has its own Customer model, all linked to the same customer identity (CustomerID): as payer in payment (billing address, tax code or VAT number, payment methods), as shopper in the catalog (purchase history, preferences, segment), as account holder in the customer context (personal data, credentials, contacts), and as recipient in shipping (shipping addresses, delivery preferences) and tracking (shipments to track, notification contacts)](./domain.svg)
+
+---
+
+{{< slide id="same-concept-different-models" >}}
+
+## Same concept, different models
+
+- The same real-world _concept_ (e.g. a __customer__) shows up in several subdomains, seen from a different __angle__ each time:
+    + _payment_ $\rightarrow$ the customer as __payer__: billing (fiscal) address, tax code / VAT number, payment methods
+    + _offer_ $\rightarrow$ the customer as __shopper__: purchase history, preferences, segment $\Rightarrow$ predict offers and recommendations
+    + _customer_ $\rightarrow$ the customer as __account holder__: personal data, credentials, contacts, which they manage themselves
+    + _shipping_ $\rightarrow$ the customer as __recipient__: shipping addresses, delivery preferences, shipments to track
+
+- Each bounded context keeps its __own model__ of the concept, with only the data and behaviour it needs
+    + possibly under a different name, in its own _ubiquitous language_ (payer, shopper, recipient, ...)
+
+- What contexts _share_ is the __identity__ (e.g. `CustomerID`), _not_ the model
+    + contexts refer to each other's objects _by identifier_
+    + the same holds for other concepts, e.g. a _product_: price and discounts in _offer_, VAT rate in _payment_, weight and size in _shipping_
+
+- __Anti-pattern__: one all-encompassing `Customer` class shared by every context
+    + any change for one context affects all the others, and the constraints of different contexts end up conflicting
+    + how contexts integrate with each other is the subject of [context maps](#/context-map)
 
 ---
 
