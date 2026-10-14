@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="380" viewBox="0 0 1000 380" font-family="Helvetica, Arial, sans-serif"><defs><marker id="a-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b2b2b"/></marker></defs>
+<rect width="1000" height="380" fill="#ffffff"/>
+<rect x="290" y="30" width="420" height="70" rx="10" fill="#e3edf8" stroke="#2f6db5" stroke-width="2"/><text x="500" y="62" font-size="17" fill="#2f6db5" font-weight="bold" text-anchor="middle">OrderManagementServiceImpl</text><text x="500" y="86" font-size="14" fill="#6b6b6b" font-style="italic" text-anchor="middle">same production code, OrderStore injected via constructor</text>
+<text x="170" y="215" font-size="17" fill="#2b2b2b" font-weight="bold" text-anchor="middle">production</text>
+<text x="500" y="215" font-size="17" fill="#2b2b2b" font-weight="bold" text-anchor="middle">unit test</text>
+<text x="830" y="215" font-size="17" fill="#2b2b2b" font-weight="bold" text-anchor="middle">integration test</text>
+<rect x="40" y="230" width="260" height="70" rx="10" fill="#f9e1e0" stroke="#b5332e" stroke-width="2"/><text x="170" y="271" font-size="17" fill="#b5332e" font-weight="bold" text-anchor="middle">SqlOrderStore</text>
+<rect x="370" y="230" width="260" height="70" rx="10" fill="#fbe9dc" stroke="#c0672b" stroke-width="2"/><text x="500" y="271" font-size="17" fill="#c0672b" font-weight="bold" text-anchor="middle">mock OrderStore</text>
+<rect x="700" y="230" width="260" height="70" rx="10" fill="#e0f1e4" stroke="#3b8a55" stroke-width="2"/><text x="830" y="259" font-size="17" fill="#3b8a55" font-weight="bold" text-anchor="middle">InMemoryOrderStore</text><text x="830" y="284" font-size="15" fill="#3b8a55" text-anchor="middle">or SqlOrderStore on a test DB</text>
+<path d="M170,198 L430,102" fill="none" stroke="#2b2b2b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a-ink)"/>
+<path d="M500,198 L500,104" fill="none" stroke="#2b2b2b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a-ink)"/>
+<path d="M830,198 L570,102" fill="none" stroke="#2b2b2b" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a-ink)"/>
+<text x="170" y="330" font-size="15" fill="#6b6b6b" font-style="italic" text-anchor="middle">wired by ApplicationFactory</text>
+<text x="500" y="330" font-size="15" fill="#6b6b6b" font-style="italic" text-anchor="middle">wired by the test (e.g. Mockito)</text>
+<text x="830" y="330" font-size="15" fill="#6b6b6b" font-style="italic" text-anchor="middle">wired by the test (e.g. Testcontainers)</text>
+<text x="500" y="368" font-size="16" fill="#6b6b6b" font-style="italic" text-anchor="middle">only the wiring changes: no edits, no static patching</text>
+</svg>
