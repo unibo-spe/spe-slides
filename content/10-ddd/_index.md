@@ -24,7 +24,7 @@ enableSourceMap = true
 }
 </style>
 
-# Domain Driven Design  
+# Domain Driven Design
 
 
 ## {{< course_name >}}
@@ -186,7 +186,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 {{% section %}}
 
-## Overview of main notions 
+## Overview of main notions
 
 - __Domain__: the reference area of knowledge
 
@@ -220,7 +220,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 (cf. [Evans, 2003](https://www.domainlanguage.com/ddd/); [Evans, _DDD Reference_, 2015](https://www.domainlanguage.com/ddd/reference/))
 
---- 
+---
 
 ## Domain _vs._ Subdomains _vs._ Contexts
 
@@ -266,13 +266,13 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 3. Identify the actual meaning of __relevant words__ from the domain, and track them into a __glossary__
     - possibly, by interacting with experts
-    
+
     - _without assuming you already know the meaning of words_
         + i.e. do __not__ rely on (your) __common sense__
 
     - keep in mind that the meaning of words may vary among contexts
         + __homonyms__: similar names, different meanings
-        + __synonyms__: different names, similar meanings 
+        + __synonyms__: different names, similar meanings
 
 4. Adhere to the language, use it, make it yours
     - especially when talking about the domain / model / software
@@ -373,7 +373,7 @@ Model
 
 - __Factory__: objects creating other objects
 
---- 
+---
 
 ## Building blocks (concept)
 
@@ -414,7 +414,7 @@ Model
 - Must be _immutable_: their state is their attributes, which never change
     + read-only properties
     + lack of state-changing methods
-- May be implemented as 
+- May be implemented as
     - structures in .NET
     - _data classes_ in Kotlin, Scala, Python
     - records in Java
@@ -600,7 +600,7 @@ CustomerFactory -r-> TaxCode: creates
 CustomerFactory -u-> Customer: creates
 {{< /plantuml >}}
 
---- 
+---
 
 ## Repositories (definition)
 
@@ -614,7 +614,7 @@ CustomerFactory -u-> Customer: creates
 
 ### Purpose
 
-- Hiding (i.e. be backed by) some _database technology_ 
+- Hiding (i.e. be backed by) some _database technology_
 - Possibly realising some sort of [object-relational mapping (ORM)](https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping)
 - _Storing_ / _retrieving_ aggregate roots as _wholes_
 - Supporting _CRUD_ operations on aggregate roots, and/or _wrapping common queries_
@@ -623,30 +623,30 @@ CustomerFactory -u-> Customer: creates
 ### Remarks
 
 - They may exploit _factories_ for turning retrieved data into objects
-- If properly engineered, they avoid the _lock-in_ effect for database technologies 
+- If properly engineered, they avoid the _lock-in_ effect for database technologies
 - Design & implementation may require thinking about:
-    - the architecture, 
-    - the infrastructure, 
-    - the expected load, 
+    - the architecture,
+    - the infrastructure,
+    - the expected load,
     - etc.
 
 ---
 
 ## Repositories (constraints)
 
-- They are usually _identity-less_, _stateful_, and _composed_ objects 
+- They are usually _identity-less_, _stateful_, and _composed_ objects
     + state may consist of the _stored objects_
     + state may consist of _DB connections_
 
 - May be implemented as _classes_ in most OOP languages
 
 - Provide methods to
-    + _add_, _remove_, _update_ aggregate root entities 
+    + _add_, _remove_, _update_ aggregate root entities
     + _select_ and return one or more entities, possibly in a _lazy_ way
-        * this should return `Iterable`, `Collection`, or `Stream` on JVM 
+        * this should return `Iterable`, `Collection`, or `Stream` on JVM
 
 - _Non-trivial_ implementations should take care of
-    + enforcing _consistency_, in spite of _concurrent_ access 
+    + enforcing _consistency_, in spite of _concurrent_ access
     + supporting complex _transactions_
 
 ---
@@ -654,7 +654,7 @@ CustomerFactory -u-> Customer: creates
 ## Repositories (example)
 
 {{< plantuml height="70vh" >}}
-interface CustomerID 
+interface CustomerID
 
 interface Customer
 
@@ -685,7 +685,7 @@ CustomerRegistry --> CustomerID: exploits
 ### Purpose
 
 - Reifying _control-related_ aspects of the software
-- _Wiring_ aggregates, entities, and value objects _together_ 
+- _Wiring_ aggregates, entities, and value objects _together_
 - Exposing _coarse-grained functionalities_ to the users
 - Providing a _façade_ for the domain
 - Making the business logic evolvable, interchangeable, replaceable
@@ -704,12 +704,12 @@ CustomerRegistry --> CustomerID: exploits
 
 ## Services (constraints)
 
-- They are usually _identity-less_, _stateless_ objects 
+- They are usually _identity-less_, _stateless_ objects
 
 - May be implemented as classes in OOP languages
     + or bare _functions_ in functional languages
 
-- Commonly provide _procedures_ to do business-related stuff 
+- Commonly provide _procedures_ to do business-related stuff
     + e.g. a __complex operation__...
         * ... concerning some particular _aggregate root_
         * ... which does <u>not</u> support the operation directly through its methods
@@ -718,10 +718,10 @@ CustomerRegistry --> CustomerID: exploits
     + e.g. a complex operation spanning __several aggregates__, repositories, factories, etc.
 
 - _Non-trivial_ implementations should take care of
-    + supporting _concurrent access_ to the service’s facilities 
+    + supporting _concurrent access_ to the service’s facilities
     + exposing _domain events_ to the external world
 
---- 
+---
 
 ## Services (example)
 
@@ -763,7 +763,7 @@ note right of Customer: entity
 note top of OrderManagementService: service
 
 OrderID -u[hidden]- Product
-OrderID -d[hidden]- Customer 
+OrderID -d[hidden]- Customer
 
 {{< /plantuml >}}
 
@@ -773,7 +773,7 @@ OrderID -d[hidden]- Customer
 
 ## Domain Events (definition)
 
-> A value-like object capturing some domain-related _event_ 
+> A value-like object capturing some domain-related _event_
 > <br> (i.e., an observable _variation_ in the domain, which is _relevant_ to the software)
 
 - actually, only the event _notification_/description is reified to a type
@@ -790,9 +790,9 @@ OrderID -d[hidden]- Customer
 
 ### Remarks
 
-- Strong relation with the [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) (i.e. publish-subscribe) 
+- Strong relation with the [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) (i.e. publish-subscribe)
 
-- Strong relation with the _event sourcing_ approach (described later) 
+- Strong relation with the _event sourcing_ approach (described later)
 
 - Strong relation with the _CQRS pattern_ (described later)
 
@@ -856,7 +856,7 @@ note right of OrderManagementService: service
 
 {{% /section %}}
 
---- 
+---
 
 {{< slide id="strategic-design" >}}
 
@@ -954,7 +954,7 @@ note right of OrderManagementService: service
     + each context should be as independent as possible
     + each change affects as few contexts as possible
 
---- 
+---
 
 ## Model integrity patterns (background, pt. 1)
 
@@ -963,7 +963,7 @@ note right of OrderManagementService: service
 - Context maps highlight relations among contexts
     + yet, _not_ __all relations are equal__, nor symmetric
 
---- 
+---
 
 ## Model integrity patterns (background, pt. 2)
 
@@ -1007,9 +1007,9 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ![A downstream Search Page Context and upstream Search API Context connected by a customer-supplier relationship](./customer-supplier.jpg)
 
-- Best when: 
+- Best when:
     + multiple teams
-    + __mutual trust__ 
+    + __mutual trust__
     + good communication
 
 - Key idea:
@@ -1027,7 +1027,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ![A Search Page Context downstream of a Search API Context, while an External Context conforms downstream to the Search API Context](./conformist.jpg)
 
-- Best when: 
+- Best when:
     + multiple teams
     + poor communication / different pace
     + some trust
@@ -1042,9 +1042,9 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ![A Search Context isolates its model from an upstream Catalog Context through an anti-corruption translation layer with no business logic](./anti-corruption-layer.jpg)
 
-- Best when: 
+- Best when:
     + multiple teams
-    + poor communication 
+    + poor communication
     + poor trust
 
 - If upstream cannot be trusted, and interaction is pointless...
@@ -1056,68 +1056,6 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
     + e.g. often, repository types are anti-corruption layers for DB technologies
 
 ---
-
-## Partnership
-
-- Best when: contexts are __peers__ and their teams can cooperate closely
-
-- Key idea: teams __coordinate__ development, releases, and operational decisions
-    + neither team is a supplier or customer of the other
-
-- Trade-off: the relationship works only while communication and shared commitment remain strong
-
----
-
-## Open Host Service
-
-- Best when: one __upstream__ context serves many different downstream contexts
-
-- Key idea: expose a __stable protocol__ that all downstream contexts can use
-    + avoid a separate, bespoke integration for every consumer
-
-- Keep the protocol explicit and evolve it compatibly
-
----
-
-## Published Language
-
-- Best when: contexts exchange information through a __shared interchange language__
-
-- Key idea: publish and document the language independently of either internal model
-    + e.g. a versioned message schema or API representation
-
-- An open host service often uses a published language
-
----
-
-## Separate Ways
-
-- Best when: integration would cost more than the value it provides
-
-- Key idea: keep contexts __independent__; duplicate or recreate only the information each needs
-
-- Reconsider when duplicated work or inconsistent information becomes costly
-
----
-
-## Integration patterns (summary)
-
-| Pattern | Upstream/downstream relation | Key idea |
-| --- | --- | --- |
-| Shared Kernel | peers | Keep a small shared part of the model |
-| Customer--Supplier | customer influences supplier | Collaborate on the supplier's evolution |
-| Conformist | downstream accepts upstream | Adapt the downstream model to the upstream |
-| Anti-corruption Layer | downstream shields itself | Translate the upstream model at the boundary |
-| Partnership | peers | Coordinate development and releases |
-| Open Host Service | one upstream, many downstreams | Offer a stable protocol for integration |
-| Published Language | shared interchange language | Publish a documented integration language |
-| Separate Ways | no integration | Decouple when integration is not worth its cost |
-
-- _Big Ball of Mud_ is a descriptive label for an unstructured system, not an integration pattern.
-
-(cf. [Evans, _DDD Reference_, 2015](https://www.domainlanguage.com/ddd/reference/))
-
---- 
 
 {{< slide id="architecture" >}}
 
@@ -1190,7 +1128,7 @@ component "third-party serialization library" as gson
 component "third-party DB client library" as db
 component ":storage" as storage
 component ":web-api" as server
-component ":message-queue" as mq 
+component ":message-queue" as mq
 component ":command-line" as cli
 component product
 
@@ -1256,7 +1194,7 @@ product ..> mq
 - A lot of data is generated and must be stored, which costs _space_
 - Reconstructing the (current) state costs _time_
 
---- 
+---
 
 ## Command--Query Responsibility Segregation (__CQRS__)
 
@@ -1429,7 +1367,7 @@ A simple domain keeping track of: _customers_, _products_, and _orders_.
     - i.e. put code into either the `domain` or `application` modules
 5. Sketch _tests_ and, then, implementation for at least one
     - entity
-    - value object 
+    - value object
     - factory
     - repository
     - service
@@ -1448,11 +1386,11 @@ A simple domain keeping track of: _customers_, _products_, and _orders_.
 - Whenever the value changes, a new domain event is published, of type `Variation`
 - However, the repository only memorises the _current_ value of the counter
 
---- 
+---
 
 ## Exercise 2 -- Trivial CQRS (pt. 2)
 
-### TO-DO 
+### TO-DO
 
 1. Switch the design towards __event sourcing__, by memorising variations instead of snapshots.
 2. Implement the __CQRS pattern__ by splitting the repository into 2 parts:
