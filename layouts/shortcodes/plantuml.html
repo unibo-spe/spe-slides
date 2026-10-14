@@ -2,7 +2,7 @@
 <figure id="plantuml-figure-{{ $figure_id }}" class="plantuml" 
     alt="{{ with .Get "alt" }}{{.}}{{ else }}{{ end }}"
     style="width: {{ with .Get "width" }}{{.}}{{ else }}100%{{ end }};{{ with .Get "height" }}height: {{.}};{{ end }}max-width: {{ with .Get "max-w" }}{{.}}{{ else }}95{{ end }}vw;max-height: {{ with .Get "max-h" }}{{.}}{{ else }}80{{end}}vh;">
-    {{ .Inner }}
+<pre>{{ replace (.Inner | htmlEscape) "\n" "&#10;" | safeHTML }}</pre>
 </figure>
 <script>
     handlePlantumlFigureByID("plantuml-figure-{{ $figure_id }}");
