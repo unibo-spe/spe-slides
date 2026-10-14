@@ -516,9 +516,60 @@ Customer *-r- CustomerID
 
 ## Aggregate Root (example)
 
-![A Buyer aggregate containing a Buyer aggregate root, and an Order aggregate containing an Order root, Address value object, and OrderItem child entity; Order refers to Buyer through BuyerID](./aggregate-root.svg)
+{{< plantuml height="65vh" alt="A Customer aggregate, whose root Customer owns a CustomerID, and an Order aggregate, whose root Order owns an OrderID, an Address value object, and many OrderItem entities; Order refers to the customer only through its CustomerID" >}}
+package "Customer aggregate" <<Rectangle>> {
+    interface Customer {
+        + CustomerID getID()
+        ..
+        + String getName()
+        + String getEmail()
+    }
+    note left of Customer: aggregate root
 
-(notice the link between `Order` and `Buyer` implemented by letting the `Order` hold a reference to the `BuyerID`)
+    interface CustomerID
+    note left of CustomerID: value object
+}
+
+package "Order aggregate" <<Rectangle>> {
+    interface Order {
+        + OrderID getID()
+        + CustomerID **getCustomer**()
+        + Date getTimestamp()
+        + Address getShippingAddress()
+        + Iterable<OrderItem> getItems()
+        ..
+        + void **setShippingAddress**(address: Address)
+        + void **addItem**(product: ProductID, amount: long)
+        + void **removeItem**(product: ProductID)
+        + Money getTotal()
+    }
+    note top of Order: aggregate root
+
+    interface OrderID
+    note bottom of OrderID: value object
+
+    interface Address {
+        + String getStreet()
+        + String getCity()
+    }
+    note bottom of Address: value object
+
+    interface OrderItem {
+        + ProductID getProduct()
+        + long getAmount()
+        + Money getPrice()
+    }
+    note bottom of OrderItem: entity
+}
+
+Customer "1" *-d- "1" CustomerID
+Order "1" *-d- "1" OrderID
+Order "1" *-d- "1" Address
+Order "1" *-d- "N" OrderItem
+Order .l.> CustomerID: refers to\nthe customer\nby ID
+{{< /plantuml >}}
+
+(notice that `Order` refers to its `Customer` via the `CustomerID` only, and that `OrderItem`s refer to products via `ProductID`s)
 
 ---
 
@@ -732,38 +783,38 @@ interface OrderManagementService {
 
 interface Order {
     + OrderID getId()
-    + Customer getCustomer()
-    + void setCustomer(Customer customer)
+    + CustomerID getCustomer()
+    + void setCustomer(CustomerID customer)
     + Date getTimestamp()
     + void setTimestamp(Date timestamp)
-    + Map<Product, Long> getAmounts()
+    + Map<ProductID, Long> getAmounts()
 }
 
 interface OrderID
 
-interface Customer
+interface CustomerID
 
-interface Product
+interface ProductID
 
 interface OrderStore
 
 Order "1" *-r- "1" OrderID
-Order "1" *-d- "1" Customer
-Order "1" *-u- "N" Product
+Order "1" *-d- "1" CustomerID
+Order "1" *-u- "N" ProductID
 OrderStore "1" *-- "N" Order
 
 OrderManagementService ..> Order: handles
 OrderManagementService ..> OrderStore: updates
 
 note bottom of OrderStore: repository
-note top of Order: entity
+note top of Order: entity (aggregate root)
 note right of OrderID: value object
-note right of Product: entity
-note right of Customer: entity
+note right of ProductID: value object
+note right of CustomerID: value object
 note top of OrderManagementService: service
 
-OrderID -u[hidden]- Product
-OrderID -d[hidden]- Customer
+OrderID -u[hidden]- ProductID
+OrderID -d[hidden]- CustomerID
 
 {{< /plantuml >}}
 
