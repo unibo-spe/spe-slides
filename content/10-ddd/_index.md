@@ -89,6 +89,12 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ---
 
+## The domain as the criterion
+
+![Left, facts stated by domain experts; right, the design choice each fact suggests, with the part of the lecture discussing it. A placed order must never change suggests immutable value objects (building blocks). Every price change must be traceable for years suggests event sourcing. Payment and shipping are run by different teams and change at different paces suggests separate bounded contexts (strategic design). The catalogue is browsed all day but updated once a week suggests segregating reads from writes (CQRS). We may switch payment provider next year suggests ports and adapters and dependency injection. Crossed out as non-criteria: it's trendy, I already know it, the last project used it, the framework wants it so](./domain-as-criterion.svg)
+
+---
+
 ## Recommended workflow
 
 ```mermaid
@@ -155,6 +161,12 @@ flowchart LR
     + some given __company__ (manufacturing, marketing, HR, etc.)
     + __linear algebra__ (matrices, complex numbers, polynomials, etc.)
     + __machine learning__ (classification, regression, feature selection, etc.)
+
+---
+
+## What is the domain? (example)
+
+![A university domain made of five contexts, each with its own expert and its own words: teaching (course coordinator), student office (secretary), human resources (HR officer), research (research office), facilities (facilities manager). Some words recur with different meanings: a student takes classes and exams in teaching, but is someone enrolled who pays fees in the student office; a course is a subject taught yearly in teaching, but a degree programme in the student office; a professor teaches courses in teaching, is an employee with a contract in HR, and a principal investigator in research](./university-domain.svg)
 
 ---
 
