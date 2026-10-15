@@ -648,11 +648,15 @@ Customer *-r- CustomerID
 - _Must_ implement `equals()` and `hashCode()` on JVM (as any other entity)
     + equality compares the root's identity, as for any entity
 
+---
+
+## Aggregate Roots (constraints, cont'd)
+
 - Components of an aggregate should _not_ hold **references** to components of _other_ aggregates
     + that's why they are called aggregate _roots_
     + notable exception: _references_ to _identifiers_ of other aggregates
 
-    ![Three aggregates, each with an aggregate root and internal components; references from one aggregate to another aggregate's root are allowed, while a reference to another aggregate's internal component is forbidden](./aggregate-references.svg)
+![Three aggregates, each with an aggregate root and internal components; references from one aggregate to another aggregate's root are allowed, while a reference to another aggregate's internal component is forbidden](./aggregate-references.svg)
 
 ---
 
