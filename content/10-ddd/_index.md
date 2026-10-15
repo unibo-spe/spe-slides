@@ -736,11 +736,39 @@ CustomerRegistry --> CustomerID: exploits
 
 ---
 
+## Services and events
+
+- Services are most commonly __prosumers__ of _events_
+    + i.e. they both _produce_ and _consume_ events
+    + events are most commonly _domain events_ (cf. [later](#/domain-events))
+
+- In practice, services commonly implement the [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) (aka _event listener_)
+    + often in _both_ roles: event __source__ (subject) _and_ event __listener__ (observer)
+
+- Hence, services may come with _ad-hoc methods_ to
+    + _produce_ events, i.e. let listeners (un)subscribe
+        * e.g. `addOrderEventListener(listener)`, `removeOrderEventListener(listener)`
+    + _react_ to events, i.e. handle notifications from other sources
+        * e.g. `onCustomerEvent(event)`
+
+---
+
 ## Services (example)
 
 {{< plantuml height="70vh" >}}
 interface OrderManagementService {
     + void performOrder(Order order)
+    ..
+    + void **addOrderEventListener**(OrderEventListener listener)
+    + void **removeOrderEventListener**(OrderEventListener listener)
+}
+
+interface OrderEventListener {
+    + void **onOrderEvent**(OrderEvent event)
+}
+
+interface CustomerEventListener {
+    + void **onCustomerEvent**(CustomerEvent event)
 }
 
 interface Order {
@@ -767,13 +795,17 @@ OrderStore "1" *-- "N" Order
 
 OrderManagementService ..> Order: handles
 OrderManagementService ..> OrderStore: updates
+OrderManagementService -u-|> CustomerEventListener
+OrderManagementService "1" o-l- "N" OrderEventListener: notifies
 
 note bottom of OrderStore: repository
 note top of Order: entity (aggregate root)
 note right of OrderID: value object
 note right of ProductID: value object
 note right of CustomerID: value object
-note top of OrderManagementService: service
+note right of OrderManagementService: service\n(source of order events,\nlistener of customer events)
+note left of OrderEventListener: listener (observer)
+note left of CustomerEventListener: listener (observer)
 
 OrderID -u[hidden]- ProductID
 OrderID -d[hidden]- CustomerID
@@ -795,7 +827,7 @@ OrderID -d[hidden]- CustomerID
 
 - actually, only the event _notification_/description is reified to a type
 
-![A customer adds a product to the Basket aggregate, which publishes a ProductAdded domain event after saving; the event notifies a Recommendation Service, which updates the Recommendations aggregate](./domain-events.svg)
+![A customer places an order via the Order Management Service, which saves the Order aggregate and then publishes an OrderEvent of kind "placed"; the event notifies a Recommendation Service, which updates the Recommendations aggregate](./domain-events.svg)
 
 ---
 
@@ -842,11 +874,19 @@ OrderID -d[hidden]- CustomerID
 interface OrderManagementService {
     + void performOrder(Order order)
     ..
-    + void **notifyOrderPerformed**(OrderEvent event)
+    + void **addOrderEventListener**(OrderEventListener listener)
+    + void **removeOrderEventListener**(OrderEventListener listener)
 }
 
+interface OrderEventListener {
+    + void **onOrderEvent**(OrderEvent event)
+}
+
+interface RecommendationService
+
 interface OrderEvent {
-    + OrderID getID()
+    + String **getKind**()
+    + OrderID getOrder()
     + CustomerID getCustomer()
     + Date **getTimestamp**()
     + Map<ProductID, Long> getAmounts()
@@ -858,17 +898,27 @@ interface CustomerID
 
 interface ProductID
 
-OrderEvent "1" *-u- "1" OrderID
-OrderEvent "1" *-r- "1" CustomerID
+OrderEvent "1" *-r- "1" OrderID
+OrderEvent "1" *-d- "1" CustomerID
 OrderEvent "1" *-d- "N" ProductID
+OrderID -[hidden]d- ProductID
 
-OrderEvent .. OrderManagementService
+OrderManagementService .r.> OrderEvent: publishes
+OrderEventListener <|-d- RecommendationService
+OrderManagementService "1" o-d- "N" OrderEventListener: notifies
+OrderEventListener .r.> OrderEvent: consumes
 
-note left of OrderEvent: domain event
-note left of OrderID: value object
-note left of ProductID: value object
-note right of CustomerID: value object
-note right of OrderManagementService: service
+note top of OrderEvent
+    domain event
+    (kind: "placed",
+    "cancelled", ...)
+end note
+note right of OrderID: value object
+note right of ProductID: value object
+note left of CustomerID: value object
+note top of OrderManagementService: service
+note right of RecommendationService: service
+note left of OrderEventListener: listener (observer)
 {{< /plantuml >}}
 
 {{% /section %}}
@@ -1048,7 +1098,10 @@ class OrderManagementServiceImpl implements OrderManagementService {
     public void performOrder(Order order) {
         // ... validate the order, possibly via customers ...
         store.add(order);
+        // ... then notify order event listeners ...
     }
+
+    // ... (un)subscription methods for order event listeners ...
 }
 ```
 
