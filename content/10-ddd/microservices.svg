@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1560" height="720" viewBox="0 0 1560 720" font-family="Helvetica, Arial, sans-serif">
+<defs>
+<marker id="a-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b2b2b"/></marker>
+<marker id="a-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2f6db5"/></marker>
+<marker id="a-ora" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c0672b"/></marker>
+</defs>
+<rect width="1560" height="720" fill="#ffffff"/>
+
+<!-- client and gateway -->
+<circle cx="470" cy="38" r="14" fill="none" stroke="#2b2b2b" stroke-width="3"/>
+<path d="M470,52 L470,84 M448,64 L492,64 M470,84 L452,108 M470,84 L488,108" fill="none" stroke="#2b2b2b" stroke-width="3"/>
+<text x="470" y="132" font-size="22" fill="#2b2b2b" text-anchor="middle">Client</text>
+<path d="M505,70 L640,70" fill="none" stroke="#2b2b2b" stroke-width="2.5" marker-end="url(#a-ink)"/>
+<text x="572" y="58" font-size="20" fill="#2b2b2b" text-anchor="middle">HTTP</text>
+<rect x="650" y="35" width="260" height="70" rx="10" fill="#e3edf8" stroke="#2f6db5" stroke-width="2.5"/>
+<text x="780" y="78" font-size="24" fill="#2f6db5" font-weight="bold" text-anchor="middle">API gateway</text>
+
+<!-- ReST calls -->
+<path d="M700,105 L240,240" fill="none" stroke="#2f6db5" stroke-width="2.5" marker-end="url(#a-blue)"/>
+<path d="M780,105 L780,240" fill="none" stroke="#2f6db5" stroke-width="2.5" marker-end="url(#a-blue)"/>
+<path d="M860,105 L1320,240" fill="none" stroke="#2f6db5" stroke-width="2.5" marker-end="url(#a-blue)"/>
+<text x="430" y="160" font-size="20" fill="#2f6db5" text-anchor="middle">ReST</text>
+<text x="812" y="175" font-size="20" fill="#2f6db5" text-anchor="middle">ReST</text>
+<text x="1130" y="160" font-size="20" fill="#2f6db5" text-anchor="middle">ReST</text>
+
+<!-- bounded contexts -->
+<g>
+<rect x="20" y="190" width="480" height="260" rx="14" fill="#fafafa" stroke="#777" stroke-width="2.5" stroke-dasharray="10,6"/>
+<text x="260" y="222" font-size="22" fill="#2b2b2b" font-weight="bold" text-anchor="middle">Customers context</text>
+<rect x="50" y="240" width="220" height="100" rx="10" fill="#f9e1e0" stroke="#b5332e" stroke-width="2.5"/>
+<text x="160" y="282" font-size="22" fill="#b5332e" font-weight="bold" text-anchor="middle">Customer</text>
+<text x="160" y="310" font-size="22" fill="#b5332e" font-weight="bold" text-anchor="middle">service</text>
+<path d="M270,290 L322,290" fill="none" stroke="#2b2b2b" stroke-width="2.5" marker-end="url(#a-ink)"/>
+<path d="M330,255 L330,325 A70,15 0 0 0 470,325 L470,255" fill="#fff4c2" stroke="#a8871f" stroke-width="2.5"/>
+<ellipse cx="400" cy="255" rx="70" ry="15" fill="#fff4c2" stroke="#a8871f" stroke-width="2.5"/>
+<text x="400" y="305" font-size="18" fill="#a8871f" font-weight="bold" text-anchor="middle">Customers DB</text>
+</g>
+<g>
+<rect x="540" y="190" width="480" height="260" rx="14" fill="#fafafa" stroke="#777" stroke-width="2.5" stroke-dasharray="10,6"/>
+<text x="780" y="222" font-size="22" fill="#2b2b2b" font-weight="bold" text-anchor="middle">Orders context</text>
+<rect x="570" y="240" width="220" height="100" rx="10" fill="#f9e1e0" stroke="#b5332e" stroke-width="2.5"/>
+<text x="680" y="282" font-size="22" fill="#b5332e" font-weight="bold" text-anchor="middle">Order</text>
+<text x="680" y="310" font-size="22" fill="#b5332e" font-weight="bold" text-anchor="middle">service</text>
+<path d="M790,290 L842,290" fill="none" stroke="#2b2b2b" stroke-width="2.5" marker-end="url(#a-ink)"/>
+<path d="M850,255 L850,325 A70,15 0 0 0 990,325 L990,255" fill="#fff4c2" stroke="#a8871f" stroke-width="2.5"/>
+<ellipse cx="920" cy="255" rx="70" ry="15" fill="#fff4c2" stroke="#a8871f" stroke-width="2.5"/>
+<text x="920" y="305" font-size="20" fill="#a8871f" font-weight="bold" text-anchor="middle">Orders DB</text>
+</g>
+<g>
+<rect x="1060" y="190" width="480" height="260" rx="14" fill="#fafafa" stroke="#777" stroke-width="2.5" stroke-dasharray="10,6"/>
+<text x="1300" y="222" font-size="22" fill="#2b2b2b" font-weight="bold" text-anchor="middle">Recommendations context</text>
+<rect x="1090" y="240" width="220" height="100" rx="10" fill="#f9e1e0" stroke="#b5332e" stroke-width="2.5"/>
+<text x="1200" y="282" font-size="22" fill="#b5332e" font-weight="bold" text-anchor="middle">Recommendation</text>
+<text x="1200" y="310" font-size="22" fill="#b5332e" font-weight="bold" text-anchor="middle">service</text>
+<path d="M1310,290 L1362,290" fill="none" stroke="#2b2b2b" stroke-width="2.5" marker-end="url(#a-ink)"/>
+<path d="M1370,255 L1370,325 A70,15 0 0 0 1510,325 L1510,255" fill="#fff4c2" stroke="#a8871f" stroke-width="2.5"/>
+<ellipse cx="1440" cy="255" rx="70" ry="15" fill="#fff4c2" stroke="#a8871f" stroke-width="2.5"/>
+<text x="1440" y="305" font-size="18" fill="#a8871f" font-weight="bold" text-anchor="middle">Recomm. DB</text>
+</g>
+
+<!-- events via the broker -->
+<path d="M160,340 L160,592" fill="none" stroke="#c0672b" stroke-width="2.5" stroke-dasharray="8,6" marker-end="url(#a-ora)"/>
+<text x="172" y="520" font-size="20" fill="#c0672b">publishes CustomerEvent</text>
+<path d="M640,340 L640,592" fill="none" stroke="#c0672b" stroke-width="2.5" stroke-dasharray="8,6" marker-end="url(#a-ora)"/>
+<text x="628" y="520" font-size="20" fill="#c0672b" text-anchor="end">publishes OrderEvent</text>
+<path d="M720,600 L720,348" fill="none" stroke="#c0672b" stroke-width="2.5" stroke-dasharray="8,6" marker-end="url(#a-ora)"/>
+<text x="732" y="520" font-size="20" fill="#c0672b">receives CustomerEvent</text>
+<path d="M1200,600 L1200,348" fill="none" stroke="#c0672b" stroke-width="2.5" stroke-dasharray="8,6" marker-end="url(#a-ora)"/>
+<text x="1212" y="520" font-size="20" fill="#c0672b">receives OrderEvent</text>
+
+<rect x="20" y="600" width="1520" height="80" rx="40" fill="#fbe7d9" stroke="#c0672b" stroke-width="2.5"/>
+<text x="780" y="650" font-size="26" fill="#c0672b" font-weight="bold" text-anchor="middle">Message broker (e.g. RabbitMQ, Kafka, MQTT)</text>
+</svg>

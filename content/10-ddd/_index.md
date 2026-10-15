@@ -513,6 +513,31 @@ stop
 
 ![A concept map linking model-driven design to services, entities, value objects, aggregates, factories, and repositories; entities act as aggregate roots and repositories access aggregates](./building-blocks.svg)
 
+---
+
+{{< slide id="building-blocks-levels" >}}
+
+## Building blocks at two levels
+
+> Building blocks are _archetypes_ for design decisions: they apply at (at least) two __levels__ of abstraction
+
+- __Low level__, i.e. _OOP modelling_: types, classes, interfaces, and objects _within_ a software process
+    + the focus of the original DDD literature, and of the first slides of each building block
+- __High level__, i.e. _Web APIs_ and _microservices_: resources, data schemas, endpoints, messages, and services _of_ a distributed system
+    + each building block ends with suggestions on how to employ it at this level
+
+<br>
+
+| Building block | OOP level | Web API / microservices level |
+|----------------|-----------|-------------------------------|
+| Value Object | immutable data class / record | reusable _schema_, embedded by value, no URL of its own |
+| Entity | class with an identifier | schema with an `id` + _resource_ with its own URL |
+| Aggregate | cluster of objects behind a root | resource (+ sub-resources), _transaction boundary_ of each request |
+| Repository | object hiding the storage | _DBMS_ technology, and which service _owns_ which data |
+| Service | stateless object wiring the domain | _microservice_ ($\approx$ one per bounded context), API controllers |
+| Domain Event | time-stamped value object | _message_ schema, propagated via a _broker_ |
+| Factory | object creating other objects | `POST` on collections, request $\rightarrow$ domain object mapping |
+
 {{% /section %}}
 
 ---
@@ -610,6 +635,123 @@ TaxCode -d-|> CustomerID
 
 Customer *-r- CustomerID
 {{< /plantuml >}}
+
+---
+
+## Value Objects at the Web level
+
+- Value objects $\rightarrow$ reusable __data schemas__
+    + e.g. in the `components/schemas` part of an [OpenAPI](https://spec.openapis.org/oas/v3.1.0) specification, or via [JSON Schema](https://json-schema.org/)
+- They have _no URL_ of their own: they are always _embedded_ by value into the representations of other resources
+- Their invariants become _schema constraints_: `required`, `pattern`, `minimum`, `enum`, `additionalProperties: false`, ...
+    + servers reject non-conforming requests with `400 Bad Request` (or `422 Unprocessable Content`)
+- The schema is the _contract_ between clients and servers, the record is its _counterpart_ in the code
+    + the latter may be generated from the former (cf. [OpenAPI Generator](https://openapi-generator.tech/)), or vice versa
+- Immutability comes for free: representations are _copies_, so updating a value means _replacing_ it
+
+{{< multicol >}}
+{{% col class="col-6" %}}
+
+```yaml
+# openapi.yaml (excerpt)
+components:
+  schemas:
+    Money:
+      type: object
+      required: [amount, currency]
+      additionalProperties: false
+      properties:
+        amount:   { type: number, minimum: 0 }
+        currency: { type: string, pattern: "^[A-Z]{3}$" }
+    Address:
+      type: object
+      required: [street, city, zip]
+      additionalProperties: false
+      properties:
+        street: { type: string, minLength: 1 }
+        city:   { type: string, minLength: 1 }
+        zip:    { type: string, pattern: "^[0-9]{5}$" }
+```
+
+{{% /col %}}
+{{% col class="col-6" %}}
+
+```java
+record Money(BigDecimal amount, Currency currency) {
+    Money { // compact constructor: checks invariants
+        if (amount.signum() < 0)
+            throw new IllegalArgumentException("negative amount");
+    }
+}
+
+record Address(String street, String city, String zip) {
+    Address {
+        if (street.isBlank() || city.isBlank())
+            throw new IllegalArgumentException("blank field");
+        if (!zip.matches("[0-9]{5}"))
+            throw new IllegalArgumentException("invalid zip");
+    }
+}
+```
+
+{{% /col %}}
+{{< /multicol >}}
+
+---
+
+## Entities at the Web level
+
+- Same as value objects (i.e. data schemas), plus __identity__
+    + the identifier is part of the schema, but `readOnly`: assigned by the server, never changed by clients
+    + the identifier is also part of the entity's __URL__, e.g. `/customers/{id}`
+    + prefer _opaque_, server-generated identifiers (e.g. UUIDs) over _natural keys_ (e.g. tax codes)
+        * natural keys may change, and they leak personal data into URLs and logs
+- Entities are mutable $\rightarrow$ concurrent updates may conflict
+    + use `ETag` / `If-Match` headers for _optimistic concurrency_ (cf. [RFC 9110](https://www.rfc-editor.org/rfc/rfc9110#name-if-match))
+    + `412 Precondition Failed` if the entity changed since the client last read it
+- Not every entity deserves its own URL: only _aggregate roots_ do (cf. next section)
+
+{{< multicol >}}
+{{% col class="col-6" %}}
+
+```yaml
+    CustomerID:
+      type: string
+      format: uuid
+    Customer:
+      type: object
+      required: [id, name, email]
+      properties:
+        id:
+          $ref: "#/components/schemas/CustomerID"
+          readOnly: true
+        name:    { type: string, minLength: 1 }
+        email:   { type: string, format: email }
+        address: { $ref: "#/components/schemas/Address" }
+```
+
+{{% /col %}}
+{{% col class="col-6" %}}
+
+```java
+record CustomerID(UUID value) { }
+
+class Customer {
+    private final CustomerID id; // never changes
+    private String name, email;  // may change
+    private Address address;     // value object
+
+    // ... constructor, getters, setters ...
+
+    @Override public boolean equals(Object o) {
+        return o instanceof Customer c && id.equals(c.id);
+    }
+    @Override public int hashCode() { return id.hashCode(); }
+}
+```
+
+{{% /col %}}
+{{< /multicol >}}
 
 {{% /section %}}
 
@@ -717,6 +859,53 @@ Order .l.> CustomerID: refers to\nthe customer\nby ID
 
 (notice that `Order` refers to its `Customer` via the `CustomerID` only, and that `OrderItem`s refer to products via `ProductID`s)
 
+---
+
+## Aggregates at the Web level (pt. 1)
+
+> Recall: ReST principles and API design anti-patterns in [these slides](https://unibo-dtm-se.github.io/course-slides/web/)
+
+- One aggregate root $\rightarrow$ one _collection_ resource + one _item_ resource
+    + e.g. `/orders` (collection) and `/orders/{orderId}` (item)
+- Internal components $\rightarrow$ _sub-resources_, reachable only _through the root_
+    + e.g. `/orders/{orderId}/items/{productId}`, never `/order-items/{id}`
+- References to _other aggregates_ $\rightarrow$ _identifiers_ (or links), never embedded copies
+    + e.g. `"customerId": "c-42"`, or `"customer": "/customers/c-42"`, in the representation of an order
+- `GET` on the root returns the _whole_ aggregate (root + components)
+    + consistently with repositories, which load and store _whole_ aggregates
+- One request modifies _one_ aggregate $\rightarrow$ the aggregate is the __transaction boundary__ of each request
+    + changes spanning several aggregates are _eventually_ consistent, via [domain events](#/domain-events)
+- Domain operations which are not CRUD $\rightarrow$ model them as _resources_ (nouns), not as verbs in the URL
+    + e.g. `POST /orders/{orderId}/cancellation`, rather than `POST /cancelOrder?id=...`
+- The root still _enforces the invariants_, and violations become _status codes_
+    + e.g. adding items to a cancelled order $\rightarrow$ `409 Conflict`
+
+---
+
+## Aggregates at the Web level (pt. 2)
+
+### Example: Web API for the `Order` aggregate
+
+<div style="font-size: 0.85em">
+
+| Method | Path | Meaning | `Order` method | Success | Errors |
+|--------|------|---------|----------------|---------|--------|
+| `GET` | `/orders?customerId=c-42` | list orders (of a customer) | (repository query) | `200` | `400` |
+| `POST` | `/orders` | place a new order | (factory) | `201` + `Location` | `400`, `422` |
+| `GET` | `/orders/{orderId}` | read the whole aggregate | getters | `200` + `ETag` | `404` |
+| `PUT` | `/orders/{orderId}/shipping-address` | replace a value object | `setShippingAddress` | `204` | `400`, `404`, `412` |
+| `POST` | `/orders/{orderId}/items` | add an item, via the root | `addItem` | `201` | `400`, `404`, `409` |
+| `DELETE` | `/orders/{orderId}/items/{productId}` | remove an item, via the root | `removeItem` | `204` | `404`, `409` |
+| `POST` | `/orders/{orderId}/cancellation` | domain operation | `cancel` (new) | `201` | `404`, `409` |
+| `DELETE` | `/orders/{orderId}` | delete the aggregate | (repository) | `204` | `404` |
+
+</div>
+
+<br>
+
+- Paths mention _aggregates_ and their _components_, never _database tables_ or _actions_
+- Every endpoint on `/orders/{orderId}/...` is handled by _loading_ the root, _invoking_ one of its methods, and _saving_ it back
+
 {{% /section %}}
 
 ---
@@ -796,6 +985,82 @@ interface CustomerRegistry {
 CustomerRegistry "1" o--> "N" Customer: contains
 CustomerRegistry --> CustomerID: exploits
 {{< /plantuml >}}
+
+---
+
+## Repositories at the Web level (pt. 1)
+
+{{< multicol >}}
+{{% col class="col-8" %}}
+
+- At the Web level, repositories are mostly about __infrastructure__
+    + which _DBMS_ technology?
+        * relational (e.g. PostgreSQL), document (e.g. MongoDB), key-value (e.g. Redis), graph (e.g. Neo4j), ...
+        * depending on the _shape_ of aggregates, and on the _queries_ to be supported
+        * aggregates fit document stores naturally: one document per aggregate
+    + how to deploy it? managed (cloud) vs. self-hosted, replication, backups, ...
+- Each microservice may adopt a different technology: _polyglot persistence_ (cf. [Fowler](https://martinfowler.com/bliki/PolyglotPersistence.html))
+- The repository _interface_ keeps the choice _swappable_ (and _mockable_ in tests, cf. [dependency injection](#/dependency-injection))
+
+{{% /col %}}
+{{% col class="col-4" %}}
+
+{{< plantuml max-h="70vh" alt="Shared database: an Order service and a Customer service both read and write the same database. Database per service: each service owns its own database, and the Order service gets customer data via the Customer service's API or events" >}}
+skinparam defaultFontSize 18
+rectangle "Shared database" {
+  component "Order\nservice" as O1
+  component "Customer\nservice" as C1
+  database "DB" as DB1
+  O1 --> DB1
+  C1 --> DB1
+}
+rectangle "Database per service" {
+  component "Order\nservice" as O2
+  component "Customer\nservice" as C2
+  database "Orders\nDB" as DB2
+  database "Customers\nDB" as DB3
+  O2 --> DB2
+  C2 --> DB3
+  O2 ..> C2 : API / events
+}
+{{< /plantuml >}}
+
+{{% /col %}}
+{{< /multicol >}}
+
+> The __main__ design decision, though, is: shall microservices _share_ a database?
+
+---
+
+## Repositories at the Web level (pt. 2)
+
+### Shared database _vs._ database per service
+
+| Aspect | Shared database | Database per service |
+|--------|-----------------|----------------------|
+| Coupling | via the _schema_: one change may break other services | each service _owns_ its data, hidden behind its API |
+| Deployment and scaling | coordinated | independent |
+| Queries across contexts | easy (e.g. SQL joins) | API composition, or local _read models_ (cf. [CQRS](#/advanced)) |
+| Transactions across contexts | ACID, for free | _sagas_ + eventual consistency |
+| Technology | one DBMS for all | polyglot persistence |
+| Operations | one DB to run | many DBs to run, back up, monitor |
+
+---
+
+## Repositories at the Web level (pt. 3)
+
+- Rule of thumb: __one database per bounded context__ (cf. [microservices.io](https://microservices.io/patterns/data/database-per-service.html))
+    + sharing a _DBMS server_ is fine, sharing _tables_ is not
+        * e.g. one schema (and one DB user) per service, on the same PostgreSQL instance
+    + a shared database is a hidden _shared kernel_ (cf. [strategic design](#/strategic-design)): acceptable only with tight coordination among teams
+
+- Consequences of having one database per service:
+    + data of other contexts is either _requested_ via their APIs, or _replicated_ locally by listening to their [domain events](#/domain-events)
+    + business transactions spanning several services become __sagas__ (cf. [microservices.io](https://microservices.io/patterns/data/saga.html))
+        * i.e. sequences of _local_ transactions, with _compensating_ actions in case of failure
+        * e.g. _place order_ $\rightarrow$ _reserve stock_ $\rightarrow$ _charge payment_; if payment fails, _release stock_ and _cancel order_
+    + saving an aggregate _and_ publishing its event must be _atomic_ $\rightarrow$ __transactional outbox__ (cf. [microservices.io](https://microservices.io/patterns/data/transactional-outbox.html))
+        * the event is stored in the same DB transaction as the aggregate, then relayed to the broker
 
 {{% /section %}}
 
@@ -924,6 +1189,34 @@ OrderID -d[hidden]- CustomerID
 
 {{< /plantuml >}}
 
+---
+
+## Services at the Web level (pt. 1)
+
+- Which and how many Web services? Rule of thumb: __one microservice per bounded context__
+    + the bounded context is the boundary of a model, of a language, and (often) of a team
+    + _finer_ splits (e.g. one service per aggregate) are possible, but increase the communication overhead
+    + _coarser_ splits are fine to begin with: a _modular monolith_ may be split later (cf. [Fowler](https://martinfowler.com/bliki/MonolithFirst.html))
+
+- Inside each microservice:
+    + _application services_ $\rightarrow$ API _controllers_ (i.e. endpoint handlers)
+        * parse requests, load aggregates via repositories, invoke them, save them, publish events
+    + _domain services_ stay internal: not every service object deserves an endpoint
+
+- Microservices communicate either:
+    + __synchronously__, via ReST calls
+        * simple, but the caller depends on the callee being up (_temporal coupling_)
+    + __asynchronously__, via some __message-oriented middleware__ (i.e. a _broker_)
+        * e.g. [RabbitMQ](https://www.rabbitmq.com/), [Apache Kafka](https://kafka.apache.org/), [MQTT](https://mqtt.org/) brokers
+        * producers _publish_ domain events on topics/queues, consumers _subscribe_ to them
+        * it is the observer pattern, at the system level: publishers know nothing about subscribers
+
+---
+
+## Services at the Web level (pt. 2)
+
+![A client calls an API gateway via HTTP; the gateway routes ReST requests to the Customer, Order, and Recommendation services, one per bounded context, each with its own database; the Customer service publishes customer events and the Order service publishes order events on a message broker; the Order service consumes customer events, the Recommendation service consumes order events](./microservices.svg)
+
 {{% /section %}}
 
 ---
@@ -1033,6 +1326,87 @@ note right of RecommendationService: service
 note left of OrderEventListener: listener (observer)
 {{< /plantuml >}}
 
+---
+
+## Domain Events at the Web level (pt. 1)
+
+- As for value objects, mostly a matter of __data schema design__
+    + but for _messages_ exchanged via a broker, rather than for _resources_ exposed via HTTP
+
+- [AsyncAPI](https://www.asyncapi.com/docs/reference/specification/v3.0.0) is the counterpart of OpenAPI for _message-driven_ APIs
+    + it describes the _channels_ (i.e. topics/queues), the _operations_ of each service on them (send/receive), and the _messages_
+    + message payloads are described via JSON Schema, as in OpenAPI
+    + documentation and code skeletons can be generated from it, as for OpenAPI
+
+- [CloudEvents](https://cloudevents.io/) standardises the _envelope_ of events, regardless of the broker
+    + i.e. the metadata wrapping the payload: `id`, `source`, `type`, `time`, `data`, ...
+
+- Events carry _identifiers_ of aggregates (as ReST representations do), and possibly a _snapshot_ of relevant data (cf. [Fowler](https://martinfowler.com/articles/201701-event-driven.html))
+    + _thin_ events (identifiers only): consumers query the producer's API for details
+    + _fat_ events (state-carrying): consumers keep a local copy of the data they need, with no further calls
+
+---
+
+## Domain Events at the Web level (pt. 2)
+
+{{< multicol >}}
+{{% col class="col-7" %}}
+
+```yaml
+# asyncapi.yaml (excerpt)
+asyncapi: 3.0.0
+info: { title: Order service events, version: 1.0.0 }
+channels:
+  orderEvents:
+    address: orders.events
+    messages:
+      orderEvent: { $ref: "#/components/messages/OrderEvent" }
+operations:
+  publishOrderEvent:
+    action: send
+    channel: { $ref: "#/channels/orderEvents" }
+components:
+  messages:
+    OrderEvent:
+      payload:
+        type: object
+        required: [kind, orderId, customerId, timestamp, amounts]
+        properties:
+          kind:       { type: string, enum: [placed, cancelled] }
+          orderId:    { type: string, format: uuid }
+          customerId: { type: string, format: uuid }
+          timestamp:  { type: string, format: date-time }
+          amounts:    # ProductID -> amount
+            type: object
+            additionalProperties: { type: integer, minimum: 1 }
+```
+
+{{% /col %}}
+{{% col class="col-5" %}}
+
+```java
+record OrderEvent(
+    String kind, // "placed", "cancelled", ...
+    OrderID orderId,
+    CustomerID customerId,
+    Instant timestamp,
+    Map<ProductID, Long> amounts
+) { }
+```
+
+<br>
+
+- Events are published to _unknown_ consumers $\rightarrow$ their schema is a __public contract__
+    + prefer _additive_ changes (new optional fields)
+    + never remove/rename fields, nor change their meaning
+    + _version_ the schema otherwise
+    + consumers should ignore unknown fields (cf. [_tolerant reader_](https://martinfowler.com/bliki/TolerantReader.html))
+- Brokers commonly deliver messages _at least once_ $\rightarrow$ consumers should be _idempotent_
+    + e.g. discard events whose `id` was already processed
+
+{{% /col %}}
+{{< /multicol >}}
+
 {{% /section %}}
 
 ---
@@ -1116,6 +1490,87 @@ end note
 CustomerFactory -r-> TaxCode: creates
 CustomerFactory -u-> Customer: creates
 {{< /plantuml >}}
+
+---
+
+## Factories at the Web level (pt. 1)
+
+- `POST` on a _collection_ resource is the Web counterpart of a __factory__
+    + the client sends the _ingredients_, the server _creates_ the entity
+    + the server assigns the _identifier_, computes _derived_ values (e.g. tax codes, totals, timestamps), and enforces _invariants_
+    + response: `201 Created`, plus `Location: /customers/{id}` header, plus the representation of the new entity
+    + conversely, `PUT /customers/{id}` lets the _client_ choose the identifier (sensible only for natural keys)
+
+- Different factory methods $\rightarrow$ different _request schemas_ for the same collection
+    + e.g. `newCustomerPerson` vs. `newCustomerCompany` $\rightarrow$ `oneOf` + `discriminator` in OpenAPI
+
+- Request bodies are untrusted _representations_ (aka DTOs, data transfer objects), <u>not</u> domain objects
+    + factories _reconstitute_ valid domain objects out of them, or reject them (`400` / `422`)
+    + this keeps the wire format and the domain model _independent_ of each other
+        * i.e. the inbound side of an _anti-corruption layer_ (cf. [strategic design](#/strategic-design))
+
+- `POST` is not idempotent: if the client retries after a timeout, duplicates may be created
+    + _idempotency keys_: the client sends a unique `Idempotency-Key` header, the server creates the entity only once (cf. [IETF draft](https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/))
+
+---
+
+## Factories at the Web level (pt. 2)
+
+{{< multicol >}}
+{{% col class="col-6" %}}
+
+```yaml
+# openapi.yaml (excerpt)
+paths:
+  /customers:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/NewPerson"
+                - $ref: "#/components/schemas/NewCompany"
+              discriminator: { propertyName: kind }
+      responses:
+        "201":
+          description: customer created
+          headers:
+            Location:
+              schema: { type: string, format: uri }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Customer" }
+        "422":
+          description: invalid data (e.g. malformed VAT number)
+```
+
+{{% /col %}}
+{{% col class="col-6" %}}
+
+```java
+// API controller (application layer)
+Customer create(NewCustomerRequest request) {
+    Customer customer = switch (request) {
+        case NewPerson p -> factory.newCustomerPerson(
+            p.name(), p.surname(), p.birthDate(),
+            p.birthPlace(), p.email());
+        case NewCompany c -> factory.newCustomerCompany(
+            VatNumber.parse(c.vat()), // may throw
+            c.fullName(), c.email());
+    };
+    registry.addNewCustomer(customer);
+    return customer;
+    // -> 201 Created
+    //    Location: /customers/{customer.getID()}
+}
+```
+
+- `NewPerson` and `NewCompany` are DTOs (e.g. records generated from the OpenAPI schemas)
+- `factory` and `registry` are the `CustomerFactory` and `CustomerRegistry` from the previous examples
+
+{{% /col %}}
+{{< /multicol >}}
 
 {{% /section %}}
 
