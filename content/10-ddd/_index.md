@@ -2224,6 +2224,8 @@ Repository: <{{% github-url repo="ddd-exercise" %}}>, branch `exercise`
 
 (solutions on branch `master`)
 
+Each exercise folder contains a `walkthrough.md`, suggesting how to address the exercise step by step
+
 ---
 
 {{% section %}}
