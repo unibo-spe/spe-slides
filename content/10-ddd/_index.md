@@ -55,7 +55,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 1. [Motivation](#/motivation): _why a structured design process_
 2. [Main notions](#/notions): _domain, subdomains, bounded contexts, model, ubiquitous language_
-3. [Building blocks](#/building-blocks): _entities, value objects, aggregates, factories, repositories, services, dependency injection, domain events_
+3. [Building blocks](#/building-blocks): _entities, value objects, aggregates, repositories, services, domain events, factories, dependency injection_
 4. [Strategic design](#/strategic-design): _bounded contexts, context maps, integration patterns_
 5. [Layered architecture](#/architecture): _layers, ports & adapters, modules_
 6. [Event sourcing and CQRS](#/advanced): _storing changes, segregating reads and writes_
@@ -97,16 +97,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ## Recommended workflow
 
-```mermaid
-flowchart LR
-  P([Problem]) -- analysis --> M[[Model]]
-  M -- design --> A[Architecture]
-  A -- implementation --> S([Solution])
-
-  classDef focus fill:#f9e1e0,stroke:#b5332e,stroke-width:3px,color:#b5332e,font-weight:bold;
-  class M focus;
-  linkStyle 0,1 stroke:#b5332e,stroke-width:3px
-```
+![A linear workflow: the problem is turned into a model via analysis, the model into an architecture via design, and the architecture into a solution via implementation; the model and the steps leading to and from it are highlighted](./workflow.svg)
 
 - yet, how to derive the model?
 

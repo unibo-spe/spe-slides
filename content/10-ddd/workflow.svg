@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="190" viewBox="0 0 1300 190" font-family="Helvetica, Arial, sans-serif"><defs><marker id="a-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b2b2b"/></marker><marker id="a-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b5332e"/></marker></defs><rect width="1300" height="190" fill="#ffffff"/>
+<rect x="5" y="55" width="190" height="76" rx="38" fill="#fff4c2" stroke="#a8871f" stroke-width="2.5"/><text x="100" y="103" font-size="30" fill="#a8871f" font-weight="bold" text-anchor="middle">Problem</text>
+<path d="M199,93 L341,93" fill="none" stroke="#b5332e" stroke-width="4" marker-end="url(#a-red)"/><text x="270" y="78" font-size="25" fill="#b5332e" font-style="italic" text-anchor="middle">analysis</text>
+<rect x="345" y="50" width="190" height="86" rx="8" fill="#f9e1e0" stroke="#b5332e" stroke-width="5"/><text x="440" y="104" font-size="32" fill="#b5332e" font-weight="bold" text-anchor="middle">Model</text>
+<path d="M539,93 L681,93" fill="none" stroke="#b5332e" stroke-width="4" marker-end="url(#a-red)"/><text x="610" y="78" font-size="25" fill="#b5332e" font-style="italic" text-anchor="middle">design</text>
+<rect x="685" y="55" width="220" height="76" rx="8" fill="#e3edf8" stroke="#2f6db5" stroke-width="2.5"/><text x="795" y="103" font-size="30" fill="#2f6db5" font-weight="bold" text-anchor="middle">Architecture</text>
+<path d="M909,93 L1091,93" fill="none" stroke="#2b2b2b" stroke-width="3" marker-end="url(#a-ink)"/><text x="1000" y="78" font-size="25" fill="#6b6b6b" font-style="italic" text-anchor="middle">implementation</text>
+<rect x="1095" y="55" width="200" height="76" rx="38" fill="#e3f1e6" stroke="#3b8a55" stroke-width="2.5"/><text x="1195" y="103" font-size="30" fill="#3b8a55" font-weight="bold" text-anchor="middle">Solution</text>
+<text x="440" y="175" font-size="22" fill="#b5332e" font-style="italic" text-anchor="middle">DDD focus</text>
+</svg>
