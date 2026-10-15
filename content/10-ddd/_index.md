@@ -91,7 +91,16 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ## Recommended workflow
 
-### Problem $\xrightarrow{\color{red}analysis}$ **Model** $\xrightarrow{\color{red}design}$ Architecture $\xrightarrow{implementation}$ Solution
+```mermaid
+flowchart LR
+  P([Problem]) -- analysis --> M[[Model]]
+  M -- design --> A[Architecture]
+  A -- implementation --> S([Solution])
+
+  classDef focus fill:#f9e1e0,stroke:#b5332e,stroke-width:3px,color:#b5332e,font-weight:bold;
+  class M focus;
+  linkStyle 0,1 stroke:#b5332e,stroke-width:3px
+```
 
 - yet, how to derive the model?
 
@@ -200,6 +209,12 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ---
 
+## Overview of main notions (picture)
+
+![Problem space: an e-commerce domain split into payment (generic), offer (core), customer (supporting), and shipping (supporting) subdomains. Solution space: each subdomain is realised, ideally one-to-one, by a bounded context, which contains its own model and its own ubiquitous language](./notions-overview.svg)
+
+---
+
 ## _Subdomains_ and _Bounded Contexts_
 
 > A bounded context is a _boundary_ within which a model and its language are consistent:
@@ -276,6 +291,24 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 - __used to name software components__
 
+---
+
+{{< slide id="glossary" >}}
+
+## How a glossary may look like
+
+![Excerpt of a glossary for an e-commerce domain, as a table with columns term, context, definition, and synonyms to avoid. Basket (offer): the products a customer is considering, not binding, not to be confused with order. Order (offer): a binding request to buy products at the agreed prices. Place an order (offer): turn a basket into an order. Customer appears twice, with different meanings: in payment, whoever is billed (a.k.a. payer); in shipping, whoever receives a shipment (a.k.a. recipient). Shipment (shipping): a parcel carrying part of one order to one address](./glossary.svg)
+
+- one entry per term _and_ per context: the same word may mean different things in different contexts
+
+---
+
+## The glossary is reflected everywhere
+
+![The glossary terms (Basket, Order, place, Customer, Shipment) are mirrored by the code (interfaces Basket, Order, Customer, method place, List of Shipment), by the documentation (a page explaining how a customer places a basket, which becomes an order delivered via shipments), and by conversations among a domain expert, a developer, and a manager, who all use the same terms](./glossary-reflection.svg)
+
+- same words, same meanings, for _all_ people: experts, developers, managers, users
+
 {{% /section %}}
 
 ---
@@ -312,12 +345,72 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ---
 
+{{< slide id="conceptual-workflow-diagram" >}}
+
+## Conceptual Workflow (activity diagram)
+
+{{< plantuml max-h="85vh" alt="Activity diagram of the conceptual workflow: identify and name the domain, then its main contexts; then repeatedly elicit the meaning of relevant words with domain experts and update the glossary, as long as ambiguous words remain; then adopt the ubiquitous language, draw the context map, model the software around the language, and continue with the choice of building blocks" >}}
+skinparam defaultFontSize 18
+skinparam ActivityBackgroundColor #e3edf8
+skinparam ActivityBorderColor #2f6db5
+start
+:Identify and name the **domain**;
+:Identify and name the main **contexts**;
+repeat
+  :Elicit the meaning of relevant **words**
+  with **domain experts**
+  (beware of homonyms and synonyms);
+  :Update the **glossary**;
+repeat while (ambiguous or missing words?) is (yes)
+-> no;
+:Adopt the **ubiquitous language**
+in talks, sketches, and code;
+:Draw the **context map**;
+:Model the software around the language
+(1 concept ≈ 1 interface);
+(A)
+note right: continues with\nbuilding blocks
+{{< /plantuml >}}
+
+---
+
 ## Discovering the domain: Event Storming
 
 - Collaborative workshop with domain experts and developers (cf. [Brandolini](https://www.eventstorming.com/))
 - Put _domain events_ (past tense) on a timeline, then add commands, actors, aggregates, and policies
 - Boundaries between clusters of events suggest _bounded contexts_
 - Domain events are introduced [later](#/domain-events)
+
+<br>
+
+> More on event storming in the course [Software Architecture and Platforms](https://www.unibo.it/en/study/course-units-transferable-skills-moocs/course-unit-catalogue/course-unit/2026/558673)
+
+---
+
+## Event Storming: notation
+
+![Sticky-note colours used in event storming: orange for domain events (e.g. Order Placed), blue for commands (Place Order), small yellow for actors (Customer), large yellow for aggregates (Order), lilac for policies (whenever ... then ...), green for read models (Basket Summary), pink for external systems (Payment Gateway), and red, tilted, for hot spots (open questions)](./event-storming-notation.svg)
+
+- one colour per kind of sticky note, on a long paper roll (or a virtual whiteboard)
+
+---
+
+## Event Storming: big picture
+
+![Domain events of an e-commerce placed along a timeline: product added to or removed from basket, order placed, payment authorized or refused, invoice issued, shipment prepared, parcel dispatched, delivered, or returned. Hot spots ask what if stock runs out after placing, and who pays for returns. Dashed boundaries group the events into candidate offer, payment, and shipping contexts](./event-storming-big-picture.svg)
+
+1. everybody writes the events they know, then the group sorts them in time
+2. discussions reveal _hot spots_ and the _words_ people use $\rightarrow$ glossary
+3. clusters of events suggest _bounded contexts_
+
+---
+
+## Event Storming: process modelling
+
+![Process-level event storming: a Customer, informed by the Basket Summary read model, issues the Place Order command, handled by the Order aggregate, which emits Order Placed; a policy (whenever an order is placed, charge the customer) issues the Charge Customer command, sent to the Payment Gateway external system, which emits Payment Authorized, and so on](./event-storming-process.svg)
+
+- zoom into one process: _actor_ $\rightarrow$ _command_ $\rightarrow$ _aggregate_ $\rightarrow$ _event_ $\rightarrow$ _policy_ $\rightarrow$ _command_ ...
+- aggregates and events found here become building blocks of the model
 
 {{% /section %}}
 
@@ -331,23 +424,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ## Towards building blocks
 
-{{< multicol >}}
-{{% col %}}
-Domain
-
-- Concept
-    + instance
-{{% /col %}}
-{{% col %}}
-$\xrightarrow{modelling}$
-{{% /col %}}
-{{% col %}}
-Model
-
-- Type
-    + object
-{{% /col %}}
-{{< /multicol >}}
+![Modelling maps the domain onto the model: a domain concept (e.g. customer) becomes a type (e.g. interface Customer), and each instance of the concept (e.g. Alice, Bob) is reified as an object of that type (alice, bob)](./domain-to-model.svg)
 
 
 - Each _concept_ from each **context** shall become a _type_ in the **model**
@@ -365,6 +442,9 @@ Model
 
 (continued)
 
+{{< multicol >}}
+{{% col class="col-7" %}}
+
 7. _Choose_ the most adequate __building block__ for each concept
     - depending on the nature of the concept
     - ... or the properties of its instances
@@ -377,6 +457,31 @@ Model
     - e.g. entities may need repositories to be stored
     - e.g. entities may need factories to be created
     - e.g. aggregates may be composed of entities or value objects
+
+{{% /col %}}
+{{% col class="col-5" %}}
+
+{{< plantuml max-h="75vh" alt="Continuation of the conceptual workflow activity diagram: for each concept, choose the most adequate building block and design the corresponding type; if new concepts emerge (identifiers, repositories, factories, ...), add them to the glossary and to the model; repeat while concepts are left" >}}
+skinparam defaultFontSize 18
+skinparam ActivityBackgroundColor #e3edf8
+skinparam ActivityBorderColor #2f6db5
+(A)
+repeat
+  :Pick a **concept**;
+  :Choose its **building block**;
+  :Design the corresponding **type**;
+  if (new concepts emerged?) then (yes)
+    :Add them to the **glossary**
+    and to the model;
+  else (no)
+  endif
+repeat while (concepts left?) is (yes)
+-> no;
+stop
+{{< /plantuml >}}
+
+{{% /col %}}
+{{< /multicol >}}
 
 ---
 
