@@ -390,11 +390,11 @@ Model
 
 - __Aggregate__: cluster of entities/value objects with a consistency boundary, accessed via its __root__ entity
 
-- __Domain Event__: objects modelling relevant events (notifications)
+- __Repository__: objects providing storage facilities
 
 - __Service__ objects: providing stateless functionalities
 
-- __Repository__: objects providing storage facilities
+- __Domain Event__: objects modelling relevant events (notifications)
 
 - __Factory__: objects creating other objects
     + they enable _dependency injection_ (and, hence, testability)
@@ -405,7 +405,11 @@ Model
 
 ![A concept map linking model-driven design to services, entities, value objects, aggregates, factories, and repositories; entities act as aggregate roots and repositories access aggregates](./building-blocks.svg)
 
+{{% /section %}}
+
 ---
+
+{{% section %}}
 
 ## Entities vs. Value Objects
 
@@ -499,7 +503,11 @@ TaxCode -d-|> CustomerID
 Customer *-r- CustomerID
 {{< /plantuml >}}
 
+{{% /section %}}
+
 ---
+
+{{% section %}}
 
 ## Aggregates and Aggregate Roots
 
@@ -597,87 +605,11 @@ Order .l.> CustomerID: refers to\nthe customer\nby ID
 
 (notice that `Order` refers to its `Customer` via the `CustomerID` only, and that `OrderItem`s refer to products via `ProductID`s)
 
----
-
-## Factories (definition)
-
-> Objects aimed at __creating__ other objects
-
-<br>
-
-![A client delegates entity creation to a factory, which hides the complexity of creating the entity](./factories.svg)
+{{% /section %}}
 
 ---
 
-## Factories (details)
-
-### Purpose
-
-+ Factories encapsulate the _creation logic_ for _complex objects_
-    * making it evolvable, interchangeable, replaceable
-
-+ They ease the enforcement of _invariants_
-
-+ They support _dynamic selection_ of the most adequate _implementation_
-    + while _hiding_ the actual implementation choice
-
-### Remarks
-
-- DDD's notion of factory is quite loose
-    + DDD's Factories $\supset$ GOF's Factories $\cup$ Builders $\cup$ ...
-
----
-
-## Factories (constraints)
-
-- They are usually _identity-less_ and _state-less_ objects
-    + recall the [abstract factory pattern](https://en.wikipedia.org/wiki/Abstract_factory_pattern)
-
-- May be implemented as _classes_ in most OOP languages
-
-- Provide methods to _instantiate_ entities or value objects
-
-- Usually they require _no mutable_ field/property
-
-- No need to implement `equals()` and `hashCode()` on JVM
-
----
-
-## Factories (example)
-
-{{< plantuml >}}
-interface CustomerID
-
-interface TaxCode
-
-interface VatNumber
-
-interface Customer
-
-Customer "1" *-- "1" CustomerID
-
-VatNumber -u-|> CustomerID
-TaxCode -u-|> CustomerID
-
-interface CustomerFactory {
-    + TaxCode computeTaxCode(String name, String surname, Date birthDate, String birthPlace)
-    ..
-    + Customer newCustomerPerson(TaxCode code, String fullName, String email)
-    + Customer newCustomerPerson(String name, String surname, Date birthDate, String birthPlace, String email)
-    ..
-    + Customer newCustomerCompany(VatNumber code, String fullName, String email)
-}
-note bottom of CustomerFactory
-- method for computing tax codes
-- methods for creating person customers
-- methods for creating company customers
-end note
-
-CustomerFactory -r-> TaxCode: creates
-CustomerFactory -u-> Customer: creates
-{{< /plantuml >}}
-
----
+{{% section %}}
 
 ## Repositories (definition)
 
@@ -753,7 +685,11 @@ CustomerRegistry "1" o--> "N" Customer: contains
 CustomerRegistry --> CustomerID: exploits
 {{< /plantuml >}}
 
+{{% /section %}}
+
 ---
+
+{{% section %}}
 
 ## Services
 
@@ -844,7 +780,186 @@ OrderID -d[hidden]- CustomerID
 
 {{< /plantuml >}}
 
+{{% /section %}}
+
 ---
+
+{{% section %}}
+
+{{< slide id="domain-events" >}}
+
+## Domain Events (definition)
+
+> A value-like object capturing some domain-related _event_
+> <br> (i.e., an observable _variation_ in the domain, which is _relevant_ to the software)
+
+- actually, only the event _notification_/description is reified to a type
+
+![A customer adds a product to the Basket aggregate, which publishes a ProductAdded domain event after saving; the event notifies a Recommendation Service, which updates the Recommendations aggregate](./domain-events.svg)
+
+---
+
+## Domain Events (details)
+
+### Purpose
+- _Propagate_ changes among portions of the domain model (e.g. contexts, aggregates, entities, etc.)
+- _Record_ changes concerning the domain
+
+### Remarks
+
+- Strong relation with the [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) (i.e. publish-subscribe)
+
+- Strong relation with the _event sourcing_ approach (described later)
+
+- Strong relation with the _CQRS pattern_ (described later)
+
+---
+
+## Domain Events (constraints)
+
+- They are usually _time-stamped_ value objects
+
+- May be implemented as _data-classes_ or _records_
+
+- They represent a _relevant variation_ in the domain
+    + e.g. a _change_ in the _state_ of some entity / repository
+
+- Event sources & listeners shall be identified too
+    + who is _generating_ the event?
+    + who is _consuming_ the event?
+
+- _Infrastructural components_ may be devoted to _propagate_ events across contexts
+    + e.g. a message broker, a message queue, etc.
+
+- Common convention: one type per event, named in the _past tense_ (e.g. `OrderPlaced`, `OrderCancelled`) (cf. [Vernon, 2013](https://www.informit.com/store/implementing-domain-driven-design-9780321834577))
+- \[Teacher's Suggestion\]: use a neutral type (e.g. `OrderEvent`) plus a kind/discriminator field when many events share the same payload
+
+---
+
+## Domain Events (example)
+
+{{< plantuml >}}
+interface OrderManagementService {
+    + void performOrder(Order order)
+    ..
+    + void **notifyOrderPerformed**(OrderEvent event)
+}
+
+interface OrderEvent {
+    + OrderID getID()
+    + CustomerID getCustomer()
+    + Date **getTimestamp**()
+    + Map<ProductID, Long> getAmounts()
+}
+
+interface OrderID
+
+interface CustomerID
+
+interface ProductID
+
+OrderEvent "1" *-u- "1" OrderID
+OrderEvent "1" *-r- "1" CustomerID
+OrderEvent "1" *-d- "N" ProductID
+
+OrderEvent .. OrderManagementService
+
+note left of OrderEvent: domain event
+note left of OrderID: value object
+note left of ProductID: value object
+note right of CustomerID: value object
+note right of OrderManagementService: service
+{{< /plantuml >}}
+
+{{% /section %}}
+
+---
+
+{{% section %}}
+
+## Factories (definition)
+
+> Objects aimed at __creating__ other objects
+
+<br>
+
+![A client delegates entity creation to a factory, which hides the complexity of creating the entity](./factories.svg)
+
+---
+
+## Factories (details)
+
+### Purpose
+
++ Factories encapsulate the _creation logic_ for _complex objects_
+    * making it evolvable, interchangeable, replaceable
+
++ They ease the enforcement of _invariants_
+
++ They support _dynamic selection_ of the most adequate _implementation_
+    + while _hiding_ the actual implementation choice
+
+### Remarks
+
+- DDD's notion of factory is quite loose
+    + DDD's Factories $\supset$ GOF's Factories $\cup$ Builders $\cup$ ...
+
+---
+
+## Factories (constraints)
+
+- They are usually _identity-less_ and _state-less_ objects
+    + recall the [abstract factory pattern](https://en.wikipedia.org/wiki/Abstract_factory_pattern)
+
+- May be implemented as _classes_ in most OOP languages
+
+- Provide methods to _instantiate_ entities or value objects
+
+- Usually they require _no mutable_ field/property
+
+- No need to implement `equals()` and `hashCode()` on JVM
+
+---
+
+## Factories (example)
+
+{{< plantuml >}}
+interface CustomerID
+
+interface TaxCode
+
+interface VatNumber
+
+interface Customer
+
+Customer "1" *-- "1" CustomerID
+
+VatNumber -u-|> CustomerID
+TaxCode -u-|> CustomerID
+
+interface CustomerFactory {
+    + TaxCode computeTaxCode(String name, String surname, Date birthDate, String birthPlace)
+    ..
+    + Customer newCustomerPerson(TaxCode code, String fullName, String email)
+    + Customer newCustomerPerson(String name, String surname, Date birthDate, String birthPlace, String email)
+    ..
+    + Customer newCustomerCompany(VatNumber code, String fullName, String email)
+}
+note bottom of CustomerFactory
+- method for computing tax codes
+- methods for creating person customers
+- methods for creating company customers
+end note
+
+CustomerFactory -r-> TaxCode: creates
+CustomerFactory -u-> Customer: creates
+{{< /plantuml >}}
+
+{{% /section %}}
+
+---
+
+{{% section %}}
 
 {{< slide id="dependency-injection" >}}
 
@@ -1048,93 +1163,6 @@ void orderIsActuallyStored() {
 
 - Containers support _overriding_ bindings in tests too
     + e.g. Spring's `@MockitoBean`, Guice's `Modules.override(...)`
-
----
-
-{{< slide id="domain-events" >}}
-
-## Domain Events (definition)
-
-> A value-like object capturing some domain-related _event_
-> <br> (i.e., an observable _variation_ in the domain, which is _relevant_ to the software)
-
-- actually, only the event _notification_/description is reified to a type
-
-![A customer adds a product to the Basket aggregate, which publishes a ProductAdded domain event after saving; the event notifies a Recommendation Service, which updates the Recommendations aggregate](./domain-events.svg)
-
----
-
-## Domain Events (details)
-
-### Purpose
-- _Propagate_ changes among portions of the domain model (e.g. contexts, aggregates, entities, etc.)
-- _Record_ changes concerning the domain
-
-### Remarks
-
-- Strong relation with the [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) (i.e. publish-subscribe)
-
-- Strong relation with the _event sourcing_ approach (described later)
-
-- Strong relation with the _CQRS pattern_ (described later)
-
----
-
-## Domain Events (constraints)
-
-- They are usually _time-stamped_ value objects
-
-- May be implemented as _data-classes_ or _records_
-
-- They represent a _relevant variation_ in the domain
-    + e.g. a _change_ in the _state_ of some entity / repository
-
-- Event sources & listeners shall be identified too
-    + who is _generating_ the event?
-    + who is _consuming_ the event?
-
-- _Infrastructural components_ may be devoted to _propagate_ events across contexts
-    + e.g. a message broker, a message queue, etc.
-
-- Common convention: one type per event, named in the _past tense_ (e.g. `OrderPlaced`, `OrderCancelled`) (cf. [Vernon, 2013](https://www.informit.com/store/implementing-domain-driven-design-9780321834577))
-- \[Teacher's Suggestion\]: use a neutral type (e.g. `OrderEvent`) plus a kind/discriminator field when many events share the same payload
-
----
-
-## Domain Events (example)
-
-{{< plantuml >}}
-interface OrderManagementService {
-    + void performOrder(Order order)
-    ..
-    + void **notifyOrderPerformed**(OrderEvent event)
-}
-
-interface OrderEvent {
-    + OrderID getID()
-    + CustomerID getCustomer()
-    + Date **getTimestamp**()
-    + Map<ProductID, Long> getAmounts()
-}
-
-interface OrderID
-
-interface CustomerID
-
-interface ProductID
-
-OrderEvent "1" *-u- "1" OrderID
-OrderEvent "1" *-r- "1" CustomerID
-OrderEvent "1" *-d- "N" ProductID
-
-OrderEvent .. OrderManagementService
-
-note left of OrderEvent: domain event
-note left of OrderID: value object
-note left of ProductID: value object
-note right of CustomerID: value object
-note right of OrderManagementService: service
-{{< /plantuml >}}
 
 {{% /section %}}
 
