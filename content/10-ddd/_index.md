@@ -822,7 +822,7 @@ package "Order aggregate" <<Rectangle>> {
     interface Order {
         + OrderID getID()
         + CustomerID **getCustomer**()
-        + Date getTimestamp()
+        + Instant getTimestamp()
         + Address getShippingAddress()
         + Iterable<OrderItem> getItems()
         ..
@@ -1152,8 +1152,8 @@ interface Order {
     + OrderID getId()
     + CustomerID getCustomer()
     + void setCustomer(CustomerID customer)
-    + Date getTimestamp()
-    + void setTimestamp(Date timestamp)
+    + Instant getTimestamp()
+    + void setTimestamp(Instant timestamp)
     + Map<ProductID, Long> getAmounts()
 }
 
@@ -1293,7 +1293,7 @@ interface OrderEvent {
     + String **getKind**()
     + OrderID getOrder()
     + CustomerID getCustomer()
-    + Date **getTimestamp**()
+    + Instant **getTimestamp**()
     + Map<ProductID, Long> getAmounts()
 }
 
@@ -1473,19 +1473,27 @@ Customer "1" *-- "1" CustomerID
 VatNumber -u-|> CustomerID
 TaxCode -u-|> CustomerID
 
+enum Gender {
+    MALE
+    FEMALE
+}
+
 interface CustomerFactory {
-    + TaxCode computeTaxCode(String name, String surname, Date birthDate, String birthPlace)
+    + TaxCode computeTaxCode(String name, String surname, LocalDate birthDate, Gender gender, String birthPlace)
     ..
     + Customer newCustomerPerson(TaxCode code, String fullName, String email)
-    + Customer newCustomerPerson(String name, String surname, Date birthDate, String birthPlace, String email)
+    + Customer newCustomerPerson(String name, String surname, LocalDate birthDate, Gender gender, String birthPlace, String email)
     ..
     + Customer newCustomerCompany(VatNumber code, String fullName, String email)
 }
 note bottom of CustomerFactory
 - method for computing tax codes
+  (birth place = Italian municipality, e.g. "Roma" -> H501)
 - methods for creating person customers
 - methods for creating company customers
 end note
+
+CustomerFactory .l.> Gender
 
 CustomerFactory -r-> TaxCode: creates
 CustomerFactory -u-> Customer: creates
@@ -1554,9 +1562,9 @@ Customer create(NewCustomerRequest request) {
     Customer customer = switch (request) {
         case NewPerson p -> factory.newCustomerPerson(
             p.name(), p.surname(), p.birthDate(),
-            p.birthPlace(), p.email());
+            p.gender(), p.birthPlace(), p.email());
         case NewCompany c -> factory.newCustomerCompany(
-            VatNumber.parse(c.vat()), // may throw
+            factory.vatNumber(c.vat()), // may throw
             c.fullName(), c.email());
     };
     registry.addNewCustomer(customer);
@@ -2231,6 +2239,7 @@ A simple domain keeping track of: _customers_, _products_, and _orders_.
 - Companies are identified by a VAT number
 
 - Persons are identified by tax codes
+    * computed out of name, surname, birth date, gender, and birth place
 
 - In any case a name and email are recorded for each customer
 
