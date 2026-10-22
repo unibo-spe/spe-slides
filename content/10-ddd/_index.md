@@ -1905,7 +1905,7 @@ void orderIsActuallyStored() {
 
 ## Model integrity patterns (background, pt. 2)
 
-![A downstream Search Page Context and an upstream Search API Context connected by a line, marked D and U at the two ends](./provider-consumer.svg)
+![A downstream Frontend context and an upstream Backend context connected by a line, marked D and U at the two ends](./provider-consumer.svg)
 
 Each relation among 2 contexts usually involves 2 ends/roles:
 - __upstream__ end, i.e. the one _providing_ functionalities
@@ -1928,7 +1928,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ## Shared Kernel
 
-![Catalog and Inventory contexts overlap around a shared supplier model used by both contexts](./shared-kernel.svg)
+![Order and Inventory contexts overlap around a shared kernel, the Product context, whose model is used by both](./shared-kernel.svg)
 
 - Best when: multiple contexts _share_ the __same team__ / organization / product
 
@@ -1943,7 +1943,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ## Customer--Supplier
 
-![A downstream Search Page Context and upstream Search API Context connected by a customer-supplier relationship](./customer-supplier.svg)
+![A downstream Frontend context and an upstream Backend context connected by a customer-supplier relationship](./customer-supplier.svg)
 
 - Best when:
     + multiple teams
@@ -1963,7 +1963,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ## Conformist
 
-![A Search Page Context downstream of a Search API Context, while an External Context conforms downstream to the Search API Context](./conformist.svg)
+![Your project, downstream, conforms to an upstream fancy Google library; an administrative domain border cuts the line between them](./conformist.svg)
 
 - Best when:
     + multiple teams
@@ -1978,7 +1978,7 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ## Anti-corruption layer
 
-![A Search Context isolates its model from an upstream Catalog Context through an anti-corruption translation layer with no business logic](./anti-corruption-layer.svg)
+![Your project isolates its model from an upstream random library from GitHub through an anti-corruption translation layer with no business logic](./anti-corruption-layer.svg)
 
 - Best when:
     + multiple teams
