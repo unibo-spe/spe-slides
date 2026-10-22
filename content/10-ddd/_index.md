@@ -47,7 +47,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 - Know the DDD __building blocks__ (tactical design) and __integration patterns__ (strategic design)
 - Map a DDD model onto a __layered architecture__
 - Understand __event sourcing__ and __CQRS__
-- Practice on the exercises
+- __Practice__ on the _exercises_
 
 ---
 
@@ -99,24 +99,24 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 ![A linear workflow: the problem is turned into a model via analysis, the model into an architecture via design, and the architecture into a solution via implementation; the model and the steps leading to and from it are highlighted](./workflow.svg)
 
-- yet, how to derive the model?
+- yet, __how to derive the model__?
 
 ---
 
 ## Why Domain Driven Design?
 
 - Here we present __domain-driven design__ (DDD)
-    + one of many approaches to software design
+    + one of _many approaches_ to software _design_
 
 <br>
 
-- It consists of principles, best practices, and patterns guiding design
+- It consists of _principles_, _best practices_, and _patterns_ guiding __design__
     + unified under a common _philosophy_
     + focus is on the _design workflow_, other than the result
 
 <br>
 
-- Major benefits:
+- Major __benefits__:
     + it stresses _adherence_ to the problem at hand
     + it focuses on delivering a _business-tailored_ model
         * and, therefore, a business-tailored solution
@@ -141,13 +141,13 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 <br>
 
-- Remarks:
+- __Remarks__:
     + focus is on how __users and experts perceive the domain__
     + focus is __not__ on how __developers__ perceive the domain
 
 <br>
 
-- Examples of domains and the contexts composing them
+- Examples of __domains__ and the _contexts_ composing them
     + some __university__ (department, faculty, HR, etc.)
     + some given __company__ (manufacturing, marketing, HR, etc.)
     + __linear algebra__ (matrices, complex numbers, polynomials, etc.)
@@ -165,7 +165,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 
 - _Software_ will represent a _solution_ to a _problem_ in some __business domain__
     + it should be _modelled_ & _implemented_ to match that domain
-        * i.e. modelling should elicit the key aspects of a domain, possibly by interacting with experts
+        * i.e. modelling should _elicit_ the _key aspects_ of a domain, possibly by _interacting with experts_
         * i.e. design and implementation should _mirror_ the domain
 
 <br>
@@ -181,14 +181,14 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 ## DDD Philosophy (pt. 2)
 
 - Software should _adhere_ to the _domain_, at any moment
-    + architecture and implementation should favour adherence to the domain
-        * in spite of their evolution / modification
+    + _architecture_ and _implementation_ should favour __adherence__ to the domain
+        * in spite of their _evolution_ / _modification_
 
 <br>
 
 - Functionalities, structure, and UX should _mirror_ the domain too
-    - using the libraries should be natural for developers
-    - UX should be natural for users
+    - using the libraries should be _natural_ for _developers_
+    - UX should be _natural_ for _users_
 
     as both developers and users are (supposed to be) immersed in the domain
 
@@ -225,7 +225,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 > - where words/names have a unique, precise meaning
 > - clearly distinguishable from other contexts
 
-- ideally 1 subdomain $\approx$ 1 bounded context, but not necessarily
+- ideally 1 _subdomain_ $\approx$ 1 _bounded context_, but __not necessarily__
 
 ---
 
@@ -266,7 +266,7 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
     + the same holds for other concepts, e.g. a _product_: price and discounts in _offer_, VAT rate in _payment_, weight and size in _shipping_
 
 - __Anti-pattern__: one all-encompassing `Customer` class shared by every context
-    + any change for one context affects all the others, and the constraints of different contexts end up conflicting
+    + any _change_ for one context _affects all the others_, and the constraints of different contexts end up __conflicting__
     + how contexts integrate with each other is the subject of [context maps](#/context-map)
 
 ---
@@ -286,9 +286,9 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 >   + which should be _used in the software_
 >   + in such a way that their _semantics is preserved_
 
-- underlying assumption:
-    * different people call the same things differently
-    * especially when they come from different contexts
+- underlying __assumption__:
+    * _different people_ call the _same things_ __differently__
+    * especially when they come from _different contexts_
 
 - commonly reified into a __glossary__ of terms
 
@@ -323,25 +323,25 @@ Compiled on: {{< today >}} --- [<i class="fa fa-print" aria-hidden="true"></i> p
 1. Identify the __domain__, give a name to it
 
 2. Identify the __main contexts__ within the domain, giving them names
-    -  possibly, by interacting with experts
+    -  possibly, by _interacting with experts_
 
 3. Identify the actual meaning of __relevant words__ from the domain, and track them into a __glossary__
-    - possibly, by interacting with experts
+    - possibly, by _interacting with experts_
 
     - _without assuming you already know the meaning of words_
         + i.e. do __not__ rely on (your) __common sense__
 
-    - keep in mind that the meaning of words may vary among contexts
+    - keep in mind that the _meaning_ of words may __vary among contexts__
         + __homonyms__: similar names, different meanings
         + __synonyms__: different names, similar meanings
 
 4. Adhere to the language, use it, make it yours
-    - especially when talking about the domain / model / software
-    - design/sketch code mirroring the language
+    - especially when _talking_ about the domain / model / software
+    - design/sketch code _mirroring_ the language
 
 5. Draw a __context map__ (defined [later](#/context-map)) tracking
-    - the main contexts and their junctions
-    - words whose meaning varies across contexts
+    - the main _contexts_ and their _junctions_
+    - _words_ whose meaning _varies_ across contexts
 
 6. Model the software around the ubiquitous language
     - rule of thumb: __1 concept $\approx$ 1 interface__
@@ -394,7 +394,7 @@ note right: continues with\nbuilding blocks
 
 ![Sticky-note colours used in event storming: orange for domain events (e.g. Order Placed), blue for commands (Place Order), small yellow for actors (Customer), large yellow for aggregates (Order), lilac for policies (whenever ... then ...), green for read models (Basket Summary), pink for external systems (Payment Gateway), and red, tilted, for hot spots (open questions)](./event-storming-notation.svg)
 
-- one colour per kind of sticky note, on a long paper roll (or a virtual whiteboard)
+- one _colour_ per __kind of sticky note__, on a long paper roll (or a virtual whiteboard)
 
 ---
 
@@ -413,7 +413,7 @@ note right: continues with\nbuilding blocks
 ![Process-level event storming: a Customer, informed by the Basket Summary read model, issues the Place Order command, handled by the Order aggregate, which emits Order Placed; a policy (whenever an order is placed, charge the customer) issues the Charge Customer command, sent to the Payment Gateway external system, which emits Payment Authorized, and so on](./event-storming-process.svg)
 
 - zoom into one process: _actor_ $\rightarrow$ _command_ $\rightarrow$ _aggregate_ $\rightarrow$ _event_ $\rightarrow$ _policy_ $\rightarrow$ _command_ ...
-- aggregates and events found here become building blocks of the model
+- _aggregates_ and _events_ found here become __building blocks__ of the model
 
 {{% /section %}}
 
@@ -437,7 +437,7 @@ note right: continues with\nbuilding blocks
 <br>
 
 - Use _building blocks_ as __archetypes__
-    + let them guide and constrain your design
+    + let them _guide_ and _constrain_ your design
 
 ---
 
@@ -449,11 +449,11 @@ note right: continues with\nbuilding blocks
 {{% col class="col-7" %}}
 
 7. _Choose_ the most adequate __building block__ for each concept
-    - depending on the nature of the concept
-    - ... or the properties of its instances
+    - depending on the _nature_ of the concept
+    - ... or the _properties_ of its _instances_
 
 8. The building block dictates how to __design the type__ corresponding to the concept
-    - objects in OOP are shaped by types
+    - _objects_ in OOP are _shaped_ by _types_
 
 9. The choice of building block may lead to the identification of __other concepts / models__
     - e.g. entities may need value objects as identifiers
@@ -556,15 +556,15 @@ stop
 
 #### Classroom
 
-- Seats in a classroom may be modelled as value objects
+- _Seats_ in a classroom may be modelled as __value objects__
 
-- Attendees of a class may be modelled as entities
+- _Attendees_ of a class may be modelled as __entities__
 
 #### Seats on a plane
 
-- Numbered seats $\rightarrow$ entities
+- _Numbered_ seats $\rightarrow$ __entities__
 
-- otherwise $\rightarrow$ value objects
+- otherwise $\rightarrow$ __value objects__
 
 ---
 
@@ -573,16 +573,16 @@ stop
 ### Value Objects
 
 - Identified by their _attributes_
-    + equality compares attributes alone
+    + _equality_ compares _attributes_ alone
 - Must be _immutable_: their state is their attributes, which never change
-    + read-only properties
-    + lack of state-changing methods
+    + _read-only_ properties
+    + _lack_ of _state-changing_ methods
 - May be implemented as
-    - structures in .NET
+    - _structures_ in .NET
     - _data classes_ in Kotlin, Scala, Python
-    - records in Java
+    - _records_ in Java
 - _Must_ implement `equals()` and `hashCode()` on JVM
-    + implementation must compare the objects' attributes
+    + implementation must compare the objects' _attributes_
 
 ---
 
@@ -592,13 +592,13 @@ stop
 
 - They have an inherent _identity_, which never changes during their lifespan
     + common modelling: __identifier attribute__, of some value type
-    + equality compares identity
+    + _equality_ compares _identity_
 - Can be _stateful_ $\Rightarrow$ may have a _mutable_ design
-    + modifiable properties
-    + state-changing methods
+    + _modifiable_ properties
+    + _state-changing_ methods
 - May be implemented via _classes_ in most languages
 - Must implement `equals()` and `hashCode()` on JVM
-    + implementation must compare (at least) the objects' identifiers
+    + implementation must compare (at least) the objects' _identifiers_
 
 ---
 
@@ -706,7 +706,7 @@ record Address(String street, String city, String zip) {
     + the identifier is also part of the entity's __URL__, e.g. `/customers/{id}`
     + prefer _opaque_, server-generated identifiers (e.g. UUIDs) over _natural keys_ (e.g. tax codes)
         * natural keys may change, and they leak personal data into URLs and logs
-- Entities are mutable $\rightarrow$ concurrent updates may conflict
+- Entities are _mutable_ $\rightarrow$ __concurrent updates__ may _conflict_
     + use `ETag` / `If-Match` headers for _optimistic concurrency_ (cf. [RFC 9110](https://www.rfc-editor.org/rfc/rfc9110#name-if-match))
     + `412 Precondition Failed` if the entity changed since the client last read it
 - Not every entity deserves its own URL: only _aggregate roots_ do (cf. next section)
@@ -934,10 +934,10 @@ Order .l.> CustomerID: refers to\nthe customer\nby ID
 
 - They may exploit _factories_ for turning retrieved data into objects
 - If properly engineered, they avoid the _lock-in_ effect for database technologies
-- Design & implementation may require thinking about:
-    - the architecture,
-    - the infrastructure,
-    - the expected load,
+- Design & implementation may require __thinking about__:
+    - the _architecture_,
+    - the _infrastructure_,
+    - the expected _load_,
     - etc.
 
 ---
@@ -950,7 +950,7 @@ Order .l.> CustomerID: refers to\nthe customer\nby ID
 
 - May be implemented as _classes_ in most OOP languages
 
-- Provide methods to
+- Provide __methods__ to
     + _add_, _remove_, _update_ aggregate root entities
     + _select_ and return one or more entities, possibly in a _lazy_ way
         * this should return `Iterable`, `Collection`, or `Stream` on JVM
@@ -998,7 +998,7 @@ CustomerRegistry --> CustomerID: exploits
         * relational (e.g. PostgreSQL), document (e.g. MongoDB), key-value (e.g. Redis), graph (e.g. Neo4j), ...
         * depending on the _shape_ of aggregates, and on the _queries_ to be supported
         * aggregates fit document stores naturally: one document per aggregate
-    + how to deploy it? managed (cloud) vs. self-hosted, replication, backups, ...
+    + how to _deploy_ it? _managed_ (cloud) vs. _self-hosted_, replication, backups, ...
 - Each microservice may adopt a different technology: _polyglot persistence_ (cf. [Fowler](https://martinfowler.com/bliki/PolyglotPersistence.html))
 - The repository _interface_ keeps the choice _swappable_ (and _mockable_ in tests, cf. [dependency injection](#/dependency-injection))
 
@@ -1054,7 +1054,7 @@ rectangle "Database per service" {
         * e.g. one schema (and one DB user) per service, on the same PostgreSQL instance
     + a shared database is a hidden _shared kernel_ (cf. [strategic design](#/strategic-design)): acceptable only with tight coordination among teams
 
-- Consequences of having one database per service:
+- __Consequences__ of having one database per service:
     + data of other contexts is either _requested_ via their APIs, or _replicated_ locally by listening to their [domain events](#/domain-events)
     + business transactions spanning several services become __sagas__ (cf. [microservices.io](https://microservices.io/patterns/data/saga.html))
         * i.e. sequences of _local_ transactions, with _compensating_ actions in case of failure
@@ -1078,7 +1078,7 @@ rectangle "Database per service" {
 - _Wiring_ aggregates, entities, and value objects _together_
 - Exposing _coarse-grained functionalities_ to the users
 - Providing a _façade_ for the domain
-- Making the business logic evolvable, interchangeable, replaceable
+- Making the _business logic_ __evolvable__, _interchangeable_, _replaceable_
 
 - _domain service_: domain logic spanning several aggregates; lives in the domain layer
 - _application service_: orchestrates a use case (loads aggregates via repositories, calls them, saves, publishes events); lives in the application layer
@@ -1096,14 +1096,14 @@ rectangle "Database per service" {
 
 - They are usually _identity-less_, _stateless_ objects
 
-- May be implemented as classes in OOP languages
+- May be implemented as _classes_ in OOP languages
     + or bare _functions_ in functional languages
 
 - Commonly provide _procedures_ to do business-related stuff
     + e.g. a __complex operation__...
         * ... concerning some particular _aggregate root_
         * ... which does <u>not</u> support the operation directly through its methods
-            - (maybe because the operation is use-case specific)
+            - (maybe because the operation is _use-case specific_)
     + e.g. __proxying__ an external service
     + e.g. a complex operation spanning __several aggregates__, repositories, factories, etc.
 
@@ -1194,22 +1194,22 @@ OrderID -d[hidden]- CustomerID
 ## Services at the Web level (pt. 1)
 
 - Which and how many Web services? Rule of thumb: __one microservice per bounded context__
-    + the bounded context is the boundary of a model, of a language, and (often) of a team
+    + the bounded context is the _boundary_ of a _model_, of a _language_, and (often) of a _team_
     + _finer_ splits (e.g. one service per aggregate) are possible, but increase the communication overhead
     + _coarser_ splits are fine to begin with: a _modular monolith_ may be split later (cf. [Fowler](https://martinfowler.com/bliki/MonolithFirst.html))
 
-- Inside each microservice:
+- __Inside__ each microservice:
     + _application services_ $\rightarrow$ API _controllers_ (i.e. endpoint handlers)
         * parse requests, load aggregates via repositories, invoke them, save them, publish events
     + _domain services_ stay internal: not every service object deserves an endpoint
 
-- Microservices communicate either:
+- Microservices __communicate__ either:
     + __synchronously__, via ReST calls
         * simple, but the caller depends on the callee being up (_temporal coupling_)
     + __asynchronously__, via some __message-oriented middleware__ (i.e. a _broker_)
         * e.g. [RabbitMQ](https://www.rabbitmq.com/), [Apache Kafka](https://kafka.apache.org/), [MQTT](https://mqtt.org/) brokers
         * producers _publish_ domain events on topics/queues, consumers _subscribe_ to them
-        * it is the observer pattern, at the system level: publishers know nothing about subscribers
+        * it is the _observer pattern_, at the system level: publishers know _nothing_ about subscribers
 
 ---
 
@@ -1261,7 +1261,7 @@ OrderID -d[hidden]- CustomerID
 - They represent a _relevant variation_ in the domain
     + e.g. a _change_ in the _state_ of some entity / repository
 
-- Event sources & listeners shall be identified too
+- Event __sources__ & __listeners__ shall be _identified_ too
     + who is _generating_ the event?
     + who is _consuming_ the event?
 
@@ -1398,7 +1398,7 @@ record OrderEvent(
 
 - Events are published to _unknown_ consumers $\rightarrow$ their schema is a __public contract__
     + prefer _additive_ changes (new optional fields)
-    + never remove/rename fields, nor change their meaning
+    + _never_ remove/rename fields, nor change their meaning
     + _version_ the schema otherwise
     + consumers should ignore unknown fields (cf. [_tolerant reader_](https://martinfowler.com/bliki/TolerantReader.html))
 - Brokers commonly deliver messages _at least once_ $\rightarrow$ consumers should be _idempotent_
@@ -1428,7 +1428,7 @@ record OrderEvent(
 ### Purpose
 
 + Factories encapsulate the _creation logic_ for _complex objects_
-    * making it evolvable, interchangeable, replaceable
+    * making it _evolvable_, _interchangeable_, _replaceable_
 
 + They ease the enforcement of _invariants_
 
@@ -1437,7 +1437,7 @@ record OrderEvent(
 
 ### Remarks
 
-- DDD's notion of factory is quite loose
+- DDD's notion of factory is quite __loose__
     + DDD's Factories $\supset$ GOF's Factories $\cup$ Builders $\cup$ ...
 
 ---
@@ -1594,7 +1594,7 @@ Customer create(NewCustomerRequest request) {
     + e.g. `OrderManagementService` needs an `OrderStore` to save orders
 - __Who creates__ these dependencies?
     + if the service calls `new SqlOrderStore()` itself, it is _bound_ to that implementation
-    + ... and it can hardly be tested without a real database
+    + ... and it can hardly be _tested_ without a _real database_
 
 ![Left: without DI, the service itself creates a SqlOrderStore, so the implementation choice is hard-coded in the client. Right: with DI, a factory first creates the SqlOrderStore and then injects it into the service, which only uses it through the OrderStore interface](./di-motivation.svg)
 
@@ -1622,17 +1622,17 @@ Customer create(NewCustomerRequest request) {
 > Interfaces are separated from classes; the __wiring__ between them is _delayed_ and performed _outside_ the classes using them
 
 1. __Design & segregate interfaces__
-    - interface members only expose interface (or built-in) types: natural after DDD
+    - interface members only expose _interface_ (or built-in) _types_: natural after DDD
     - interfaces and implementations in _separate_ modules (e.g. `:domain` vs. `:storage`)
 2. __Implement classes relying on interfaces only__
-    - fields, parameters, return types: interfaces (private members too)
+    - fields, parameters, return types: _interfaces_ (private members too)
     - expose a mechanism to _inject_ the actual implementations:
         + _constructor injection_: dependencies are constructor parameters
             * the object is always complete and consistent $\rightarrow$ __preferred__
         + _setter injection_: one setter per dependency
             * more flexible, yet objects may be left in _inconsistent_ states
 3. __Wire interfaces and classes__ at runtime
-    - choosing the most adequate implementation for the situation at hand (production, test, etc.)
+    - choosing the most _adequate implementation_ for the situation at hand (production, test, etc.)
 
 ---
 
@@ -1705,7 +1705,7 @@ OrderManagementService service = new ApplicationFactory().orderManagementService
 ```
 
 - The factory is the _only_ class mentioning _implementation_ classes
-    + which can stay package-private (not leaked into the API)
+    + which can stay _package-private_ (not leaked into the API)
 - __A hand-written factory is a minimal DI container__
     + one method per interface, specifying _which_ implementation and _how_ to initialise it
 - In a layered architecture, this is the job of the outermost module (cf. [modules](#/enforcing-architecture))
@@ -1715,7 +1715,7 @@ OrderManagementService service = new ApplicationFactory().orderManagementService
 ## DI eases testability
 
 - The class under test does not create its dependencies $\rightarrow$ the _test_ decides what to pass in
-    + no need to edit production code, nor to patch it with static mocking tricks
+    + _no need_ to edit production code, nor to patch it with static mocking tricks
 
 {{< multicol >}}
 {{% col %}}
@@ -1769,7 +1769,7 @@ void orderIsActuallyStored() {
 
 ## DI technologies
 
-- Hand-written factories become tedious as the dependency graph grows
+- _Hand-written_ factories become __tedious__ as the dependency graph grows
 - _DI containers_ automate the wiring. They let developers:
     1. _register_ the chosen implementation for each interface (a.k.a. _binding_)
     2. specify its _lifetime_: _singleton_ (one shared instance), _transient_ (new instance per request), _scoped_ (one per scope, e.g. per HTTP request)
@@ -1848,13 +1848,13 @@ void orderIsActuallyStored() {
 - Clearly _identify & represent_ **boundaries** among contexts
 
 - *Avoid* __responsibility diffusion__ over a single context
-    + one responsible person / team for each context
+    + _one_ responsible person / team for _each_ context
 
 - *Avoid changes* in the model for __problems__ arising __outside__ the context
-    + rather, extend the domain by creating new contexts
+    + rather, _extend_ the domain by creating _new contexts_
 
 - Enforce context’s __cohesion__ via automated unit and integration __testing__
-    + to be (re)executed as frequently as possible
+    + to be (re)executed as _frequently_ as possible
 
 ---
 
@@ -1863,9 +1863,9 @@ void orderIsActuallyStored() {
 ### How to preserve the integrity of the model?
 
 - As the __domain evolves__, the software _model should evolve_ with it
-    + in order to maintain the coupling
+    + in order to maintain the _coupling_
 
-- Yet, the domain rarely changes as a whole
+- Yet, the domain _rarely_ changes __as a whole__
     + more commonly, it changes in a __context-specific__ way
 
 - Contexts are bounded, but __not isolated__
@@ -1889,8 +1889,8 @@ void orderIsActuallyStored() {
 - _Preserve_ the integrity of the model w.r.t. the domain
 
 - _Minimise_ the potential _impact_ / _reach_ of changes
-    + each context should be as independent as possible
-    + each change affects as few contexts as possible
+    + each context should be as _independent_ as possible
+    + each change affects as _few contexts_ as possible
 
 ---
 
@@ -1898,7 +1898,7 @@ void orderIsActuallyStored() {
 
 ![Three contexts, A, B, and Legacy, each enclosing one or more models; lines between models of different contexts mark contact points between contexts](./context-map.svg)
 
-- Context maps highlight relations among contexts
+- _Context maps_ highlight __relations__ among contexts
     + yet, _not_ __all relations are equal__, nor symmetric
 
 ---
@@ -1915,7 +1915,7 @@ Each relation among 2 contexts usually involves 2 ends/roles:
 <br>
 
 __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
-- several strategies may be employed, depending on
+- several _strategies_ may be employed, depending on
     + mutual _trust_* among teams
     + ease of _communication_/cooperation among teams
     + technical / organizational / administrative / legal _constraints_
@@ -1945,15 +1945,15 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ![A downstream Frontend context and an upstream Backend context connected by a customer-supplier relationship](./customer-supplier.svg)
 
-- Best when:
-    + multiple teams
+- __Best when__:
+    + _multiple_ teams
     + __mutual trust__
-    + good communication
+    + _good_ communication
 
-- Key idea:
+- __Key idea__:
     + __upstream__ acts as _supplier_, __downstream__ acts as _customer_
     + both sides collaborate to __maximise integration__ among their models
-        * and interoperability among their software
+        * and _interoperability_ among their software
 
 - Customers may _ask_ for features, suppliers will do their best to __provide__ them
 
@@ -1965,14 +1965,14 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ![Your project, downstream, conforms to an upstream fancy Google library; an administrative domain border cuts the line between them](./conformist.svg)
 
-- Best when:
-    + multiple teams
-    + poor communication / different pace
-    + some trust
+- __Best when__:
+    + _multiple_ teams
+    + _poor_ communication / _different pace_
+    + _some_ trust
 
-- Key idea: downstream must conform to the upstream, reactively
-    + adapting their model accordingly
-    + whenever the upstream's one changes
+- __Key idea__: downstream must __conform__ to the upstream, _reactively_
+    + _adapting_ their model accordingly
+    + _whenever_ the upstream's one _changes_
 
 ---
 
@@ -1980,18 +1980,18 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ![Your project isolates its model from an upstream random library from GitHub through an anti-corruption translation layer with no business logic](./anti-corruption-layer.svg)
 
-- Best when:
-    + multiple teams
-    + poor communication
-    + poor trust
+- __Best when__:
+    + _multiple_ teams
+    + _poor_ communication
+    + __poor trust__
 
-- If upstream cannot be trusted, and interaction is pointless...
-    + e.g. legacy code, poorly maintained library, etc.
+- If upstream __cannot be trusted__, and interaction is _pointless_...
+    + e.g. _legacy_ code, _poorly maintained_ library, etc.
 
-- ... downstream must defend itself against unexpected / unanticipated change
+- ... downstream must __defend itself__ against _unexpected_ / _unanticipated_ change
 
 - The upstream's model is then reverse engineered & __adapted__
-    + e.g. often, repository types are anti-corruption layers for DB technologies
+    + e.g. often, _repository_ types are _anti-corruption layers_ for DB technologies
 
 ---
 
@@ -2003,11 +2003,11 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ## Layered Architecture (disclaimer)
 
-- DDD does not enforce a particular architecture
+- DDD does __not enforce__ a particular architecture
 
-- Any is fine as long as the model keeps its integrity
+- Any is fine as long as the model keeps its _integrity_
 
-- Layered architectures are well suited to preserve models' integrity
+- __Layered architectures__ are _well suited_ to preserve models' integrity
 
 - The same dependency rule (outer depends on inner, never the converse) underlies _hexagonal_ (ports & adapters, cf. [Cockburn, 2005](https://alistair.cockburn.us/hexagonal-architecture/)), _onion_, and _clean_ architectures
     + in hexagonal terms, domain/application define _ports_ (e.g. repository interfaces); outer layers provide _adapters_ (e.g. DB-backed repositories, REST controllers)
@@ -2018,32 +2018,32 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ![Concentric layers: Domain at the centre, Application and Presentation around it, and Messages, REST API, and Storage as outer adapters](./layered-architecture.svg)
 
-- outer layers depend on inner ones
-    + the converse is not true
+- _outer_ layers __depend__ on _inner_ ones
+    + the converse is __not__ true
 
 ---
 
 ## Layered (onion) architecture (explanation)
 
 1. __Domain layer__: contains the domain model (entities, values, events, aggregates, etc.)
-    - must support a wide range of applications
-    - has no dependency on any other layer
+    - must support a _wide range_ of applications
+    - has __no dependency__ on any other layer
 
 2. __Application layer__: contains services providing business logic
-    - supports a particular use case via services
-    - depends on the domain layer
+    - supports a particular _use case_ via _services_
+    - _depends_ on the domain layer
 
 3. __Presentation layer__: provides conversion facilities to/from representation formats
     - e.g. JSON, BSON, XML, YAML, XDR, Avro, HTML, etc.
-        + depends on the domain layer (and, possibly, on the application layer)
+        + _depends_ on the domain layer (and, possibly, on the application layer)
 
 4. __Storage layer__: supports persistent storage/retrieval of domain data
-    - this is where repositories are implemented
-    - may involve some DB technology
-    - depends on the domain layer (and, possibly, on the application layer)
+    - this is where _repositories_ are implemented
+    - may involve some _DB technology_
+    - _depends_ on the domain layer (and, possibly, on the application layer)
 
 5. __Interface layers__ (e.g. ReST API, MOM, View): let external entities access the software
-    - via a GUI, or via some remote interface such as HTTP
+    - via a _GUI_, or via some _remote interface_ such as HTTP
 
 ---
 
@@ -2051,12 +2051,12 @@ __Integration__ among _contexts_ $\leftrightarrow$ __interaction__ among _teams_
 
 ## Enforcing the architecture in the code
 
-- Layering may be enforced in the code
+- Layering may be __enforced__ in the code
 
-- By mapping layers into modules
-    + module $\approx$ packaging unit
+- By _mapping_ layers into __modules__
+    + module $\approx$ _packaging unit_
         * e.g. Gradle sub-projects, Maven modules, .NET assemblies, etc.
-    + each module having its own build dependencies
+    + each module having its own _build dependencies_
 
 {{< plantuml height="50vh">}}
 top to bottom direction
@@ -2098,8 +2098,8 @@ product ..> mq
 ## Event sourcing (preliminaries)
 
 - Whenever there is a _mutable_ entity ...
-- ... whose state evolution over time must be tracked ...
-- ... state transitions can be memorised in 2 ways:
+- ... whose _state evolution_ over time must be _tracked_ ...
+- ... state transitions can be _memorised_ in 2 ways:
     + one may track the __current state__
     + or the __flow__ of __variations__
 
@@ -2111,7 +2111,7 @@ product ..> mq
 
 > A pattern where _domain events_ are reified into _time-stamped data_ and the whole _evolution_ of a system is persistently _stored_
 
-- perfect match with DDD as domain events are first-class citizens
+- _perfect match_ with DDD as _domain events_ are __first-class citizens__
 
 (cf. [Fowler, Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html))
 
@@ -2121,15 +2121,15 @@ product ..> mq
 
 ### Benefits
 
-- Historical data can be analysed, to serve several purposes
+- _Historical data_ can be __analysed__, to serve several purposes
     + e.g. predictive maintenance, optimisation, analysing & anticipating faults
 
-- Past situations can be replayed
-    + it improves debugging and enables measurements
+- _Past situations_ can be __replayed__
+    + it improves _debugging_ and enables _measurements_
 
-- Enables complex event detection & reaction
+- Enables __complex event__ detection & reaction
 
-- Enables CQRS (described later)
+- Enables __CQRS__ (described later)
 
 ### Limitations
 
@@ -2145,8 +2145,8 @@ product ..> mq
 - It is _often combined_ with event sourcing, but does not require it (cf. [Fowler, CQRS](https://martinfowler.com/bliki/CQRS.html))
 
 - It can deliver **reactive**, **eventually consistent** solutions where:
-    + context boundaries can be easily enforced
-    + single responsibility principle is applied extensively
+    + _context boundaries_ can be easily enforced
+    + _single responsibility principle_ is applied extensively
 
 ---
 
@@ -2196,7 +2196,7 @@ Whenever users want to _inspect/observe the system_ at time $t$:
 <br>
 
 2. the read model is a _projection_ built from the events up to time $t$
-    - it returns a read-optimised representation of the system state at time $t$
+    - it returns a _read-optimised_ representation of the system state at time $t$
 
 ---
 
@@ -2204,12 +2204,12 @@ Whenever users want to _inspect/observe the system_ at time $t$:
 
 > A _projection_ computes a read model by applying the events recorded up to time $t$
 
-- If read and write data are stored on different databases
-    + projecting events updates the query database
+- If _read_ and _write_ data are stored on __different databases__
+    + _projecting_ events updates the _query database_
     + the query database should be __read-efficient__
     + the event store should be __write-efficient__
 
-- Several, non-mutually-exclusive strategies:
+- Several, _non-mutually-exclusive_ __strategies__:
     + __eager__: events are projected as soon as they are received
     + __on read__: events are projected when a query is read
     + __scheduled__: events are projected in the background, periodically
@@ -2376,7 +2376,7 @@ In practice:
 
 1. Extend the model of our domain with new __interfaces__ supporting __CSV parsing / writing functionalities__
 2. Design the interfaces so that they are __agnostic__ of the third-party libraries
-    - without corrupting the domain model with library-specific types
+    - without _corrupting_ the domain model with _library-specific_ types
 3. Provide __implementations__ for the interfaces, using __one of the two__ libraries
 4. Sketch _tests_ for the implementations
 5. Provide __implementations__ for the interfaces, using __the other__ library
