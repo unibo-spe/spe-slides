@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1420 1026" width="1420" height="1026" role="img" aria-label="A Jupyter notebook (experiment.ipynb): code cells run on demand by a kernel, with execution counters, text cells, hard-coded parameters, and outputs (text and plots) stored inside the file itself"><title>A Jupyter notebook (experiment.ipynb): code cells run on demand by a kernel, with execution counters, text cells, hard-coded parameters, and outputs (text and plots) stored inside the file itself</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="arr-fade" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8bfc9"/></marker></defs>
+<rect width="1420" height="1026" fill="white"/>
+<rect x="20" y="20" width="1040" height="986" rx="10" fill="white" stroke="#6b7280" stroke-width="2" opacity="1"/>
+<rect x="20" y="20" width="1040" height="50" rx="10" fill="#e5e7eb" stroke="#6b7280" stroke-width="2" opacity="1"/>
+<text style="white-space:pre" x="40" y="46" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="bold">experiment.ipynb</text>
+<text style="white-space:pre" x="1040" y="46" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="end" dominant-baseline="middle" fill="#6b7280" font-weight="normal">▶ Run   ■ Stop   ↻ Restart kernel        Kernel: Python 3</text>
+<text style="white-space:pre" x="130" y="110" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="end" dominant-baseline="middle" fill="#2b6cb0" font-weight="normal">[1]:</text>
+<rect x="140" y="90" width="900" height="94" rx="4" fill="#f5f5f5" stroke="#d0d0d0" stroke-width="1.5" opacity="1"/>
+<text style="white-space:pre" x="152" y="111" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">import openml</text>
+<text style="white-space:pre" x="152" y="137" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">from sklearn.model_selection import train_test_split, GridSearchCV</text>
+<text style="white-space:pre" x="152" y="163" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">...</text>
+<text style="white-space:pre" x="150" y="224" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="bold">Load the dataset from OpenML</text>
+<text style="white-space:pre" x="130" y="278" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="end" dominant-baseline="middle" fill="#2b6cb0" font-weight="normal">[2]:</text>
+<rect x="140" y="258" width="900" height="68" rx="4" fill="#f5f5f5" stroke="#d0d0d0" stroke-width="1.5" opacity="1"/>
+<text style="white-space:pre" x="152" y="279" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">dataset = openml.datasets.get_dataset(61)  # iris</text>
+<text style="white-space:pre" x="152" y="305" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">X, y, _, _ = dataset.get_data(...)</text>
+<text style="white-space:pre" x="130" y="368" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="end" dominant-baseline="middle" fill="#2b6cb0" font-weight="normal">[3]:</text>
+<rect x="140" y="348" width="900" height="120" rx="4" fill="#f5f5f5" stroke="#d0d0d0" stroke-width="1.5" opacity="1"/>
+<text style="white-space:pre" x="152" y="369" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">classifiers = {</text>
+<text style="white-space:pre" x="152" y="395" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">    'DecisionTree': (DecisionTreeClassifier(), {'max_depth': [None, 10, 20], ...}),</text>
+<text style="white-space:pre" x="152" y="421" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">    'SVM': (SVC(), {'C': [0.1, 1, 10], 'kernel': ['linear', 'rbf']}), ...</text>
+<text style="white-space:pre" x="152" y="447" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">}</text>
+<text style="white-space:pre" x="130" y="510" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="end" dominant-baseline="middle" fill="#2b6cb0" font-weight="normal">[4]:</text>
+<rect x="140" y="490" width="900" height="94" rx="4" fill="#f5f5f5" stroke="#d0d0d0" stroke-width="1.5" opacity="1"/>
+<text style="white-space:pre" x="152" y="511" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">for clf_name, (clf, params) in classifiers.items():</text>
+<text style="white-space:pre" x="152" y="537" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">    grid_search = GridSearchCV(clf, params, cv=10, n_jobs=-1)</text>
+<text style="white-space:pre" x="152" y="563" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">    grid_search.fit(X_train, y_train)  ...</text>
+<text style="white-space:pre" x="152" y="606" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="start" dominant-baseline="middle" fill="#6b7280" font-weight="normal">Fitting 10 folds for each of 9 candidates, totalling 90 fits</text>
+<text style="white-space:pre" x="152" y="630" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="start" dominant-baseline="middle" fill="#6b7280" font-weight="normal">/home/gciatto/.../sklearn/...: ConvergenceWarning: ...</text>
+<text style="white-space:pre" x="130" y="682" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="end" dominant-baseline="middle" fill="#2b6cb0" font-weight="normal">[5]:</text>
+<rect x="140" y="662" width="900" height="42" rx="4" fill="#f5f5f5" stroke="#d0d0d0" stroke-width="1.5" opacity="1"/>
+<text style="white-space:pre" x="152" y="683" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">plt.boxplot(results.values(), labels=results.keys())  ...</text>
+<rect x="160" y="714" width="330" height="140" rx="2" fill="white" stroke="#d0d0d0" stroke-width="1" opacity="1"/>
+<line x1="210" y1="734.0" x2="210" y2="756.0" stroke="#6b7280" stroke-width="1.5"/>
+<rect x="195" y="738.0" width="30" height="14.0" rx="1" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="1.5" opacity="1"/>
+<line x1="195" y1="740.0" x2="225" y2="740.0" stroke="#f6a623" stroke-width="2.5"/>
+<line x1="285" y1="730.0" x2="285" y2="834.0" stroke="#6b7280" stroke-width="1.5"/>
+<rect x="270" y="734.0" width="30" height="96.0" rx="1" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="1.5" opacity="1"/>
+<line x1="270" y1="764.0" x2="300" y2="764.0" stroke="#f6a623" stroke-width="2.5"/>
+<line x1="360" y1="732.0" x2="360" y2="744.0" stroke="#6b7280" stroke-width="1.5"/>
+<rect x="345" y="736.0" width="30" height="6" rx="1" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="1.5" opacity="1"/>
+<line x1="345" y1="736.0" x2="375" y2="736.0" stroke="#f6a623" stroke-width="2.5"/>
+<line x1="435" y1="730.0" x2="435" y2="738.0" stroke="#6b7280" stroke-width="1.5"/>
+<rect x="420" y="734.0" width="30" height="6" rx="1" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="1.5" opacity="1"/>
+<line x1="420" y1="734.0" x2="450" y2="734.0" stroke="#f6a623" stroke-width="2.5"/>
+<text style="white-space:pre" x="130" y="896" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="end" dominant-baseline="middle" fill="#2b6cb0" font-weight="normal">[6]:</text>
+<rect x="140" y="876" width="900" height="42" rx="4" fill="#f5f5f5" stroke="#d0d0d0" stroke-width="1.5" opacity="1"/>
+<text style="white-space:pre" x="152" y="897" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">print(f'Best Model: {best_model_name}')  ...</text>
+<text style="white-space:pre" x="152" y="940" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="start" dominant-baseline="middle" fill="#6b7280" font-weight="normal">Best Model: MLP</text>
+<text style="white-space:pre" x="152" y="964" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="start" dominant-baseline="middle" fill="#6b7280" font-weight="normal">Test Set Accuracy: 1.0000</text>
+<line x1="1064" y1="104" x2="1090" y2="104" stroke="#c62828" stroke-width="2"/>
+<text style="white-space:pre" x="1100" y="105" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#c62828" font-weight="normal" font-style="italic">code cell, run on demand by a kernel</text>
+<line x1="1064" y1="212" x2="1090" y2="212" stroke="#c62828" stroke-width="2"/>
+<text style="white-space:pre" x="1100" y="213" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#c62828" font-weight="normal" font-style="italic">text (markdown) cell</text>
+<line x1="1064" y1="362" x2="1090" y2="362" stroke="#c62828" stroke-width="2"/>
+<text style="white-space:pre" x="1100" y="363" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#c62828" font-weight="normal" font-style="italic">parameters hard-coded in the code</text>
+<line x1="1064" y1="534" x2="1090" y2="534" stroke="#c62828" stroke-width="2"/>
+<text style="white-space:pre" x="1100" y="535" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#c62828" font-weight="normal" font-style="italic">execution counter: the order in which</text>
+<line x1="1064" y1="558" x2="1090" y2="558" stroke="#c62828" stroke-width="2"/>
+<text style="white-space:pre" x="1100" y="559" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#c62828" font-weight="normal" font-style="italic">cells were run (any order is allowed)</text>
+<line x1="1064" y1="604" x2="1090" y2="604" stroke="#c62828" stroke-width="2"/>
+<text style="white-space:pre" x="1100" y="605" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#c62828" font-weight="normal" font-style="italic">outputs are stored inside the file,</text>
+<line x1="1064" y1="628" x2="1090" y2="628" stroke="#c62828" stroke-width="2"/>
+<text style="white-space:pre" x="1100" y="629" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#c62828" font-weight="normal" font-style="italic">including machine-specific paths</text>
+<line x1="1064" y1="746" x2="1090" y2="746" stroke="#c62828" stroke-width="2"/>
+<text style="white-space:pre" x="1100" y="747" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#c62828" font-weight="normal" font-style="italic">plots too (as images in the JSON)</text>
+</svg>

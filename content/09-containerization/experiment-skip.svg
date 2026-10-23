@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 520" width="1400" height="520" role="img" aria-label="Skipping experiments already executed: the parameters are serialised into a footprint, hashed into an experiment ID, and if a file named after that ID already exists under data, the experiment is skipped; otherwise it runs and saves its results, writing the ID file last"><title>Skipping experiments already executed: the parameters are serialised into a footprint, hashed into an experiment ID, and if a file named after that ID already exists under data, the experiment is skipped; otherwise it runs and saves its results, writing the ID file last</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="arr-fade" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8bfc9"/></marker></defs>
+<rect width="1400" height="520" fill="white"/>
+<rect x="20" y="60" width="250" height="70" rx="8" fill="#f3e8ff" stroke="#7b3fbf" stroke-width="2" opacity="1"/>
+<text x="145.0" y="95.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">parameters (env vars)</text>
+<rect x="340" y="60" width="250" height="70" rx="8" fill="white" stroke="#6b7280" stroke-width="2" opacity="1"/>
+<text x="465.0" y="95.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">footprint (YAML)</text>
+<rect x="660" y="60" width="250" height="70" rx="8" fill="white" stroke="#6b7280" stroke-width="2" opacity="1"/>
+<text x="785.0" y="95.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">ID = sha512(footprint)</text>
+<line x1="272" y1="95" x2="336" y2="95" stroke="#1f3b63" stroke-width="3" marker-end="url(#arr-navy)"/>
+<line x1="592" y1="95" x2="656" y2="95" stroke="#1f3b63" stroke-width="3" marker-end="url(#arr-navy)"/>
+<text x="465" y="158" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">sorted keys: same parameters ⇒ same ID</text>
+<path d="M1110,40 L1250,95 L1110,150 L970,95 Z" fill="#fff4de" stroke="#f6a623" stroke-width="3"/>
+<text x="1110" y="84" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">data/**/ID.yaml</text>
+<text x="1110" y="110" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="bold">exists?</text>
+<line x1="912" y1="95" x2="966" y2="95" stroke="#1f3b63" stroke-width="3" marker-end="url(#arr-navy)"/>
+<line x1="1110" y1="152" x2="1110" y2="236" stroke="#2e7d32" stroke-width="3" marker-end="url(#arr-green)"/>
+<text x="1124" y="190" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#2e7d32" font-weight="bold">yes</text>
+<rect x="990" y="240" width="240" height="70" rx="8" fill="#d8f0dc" stroke="#2e7d32" stroke-width="2" opacity="1"/>
+<text x="1110.0" y="275.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="bold">skip (exit 0)</text>
+<text x="1110" y="334" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">run.sh removes the empty directory</text>
+<path d="M1252,95 L1320,95 L1320,420 L912,420" fill="none" stroke="#c62828" stroke-width="3" marker-end="url(#arr-red)"/>
+<text x="1334" y="250" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#c62828" font-weight="bold">no</text>
+<rect x="560" y="390" width="350" height="64" rx="8" fill="#fde8e8" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="735.0" y="422.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="bold">run the experiment</text>
+<line x1="558" y1="422" x2="474" y2="422" stroke="#c62828" stroke-width="3" marker-end="url(#arr-red)"/>
+<rect x="60" y="380" width="410" height="84" rx="8" fill="white" stroke="#2e7d32" stroke-width="2.5" opacity="1"/>
+<text x="265" y="404" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#2e7d32" font-weight="bold">save results, then ID.yaml (last!)</text>
+<text x="265" y="438" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">graph.png, model.pkl, &lt;ID&gt;.yaml</text>
+<text x="700" y="500" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">interrupted runs never write ID.yaml, so they are simply re-run next time</text>
+</svg>

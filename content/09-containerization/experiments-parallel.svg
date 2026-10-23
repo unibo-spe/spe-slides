@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1580 550" width="1580" height="550" role="img" aria-label="Parallel experiments with Docker Compose: one image, four services (dt, mlp, lr, svm) differing only in their MODEL_* environment variable, run in parallel by docker compose up with capped resources, each one writing its results into its own directory under ./data on the host"><title>Parallel experiments with Docker Compose: one image, four services (dt, mlp, lr, svm) differing only in their MODEL_* environment variable, run in parallel by docker compose up with capped resources, each one writing its results into its own directory under ./data on the host</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="arr-fade" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8bfc9"/></marker></defs>
+<rect width="1580" height="550" fill="white"/>
+<path d="M20,40 h202 l28,28 v102 h-230 z" fill="white" stroke="#6b7280" stroke-width="2.5"/><path d="M222,40 v28 h28" fill="none" stroke="#6b7280" stroke-width="2.5"/>
+<text x="135.0" y="95.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="20" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="bold">compose.yaml</text>
+<text x="135.0" y="123.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">4 services, 1 image</text>
+<rect x="310" y="40" width="250" height="130" rx="10" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="3" opacity="1"/>
+<text x="435" y="74" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#2b6cb0" font-weight="bold">image</text>
+<text x="435" y="106" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">experiment.py</text>
+<text x="435" y="134" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">+ run.sh</text>
+<line x1="252" y1="105" x2="306" y2="105" stroke="#1f3b63" stroke-width="3" marker-end="url(#arr-navy)"/>
+<text x="135" y="196" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">docker compose up</text>
+<rect x="20" y="230" width="1220" height="300" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M20,270 L20,244 Q20,230 34,230 L538,230 L538,252 Q538,270 520,270 Z" fill="#1f3b63"/>
+<text x="34" y="251" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">Host (each container: ≤ 1 CPU, ≤ 2 GB)</text>
+<rect x="50" y="290" width="265" height="110" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="182" y="316" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">experiment-dt</text>
+<text x="182" y="348" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="14" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">MODEL_DecisionTree=...</text>
+<text x="182" y="378" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">GridSearchCV</text>
+<line x1="435" y1="172" x2="182" y2="286" stroke="#2b6cb0" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arr-blue)"/>
+<line x1="182" y1="402" x2="182" y2="458" stroke="#2e7d32" stroke-width="3" marker-end="url(#arr-green)"/>
+<rect x="345" y="290" width="265" height="110" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="477" y="316" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">experiment-mlp</text>
+<text x="477" y="348" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="14" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">MODEL_MLP=...</text>
+<text x="477" y="378" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">GridSearchCV</text>
+<line x1="435" y1="172" x2="477" y2="286" stroke="#2b6cb0" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arr-blue)"/>
+<line x1="477" y1="402" x2="477" y2="458" stroke="#2e7d32" stroke-width="3" marker-end="url(#arr-green)"/>
+<rect x="640" y="290" width="265" height="110" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="772" y="316" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">experiment-lr</text>
+<text x="772" y="348" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="14" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">MODEL_LogisticRegression=...</text>
+<text x="772" y="378" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">GridSearchCV</text>
+<line x1="435" y1="172" x2="772" y2="286" stroke="#2b6cb0" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arr-blue)"/>
+<line x1="772" y1="402" x2="772" y2="458" stroke="#2e7d32" stroke-width="3" marker-end="url(#arr-green)"/>
+<rect x="935" y="290" width="265" height="110" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="1067" y="316" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">experiment-svm</text>
+<text x="1067" y="348" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="14" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">MODEL_SVM=...</text>
+<text x="1067" y="378" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">GridSearchCV</text>
+<line x1="435" y1="172" x2="1067" y2="286" stroke="#2b6cb0" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arr-blue)"/>
+<line x1="1067" y1="402" x2="1067" y2="458" stroke="#2e7d32" stroke-width="3" marker-end="url(#arr-green)"/>
+<rect x="50" y="460" width="1160" height="54" rx="8" fill="white" stroke="#2e7d32" stroke-width="2.5" opacity="1"/>
+<text x="630" y="488" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">./data/&lt;date&gt;-dt/   ./data/&lt;date&gt;-mlp/   ./data/&lt;date&gt;-lr/   ./data/&lt;date&gt;-svm/</text>
+<rect x="1280" y="300" width="280" height="200" rx="10" fill="white" stroke="#6b7280" stroke-width="2" opacity="1"/>
+<text x="1420" y="326" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="bold">each run directory</text>
+<text x="1300" y="362" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">&lt;experiment ID&gt;.yaml</text>
+<text x="1300" y="396" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">graph.png</text>
+<text x="1300" y="430" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">model.pkl</text>
+<text x="1300" y="464" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">output.log</text>
+<line x1="1212" y1="487" x2="1276" y2="440" stroke="#6b7280" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arr-gray)"/>
+</svg>

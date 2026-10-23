@@ -37,7 +37,8 @@ enableSourceMap = true
 5. [Volumes](#/volumes): _bind mounts, named volumes, tmpfs_
 6. [Networks](#/networks): _network drivers, exposing and publishing ports_
 7. [Orchestration with Docker Compose](#/compose): _stacks, services, configs, secrets, testing_
-8. [Orchestration with Docker Swarm](#/swarm): _clusters, stacks, placement, replication_
+8. [Running experiments in parallel](#/experiments): _from notebooks to parallel, reproducible, containerised experiments_
+9. [Orchestration with Docker Swarm](#/swarm): _clusters, stacks, placement, replication_
 
 ---
 
@@ -619,6 +620,8 @@ If so, it reuses the __cached layer__, and skips the execution of the correspond
 
 ---
 
+{{< slide id="caching" >}}
+
 ## Layers and caching (pt. 3)
 
 What if the `Dockerfile` copied the whole project _before_ installing dependencies?
@@ -661,6 +664,8 @@ Image naming is done via **tags**
         + the image `my-service:latest` is automatically created
 
 ---
+
+{{< slide id="publishing" >}}
 
 ## Publishing Docker images
 
@@ -842,6 +847,8 @@ They support several use cases:
     ```
 
 ---
+
+{{< slide id="bind-mounts-ownership" >}}
 
 ## Example: sharing data with bind mounts (pt. 2)
 
@@ -2034,6 +2041,346 @@ class TestMariaDBCustomerRepository {
 
 ---
 
+{{< slide id="experiments" >}}
+
+# Running experiments in parallel
+
+## With Docker Compose
+
+---
+
+## Experiments as jobs
+
+> Recall: [jobs](#/motivation) eventually terminate, and may exploit __parallelism__ to speed up the computation
+
+- Experiments (simulations, data analyses, ML trainings, benchmarks...) are typical __jobs__
+    + _input_: data + __parameters__ $\rightarrow$ _output_: results (metrics, models, plots, logs)
+    + often run as __parameter sweeps__ (e.g. grid search, multiple seeds): many _independent_ runs
+    + independent runs are trivially __parallelisable__
+
+- Why containerise them?
+    + __reproducibility__: same image $\Rightarrow$ same OS, runtime, and _pinned_ dependencies, everywhere
+    + __automation__: one command (re-)runs all experiments, possibly in CI
+    + __scalability__: the same image runs in parallel on one machine (Compose) or on a cluster (Swarm)
+
+> __Running example__: <https://github.com/unibo-spe/containerized-experiment>, whose _commit history_ we follow step by step, \
+> from a Jupyter notebook to parallel, containerised experiments
+
+---
+
+## The running example, in plain words
+
+No background in machine learning (ML) is needed: what matters is the _shape_ of the computation
+
+- __Dataset__: a table of _examples_, here [Iris](https://www.openml.org/d/61): 150 flowers, 4 measurements each, plus their _species_ (the _label_)
+- __Model__: an algorithm that _learns_ from examples to predict the label of new ones
+    + e.g. a decision tree, a neural network (MLP), a logistic regression, a support vector machine (SVM)
+- __Hyper-parameters__: the _knobs_ of a model (e.g. the maximum depth of a tree), to be chosen _before_ training
+- __Grid search__: train a model for _every combination_ of knob values, keep the best one
+    + quality is measured as __accuracy__ (% of correct predictions) on examples _not_ used for training
+
+<br/>
+
+> For us, an experiment is: _input data_ + _parameters_ $\rightarrow$ _many independent trainings_ $\rightarrow$ _results_ (scores, plots, the best model)
+
+---
+
+## Where experiments are born: Jupyter notebooks
+
+{{% multicol %}}
+{{% col class="col-7" %}}
+![A Jupyter notebook (experiment.ipynb): code cells run on demand by a kernel, with execution counters, text cells, hard-coded parameters, and outputs (text and plots) stored inside the file itself](./notebook.svg)
+{{% /col %}}
+{{% col class="col-5" %}}
+- A [Jupyter](https://jupyter.org/) __notebook__ is a document mixing _code_, _text_, and _outputs_
+    + stored as a JSON file (`.ipynb`)
+    + edited in the browser (e.g. via `jupyter lab`)
+- Code __cells__ are executed _on demand_, one at a time, by a __kernel__
+    + i.e. a Python process which keeps _all variables_ in memory between cells
+- Great for _exploration_: try something, look at the output, adjust, repeat
+- Very common in data science and research
+    + our running example _starts_ as a notebook ([`078562f`](https://github.com/unibo-spe/containerized-experiment/tree/078562ffb8887104e4c53355933f5a6c6bfbee54))
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+## The bad situation: experiments in notebooks
+
+What is great for exploration is bad for __reproducibility__ and __automation__:
+
+- __Hidden state__: cells can be run in _any order_, and re-run, so the results depend on the click history
+    + "Restart kernel and run all" may give _different_ results, or fail
+- __Hard-coded parameters__: trying another configuration means _editing_ the code, then re-running by hand
+- __Implicit environment__: which Python? which library versions? whatever was installed on the author's machine
+- __Outputs mixed with code__: results live _inside_ the `.ipynb` (with paths like `/home/gciatto/...`), or in the current directory
+- __No automation__: a notebook needs a human (and a browser) to be run, so no CI, no remote / batch execution
+- __Poor version control__: diffs of a JSON with embedded images are hardly readable
+- __Sequential__: all configurations run one after the other, in the same process
+
+> Goal: turn the notebook into an experiment which anybody can (re-)run, _in parallel_, with __one command__
+
+---
+
+## The plan: one commit per step
+
+Inspect each step via `git checkout <commit>` in the [repository](https://github.com/unibo-spe/containerized-experiment):
+
+| Step | Commit | What changes |
+|------|--------|--------------|
+| 0 | [`078562f`](https://github.com/unibo-spe/containerized-experiment/tree/078562ffb8887104e4c53355933f5a6c6bfbee54) | the experiment is a _notebook_ (the bad situation) |
+| 1 | [`84d3822`](https://github.com/unibo-spe/containerized-experiment/tree/84d3822c777b8105e8dce1fa8736429399952a38) | notebook $\rightarrow$ _script_, parameters from _environment variables_ |
+| 2 | [`9345702`](https://github.com/unibo-spe/containerized-experiment/tree/93457028ebe4fb9db5b4592fdcb06bd25ecc0d03) | _dockerise_: `Dockerfile` + Compose file |
+| 3 | [`9e78fce`](https://github.com/unibo-spe/containerized-experiment/tree/9e78fce8e24ddcb7fcf4dea8ed72be6c96eb100a), [`b6823d3`](https://github.com/unibo-spe/containerized-experiment/commit/b6823d3) | fix the _ownership_ of results on the host |
+| 4 | [`0fc62ff`](https://github.com/unibo-spe/containerized-experiment/tree/0fc62ffa7354fd3f8b56c265c65112dacd1268bd) | _skip_ experiments which were already executed |
+| 5 | [`8293534`](https://github.com/unibo-spe/containerized-experiment/tree/829353426f4044b1f72a5dc03027580580ad6246) | move the _grids_ of hyper-parameters out of the code |
+| 6 | [`19ba9fe`](https://github.com/unibo-spe/containerized-experiment/tree/19ba9fe0f0d0f990a25bd2e7e9ff5b7326140a7e) | one Compose _service per configuration_ $\Rightarrow$ __parallelism__ |
+| 7 | [`f63c762`](https://github.com/unibo-spe/containerized-experiment/tree/f63c7623017dfe09046459b467419a503d1d55ed) | polishing: resource limits, updated dependencies, robust scripts |
+
+---
+
+## Step 1: from notebook to script
+
+{{% multicol %}}
+{{% col class="col-6" %}}
+{{< github repo="containerized-experiment" branch="84d3822c777b8105e8dce1fa8736429399952a38" path="experiment.py" from="14" to="21" >}}
+
+full script [here](https://github.com/unibo-spe/containerized-experiment/blob/84d3822c777b8105e8dce1fa8736429399952a38/experiment.py)
+{{% /col %}}
+{{% col class="col-6" %}}
+- `jupyter nbconvert --to script experiment.ipynb` gives a _starting point_: the code of all cells, in order
+- Then, clean it up:
+    + drop interactive bits (e.g. `plt.show()`)
+    + __parameters__ come from _environment variables_, with safe _defaults_
+    + __outputs__ (plot, best model) go into a configurable directory (`OUTPUT_DIR`)
+- The script runs top to bottom, with no human in the loop: `python experiment.py`
+- The notebook is _deleted_: one source of truth
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+## Step 2: dockerise
+
+{{% multicol %}}
+{{% col class="col-6" %}}
+`Dockerfile`
+{{< github repo="containerized-experiment" branch="93457028ebe4fb9db5b4592fdcb06bd25ecc0d03" path="Dockerfile" language="dockerfile" >}}
+
+`docker-compose.yml`
+{{< github repo="containerized-experiment" branch="93457028ebe4fb9db5b4592fdcb06bd25ecc0d03" path="docker-compose.yml" >}}
+{{% /col %}}
+{{% col class="col-6" %}}
+- The __environment__ becomes _explicit_: Python version (`ARG`), _pinned_ dependencies (`requirements.txt`)
+- Dependencies are installed _before_ copying the code (cf. [caching](#/caching))
+- Results go to `/data`, _bind-mounted_ onto `./data` on the host
+- Parameters can be overridden in the Compose file (`environment`)
+- Running the experiment, on any machine with Docker: `docker compose up`
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+## Step 3: who owns the results?
+
+> Recall: files written by containers via bind mounts are [owned by `root`](#/bind-mounts-ownership) on the host
+
+{{% multicol %}}
+{{% col class="col-6" %}}
+First attempt ([`9e78fce`](https://github.com/unibo-spe/containerized-experiment/tree/9e78fce8e24ddcb7fcf4dea8ed72be6c96eb100a)): `chown` at the end of the run
+{{< github repo="containerized-experiment" branch="9e78fce8e24ddcb7fcf4dea8ed72be6c96eb100a" path="Dockerfile" from="10" to="12" language="dockerfile" >}}
+
+Final solution ([`b6823d3`](https://github.com/unibo-spe/containerized-experiment/commit/b6823d3)): run as the host user
+{{< github repo="containerized-experiment" branch="f63c7623017dfe09046459b467419a503d1d55ed" path="compose.yaml" from="10" to="11" >}}
+{{% /col %}}
+{{% col class="col-6" %}}
+- `chown` at the _end_ is fragile: if the experiment fails, files stay owned by `root`
+- Better: let containers run as the _host user_ (`user`, or `docker run --user`)
+    + `export HOST_UID=$(id -u) HOST_GID=$(id -g)` before `docker compose up`
+    + not `UID`: in Bash it is _read-only_ and not exported, while `GID` does not exist
+- Consequences:
+    + that user has _no home_ in the image $\Rightarrow$ `ENV HOME=/tmp`, for libraries' caches
+    + `./data` must _exist_ before starting, otherwise Docker creates it as `root` (hence `data/.gitkeep`)
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+## Step 4: do not run the same experiment twice
+
+![Skipping experiments already executed: the parameters are serialised into a footprint, hashed into an experiment ID, and if a file named after that ID already exists under data, the experiment is skipped; otherwise it runs and saves its results, writing the ID file last](./experiment-skip.svg)
+
+- Parameter sweeps take long, and get _interrupted_: re-running `docker compose up` should only run the _missing_ experiments
+- Results are saved __before__ the ID file: a run is considered _done_ only if it completed
+
+---
+
+## Step 4: do not run the same experiment twice (code)
+
+{{< github repo="containerized-experiment" branch="f63c7623017dfe09046459b467419a503d1d55ed" path="experiment.py" from="52" to="68" >}}
+
+- The __footprint__ is the set of _all_ parameters affecting the results
+    + forgetting one (e.g. the dataset) means two different experiments get the _same_ ID
+- `yaml.dump(..., sort_keys=True)` makes the footprint _canonical_: same parameters $\Rightarrow$ same ID
+
+---
+
+## Step 5: parameters out of the code
+
+{{% multicol %}}
+{{% col class="col-6" %}}
+{{< github repo="containerized-experiment" branch="829353426f4044b1f72a5dc03027580580ad6246" path="docker-compose.yml" from="19" to="38" >}}
+{{% /col %}}
+{{% col class="col-6" %}}
+- In the notebook, the grids of hyper-parameters were _hard-coded_ in a Python dictionary
+- Now each model is an environment variable `MODEL_<name>`, whose value is a _YAML document_:
+    + the model's _class name_, and the _values_ to try for each hyper-parameter
+- The script reads all `MODEL_*` variables (via `yaml.safe_load`), and creates the models _by name_ (via `importlib`)
+- Changing the experiments means changing the _Compose file_, not the code
+- Still, a _single_ container trains all models, _one after the other_
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+## Step 6: one service per configuration (pt. 1)
+
+{{% multicol %}}
+{{% col class="col-6" %}}
+{{< github repo="containerized-experiment" branch="f63c7623017dfe09046459b467419a503d1d55ed" path="compose.yaml" from="1" to="38" >}}
+{{% /col %}}
+{{% col class="col-6" %}}
+- __One service per configuration__ (here, per model and grid of hyper-parameters)
+    + they only differ in their `environment` (and `hostname`)
+- YAML __anchors__ (`&name`) and __aliases__ (`*name`) avoid repeating the shared parts
+    + `build`, `volumes`, `user`, `deploy`
+- The grid of each model is a YAML document _inside_ an environment variable (`MODEL_*`)
+    + parsed by `experiment.py` via `yaml.safe_load`
+
+shown in its _final_ version (after step 7), full file [here](https://github.com/unibo-spe/containerized-experiment/blob/master/compose.yaml)
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+## Step 6: one service per configuration (pt. 2)
+
+![Parallel experiments with Docker Compose: one image, four services (dt, mlp, lr, svm) differing only in their MODEL_* environment variable, run in parallel by docker compose up with capped resources, each one writing its results into its own directory under ./data on the host](./experiments-parallel.svg)
+
+- `docker compose up`: builds the image (once), then runs __all__ experiments __in parallel__
+- `docker compose up experiment-svm`: runs just _one_ of them
+- `docker compose logs -f experiment-mlp`: follows the output of one experiment
+
+---
+
+## Step 7: polishing
+
+{{% multicol %}}
+{{% col class="col-6" %}}
+`Dockerfile`
+{{< github repo="containerized-experiment" branch="f63c7623017dfe09046459b467419a503d1d55ed" path="Dockerfile" language="dockerfile" >}}
+
+`run.sh`
+{{< github repo="containerized-experiment" branch="f63c7623017dfe09046459b467419a503d1d55ed" path="run.sh" >}}
+{{% /col %}}
+{{% col class="col-6" %}}
+- Only the dependencies actually needed by the script (no Jupyter), updated, on Python 3.14
+- The run logic moved to `run.sh`:
+    + each run writes into a _fresh_ directory, named after date and `hostname`
+    + `set -o pipefail`: failures of `python` are not masked by `tee`
+    + skipped experiments leave no empty directories behind
+- `CMD` in _exec_ form, `HOME=/tmp` for the host user (cf. step 3)
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+## Step 7: not overloading the machine
+
+{{% multicol %}}
+{{% col class="col-5" %}}
+{{< github repo="containerized-experiment" branch="f63c7623017dfe09046459b467419a503d1d55ed" path="compose.yaml" from="12" to="17" >}}
+{{% /col %}}
+{{% col class="col-7" %}}
+- Parallel containers compete for the _same_ CPUs and memory
+    + without limits, one hungry experiment may slow down (or _kill_, by memory exhaustion) the others
+- `deploy.resources.limits` caps each container
+    + `cpus: "1"`: at most one CPU's worth of time
+    + `memory: 2G`: the container is killed if it exceeds it
+- Keep limits _consistent_ with the experiment's own parallelism
+    + e.g. `GridSearchCV(n_jobs=...)` should not exceed `cpus`
+- `docker stats` shows the actual usage of running containers
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+## Scaling out: experiments on a Swarm
+
+{{% multicol %}}
+{{% col class="col-6" %}}
+```yaml
+services:
+  experiment-svm:
+    image: <username>/containerized-experiment:1.0.0
+    hostname: svm
+    environment:
+      MODEL_SVM: |
+        sklearn.svm.SVC:
+          C: [0.1, 1, 10]
+          kernel: ['linear', 'rbf']
+    volumes:
+      - results:/data
+    deploy:
+      mode: replicated-job   # run to completion
+      replicas: 1
+      restart_policy:
+        condition: none
+      resources:
+        limits: { cpus: "1", memory: 2G }
+  # ... other experiments ...
+volumes:
+  results:
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=NFS_SERVER_ADDRESS,rw"
+      device: ":/path/to/results/"
+```
+{{% /col %}}
+{{% col class="col-6" %}}
+- The same stack can be deployed on a [Swarm](#/swarm), to run experiments on _several_ nodes
+- Differences w.r.t. Compose:
+    + Swarm does not `build`: the image must be [pushed](#/publishing) to a registry first
+    + `mode: replicated-job`: tasks run until they _complete_ (exit code 0), rather than forever
+    + `restart_policy: none`: failed experiments are not restarted in a loop
+    + results must land on [storage shared among nodes](#/sharing-among-nodes), e.g. NFS
+- `docker service ls` reports progress, e.g. `0/1 (1/1 completed)`
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+## Exercise: containerise your own experiment
+
+Repository: <https://github.com/unibo-spe/containerized-experiment>
+
+1. Select some experiment of your choice
+    + e.g. from a course you attended, from your thesis, or from a published paper
+    + better if it is a Jupyter notebook
+
+2. Containerise it, in such a way that:
+    + only scripts are present (no notebooks)
+    + the experiments can be run via Docker Compose
+    + the results are saved in a folder on the host machine, _owned by the host user_
+    + the parameters of the experiments are set via environment variables
+    + experiments already executed for a given assignment of parameters are _skipped_
+    + different assignments of parameters run _in parallel_, each with _capped resources_
+
+3. Bonus: build the image and run the experiments in CI (cf. [Continuous Integration](../07-ci/))
+
+---
+
 {{< slide id="swarm" >}}
 
 # Orchestration
@@ -2579,6 +2926,8 @@ volumes:
 {{< /multicol >}}
 
 ---
+
+{{< slide id="sharing-among-nodes" >}}
 
 ## Sharing data among nodes
 
