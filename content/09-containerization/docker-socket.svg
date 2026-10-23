@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 630" width="1100" height="630" role="img" aria-label="Sudo-powered containers: the host's Docker socket is bind-mounted into container sudo, so the docker CLI inside it drives the host's daemon, which creates new containers as siblings of sudo, on the host"><title>Sudo-powered containers: the host's Docker socket is bind-mounted into container sudo, so the docker CLI inside it drives the host's daemon, which creates new containers as siblings of sudo, on the host</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="arr-fade" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8bfc9"/></marker></defs>
+<rect width="1100" height="630" fill="white"/>
+<rect x="20" y="20" width="1060" height="540" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M20,60 L20,34 Q20,20 34,20 L96,20 L96,42 Q96,60 78,60 Z" fill="#1f3b63"/>
+<text x="34" y="41" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">Host</text>
+<rect x="60" y="80" width="420" height="200" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="80" y="104" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="start" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">container sudo (docker:cli)</text>
+<text x="270" y="160" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">$ docker run hello-world</text>
+<rect x="90" y="214" width="360" height="40" rx="4" fill="#fff4de" stroke="#f6a623" stroke-width="2" opacity="1"/>
+<text x="270.0" y="234.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">/var/run/docker.sock</text>
+<rect x="380" y="390" width="340" height="46" rx="4" fill="#fff4de" stroke="#f6a623" stroke-width="2" opacity="1"/>
+<text x="550.0" y="413.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">/var/run/docker.sock</text>
+<text x="370" y="452" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="end" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">Unix socket (a file on the host)</text>
+<path d="M270,256 C270,330 420,330 460,388" fill="none" stroke="#f6a623" stroke-width="3" marker-end="url(#arr-gray)"/>
+<text x="150" y="330" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#9a6200" font-weight="normal" font-style="italic">bind mount</text>
+<rect x="380" y="470" width="340" height="60" rx="8" fill="#1f3b63" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="550.0" y="500.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">dockerd (daemon)</text>
+<line x1="550" y1="438" x2="550" y2="468" stroke="#6b7280" stroke-width="3" marker-end="url(#arr-gray)" marker-start="url(#arr-gray)"/>
+<rect x="620" y="80" width="420" height="200" rx="10" fill="#f3f6fb" stroke="#2e7d32" stroke-width="2.5" stroke-dasharray="8 5" opacity="1"/>
+<text x="640" y="104" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="start" dominant-baseline="middle" fill="#2e7d32" font-weight="bold">created by dockerd</text>
+<rect x="650" y="140" width="360" height="50" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="830.0" y="165.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">sudo's sibling: hello-world</text>
+<rect x="650" y="210" width="360" height="50" rx="6" fill="white" stroke="#6b7280" stroke-width="2" opacity="1"/>
+<text x="830.0" y="235.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">other containers</text>
+<path d="M720,500 C900,500 980,420 980,284" fill="none" stroke="#2e7d32" stroke-width="3" marker-end="url(#arr-green)"/>
+<text x="1000" y="400" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#2e7d32" font-weight="normal" font-style="italic">creates</text>
+<text x="550" y="600" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock --name sudo docker:cli sh</text>
+</svg>

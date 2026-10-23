@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1340 540" width="1340" height="540" role="img" aria-label="Volumes in practice: named volumes db_data and wordpress_data persist the data of containers db and wordpress, and are also mounted read-only by a backup container, which writes into the host directory /home/$USER/backups via a bind mount"><title>Volumes in practice: named volumes db_data and wordpress_data persist the data of containers db and wordpress, and are also mounted read-only by a backup container, which writes into the host directory /home/$USER/backups via a bind mount</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="arr-fade" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8bfc9"/></marker></defs>
+<rect width="1340" height="540" fill="white"/>
+<text x="20" y="26" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="start" dominant-baseline="middle" fill="#6b7280" font-weight="bold">named volumes (Docker daemon area)</text>
+<path d="M40,70 v56 a110,14 0 0,0 220,0 v-56" fill="#fff4de" stroke="#f6a623" stroke-width="3"/><ellipse cx="150" cy="70" rx="110" ry="14" fill="#fff4de" stroke="#f6a623" stroke-width="3"/>
+<text x="150" y="108" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="20" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">db_data</text>
+<path d="M40,210 v56 a110,14 0 0,0 220,0 v-56" fill="#fff4de" stroke="#f6a623" stroke-width="3"/><ellipse cx="150" cy="210" rx="110" ry="14" fill="#fff4de" stroke="#f6a623" stroke-width="3"/>
+<text x="150" y="248" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="20" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">wordpress_data</text>
+<rect x="420" y="50" width="460" height="84" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="436" y="72" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="start" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">container db</text>
+<text x="864" y="72" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="end" dominant-baseline="middle" fill="#6b7280" font-weight="normal">mariadb</text>
+<rect x="560" y="88" width="300" height="36" rx="4" fill="white" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<text x="710.0" y="106.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">/var/lib/mysql</text>
+<rect x="420" y="190" width="460" height="84" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="436" y="212" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="start" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">container wordpress</text>
+<text x="864" y="212" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="end" dominant-baseline="middle" fill="#6b7280" font-weight="normal">wordpress</text>
+<rect x="560" y="228" width="300" height="36" rx="4" fill="white" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<text x="710.0" y="246.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">/var/www/html</text>
+<rect x="420" y="330" width="460" height="172" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="436" y="352" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="start" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">container backup</text>
+<text x="864" y="352" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="end" dominant-baseline="middle" fill="#6b7280" font-weight="normal">alpine</text>
+<rect x="560" y="368" width="300" height="36" rx="4" fill="white" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<text x="710.0" y="386.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">/from/db (ro)</text>
+<rect x="560" y="412" width="300" height="36" rx="4" fill="white" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<text x="710.0" y="430.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">/from/wp (ro)</text>
+<rect x="560" y="456" width="300" height="36" rx="4" fill="#d8f0dc" stroke="#2e7d32" stroke-width="2" opacity="1"/>
+<text x="710.0" y="474.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">/to</text>
+<path d="M262,98 L540,98" fill="none" stroke="#f6a623" stroke-width="3" marker-end="url(#arr-gray)"/>
+<path d="M262,238 L540,238" fill="none" stroke="#f6a623" stroke-width="3" marker-end="url(#arr-gray)"/>
+<path d="M262,114 L320,114 L320,387 L538,387" fill="none" stroke="#f6a623" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arr-gray)"/>
+<path d="M262,254 L360,254 L360,431 L538,431" fill="none" stroke="#f6a623" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arr-gray)"/>
+<rect x="980" y="430" width="340" height="92" rx="8" fill="white" stroke="#2e7d32" stroke-width="3" opacity="1"/>
+<text x="1150" y="454" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#2e7d32" font-weight="bold">host user area</text>
+<text x="1150" y="490" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">/home/$USER/backups</text>
+<path d="M978,476 L884,476" fill="none" stroke="#2e7d32" stroke-width="3" marker-end="url(#arr-green)"/>
+<text x="1150" y="410" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#2e7d32" font-weight="normal" font-style="italic">bind mount</text>
+<text x="150" y="330" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">persisted across</text>
+<text x="150" y="354" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">container re-creations</text>
+</svg>

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1480 500" width="1480" height="500" role="img" aria-label="Software stacks: bare metal (apps on one OS), virtual machines (one guest OS per app, on a hypervisor), containers (one runtime per app, sharing the host OS kernel via the container engine)"><title>Software stacks: bare metal (apps on one OS), virtual machines (one guest OS per app, on a hypervisor), containers (one runtime per app, sharing the host OS kernel via the container engine)</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="arr-fade" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8bfc9"/></marker></defs>
+<rect width="1480" height="500" fill="white"/>
+<rect x="40" y="376" width="420" height="56" rx="10" fill="#222222" stroke="#222222" stroke-width="2" opacity="1"/>
+<text x="250.0" y="404.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">Hardware</text>
+<rect x="40" y="312" width="420" height="56" rx="10" fill="#6b7280" stroke="#6b7280" stroke-width="2" opacity="1"/>
+<text x="250.0" y="340.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">Operating System</text>
+<rect x="40" y="248" width="420" height="56" rx="10" fill="#2e7d32" stroke="#2e7d32" stroke-width="2" opacity="1"/>
+<text x="250.0" y="276.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">Runtime</text>
+<rect x="40.0" y="184" width="134.66666666666666" height="56" rx="10" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="107.33333333333333" y="212.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">App 1</text>
+<rect x="182.66666666666666" y="184" width="134.66666666666666" height="56" rx="10" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="250.0" y="212.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">App 2</text>
+<rect x="325.3333333333333" y="184" width="134.66666666666666" height="56" rx="10" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="392.66666666666663" y="212.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">App 3</text>
+<rect x="530" y="376" width="420" height="56" rx="10" fill="#222222" stroke="#222222" stroke-width="2" opacity="1"/>
+<text x="740.0" y="404.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">Hardware</text>
+<rect x="530" y="312" width="420" height="56" rx="10" fill="#6b7280" stroke="#6b7280" stroke-width="2" opacity="1"/>
+<text x="740.0" y="340.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">Host Operating System</text>
+<rect x="530" y="248" width="420" height="56" rx="10" fill="#f6a623" stroke="#f6a623" stroke-width="2" opacity="1"/>
+<text x="740.0" y="276.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">Hypervisor</text>
+<rect x="530.0" y="184" width="134.66666666666666" height="56" rx="10" fill="#6b7280" stroke="#6b7280" stroke-width="2" opacity="1"/>
+<text x="597.3333333333334" y="212.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">Guest OS 1</text>
+<rect x="672.6666666666666" y="184" width="134.66666666666666" height="56" rx="10" fill="#6b7280" stroke="#6b7280" stroke-width="2" opacity="1"/>
+<text x="740.0" y="212.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">Guest OS 2</text>
+<rect x="815.3333333333333" y="184" width="134.66666666666666" height="56" rx="10" fill="#6b7280" stroke="#6b7280" stroke-width="2" opacity="1"/>
+<text x="882.6666666666666" y="212.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">Guest OS 3</text>
+<rect x="530.0" y="120" width="134.66666666666666" height="56" rx="10" fill="#2e7d32" stroke="#2e7d32" stroke-width="2" opacity="1"/>
+<text x="597.3333333333334" y="148.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">Runtime 1</text>
+<rect x="672.6666666666666" y="120" width="134.66666666666666" height="56" rx="10" fill="#2e7d32" stroke="#2e7d32" stroke-width="2" opacity="1"/>
+<text x="740.0" y="148.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">Runtime 2</text>
+<rect x="815.3333333333333" y="120" width="134.66666666666666" height="56" rx="10" fill="#2e7d32" stroke="#2e7d32" stroke-width="2" opacity="1"/>
+<text x="882.6666666666666" y="148.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">Runtime 3</text>
+<rect x="530.0" y="56" width="134.66666666666666" height="56" rx="10" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="597.3333333333334" y="84.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">App 1</text>
+<rect x="672.6666666666666" y="56" width="134.66666666666666" height="56" rx="10" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="740.0" y="84.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">App 2</text>
+<rect x="815.3333333333333" y="56" width="134.66666666666666" height="56" rx="10" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="882.6666666666666" y="84.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">App 3</text>
+<rect x="1020" y="376" width="420" height="56" rx="10" fill="#222222" stroke="#222222" stroke-width="2" opacity="1"/>
+<text x="1230.0" y="404.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">Hardware</text>
+<rect x="1020" y="312" width="420" height="56" rx="10" fill="#6b7280" stroke="#6b7280" stroke-width="2" opacity="1"/>
+<text x="1230.0" y="340.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">Operating System (shared kernel)</text>
+<rect x="1020" y="248" width="420" height="56" rx="10" fill="#2b6cb0" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<text x="1230.0" y="276.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">Container Engine</text>
+<rect x="1020.0" y="184" width="134.66666666666666" height="56" rx="10" fill="#2e7d32" stroke="#2e7d32" stroke-width="2" opacity="1"/>
+<text x="1087.3333333333333" y="212.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">Runtime 1</text>
+<rect x="1162.6666666666667" y="184" width="134.66666666666666" height="56" rx="10" fill="#2e7d32" stroke="#2e7d32" stroke-width="2" opacity="1"/>
+<text x="1230.0" y="212.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">Runtime 2</text>
+<rect x="1305.3333333333333" y="184" width="134.66666666666666" height="56" rx="10" fill="#2e7d32" stroke="#2e7d32" stroke-width="2" opacity="1"/>
+<text x="1372.6666666666665" y="212.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">Runtime 3</text>
+<rect x="1020.0" y="120" width="134.66666666666666" height="56" rx="10" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="1087.3333333333333" y="148.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">App 1</text>
+<rect x="1162.6666666666667" y="120" width="134.66666666666666" height="56" rx="10" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="1230.0" y="148.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">App 2</text>
+<rect x="1305.3333333333333" y="120" width="134.66666666666666" height="56" rx="10" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="1372.6666666666665" y="148.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">App 3</text>
+<text x="250.0" y="470" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="26" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">Bare metal</text>
+<text x="740.0" y="470" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="26" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">Virtual machines</text>
+<text x="1230.0" y="470" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="26" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">Containers</text>
+<rect x="525" y="51" width="144.66666666666666" height="194" rx="12" fill="none" stroke="#1f3b63" stroke-width="2" stroke-dasharray="8 6" opacity="1"/>
+<text x="597.3333333333334" y="34" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal" font-style="italic">one VM</text>
+<rect x="1015" y="115" width="144.66666666666666" height="130" rx="12" fill="none" stroke="#1f3b63" stroke-width="2" stroke-dasharray="8 6" opacity="1"/>
+<text x="1087.3333333333333" y="98" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal" font-style="italic">one container</text>
+</svg>

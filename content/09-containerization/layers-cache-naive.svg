@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1380 566" width="1380" height="566" role="img" aria-label="With a Dockerfile copying the whole project before npm install, editing index.mjs invalidates COPY . . and all subsequent steps, including the slow npm install"><title>With a Dockerfile copying the whole project before npm install, editing index.mjs invalidates COPY . . and all subsequent steps, including the slow npm install</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="arr-fade" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8bfc9"/></marker></defs>
+<rect width="1380" height="566" fill="white"/>
+<text x="30" y="30" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="24" text-anchor="start" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">Same edit, with a Dockerfile copying the whole project before npm install</text>
+<text x="900" y="76" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="bold">build cache?</text>
+<rect x="30" y="100" width="820" height="44" rx="8" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<circle cx="56" cy="122" r="15" fill="#2b6cb0"/><text x="56" y="123" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="bold">1</text>
+<text x="82" y="123" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="21" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">FROM alpine:latest</text>
+<path d="M888,122 L897,132 L913,111" fill="none" stroke="#2e7d32" stroke-width="5"/>
+<text x="940" y="123" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="start" dominant-baseline="middle" fill="#2e7d32" font-weight="normal" font-style="italic">re-used</text>
+<rect x="30" y="152" width="820" height="44" rx="8" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<circle cx="56" cy="174" r="15" fill="#2b6cb0"/><text x="56" y="175" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="bold">2</text>
+<text x="82" y="175" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="21" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">RUN apk add --no-cache nodejs npm</text>
+<path d="M888,174 L897,184 L913,163" fill="none" stroke="#2e7d32" stroke-width="5"/>
+<text x="940" y="175" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="start" dominant-baseline="middle" fill="#2e7d32" font-weight="normal" font-style="italic">re-used</text>
+<rect x="30" y="204" width="820" height="44" rx="8" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<circle cx="56" cy="226" r="15" fill="#6b7280"/><text x="56" y="227" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="bold">3</text>
+<text x="82" y="227" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="21" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">WORKDIR /my-project</text>
+<path d="M888,226 L897,236 L913,215" fill="none" stroke="#2e7d32" stroke-width="5"/>
+<text x="940" y="227" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="start" dominant-baseline="middle" fill="#2e7d32" font-weight="normal" font-style="italic">re-used</text>
+<rect x="30" y="256" width="820" height="44" rx="8" fill="#fde8e8" stroke="#c62828" stroke-width="2" opacity="1"/>
+<circle cx="56" cy="278" r="15" fill="#2b6cb0"/><text x="56" y="279" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="bold">4</text>
+<text x="82" y="279" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="21" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">COPY . .</text>
+<path d="M889,267 L911,289 M911,267 L889,289" fill="none" stroke="#c62828" stroke-width="5"/>
+<text x="940" y="279" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="start" dominant-baseline="middle" fill="#c62828" font-weight="normal" font-style="italic">changed input</text>
+<rect x="30" y="308" width="820" height="44" rx="8" fill="#fde8e8" stroke="#c62828" stroke-width="4" opacity="1"/>
+<circle cx="56" cy="330" r="15" fill="#2b6cb0"/><text x="56" y="331" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="bold">5</text>
+<text x="82" y="331" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="21" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">RUN npm install</text>
+<text x="830" y="331" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="end" dominant-baseline="middle" fill="#c62828" font-weight="bold" font-style="italic">slow!</text>
+<path d="M889,319 L911,341 M911,319 L889,341" fill="none" stroke="#c62828" stroke-width="5"/>
+<text x="940" y="331" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="start" dominant-baseline="middle" fill="#c62828" font-weight="normal" font-style="italic">re-executed</text>
+<rect x="30" y="360" width="820" height="44" rx="8" fill="#fde8e8" stroke="#c62828" stroke-width="2" opacity="1"/>
+<circle cx="56" cy="382" r="15" fill="#6b7280"/><text x="56" y="383" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="bold">6</text>
+<text x="82" y="383" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="21" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">ENV SERVICE_PORT=8080</text>
+<path d="M889,371 L911,393 M911,371 L889,393" fill="none" stroke="#c62828" stroke-width="5"/>
+<text x="940" y="383" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="start" dominant-baseline="middle" fill="#c62828" font-weight="normal" font-style="italic">re-executed</text>
+<rect x="30" y="412" width="820" height="44" rx="8" fill="#fde8e8" stroke="#c62828" stroke-width="2" opacity="1"/>
+<circle cx="56" cy="434" r="15" fill="#6b7280"/><text x="56" y="435" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="bold">7</text>
+<text x="82" y="435" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="21" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">EXPOSE 8080</text>
+<path d="M889,423 L911,445 M911,423 L889,445" fill="none" stroke="#c62828" stroke-width="5"/>
+<text x="940" y="435" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="start" dominant-baseline="middle" fill="#c62828" font-weight="normal" font-style="italic">re-executed</text>
+<rect x="30" y="464" width="820" height="44" rx="8" fill="#fde8e8" stroke="#c62828" stroke-width="2" opacity="1"/>
+<circle cx="56" cy="486" r="15" fill="#6b7280"/><text x="56" y="487" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="bold">8</text>
+<text x="82" y="487" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="21" text-anchor="start" dominant-baseline="middle" fill="#222222" font-weight="normal">CMD ["npm", "run", "service"]</text>
+<path d="M889,475 L911,497 M911,475 L889,497" fill="none" stroke="#c62828" stroke-width="5"/>
+<text x="940" y="487" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="start" dominant-baseline="middle" fill="#c62828" font-weight="normal" font-style="italic">re-executed</text>
+<path d="M1110,260 q14,0 14,14 L1124,494 q0,14 -14,14" fill="none" stroke="#c62828" stroke-width="3"/>
+<text x="1140" y="368.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="start" dominant-baseline="middle" fill="#c62828" font-weight="normal">invalidated: changed</text>
+<text x="1140" y="394.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="start" dominant-baseline="middle" fill="#c62828" font-weight="normal">step + all subsequent</text>
+<text x="30" y="542" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="start" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">any change in the project (even to index.mjs) re-runs the slow RUN npm install (step 5)</text>
+</svg>

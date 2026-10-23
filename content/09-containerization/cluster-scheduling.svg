@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 480" width="1500" height="480" role="img" aria-label="Scaling up to the cluster level: users submit tasks with requirements to a single access point, which allocates them onto the nodes of the cluster matching requirements with capabilities and balancing the load"><title>Scaling up to the cluster level: users submit tasks with requirements to a single access point, which allocates them onto the nodes of the cluster matching requirements with capabilities and balancing the load</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="arr-fade" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8bfc9"/></marker></defs>
+<rect width="1500" height="480" fill="white"/>
+<rect x="20" y="40" width="160" height="56" rx="8" fill="white" stroke="#222222" stroke-width="2" opacity="1"/>
+<text x="100.0" y="68.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">users</text>
+<line x1="182" y1="68" x2="258" y2="68" stroke="#222222" stroke-width="3" marker-end="url(#arr-navy)"/>
+<rect x="260" y="20" width="380" height="100" rx="12" fill="#1f3b63" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="450" y="52" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="bold">single access point</text>
+<text x="450" y="86" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal" font-style="italic">orchestrator / IaaS (CLI, dashboard)</text>
+<rect x="700" y="30" width="230" height="80" rx="10" fill="white" stroke="#c62828" stroke-width="2.5" opacity="1"/>
+<text x="815" y="58" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#c62828" font-weight="bold">simulation</text>
+<text x="815" y="88" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">needs: GPU</text>
+<rect x="960" y="30" width="230" height="80" rx="10" fill="white" stroke="#c62828" stroke-width="2.5" opacity="1"/>
+<text x="1075" y="58" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#c62828" font-weight="bold">database</text>
+<text x="1075" y="88" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">needs: SSD</text>
+<rect x="1220" y="30" width="230" height="80" rx="10" fill="white" stroke="#c62828" stroke-width="2.5" opacity="1"/>
+<text x="1335" y="58" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#c62828" font-weight="bold">web server</text>
+<text x="1335" y="88" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">needs: 1 CPU</text>
+<text x="1035" y="140" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">tasks to deploy, with requirements</text>
+<rect x="20" y="200" width="1460" height="230" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="2" stroke-dasharray="8 5" opacity="1"/>
+<text x="40" y="224" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="start" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">cluster</text>
+<rect x="50" y="250" width="320" height="160" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="66" y="276" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="start" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">node-1</text>
+<text x="66" y="306" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#6b7280" font-weight="normal">GPU, 8 CPUs</text>
+<rect x="110" y="340" width="200" height="46" rx="6" fill="#fde8e8" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="210.0" y="363.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">simulation</text>
+<rect x="410" y="250" width="320" height="160" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="426" y="276" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="start" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">node-2</text>
+<text x="426" y="306" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#6b7280" font-weight="normal">SSD, 4 CPUs</text>
+<rect x="470" y="340" width="200" height="46" rx="6" fill="#fde8e8" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="570.0" y="363.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">database</text>
+<rect x="770" y="250" width="320" height="160" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="786" y="276" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="start" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">node-3</text>
+<text x="786" y="306" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#6b7280" font-weight="normal">4 CPUs</text>
+<rect x="830" y="340" width="200" height="46" rx="6" fill="#fde8e8" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="930.0" y="363.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">web server</text>
+<rect x="1130" y="250" width="320" height="160" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="1146" y="276" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="start" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">node-4</text>
+<text x="1146" y="306" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="start" dominant-baseline="middle" fill="#6b7280" font-weight="normal">4 CPUs</text>
+<rect x="1190" y="340" width="200" height="46" rx="6" fill="#fde8e8" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="1290.0" y="363.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">web server</text>
+<path d="M450,122 L450,170 M250,170 L1330,170" fill="none" stroke="#1f3b63" stroke-width="2.5" stroke-dasharray="6 4"/>
+<line x1="250" y1="170" x2="250" y2="336" stroke="#1f3b63" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arr-navy)"/>
+<line x1="610" y1="170" x2="610" y2="336" stroke="#1f3b63" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arr-navy)"/>
+<line x1="970" y1="170" x2="970" y2="336" stroke="#1f3b63" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arr-navy)"/>
+<line x1="1330" y1="170" x2="1330" y2="336" stroke="#1f3b63" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arr-navy)"/>
+<text x="750" y="460" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">allocation: match requirements with capabilities, balance the load (e.g. replicas of the web server)</text>
+</svg>

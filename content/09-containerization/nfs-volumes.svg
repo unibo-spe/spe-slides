@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 575" width="1060" height="575" role="img" aria-label="Sharing data among nodes: each node creates its own local shared_volume, but all of them are backed by the same folder exported by an NFS server, so all replicas see the same data"><title>Sharing data among nodes: each node creates its own local shared_volume, but all of them are backed by the same folder exported by an NFS server, so all replicas see the same data</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="arr-fade" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8bfc9"/></marker></defs>
+<rect width="1060" height="575" fill="white"/>
+<rect x="20" y="20" width="310" height="300" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M20,60 L20,34 Q20,20 34,20 L122,20 L122,42 Q122,60 104,60 Z" fill="#1f3b63"/>
+<text x="34" y="41" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">node-1</text>
+<rect x="50" y="80" width="250" height="90" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="175" y="104" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">simulation.1</text>
+<rect x="115" y="124" width="120" height="34" rx="4" fill="white" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<text x="175.0" y="141.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">/data</text>
+<line x1="175" y1="160" x2="175" y2="210" stroke="#f6a623" stroke-width="3" marker-end="url(#arr-gray)"/>
+<rect x="60" y="212" width="230" height="44" rx="6" fill="#fff4de" stroke="#f6a623" stroke-width="2" opacity="1"/>
+<text x="175.0" y="234.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">shared_volume (nfs)</text>
+<line x1="175" y1="258" x2="520" y2="398" stroke="#f6a623" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arr-gray)"/>
+<rect x="360" y="20" width="310" height="300" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M360,60 L360,34 Q360,20 374,20 L462,20 L462,42 Q462,60 444,60 Z" fill="#1f3b63"/>
+<text x="374" y="41" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">node-2</text>
+<rect x="390" y="80" width="250" height="90" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="515" y="104" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">simulation.2</text>
+<rect x="455" y="124" width="120" height="34" rx="4" fill="white" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<text x="515.0" y="141.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">/data</text>
+<line x1="515" y1="160" x2="515" y2="210" stroke="#f6a623" stroke-width="3" marker-end="url(#arr-gray)"/>
+<rect x="400" y="212" width="230" height="44" rx="6" fill="#fff4de" stroke="#f6a623" stroke-width="2" opacity="1"/>
+<text x="515.0" y="234.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">shared_volume (nfs)</text>
+<line x1="515" y1="258" x2="520" y2="398" stroke="#f6a623" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arr-gray)"/>
+<rect x="700" y="20" width="310" height="300" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M700,60 L700,34 Q700,20 714,20 L802,20 L802,42 Q802,60 784,60 Z" fill="#1f3b63"/>
+<text x="714" y="41" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">node-3</text>
+<rect x="730" y="80" width="250" height="90" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="855" y="104" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">simulation.3</text>
+<rect x="795" y="124" width="120" height="34" rx="4" fill="white" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<text x="855.0" y="141.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">/data</text>
+<line x1="855" y1="160" x2="855" y2="210" stroke="#f6a623" stroke-width="3" marker-end="url(#arr-gray)"/>
+<rect x="740" y="212" width="230" height="44" rx="6" fill="#fff4de" stroke="#f6a623" stroke-width="2" opacity="1"/>
+<text x="855.0" y="234.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">shared_volume (nfs)</text>
+<line x1="855" y1="258" x2="520" y2="398" stroke="#f6a623" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arr-gray)"/>
+<path d="M290,400 v110 a230,50.6 0 0,0 460,0 v-110" fill="#fff4de" stroke="#f6a623" stroke-width="3"/><ellipse cx="520" cy="400" rx="230" ry="50.6" fill="#fff4de" stroke="#f6a623" stroke-width="3"/>
+<text x="520" y="463.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">NFS server: /path/on/the/nfs/server/</text>
+</svg>

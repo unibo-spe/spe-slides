@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1560 610" width="1560" height="610" role="img" aria-label="Example Compose stack: the user reaches service frontend (image example/webapp) on host port 443; frontend is attached to networks front-tier and back-tier, backend (image example/database) only to back-tier and mounts volume db-data; config httpd-config and secret server-certificate are injected into frontend, secret db-credentials into both services"><title>Example Compose stack: the user reaches service frontend (image example/webapp) on host port 443; frontend is attached to networks front-tier and back-tier, backend (image example/database) only to back-tier and mounts volume db-data; config httpd-config and secret server-certificate are injected into frontend, secret db-credentials into both services</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="arr-fade" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8bfc9"/></marker></defs>
+<rect width="1560" height="610" fill="white"/>
+<rect x="260" y="140" width="1120" height="420" rx="16" fill="white" stroke="#6b7280" stroke-width="2" stroke-dasharray="10 6" opacity="1"/>
+<text x="1360" y="165" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="end" dominant-baseline="middle" fill="#6b7280" font-weight="bold">stack</text>
+<rect x="300" y="230" width="460" height="280" rx="14" fill="#e7f0fb" stroke="#2b6cb0" stroke-width="2" stroke-dasharray="8 5" opacity="1"/>
+<text x="318" y="252" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="20" text-anchor="start" dominant-baseline="middle" fill="#2b6cb0" font-weight="bold">front-tier</text>
+<rect x="420" y="260" width="900" height="220" rx="14" fill="#eef7ef" stroke="#2e7d32" stroke-width="2" stroke-dasharray="8 5" opacity="1"/>
+<text x="1302" y="282" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="20" text-anchor="end" dominant-baseline="middle" fill="#2e7d32" font-weight="bold">back-tier</text>
+<rect x="460" y="310" width="280" height="120" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="600" y="345" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="23" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">frontend</text>
+<text x="600" y="385" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">example/webapp</text>
+<rect x="960" y="310" width="280" height="120" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="1100" y="345" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="23" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">backend</text>
+<text x="1100" y="385" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">example/database</text>
+<line x1="740" y1="370" x2="958" y2="370" stroke="#1f3b63" stroke-width="3" marker-end="url(#arr-navy)" marker-start="url(#arr-navy)"/>
+<text x="850" y="352" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">DB_HOST: backend</text>
+<rect x="20" y="340" width="140" height="60" rx="8" fill="white" stroke="#222222" stroke-width="2" opacity="1"/>
+<text x="90.0" y="370.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">user</text>
+<circle cx="215" cy="370" r="34" fill="white" stroke="#c62828" stroke-width="3"/><text x="215" y="371" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="20" text-anchor="middle" dominant-baseline="middle" fill="#c62828" font-weight="bold">443</text>
+<line x1="160" y1="370" x2="180" y2="370" stroke="#222222" stroke-width="3"/>
+<line x1="249" y1="370" x2="458" y2="370" stroke="#c62828" stroke-width="3" marker-end="url(#arr-red)"/>
+<text x="355" y="395" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#c62828" font-weight="normal">:8043</text>
+<path d="M1030,520 v60 a70,16 0 0,0 140,0 v-60" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="3"/><ellipse cx="1100" cy="520" rx="70" ry="16" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="3"/>
+<text x="1100" y="560" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">db-data</text>
+<line x1="1100" y1="430" x2="1100" y2="502" stroke="#2b6cb0" stroke-width="3" marker-end="url(#arr-blue)"/>
+<text x="1112" y="470" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#2b6cb0" font-weight="normal">r+w (/etc/data)</text>
+<rect x="290" y="30" width="250" height="70" rx="10" fill="white" stroke="#6b7280" stroke-width="2" stroke-dasharray="7 5" opacity="1"/>
+<text x="415.0" y="54" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">httpd-config</text>
+<text x="415.0" y="82" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">config</text>
+<path d="M415.0,100 L540,308" fill="none" stroke="#6b7280" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arr-gray)"/>
+<rect x="560" y="30" width="250" height="70" rx="10" fill="#fff4de" stroke="#f6a623" stroke-width="2" stroke-dasharray="7 5" opacity="1"/>
+<text x="685.0" y="54" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">server-certificate</text>
+<text x="685.0" y="82" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">secret</text>
+<path d="M685.0,100 L600,308" fill="none" stroke="#f6a623" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arr-gray)"/>
+<rect x="860" y="30" width="250" height="70" rx="10" fill="#fff4de" stroke="#f6a623" stroke-width="2" stroke-dasharray="7 5" opacity="1"/>
+<text x="985.0" y="54" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">db-credentials</text>
+<text x="985.0" y="82" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">secret</text>
+<path d="M985.0,100 L680,308" fill="none" stroke="#f6a623" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arr-gray)"/>
+<path d="M985.0,100 L1040,308" fill="none" stroke="#f6a623" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arr-gray)"/>
+<text x="1200" y="54" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">configs / secrets: read-only files</text>
+<text x="1200" y="78" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">secrets in /run/secrets/&lt;name&gt;</text>
+</svg>

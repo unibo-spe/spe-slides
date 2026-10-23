@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1480 525" width="1480" height="525" role="img" aria-label="Swarm routing mesh: port 8889 is published on every node; a request to storage1:8889 enters the ingress network, which forwards it to the only wordpress replica, running on inference2"><title>Swarm routing mesh: port 8889 is published on every node; a request to storage1:8889 enters the ingress network, which forwards it to the only wordpress replica, running on inference2</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="arr-fade" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8bfc9"/></marker></defs>
+<rect width="1480" height="525" fill="white"/>
+<rect x="20" y="120" width="170" height="70" rx="8" fill="white" stroke="#222222" stroke-width="2" opacity="1"/>
+<text x="105.0" y="155.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">client</text>
+<text x="105" y="214" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">curl storage1:8889</text>
+<rect x="240" y="40" width="380" height="420" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M240,80 L240,54 Q240,40 254,40 L368,40 L368,62 Q368,80 350,80 Z" fill="#1f3b63"/>
+<text x="254" y="61" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">storage1</text>
+<rect x="270" y="130" width="110" height="40" rx="20" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="325.0" y="150.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">:8889</text>
+<rect x="660" y="40" width="380" height="420" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M660,80 L660,54 Q660,40 674,40 L814,40 L814,62 Q814,80 796,80 Z" fill="#1f3b63"/>
+<text x="674" y="61" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">inference1</text>
+<rect x="690" y="130" width="110" height="40" rx="20" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="745.0" y="150.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">:8889</text>
+<rect x="1080" y="40" width="380" height="420" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M1080,80 L1080,54 Q1080,40 1094,40 L1234,40 L1234,62 Q1234,80 1216,80 Z" fill="#1f3b63"/>
+<text x="1094" y="61" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">inference2</text>
+<rect x="1110" y="130" width="110" height="40" rx="20" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="1165.0" y="150.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">:8889</text>
+<rect x="1240" y="100" width="200" height="110" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="1340" y="130" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">wordpress</text>
+<text x="1340" y="170" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">(only replica)</text>
+<rect x="260" y="286" width="1180" height="94" rx="10" fill="#d6f5f5" stroke="#00a6a6" stroke-width="3" opacity="1"/>
+<text x="850" y="308" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="20" text-anchor="middle" dominant-baseline="middle" fill="#006b6b" font-weight="bold">ingress network (overlay, created by Swarm)</text>
+<text x="850" y="334" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#006b6b" font-weight="normal" font-style="italic">load-balances requests to the service's replicas, wherever they are</text>
+<line x1="192" y1="152" x2="268" y2="152" stroke="#c62828" stroke-width="4" marker-end="url(#arr-red)"/>
+<path d="M325,172 L325,354" fill="none" stroke="#c62828" stroke-width="4" marker-end="url(#arr-red)"/>
+<path d="M340,364 L1325,364" fill="none" stroke="#c62828" stroke-width="4" marker-end="url(#arr-red)"/>
+<path d="M1340,350 L1340,214" fill="none" stroke="#c62828" stroke-width="4" marker-end="url(#arr-red)"/>
+<text x="850" y="500" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal" font-style="italic">the published port is open on every node, whether or not it hosts a replica</text>
+</svg>

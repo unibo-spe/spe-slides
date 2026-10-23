@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 520" width="1600" height="520" role="img" aria-label="Containerisation: a Dockerfile is built into image my-service, which is run as containers. Orchestration: a compose.yaml file describes a stack, deployed onto a single host via docker compose up, or onto a Swarm cluster via docker stack deploy"><title>Containerisation: a Dockerfile is built into image my-service, which is run as containers. Orchestration: a compose.yaml file describes a stack, deployed onto a single host via docker compose up, or onto a Swarm cluster via docker stack deploy</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="arr-fade" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8bfc9"/></marker></defs>
+<rect width="1600" height="520" fill="white"/>
+<text x="20" y="105" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="24" text-anchor="start" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">containerisation</text>
+<text x="20" y="345" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="24" text-anchor="start" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">orchestration</text>
+<path d="M230,60 h162 l28,28 v62 h-190 z" fill="white" stroke="#6b7280" stroke-width="2.5"/><path d="M392,60 v28 h28" fill="none" stroke="#6b7280" stroke-width="2.5"/>
+<text x="325.0" y="105.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="20" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="bold">Dockerfile</text>
+<line x1="430" y1="105" x2="590" y2="105" stroke="#1f3b63" stroke-width="3" marker-end="url(#arr-navy)"/>
+<text x="510" y="88" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">docker build</text>
+<rect x="600" y="60" width="200" height="90" rx="10" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="3" opacity="1"/>
+<text x="700" y="92" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#2b6cb0" font-weight="bold">image</text>
+<text x="700" y="122" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">my-service</text>
+<line x1="810" y1="105" x2="970" y2="105" stroke="#1f3b63" stroke-width="3" marker-end="url(#arr-navy)"/>
+<text x="890" y="88" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">docker run</text>
+<rect x="980" y="83" width="150" height="44" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1055.0" y="105.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">container</text>
+<rect x="1150" y="83" width="150" height="44" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1225.0" y="105.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">container</text>
+<rect x="1320" y="83" width="150" height="44" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1395.0" y="105.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">container</text>
+<path d="M230,300 h162 l28,28 v62 h-190 z" fill="white" stroke="#6b7280" stroke-width="2.5"/><path d="M392,300 v28 h28" fill="none" stroke="#6b7280" stroke-width="2.5"/>
+<text x="325.0" y="335.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="20" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="bold">compose.yaml</text>
+<text x="325.0" y="363.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">services, networks, ...</text>
+<line x1="430" y1="345" x2="590" y2="345" stroke="#1f3b63" stroke-width="3" marker-end="url(#arr-navy)"/>
+<text x="510" y="328" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="14" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">docker compose up</text>
+<rect x="600" y="250" width="420" height="190" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M600,290 L600,264 Q600,250 614,250 L767,250 L767,272 Q767,290 749,290 Z" fill="#1f3b63"/>
+<text x="614" y="271" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">single host</text>
+<rect x="630" y="315" width="170" height="44" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="715.0" y="337.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">container</text>
+<rect x="820" y="315" width="170" height="44" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="905.0" y="337.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">container</text>
+<rect x="630" y="380" width="360" height="36" rx="4" fill="#3fa9f5" stroke="#3fa9f5" stroke-width="2" opacity="1"/>
+<text x="810.0" y="398.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">network + volume</text>
+<path d="M330,392 C330,500 1100,500 1100,452" fill="none" stroke="#1f3b63" stroke-width="3" marker-end="url(#arr-navy)"/>
+<text x="720" y="500" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">docker stack deploy</text>
+<rect x="1060" y="250" width="520" height="190" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M1060,290 L1060,264 Q1060,250 1074,250 L1279,250 L1279,272 Q1279,290 1261,290 Z" fill="#1f3b63"/>
+<text x="1074" y="271" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">cluster (Swarm)</text>
+<rect x="1080" y="300" width="150" height="120" rx="8" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1155" y="320" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">node-1</text>
+<rect x="1090" y="340" width="130" height="38" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1155.0" y="359.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">container</text>
+<rect x="1090" y="376" width="130" height="38" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1155.0" y="395.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">container</text>
+<rect x="1245" y="300" width="150" height="120" rx="8" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1320" y="320" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">node-2</text>
+<rect x="1255" y="340" width="130" height="38" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1320.0" y="359.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">container</text>
+<rect x="1410" y="300" width="150" height="120" rx="8" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1485" y="320" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">node-3</text>
+<rect x="1420" y="340" width="130" height="38" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1485.0" y="359.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">container</text>
+<rect x="1420" y="376" width="130" height="38" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1485.0" y="395.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">container</text>
+<line x1="20" y1="200" x2="1580" y2="200" stroke="#e5e7eb" stroke-width="2" stroke-dasharray="8 6"/>
+</svg>

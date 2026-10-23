@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1540 520" width="1540" height="520" role="img" aria-label="Container lifecycle: docker create makes a created container from an image, docker start runs it, it becomes exited when its process ends or upon docker stop, it can be started again, and docker rm removes it together with its R/W layer; docker run does create and start, --rm removes the container upon exit"><title>Container lifecycle: docker create makes a created container from an image, docker start runs it, it becomes exited when its process ends or upon docker stop, it can be started again, and docker rm removes it together with its R/W layer; docker run does create and start, --rm removes the container upon exit</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="arr-fade" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8bfc9"/></marker></defs>
+<rect width="1540" height="520" fill="white"/>
+<rect x="40" y="170" width="180" height="80" rx="40" fill="#fff4de" stroke="#f6a623" stroke-width="3" opacity="1"/>
+<text x="130.0" y="211" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="bold">image</text>
+<rect x="360" y="170" width="180" height="80" rx="40" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="450.0" y="211" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="bold">created</text>
+<rect x="680" y="170" width="180" height="80" rx="40" fill="#d8f0dc" stroke="#2e7d32" stroke-width="3" opacity="1"/>
+<text x="770.0" y="211" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="bold">running</text>
+<rect x="1000" y="170" width="180" height="80" rx="40" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="1090.0" y="211" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="bold">exited</text>
+<rect x="1320" y="170" width="180" height="80" rx="40" fill="#e5e7eb" stroke="#6b7280" stroke-width="3" opacity="1"/>
+<text x="1410.0" y="211" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="bold">removed</text>
+<line x1="222" y1="210" x2="356" y2="210" stroke="#1f3b63" stroke-width="3" marker-end="url(#arr-navy)"/>
+<text x="290.0" y="192" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">docker create</text>
+<line x1="542" y1="210" x2="676" y2="210" stroke="#1f3b63" stroke-width="3" marker-end="url(#arr-navy)"/>
+<text x="610.0" y="192" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">docker start</text>
+<line x1="862" y1="210" x2="996" y2="210" stroke="#1f3b63" stroke-width="3" marker-end="url(#arr-navy)"/>
+<text x="930.0" y="192" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">process ends</text>
+<line x1="1182" y1="210" x2="1316" y2="210" stroke="#1f3b63" stroke-width="3" marker-end="url(#arr-navy)"/>
+<text x="1250.0" y="192" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">docker rm</text>
+<text x="930" y="232" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="14" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">or docker stop</text>
+<path d="M1090,168 C1090,100 820,100 820,164" fill="none" stroke="#1f3b63" stroke-width="3" marker-end="url(#arr-navy)"/>
+<text x="955" y="104" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">docker start (again)</text>
+<path d="M130,166 L130,70 L730,70 L730,162" fill="none" stroke="#c62828" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arr-red)"/>
+<text x="430" y="52" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#c62828" font-weight="bold">docker run = create + start</text>
+<path d="M790,252 C790,370 1300,370 1318,234" fill="none" stroke="#c62828" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arr-red)"/>
+<text x="1080" y="366" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#c62828" font-weight="normal" font-style="italic">with --rm: removed as soon as the process ends</text>
+<rect x="680" y="400" width="180" height="64" rx="32" fill="white" stroke="#6b7280" stroke-width="2" opacity="1"/>
+<text x="770" y="433" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="bold">paused</text>
+<line x1="730" y1="252" x2="730" y2="396" stroke="#6b7280" stroke-width="2.5" marker-end="url(#arr-gray)" marker-start="url(#arr-gray)"/>
+<text x="720" y="330" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="end" dominant-baseline="middle" fill="#6b7280" font-weight="normal">pause / unpause</text>
+<text x="130" y="276" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">read-only layers</text>
+<text x="450" y="276" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">R/W layer created</text>
+<text x="1090" y="276" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">R/W layer kept</text>
+<text x="1410" y="276" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">R/W layer discarded</text>
+</svg>

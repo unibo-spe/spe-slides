@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 600" width="1240" height="600" role="img" aria-label="Overlay network agents_network spans node-1 and node-2: containers webservice and agent on node-1, and agent on node-2, get addresses in 10.0.1.0/24 and communicate as if on the same network, with traffic tunnelled over the LAN among the nodes"><title>Overlay network agents_network spans node-1 and node-2: containers webservice and agent on node-1, and agent on node-2, get addresses in 10.0.1.0/24 and communicate as if on the same network, with traffic tunnelled over the LAN among the nodes</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="arr-fade" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8bfc9"/></marker></defs>
+<rect width="1240" height="600" fill="white"/>
+<rect x="20" y="20" width="560" height="470" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M20,60 L20,34 Q20,20 34,20 L252,20 L252,42 Q252,60 234,60 Z" fill="#1f3b63"/>
+<text x="34" y="41" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">node-1 (manager)</text>
+<rect x="60" y="90" width="230" height="130" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="76" y="112" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="start" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">webservice</text>
+<rect x="80" y="160" width="190" height="44" rx="4" fill="#3fa9f5" stroke="#3fa9f5" stroke-width="2" opacity="1"/>
+<text x="175.0" y="182.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">eth0: 10.0.1.5</text>
+<line x1="175" y1="204" x2="175" y2="286" stroke="#00a6a6" stroke-width="4"/>
+<rect x="320" y="90" width="230" height="130" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="336" y="112" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="start" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">agent</text>
+<rect x="340" y="160" width="190" height="44" rx="4" fill="#3fa9f5" stroke="#3fa9f5" stroke-width="2" opacity="1"/>
+<text x="435.0" y="182.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">eth0: 10.0.1.3</text>
+<line x1="435" y1="204" x2="435" y2="286" stroke="#00a6a6" stroke-width="4"/>
+<rect x="185" y="400" width="230" height="44" rx="4" fill="#3fa9f5" stroke="#3fa9f5" stroke-width="2" opacity="1"/>
+<text x="300.0" y="422.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">eth0: 192.168.1.2</text>
+<line x1="300" y1="444" x2="300" y2="528" stroke="#6b7280" stroke-width="3"/>
+<rect x="640" y="20" width="560" height="470" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M640,60 L640,34 Q640,20 654,20 L859,20 L859,42 Q859,60 841,60 Z" fill="#1f3b63"/>
+<text x="654" y="41" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">node-2 (worker)</text>
+<rect x="680" y="90" width="230" height="130" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="696" y="112" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="start" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">agent</text>
+<rect x="700" y="160" width="190" height="44" rx="4" fill="#3fa9f5" stroke="#3fa9f5" stroke-width="2" opacity="1"/>
+<text x="795.0" y="182.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">eth0: 10.0.1.4</text>
+<line x1="795" y1="204" x2="795" y2="286" stroke="#00a6a6" stroke-width="4"/>
+<rect x="805" y="400" width="230" height="44" rx="4" fill="#3fa9f5" stroke="#3fa9f5" stroke-width="2" opacity="1"/>
+<text x="920.0" y="422.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">eth0: 192.168.1.3</text>
+<line x1="920" y1="444" x2="920" y2="528" stroke="#6b7280" stroke-width="3"/>
+<rect x="40" y="288" width="1160" height="56" rx="10" fill="#d6f5f5" stroke="#00a6a6" stroke-width="3" opacity="1"/>
+<text x="620" y="310" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="#006b6b" font-weight="bold">overlay network agents_network (10.0.1.0/24)</text>
+<text x="620" y="334" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#006b6b" font-weight="normal" font-style="italic">traffic among nodes is tunnelled (VXLAN, UDP port 4789) over the nodes' own network</text>
+<rect x="40" y="530" width="1160" height="54" rx="8" fill="#1f3b63" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="620.0" y="557.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">physical network among nodes (LAN)</text>
+</svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 545" width="1500" height="545" role="img" aria-label="Swarm on Docker Desktop: the daemon runs in a VM whose address is not reachable from the LAN; port forwarding on the PC redirects TCP traffic from ACTUAL_IP to the VM, so other nodes must join via ACTUAL_IP"><title>Swarm on Docker Desktop: the daemon runs in a VM whose address is not reachable from the LAN; port forwarding on the PC redirects TCP traffic from ACTUAL_IP to the VM, so other nodes must join via ACTUAL_IP</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="arr-fade" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8bfc9"/></marker></defs>
+<rect width="1500" height="545" fill="white"/>
+<rect x="20" y="40" width="940" height="440" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M20,80 L20,54 Q20,40 34,40 L707,40 L707,62 Q707,80 689,80 Z" fill="#1f3b63"/>
+<text x="34" y="61" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">your PC (Windows / macOS): ACTUAL_IP = 192.168.1.10</text>
+<rect x="460" y="120" width="470" height="250" rx="14" fill="white" stroke="#6b7280" stroke-width="3" opacity="1"/>
+<path d="M460,160 L460,134 Q460,120 474,120 L705,120 L705,142 Q705,160 687,160 Z" fill="#6b7280"/>
+<text x="474" y="141" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">Docker Desktop VM</text>
+<text x="695" y="190" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">NODE_ADDRESS = 192.168.65.3</text>
+<rect x="510" y="230" width="370" height="70" rx="8" fill="#1f3b63" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="695.0" y="265.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">dockerd: Swarm manager</text>
+<rect x="60" y="170" width="330" height="150" rx="10" fill="white" stroke="#2e7d32" stroke-width="3" opacity="1"/>
+<text x="225" y="196" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#2e7d32" font-weight="bold">port forwarding</text>
+<text x="225" y="232" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">netsh interface portproxy</text>
+<text x="225" y="262" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">2377, 7946 (TCP only)</text>
+<text x="225" y="292" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">ACTUAL_IP → NODE_ADDRESS</text>
+<line x1="392" y1="265" x2="508" y2="265" stroke="#2e7d32" stroke-width="4" marker-end="url(#arr-green)"/>
+<rect x="1040" y="140" width="440" height="220" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M1040,180 L1040,154 Q1040,140 1054,140 L1376,140 L1376,162 Q1376,180 1358,180 Z" fill="#1f3b63"/>
+<text x="1054" y="161" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">other node: 192.168.1.11</text>
+<text x="1260" y="220" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">docker swarm join --token ... \</text>
+<text x="1260" y="248" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#2e7d32" font-weight="bold">192.168.1.10:2377</text>
+<path d="M1100,280 C1000,340 600,420 230,322" fill="none" stroke="#2e7d32" stroke-width="4" marker-end="url(#arr-green)"/>
+<text x="760" y="420" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#2e7d32" font-weight="normal" font-style="italic">join via ACTUAL_IP: works</text>
+<path d="M1100,200 C1050,120 1000,120 932,180" fill="none" stroke="#c62828" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#arr-red)"/>
+<path d="M994,117 L1016,139 M1016,117 L994,139" fill="none" stroke="#c62828" stroke-width="5"/>
+<text x="1260" y="392" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#c62828" font-weight="normal" font-style="italic">192.168.65.3:2377 is not</text>
+<text x="1260" y="416" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#c62828" font-weight="normal" font-style="italic">reachable from the LAN</text>
+<text x="750" y="520" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#c62828" font-weight="normal">caveat: portproxy cannot forward UDP (7946/udp, 4789/udp), so overlay traffic among nodes may still fail</text>
+</svg>

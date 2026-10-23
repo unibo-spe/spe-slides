@@ -28,10 +28,25 @@ enableSourceMap = true
 
 ---
 
+## Outline
+
+1. [Motivation](#/motivation): _deployment, tasks, and their execution context_
+2. [Encapsulation](#/encapsulation): _virtual machines vs. containers_
+3. [Docker basics](#/docker): _architecture, running containers, managing images_
+4. [Images](#/images): _Dockerfiles, layers, caching, tagging, publishing_
+5. [Volumes](#/volumes): _bind mounts, named volumes, tmpfs_
+6. [Networks](#/networks): _network drivers, exposing and publishing ports_
+7. [Orchestration with Docker Compose](#/compose): _stacks, services, configs, secrets, testing_
+8. [Orchestration with Docker Swarm](#/swarm): _clusters, stacks, placement, replication_
+
+---
+
+{{< slide id="motivation" >}}
+
 ## Preliminaries
 
 > \[Software\] __Deployment__ $:=$ all of the activities that make a software system available for use
-- [*Software Engineering: A Practitioner's Approach*, Roger S. Pressman](https://www.mlsu.ac.in/econtents/16_EBOOK-7th_ed_software_engineering_a_practitioners_approach_by_roger_s._pressman_.pdf)
+- [*Software Engineering: A Practitioner's Approach*, Roger S. Pressman](https://www.mheducation.com/highered/product/software-engineering-a-practitioners-approach-pressman.html)
 
 <br/>
 
@@ -60,6 +75,8 @@ To govern the _deployment_ of __software systems__ onto some __infrastructure__
 - __Long-lived tasks__ (a.k.a. __services__) tasks which run indefinitely
     * e.g. web servers
     * e.g. databases
+
+![Jobs vs. services: a job reads its input, computes, writes its output, and terminates by itself; a service runs indefinitely, possibly replicated, serving requests from clients](./jobs-vs-services.svg)
 
 ---
 
@@ -167,6 +184,8 @@ Some abstraction is needed to encapsulate applications, and their computational 
 
 ---
 
+{{< slide id="encapsulation" >}}
+
 ## How to achieve encapsulation? (pt. 1)
 
 * __Virtual machines__ (VM) on top of VM _hypervisors_ (VMH)
@@ -230,50 +249,9 @@ Some abstraction is needed to encapsulate applications, and their computational 
 
 ---
 
-<!-- this file includes generated content. Do not edit. Edit content/09-containerization/_generator.md, instead. -->
-
 ## Bare-metal vs. VMs vs. Containers
 
-{{< gravizo >}}
-digraph structs {
-rankdir=LR
-graph [fontname="helvetica", layout=neato]
-edge [fontname="helvetica"]
-node [fontname="helvetica", shape=record, style="rounded, filled", fontcolor=white, fixedsize=true, width=3];
-"Bare metal" [shape=plaintext, style="", fontcolor=black fontsize=20, pos="0,0!", layout=neato]
-Physical [fillcolor=black, pos="0,0.5!"]
-"Operating System" [fillcolor=gray, pos="0,1.1!"]
-Runtime [fillcolor=green, pos="0,1.7!"]
-App1 [fillcolor=red, width=0.95, pos="-1.025,2.3!"]
-App2 [fillcolor=red, width=0.95, pos="0,2.3!"]
-App3 [fillcolor=red, width=0.95, pos="1.025,2.3!"]
-
-    "Virtual Machine" [shape=plaintext, style="", fontcolor=black fontsize=20, pos="3.5,0!"]
-    VM_Phy [label=Physical, fillcolor=black, pos="3.5,0.5!"]
-    "Host Operating System" [fillcolor=gray, pos="3.5,1.1!"]
-    Hypervisor [fillcolor=orange, pos="3.5,1.7!", fontcolor=black]
-    GuestOS1 [fillcolor=gray, width=0.95, pos="2.475,2.3!"]
-    GuestOS2 [fillcolor=gray, width=0.95, pos="3.5,2.3!"]
-    GuestOS3 [fillcolor=gray, width=0.95, pos="4.525,2.3!"]
-    Runtime1 [fillcolor=green, width=0.95, pos="2.475,2.9!"]
-    Runtime2 [fillcolor=green, width=0.95, pos="3.5,2.9!"]
-    Runtime3 [fillcolor=green, width=0.95, pos="4.525,2.9!"]
-    VM_App1 [label=App1, fillcolor=red, width=0.95, pos="2.475,3.5!"]
-    VM_App2 [label=App2, fillcolor=red, width=0.95, pos="3.5,3.5!"]
-    VM_App3 [label=App3, fillcolor=red, width=0.95, pos="4.525,3.5!"]
-
-    "Container" [shape=plaintext, style="", fontcolor=black fontsize=20, pos="7,0!"]
-    C_Phy [label=Physical, fillcolor=black, pos="7,0.5!"]
-    C_K [label="Operating System", fillcolor=gray, pos="7,1.1!"]
-    "Container Service" [fillcolor=blue, pos="7,1.7!"]
-    C_Rt1 [label=Runtime1, fillcolor=green, width=0.95, pos="5.975,2.3!"]
-    C_Rt2 [label=Runtime2, fillcolor=green, width=0.95, pos="7,2.3!"]
-    C_Rt3 [label=Runtime3, fillcolor=green, width=0.95, pos="8.025,2.3!"]
-    C_App1 [label=App1, fillcolor=red, width=0.95, pos="5.975,2.9!"]
-    C_App2 [label=App2, fillcolor=red, width=0.95, pos="7,2.9!"]
-    C_App3 [label=App3, fillcolor=red, width=0.95, pos="8.025,2.9!"]
-}
-{{< /gravizo >}}
+{{< figure src="./stacks.svg" alt="Software stacks: bare metal (apps on one OS), virtual machines (one guest OS per app, on a hypervisor), containers (one runtime per app, sharing the host OS kernel via the container engine)" width="85%" >}}
 
 Containers provide **runtime isolation** _without_ **operating system replication**
 
@@ -281,17 +259,17 @@ Containers provide **runtime isolation** _without_ **operating system replicatio
 
 ## Lightweight virtual machines?
 
-![](https://raw.githubusercontent.com/DanySK/shared-slides/6824b93d3d52b841386a744f57953a73ccb67378/containerization/lightweight-container.jpg)
+![Meme: containers are often (wrongly) presented as lightweight virtual machines](https://raw.githubusercontent.com/DanySK/shared-slides/6824b93d3d52b841386a744f57953a73ccb67378/containerization/lightweight-container.jpg)
 
 ---
 
 ## Closer to confined processes
 
-![](https://raw.githubusercontent.com/DanySK/shared-slides/6824b93d3d52b841386a744f57953a73ccb67378/containerization/chroot.jpeg)
+![Meme: containers are closer to confined (chroot-ed) processes than to virtual machines](https://raw.githubusercontent.com/DanySK/shared-slides/6824b93d3d52b841386a744f57953a73ccb67378/containerization/chroot.jpeg)
 
 ---
 
-## Scaling up to the cluster level
+## Scaling up to the cluster level (pt. 1)
 
 > __Cluster__ $\approx$ a set of _similarly configured_ __machines__ (a.k.a. __nodes__) __interconnected__ via a __network__ in order to let users exploit their __joint__ computational power
 
@@ -312,14 +290,23 @@ Containers provide **runtime isolation** _without_ **operating system replicatio
 
 ---
 
+## Scaling up to the cluster level (pt. 2)
+
+![Scaling up to the cluster level: users submit tasks with requirements to a single access point, which allocates them onto the nodes of the cluster matching requirements with capabilities and balancing the load](./cluster-scheduling.svg)
+
+- The access point (e.g. a container orchestrator) decides _where_ each task runs, so users do not have to
+- Tasks declare their __requirements__, nodes expose their __capabilities__ (cf. [labelling nodes](#/labelling-nodes) in Swarm)
+
+---
+
 ## Why containers? (pt. 1)
 
 {{< multicol >}}
 {{% col %}}
-![](https://raw.githubusercontent.com/DanySK/shared-slides/6824b93d3d52b841386a744f57953a73ccb67378/containerization/works-on-my-machine.jpeg)
+![Meme: 'it works on my machine'](https://raw.githubusercontent.com/DanySK/shared-slides/6824b93d3d52b841386a744f57953a73ccb67378/containerization/works-on-my-machine.jpeg)
 {{% /col %}}
 {{% col %}}
-![](https://raw.githubusercontent.com/DanySK/shared-slides/6824b93d3d52b841386a744f57953a73ccb67378/containerization/docker-born.jpeg)
+![Meme: 'then we ship your machine', i.e. how Docker was born](https://raw.githubusercontent.com/DanySK/shared-slides/6824b93d3d52b841386a744f57953a73ccb67378/containerization/docker-born.jpeg)
 {{% /col %}}
 {{< /multicol >}}
 
@@ -331,7 +318,7 @@ Containers provide **runtime isolation** _without_ **operating system replicatio
 - faster to start, stop, snapshot, migrate (w.r.t. VM)
 - more modular, more scalable (than VM)
 - useful for dev-ops, and CI/CD
-- most-likely, it's the future of cloud computing
+- de-facto standard packaging format for cloud-native deployments (e.g. Kubernetes)
 
 ---
 
@@ -346,6 +333,8 @@ Containers provide **runtime isolation** _without_ **operating system replicatio
 - Two syntaxes involved:
     + one to _containerise_ (i.e. create container images)
     + one to _orchestrate_ (i.e. deploy containers)
+
+![Containerisation: a Dockerfile is built into image my-service, which is run as containers. Orchestration: a compose.yaml file describes a stack, deployed onto a single host via docker compose up, or onto a Swarm cluster via docker stack deploy](./containerisation-vs-orchestration.svg)
 
 ---
 
@@ -369,22 +358,30 @@ Containers provide **runtime isolation** _without_ **operating system replicatio
 - __Node__: a machine in the cluster (each one acting as a host, and running the container engine)
 - __Service__: a set of replicas of the same container
 - __Stack__: a set of inter-related services
-- __Secret__: encrypted information to be made available on containers
+- __Secret__: sensitive information to be made available on containers (encrypted at rest in Swarm)
 {{% /fragment %}}
 
 ---
+
+## Main abstractions (overview)
+
+![Main abstractions. Encapsulation level: the CLI talks to the engine of a host, which pulls/pushes images (stacks of layers) from/to a registry, runs containers as instances of images (each with its R/W layer), mounts volumes and attaches networks to them. Orchestration level: a cluster of nodes runs stacks, i.e. sets of services, each one consisting of replicated containers placed onto nodes, possibly using secrets](./abstractions.svg)
+
+---
+
+{{< slide id="docker" >}}
 
 ## About technologies
 
 __Docker__: the most famous container technology, actually consisting of several components
 - __Docker Engine__: the container engine managing containers and images, locally
 - __Docker CLI__: the command line interface for Docker Engine (this is what you use)
-- __Docker Desktop__: a GUI for Docker Engine, mostly for inspection purposes
+- __Docker Desktop__: a GUI for Docker Engine, mostly for inspection purposes (on macOS/Windows it also runs the Engine in a VM)
 - __Docker Hub__: the default registry for Docker images, available online
 - __Docker Compose__: a tool for orchestrating containers on a single machine
-- __Docker Swarm__: a tool for orchestrating containers on a cluster of machines
+- __Docker Swarm__ (mode): the Engine's built-in support for orchestrating containers on a cluster of machines
 
-![](./architecture.svg)
+![Docker architecture: the CLI client talks to the Docker daemon on the host, which manages containers and images, and pulls images from a registry](./architecture.svg)
 
 ---
 
@@ -396,6 +393,7 @@ __Docker__: the most famous container technology, actually consisting of several
 2. \[Linux only\] Add your user to the `docker` group
     + `sudo usermod -aG docker $USER`
     + log out and log in again
+    + beware: members of the `docker` group are _de facto_ `root` on the host
 3. Enable and start the Docker service 
     + on most Linux distributions `sudo systemctl enable docker; sudo systemctl start docker`
     + on macOS and Windows, start the Docker Desktop application
@@ -414,23 +412,38 @@ __Docker__: the most famous container technology, actually consisting of several
 
 ## Running containers
 
-1. Pull an image: `docker pull adoptopenjdk`
-2. Run a container: `docker run adoptopenjdk`
+1. Pull an image: `docker pull python:3.14`
+2. Run a container: `docker run python:3.14`
+    + nothing seems to happen: the container starts and terminates immediately
 
-Every image provides a *default command*; running without options runs that default in a *non-interactive* terminal.
+Every image provides a *default command* (for `python:3.14`, it is the `python3` REPL); running without options runs that default in a *non-interactive* terminal
+- the REPL finds no input, hence it terminates
 
 Running in interactive mode can be achieved with the `-i` option
+* use the `-t` option to run in a *pseudo-tty* (always use it whenever you use `-i`)
+* e.g., `docker run -it python:3.14` opens the Python REPL _inside_ the container
 
 Running a custom command *inside the container* can be achieved by writing the command after the image name
-* e.g., `docker run -i adoptopenjdk bash`
+* e.g., `docker run -it python:3.14 bash` opens a shell inside the container
 * parameters for the custom command can follow
-* use the `-t` option to run in a *pseudo-tty* (always use it whenever you use `-i`)
+    + e.g., `docker run python:3.14 python -c "import sys; print(sys.version)"`
 * use `--rm` to remove the container after use
+
+---
+
+## Container lifecycle
+
+![Container lifecycle: docker create makes a created container from an image, docker start runs it, it becomes exited when its process ends or upon docker stop, it can be started again, and docker rm removes it together with its R/W layer; docker run does create and start, --rm removes the container upon exit](./container-lifecycle.svg)
+
+- `docker ps` lists _running_ containers, `docker ps -a` lists _all_ of them (including _created_ and _exited_ ones)
+- `docker start` / `docker stop` / `docker rm` accept container _names_ (cf. `--name`) or _IDs_
 
 ---
 
 ## Interaction with the outside world
 
+{{% multicol %}}
+{{% col class="col-6" %}}
 A docker container runs *in isolation*, w.r.t. the host and other containers.
 
 Environment variables, network ports, and file system folders are **not** shared.
@@ -445,12 +458,19 @@ Sharing must be explicit and requires options to be specified after `docker run`
 * Publishing ports: `-p <host>:<guest>`
     * `<host>` is the port on the host system
     * `<guest>` is the corresponding port on the container
+{{% /col %}}
+{{% col class="col-6" %}}
+![Interaction with the outside world: environment variables (-e), volumes (-v) and published ports (-p) are the only channels between container my-service and its host](./outside-world.svg)
+{{% /col %}}
+{{% /multicol %}}
 
 ---
 
 ## Managing images
 
-Every image has a unique **ID**, and may have an associated **tag**
+Every image has a unique **ID**, and may have an associated **name** (including a **tag**)
+
+![Anatomy of an image name: docker.io/library/python:3.14 consists of registry (default docker.io), namespace (library for official images), repository, and tag (default latest)](./image-name.svg)
 
 The subcommand `images` lists the pulled images and their associated information
 
@@ -462,17 +482,20 @@ The subcommand `image` allows for running maintenance tasks, e.g.
 
 ---
 
+{{< slide id="images" >}}
+
 ## Creating Docker images
 
 Docker images are written in a `Dockerfile`
 
-- Every command inside a Dockerfile generates a new *layer*
+- Every _filesystem-changing_ instruction (`RUN`, `COPY`, `ADD`) generates a new *layer*
+    + other instructions (`ENV`, `EXPOSE`, `CMD`, ...) only change the image's _metadata_
 
 - The final stack of layers creates the final *image*
 
 - The `docker build` command interprets the `Dockerfile` commands to produce a _sequence of layers_
 
-- Changes to a layer do _not_ invalidate previous layers
+- Changes to a layer do _not_ invalidate previous layers, but they _do_ invalidate all __subsequent__ ones
 
 ---
 
@@ -481,33 +504,35 @@ Docker images are written in a `Dockerfile`
 ## Dockerfile syntax
 
 ```dockerfile
-# Pulls an image from docker hub with this name. Alternatively, "scratch" can be used for an empty container
+# Base image, pulled from Docker Hub ("scratch" = empty image)
 FROM alpine:latest
 # Runs a command
-RUN apk update; apk add nodejs npm
-# Copies a file/directory from the host into the image
-COPY path/to/my/nodejs/project /my-project
-# Sets the working directory
+RUN apk add --no-cache nodejs npm
+# Sets the working directory (created if missing)
 WORKDIR /my-project
-# Runs a command
+# Copies files from the build context into the image: dependencies first...
+COPY package.json ./
+# ... so this (slow) layer stays cached until package.json changes
 RUN npm install
+# Copies the rest of the project (relative to the build context)
+COPY . .
 # Adds a new environment variable
 ENV SERVICE_PORT=8080
-# Exposes a port
+# Documents the port the service listens on
 EXPOSE 8080
-# Configures the default command to execute
-CMD npm run service
+# Configures the default command to execute (exec form)
+CMD ["npm", "run", "service"]
 ```
 
 to be built by means of the command: `docker build PATH`
-- `PATH` is the host path containing the `Dockerfile`
+- `PATH` is the host path containing the `Dockerfile` (a.k.a. the __build context__, e.g. `path/to/my/nodejs/project`)
 
 ---
 
 ## Content of the `path/to/my/nodejs/project` DIRECTORY
 
 {{< multicol >}}
-{{% col class="col-4" %}}
+{{% col class="col-3" %}}
 1. `Dockerfile` as for the previous slide
 
 2. File `.dockerignore`
@@ -521,20 +546,20 @@ node_modules/
 {
   "name": "example",
   "version": "1.0.0",
-  "description": "Example Express WS for exemplifying Docker usage",
+  "description": "Example Express WS for Docker",
   "main": "index.mjs",
   "scripts": {
     "service": "node index.mjs"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^5.1.0"
   },
   "author": "gciatto",
   "license": "ISC"
 }
 ```
 {{% /col %}}
-{{% col class="col-4" %}}
+{{% col class="col-5" %}}
 4. File `index.mjs`
 ```js
 import { env } from 'process'
@@ -543,14 +568,16 @@ import { randomBytes } from 'crypto'
 
 const port = 'SERVICE_PORT' in env ? env.SERVICE_PORT : 8080
 const hostname = 'HOSTNAME' in env ? env.HOSTNAME : 'localhost'
-const serverID = randomBytes(8).toString('hex') // 8-char random string
+// 16-char random string
+const serverID = randomBytes(8).toString('hex')
 
 const server = express()
 
 let counter = 0
  
 server.get('/', function (req, res) {
-  res.send(`[${serverID}@${hostname}:${port}] Hit ${++counter} times`)
+  counter++
+  res.send(`[${serverID}@${hostname}:${port}] Hit ${counter} times`)
 })
  
 console.log(`Service ${serverID} listening on ${hostname}:${port}`)
@@ -570,9 +597,9 @@ i.e. a Web service listening on the port indicated by the `SERVICE_PORT` env var
 
 ## Layers and caching (pt. 1)
 
-Every *line* in a `Dockerfile` generates a *new layer*:
+Every _filesystem-changing_ instruction in a `Dockerfile` generates a *new layer*, the others only set the image _configuration_:
 
-![](./layers-1.png)
+![docker build turns each filesystem-changing Dockerfile instruction (FROM, RUN, COPY) into a read-only layer of image my-service, stacked on top of the previous one, while WORKDIR, ENV, EXPOSE and CMD only set the image configuration](./layers-build.svg)
 
 A layer is a *diff* w.r.t. the previous one
 
@@ -582,21 +609,34 @@ In other words, Docker keeps track of what information is added to the image at 
 
 ## Layers and caching (pt. 2)
 
-When a `Dockerfile` is built, Docker checks whether the layer has already been built in the _recent past_
+When a `Dockerfile` is built, Docker checks whether each layer is already in the __build cache__
+- i.e. same parent layer, same instruction, and (for `COPY`/`ADD`) same file contents
 
 If so, it reuses the __cached layer__, and skips the execution of the corresponding command
+- e.g. rebuilding `my-service` after editing `index.mjs` only:
 
-![](./layers-2.png)
+![When rebuilding my-service after editing index.mjs only, steps 1 to 5 (including npm install) are taken from the build cache, while COPY . . and all subsequent steps are re-executed](./layers-cache.svg)
 
 ---
 
 ## Layers and caching (pt. 3)
 
+What if the `Dockerfile` copied the whole project _before_ installing dependencies?
+- i.e. `COPY . .` followed by `RUN npm install`, rather than `COPY package.json ./`, `RUN npm install`, `COPY . .`
+
+![With a Dockerfile copying the whole project before npm install, editing index.mjs invalidates COPY . . and all subsequent steps, including the slow npm install](./layers-cache-naive.svg)
+
+> __Rule of thumb__: order instructions from the _least_ to the _most_ frequently changing, and copy dependency declarations (`package.json`, `requirements.txt`, `build.gradle.kts`, ...) separately from the source code
+
+---
+
+## Layers and caching (pt. 4)
+
 When the container is run, the image layers are *read-only*, and the container has a *read-write* layer on top of them
 
-![](./rw-layer.png)
+![A container adds a thin read-write layer, discarded upon removal, on top of the read-only layers of image my-service, which are shared by all containers of that image](./rw-layer.svg)
 
-So, when a container is stopped, the read-write layer is discarded, and the image layers are kept
+So, when a container is __removed__ (not merely stopped), the read-write layer is discarded, and the image layers are kept
 
 In this way, the _space occupied_ by the container is _minimal_
 
@@ -608,10 +648,10 @@ Image naming is done via **tags**
 
 - The easiest way to do so is assigning tags at *build time* with the `-t` option of `docker build`
 
-- The option can be repeated to assign multiple tags
+- The option can be repeated to assign multiple tags (names must be __lowercase__)
 
     ```bash
-    docker build -t "myImage:latest" -t "myImage:0.1.0" /path/to/Dockerfile/container
+    docker build -t "my-image:latest" -t "my-image:0.1.0" path/to/build/context
     ```
 
 - `latest` is usually used to identify the most recent version of some image
@@ -633,8 +673,11 @@ Images get published in **registries**
 - Docker Hub requires registration and CLI login:
     * `docker login docker.io`
 
-- Once done, publication is performed via `push`:
-    * `docker push <image name>`
+- Once done, publication is performed via `push`, provided that the image name includes your _namespace_:
+    * `docker tag my-image:0.1.0 <username>/my-image:0.1.0`
+    * `docker push <username>/my-image:0.1.0`
+
+![Publishing images: build my-image:0.1.0 locally, tag it as &lt;username&gt;/my-image:0.1.0, push it to Docker Hub, then any other machine can pull and run it](./publish-flow.svg)
 
 ---
 
@@ -653,11 +696,13 @@ Images get published in **registries**
 
 ---
 
+{{< slide id="volumes" >}}
+
 ## Volumes
 
-Volumes are *bridges* between the _host's_ __file system__ and the _container's_ one
+Volumes are *bridges* between the _host's_ __file system__ (or memory) and the _container's_ one
 
-<br/>
+{{< figure src="./volume-types.svg" alt="Sorts of volumes: bind mounts map a path of the user area of the host file system, named volumes map a directory in the Docker daemon area, tmpfs mounts map memory, onto /data in the container" width="45%" >}}
 
 They support several use cases:
 - __sharing__ data between the host and the container
@@ -668,11 +713,11 @@ They support several use cases:
 
 ## Sorts of volumes (pt. 1)
 
-![](./volume-types-bind.png)
+![Bind mount: a host directory ($(pwd)/shared) is mounted on /data inside the container](./volume-types-bind.svg)
 
 - __Bind mount__: a host directory is __mounted__ into the container
-    + the host directory is specified as `<host path>:<guest path>` (both must be __absolute paths__)
-        + e.g. `docker run -v /home/user/my-project:/my-project ...`
+    + the host directory is specified as `<host path>:<guest path>` (use __absolute paths__, e.g. via `$(pwd)`)
+        + e.g. `docker run -v /home/$USER/path/to/file:/data ...`
     + data present in `<host path>` can be read within the container at `<guest path>`
     + data written within the container at `<guest path>` can be accessed on `<host path>`
         * even after the container is stopped / deleted
@@ -681,7 +726,7 @@ They support several use cases:
 
 ## Sorts of volumes (pt. 2)
 
-![](./volume-types-named.png)
+![Named volume: a Docker-managed volume (my-volume) is mounted on /data inside the container](./volume-types-named.svg)
 
 - __Named volumes__: virtual drives managed by Docker
     + they are created with `docker volume create <name>`
@@ -691,20 +736,39 @@ They support several use cases:
         * e.g. `docker run -v my-volume:/my-project ...`
     + technically, they are just directories on the host's file system, yet handled by Docker
         * `/var/lib/docker/volumes/<name>/_data`
+        * on Docker Desktop, this path is inside the Engine's VM
 
 ---
 
 ## Sorts of volumes (pt. 3)
 
-![](./volume-types-temp.png)
+![Tmpfs mount: an in-memory file system is mounted on /data inside the container](./volume-types-tmpfs.svg)
 
 - __Tmpfs mount__ [Linux-only]: a temporary file system, living only as long as the container is alive
-    + it is mounted into containers as `tmpfs:<guest path>`
     + it is useful for storing temporary data
     + do not use it for sharing or persisting data
     + it is like an anonymous, ephemeral named volume
     + created by means of a `--tmpfs` option to `docker run`
         * e.g. `docker run --tmpfs <guest path> ...`
+        * or `docker run --mount type=tmpfs,destination=<guest path> ...`
+
+---
+
+## Volumes in practice
+
+![Volumes in practice: named volumes db_data and wordpress_data persist the data of containers db and wordpress, and are also mounted read-only by a backup container, which writes into the host directory /home/$USER/backups via a bind mount](./volumes-example.svg)
+
+- Named volumes `db_data` and `wordpress_data` __persist__ the data of the `db` and `wordpress` containers
+    + cf. the WordPress stack in the [Docker Compose part](#/compose), where Compose prefixes their names with the project name
+- The same volumes can be __shared__ with other containers, e.g. a one-shot `backup` container mounting them read-only...
+- ... and __sharing__ results with the host via a bind mount:
+    ```bash
+    docker run --rm \
+        -v db_data:/from/db:ro \
+        -v wordpress_data:/from/wp:ro \
+        -v /home/$USER/backups:/to \
+        alpine tar czf /to/backup.tar.gz -C / from
+    ```
 
 ---
 
@@ -722,7 +786,7 @@ They support several use cases:
     total 12
     drwxr-xr-x    2 root     root          4096 Nov  2 09:28 .
     drwxr-xr-x    1 root     root          4096 Nov  2 09:28 ..
-    -rw-r--r--    1 root     root             5 Nov  2 09:28 hello.txt
+    -rw-r--r--    1 root     root            12 Nov  2 09:28 hello.txt
     ```
 
 5. Let's exit the container: `exit`
@@ -747,14 +811,15 @@ They support several use cases:
     1. each one creating a file in `./shared/`
     2. named `container-<i>.txt`
     3. containing random data from `/dev/random`, encoded in base64
+    4. in _detached_ mode (`-d`), with a _bind mount_ (`-v`), and a parametric _hostname_ (`--hostname`)
 
     ```bash
-    for i in $(seq 1 10); do 
-        docker run --rm -d \           # detached mode
-            -v $(pwd)/shared:/data \   # bind mount
-            --hostname container-$i \  # parametric hostname inside the container
+    for i in $(seq 1 10); do
+        docker run --rm -d \
+            -v $(pwd)/shared:/data \
+            --hostname container-$i \
             alpine sh -c \
-            'cat /dev/random | head -n 1 | base64 > /data/$(hostname).txt'  
+            'cat /dev/random | head -n 1 | base64 > /data/$(hostname).txt'
     done
     ```
 
@@ -784,7 +849,9 @@ They support several use cases:
     + the files are owned by `root` (inside the container)
     + the files are still owned by `root` on the host (outside the container)
         * despite the fact that the host user is `user`
-        * if `user` has no superuser privileges, they cannot delete the files
+        * if `user` has no superuser privileges, they cannot _edit_ the files
+            - they can still _delete_ them, as `./shared` is owned by `user`
+        * (on Docker Desktop, the VM may map ownership to the host user instead)
     + when creating the container, bind mounts should be __absolute__ paths
         * hence the need for `$(pwd)` to get the current working directory
 
@@ -794,15 +861,15 @@ They support several use cases:
 
 1. Let's create a named volume: `docker volume create my-volume`
 
-2. Same 10 containers as before, but using the named volume instead of the bind mount
+2. Same 10 containers as before, but using the named volume (`-v my-volume:/data`) instead of the bind mount
 
     ```bash
-    for i in $(seq 1 10); do 
-        docker run --rm -d \           # detached mode
-            -v my-volume:/data \       # reference to volume my-volume
-            --hostname container-$i \  # parametric hostname inside the container
+    for i in $(seq 1 10); do
+        docker run --rm -d \
+            -v my-volume:/data \
+            --hostname container-$i \
             alpine sh -c \
-            'cat /dev/random | head -n 1 | base64 > /data/$(hostname).txt'  
+            'cat /dev/random | head -n 1 | base64 > /data/$(hostname).txt'
     done
     ```
 
@@ -867,7 +934,7 @@ They support several use cases:
 
 5. The `Mountpoint` entry reveals the location of the volume on the host's file system
 
-6. Let's look into that position (may require _super-user_ access rights):
+6. Let's look into that position (may require _super-user_ access rights, Linux only):
     * `sudo ls -la /var/lib/docker/volumes/my-volume/_data`
     
         ```
@@ -901,7 +968,7 @@ Volumes are NOT automatically _cleaned up_ when containers are _deleted_
 
 ---
 
-## Sudo-powered containers
+## Sudo-powered containers (pt. 1)
 
 - Sometimes one may want to let a container access the _Docker daemon_ __of its host__
     * this is useful for running containers that will: _create/delete_ other containers, handle images, etc.
@@ -927,6 +994,18 @@ Volumes are NOT automatically _cleaned up_ when containers are _deleted_
     ```
 
 ---
+
+## Sudo-powered containers (pt. 2)
+
+![Sudo-powered containers: the host's Docker socket is bind-mounted into container sudo, so the docker CLI inside it drives the host's daemon, which creates new containers as siblings of sudo, on the host](./docker-socket.svg)
+
+- Containers created from _within_ `sudo` are __siblings__ of `sudo` on the host, not nested inside it
+    + e.g. bind mounts are resolved against the _host's_ file system, not against `sudo`'s one
+- Beware: whoever controls the socket controls the host (same as being in the `docker` group)
+
+---
+
+{{< slide id="networks" >}}
 
 ## Networks
 
@@ -955,7 +1034,7 @@ This is useful to let containers __communicate__ with any external entity
 
 Different sorts of networks are available in Docker, depending on the __driver__:
 
-![](./networks.png)
+![Docker network drivers: bridge (default; either the predefined bridge network or user-defined ones such as my-network), host, and none for single hosts; overlay for clusters (Swarm)](./networks.svg)
 
 ---
 
@@ -972,13 +1051,13 @@ Available drivers:
 
 <br/>
 
-Other drivers are available as well, cf. https://docs.docker.com/network/drivers/
+Other drivers are available as well, cf. https://docs.docker.com/engine/network/drivers/
 
 ---
 
 ### None network driver
 
-{{< figure src="./none-network.png" width="20%" >}}
+{{< figure src="./none-network.svg" alt="None network driver: the alpine container only has the loopback interface, hence it cannot reach nor be reached by the external network" width="28%" >}}
 
 - __No__ networking facilities are provided to the container __at all__, which is then _isolated_ w.r.t. the external world
 
@@ -997,7 +1076,7 @@ Other drivers are available as well, cf. https://docs.docker.com/network/drivers
 
 ### Host driver
 
-{{< figure src="./host-network.png" width="20%" >}}
+{{< figure src="./host-network.svg" alt="Host network driver: container my-service uses the host's network stack directly, so it listens on port 8080 of the host's own IP address" width="28%" >}}
 
 - __No isolation__ between the container and the host
     + the container uses the host's networking facilities _directly_
@@ -1006,7 +1085,7 @@ Other drivers are available as well, cf. https://docs.docker.com/network/drivers
     + the layer-4 ports used by the container are __also busy__ for the host
         * high __collision__ probability
 
-- Example: `docker run --network host my-service`
+- Example (Linux hosts; Docker Desktop supports it only in recent versions, as an opt-in): `docker run --network host my-service`
     ```
     Service 540c3b7bb7860c6a listening on <your pc's hostname>:8080
     ```
@@ -1018,7 +1097,7 @@ Other drivers are available as well, cf. https://docs.docker.com/network/drivers
 
 ## Bridge network (pt. 1)
 
-{{< figure src="./bridge-network.png" width="30%" >}}
+{{< figure src="./bridge-network.svg" alt="Bridge network driver: containers dind and cli are attached to the user-defined network my-network, get private IPs 172.18.0.2 and 172.18.0.3, resolve each other by name, and reach the external network via NAT through the host's interface" width="34%" >}}
 
 - __Virtual network__ spanning _one or more containers_ on the _same host_
     + containers attached to the _same_ network can __communicate__ with each other via _TCP/IP_
@@ -1027,7 +1106,7 @@ Other drivers are available as well, cf. https://docs.docker.com/network/drivers
 
 - Each container gets assigned a __private IP address__ on the network
     + commonly in the range `172.x.y.z`
-    + the IP address is contactable from the host
+    + the IP address is contactable from the host (Linux only: on Docker Desktop, containers live in a VM)
 
 ---
 
@@ -1045,7 +1124,7 @@ To exemplify the usage of IP:
     * `docker inspect my-container | grep IPAddress`
         + at the time of writing, the IP address is `172.17.0.2`
 
-3. open your browser and browse to `http://172.17.0.2:8080`
+3. open your browser and browse to `http://172.17.0.2:8080` (on Linux)
     * you should see a page of the form: `[$SERVER_ID@$HOST_NAME:PORT] Hit $VIEW_COUNT times`
     * the page is served by the container, contacted by IP
     * so containers attached to `bridge`-like networks can be contacted by IP, from the host
@@ -1111,14 +1190,27 @@ Let's create a non-trivial scenario with 2 containers attached to the same netwo
 
 ---
 
+## Overlay network
+
+![Overlay network agents_network spans node-1 and node-2: containers webservice and agent on node-1, and agent on node-2, get addresses in 10.0.1.0/24 and communicate as if on the same network, with traffic tunnelled over the LAN among the nodes](./overlay-network.svg)
+
+- __Virtual network__ spanning _multiple hosts_, i.e. the nodes of a [Swarm](#/swarm) cluster
+    + containers attached to it communicate as if they were on the same host, regardless of the node they run on
+    + traffic among nodes is _encapsulated_ ([VXLAN](https://en.wikipedia.org/wiki/Virtual_Extensible_LAN)) over the network the nodes are attached to
+- E.g. the `agents_network` network of the [Portainer stack](#/portainer), later in this lecture
+    + created via `docker network create --driver overlay --attachable my-overlay` on a manager, or declared in a stack file
+
+---
+
 ## Exposing ports (pt. 1)
 
 - When a container wraps a __service__ listening on __layer-4 port__...
     + ... the port is __not accessible__ from the _outside_ world
-    + ... unless it is __explicitly exposed__ by the container
+    + ... unless it is __explicitly published__ when running the container
 
-- When _creating_ a Docker _image_, the `EXPOSE` command in the `Dockerfile` is used to declare ports _exposed by default_
+- When _creating_ a Docker _image_, the `EXPOSE` command in the `Dockerfile` is used to _declare_ which ports the service listens on
     + e.g. `EXPOSE 8080`
+    + this is just _documentation_ (metadata): it does __not__ publish the port
 
 - The port exposed by a container can be inspected via `docker ps`
     + e.g. `docker run -d --rm my-service; docker ps`
@@ -1154,6 +1246,17 @@ Let's create a non-trivial scenario with 2 containers attached to the same netwo
 
 ---
 
+## Exposing ports (pt. 3)
+
+![Exposing vs. publishing ports: EXPOSE 8080 alone does not make the port reachable from outside; -P maps it onto a random host port (e.g. 32773); -p 8888:8080 maps it onto host port 8888](./port-publishing.svg)
+
+- `EXPOSE` only _documents_ the port: it is __publishing__ (`-P` or `-p`) that makes it reachable from outside the host
+- `-p` also accepts an IP to bind to, e.g. `-p 127.0.0.1:8888:8080` publishes the port on the loopback interface only
+
+---
+
+{{< slide id="compose" >}}
+
 # Orchestration
 
 ## With Docker Compose
@@ -1174,15 +1277,17 @@ Let's create a non-trivial scenario with 2 containers attached to the same netwo
     + while _creating_ all required _networks_ and _volumes_
     + and __gracefully shut__ them __down__ upon need
 
-- The only thing the user must do is create a `docker-compose.yml` file
+- The only thing the user must do is create a `compose.yaml` file
     + a [YAML](https://yaml.org/) file describing the stack
-    + following the [official specification](https://docs.docker.com/compose/compose-file/)
+    + following the [official specification](https://docs.docker.com/reference/compose-file/)
+    + `compose.yaml` is the preferred file name nowadays, `docker-compose.yml` is still supported
+    + the top-level `version` attribute is _obsolete_, hence omitted in what follows
 
 ---
 
 ## Docker Compose syntax by example (pt. 1)
 
-{{< figure src="./compose-example.png" width="50%" >}}
+{{< figure src="./compose-example.svg" alt="Example Compose stack: the user reaches service frontend (image example/webapp) on host port 443; frontend is attached to networks front-tier and back-tier, backend (image example/database) only to back-tier and mounts volume db-data; config httpd-config and secret server-certificate are injected into frontend, secret db-credentials into both services" width="80%" >}}
 
 The example application is composed of the following parts:
 
@@ -1201,38 +1306,35 @@ The example application is composed of the following parts:
 {{< multicol >}}
 {{% col class="col-6" %}}
 ```yaml
-version: "3.9"                  # version of the specification
-
 services:                       # section defining services composing the stack
   frontend:                     # name of the first service (frontend)
     image: example/webapp       # image to use for the first service
     depends_on:                 # section for dependencies
        - backend                # short-form depends_on waits for start, not for health
     environment:                # section for environment variables
-      SERVICE_PORT: 8043        # env var dictating the port the service will listen on
-      DB_HOST: backend          # env variable dictating the hostname of the backend service 
-                                # (equal to the service name)
-      DB_PORT: 3306             # env variable dictating the port the backend service will listen on
-    ports:                      # section for ports to be exposed / mapped on the host
-      - "443:8043"              # exposing port 8043 of the container as port 443 of the host
+      SERVICE_PORT: 8043        # port the service will listen on
+      DB_HOST: backend          # hostname of the backend service (= service name)
+      DB_PORT: 3306             # port the backend service will listen on
+    ports:                      # section for ports published on the host
+      - "443:8043"              # container port 8043 as host port 443
     networks:                   # section for networks to be attached to
-      - front-tier              # attaching the service to the front-tier network (referenced by name)
-      - back-tier               # attaching the service to the back-tier network (referenced by name)
-    # configs are files to be copied into the service's container, without needing to create a new image
-    configs:                    # section for configuration files to be injected in the container
+      - front-tier              # attach to front-tier network (by name)
+      - back-tier               # attach to back-tier network (by name)
+    # configs are files copied into the container, with no need to build a new image
+    configs:                    # section for config files to be injected
       - source: httpd-config    # reference to the configuration file (by name)
-        target: /etc/httpd.conf # path on the container where the config file will be mounted as read-only
+        target: /etc/httpd.conf # where the config is mounted (read-only)
     # secrets are reified as read-only files in /run/secrets/<secret_name>
-    secrets:                    # section for secrets to be injected into the service's container
+    secrets:                    # section for secrets to be injected
       - server-certificate      # reference to the secret (by name)
       - db-credentials          # reference to the secret (by name)
     
-      # assumption: image example/webapp is programmed to look in /run/secrets/<secret_name> 
-      # and load the secrets therein contained
+      # assumption: image example/webapp is programmed to load secrets
+      # from /run/secrets/<secret_name>
 
   backend:                      # name of the second service (backend)
     image: example/database     # image to use for the second service
-    # this is a command to be run inside the service to check whether it is healthy
+    # command run inside the container to check whether it is healthy
     healthcheck:
       test: ["CMD", "command", "which", "should", "fail", "if", "db not healthy"]
       interval: 1m30s
@@ -1243,7 +1345,7 @@ services:                       # section defining services composing the stack
       - db-data:/etc/data       # the volume db-data (reference by name) will be mounted 
                                 # as read-write in /etc/data
     networks:
-      - back-tier               # attaching the service to the back-tier network (referenced by name)
+      - back-tier               # attach to back-tier network (by name)
     secrets:
       - db-credentials          # reference to the secret (by name)
 ```
@@ -1265,7 +1367,7 @@ secrets:                   # section for secrets to be created in the stack
   server-certificate:      # name of the secret, to be referenced by services
     file: path/to/certificate/file/on/the/host
   db-credentials:          # name of the secret, to be referenced by services
-    external: true         # this secret is not created by the stack, but it is expected to be created by the user
+    external: true         # not created by the stack, but expected to exist
     name: my-db-creds      # name of the secret, as created by the user 
 
 networks:
@@ -1283,20 +1385,20 @@ networks:
 ### Stacks
 
 A __stack__ is a set of _inter-related_ services, networks, volumes, secrets, configs
-- all of which are defined in a single `docker-compose.yml` file
+- all of which are defined in a single `compose.yaml` file
 - all of which are created / deleted / updated / started / stopped __together__
 
 ### Services
 
-From [Docker Compose documentation](https://docs.docker.com/compose/compose-file/05-services/):
+From [Docker Compose documentation](https://docs.docker.com/reference/compose-file/services/):
 - a __service__ is an _abstract definition_ of a computing resource within an _application_ which can be __scaled__ or __replaced__ independently of other components
 - they are backed by a _set of_ __containers__, run by the orchestrator according to __replication requirements__ and __placement constraints__
 - they are backed by containers, hence they are defined by an __image__ and a set of __runtime arguments__
     + all containers within a service are _identically_ created with these arguments
-- they are declared in the `services` section of the `docker-compose.yml` file
+- they are declared in the `services` section of the `compose.yaml` file
     + for each service, _attributes_ may be specified, _overriding_ the default behaviour of the image
     + further attributes may be specified to declare _dependencies_ on other services, volumes, networks, and so on
-        * these must be declared in the same `docker-compose.yml` file
+        * these must be declared in the same `compose.yaml` file
 
 ---
 
@@ -1304,11 +1406,11 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
 
 ### Configs
 
-From [Docker Compose documentation](https://docs.docker.com/compose/compose-file/08-configs/):
+From [Docker Compose documentation](https://docs.docker.com/reference/compose-file/configs/):
 - __configs__ are _files_ containing _configuration data_ that can be _injected_ into services upon instantiation
 - they allow users to configure their services' behaviour _without_ the need to __(re)build a (new) image__
 - they are _read-only_ files, mounted into services' containers, similarly to _read-only_ __volumes__
-- they are declared in the `configs` section of the `docker-compose.yml` file
+- they are declared in the `configs` section of the `compose.yaml` file
 
 ---
 
@@ -1322,8 +1424,8 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
         config_name:
             file: /path/to/config/on/the/host
     ```
-- ... or it can be __manually created__ by means of the `docker config create [OPTIONS] NAME PATH` command
-    + in this case they can be referenced in several `docker-compose.yml` files:
+- ... or (__Swarm mode only__) it can be __manually created__ by means of the `docker config create [OPTIONS] NAME PATH` command
+    + in this case they can be referenced in several `compose.yaml` files:
         ```yaml
         configs:
             config_name:
@@ -1348,17 +1450,30 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
 
 ### Secrets
 
-From [Docker Compose documentation](https://docs.docker.com/compose/compose-file/09-secrets/):
+From [Docker Compose documentation](https://docs.docker.com/reference/compose-file/secrets/):
 - __secrets__ are configs containing sensitive data that should be _kept secret_
 - put simply, Docker makes it harder to inspect the content of secrets, both on the host and inside the container
+    + in Swarm mode, secrets are _encrypted_ at rest and in transit
+    + with plain Docker Compose, they are just _bind-mounted_ files (no encryption)
 - one secret may either be created __stack-wise__ out of a __local file__ or an __environment variable__ from the _host_...
-    ```yaml
-    secrets:                                            secrets:
-        secret_name:                                        secret_name:
-            file: "/path/to/secret/on/the/host"                 environment: "NAME_OF_THE_VARIABLE_ON_THE_HOST"
-    ```
-- ... or it can be __manually created__ by means of the `docker secret create [OPTIONS] NAME PATH|-` command
-    + in this case they can be referenced in several `docker-compose.yml` files:
+{{< multicol >}}
+{{% col %}}
+```yaml
+secrets:
+    secret_name:
+        file: "/path/to/secret/on/the/host"
+```
+{{% /col %}}
+{{% col %}}
+```yaml
+secrets:
+    secret_name:
+        environment: "NAME_OF_THE_VARIABLE_ON_THE_HOST"
+```
+{{% /col %}}
+{{< /multicol >}}
+- ... or (__Swarm mode only__) it can be __manually created__ by means of the `docker secret create [OPTIONS] NAME PATH|-` command
+    + in this case they can be referenced in several `compose.yaml` files:
         ```yaml
         secrets:
             secret_name:
@@ -1399,9 +1514,9 @@ Important remark:
 
 ### Volumes
 
-From [Docker Compose documentation](https://docs.docker.com/compose/compose-file/07-volumes/):
+From [Docker Compose documentation](https://docs.docker.com/reference/compose-file/volumes/):
 - volumes in compose are no different from the ones we have already discussed
-- they are declared in the `volumes` section of the `docker-compose.yml` file
+- they are declared in the `volumes` section of the `compose.yaml` file
 - one volume may be created __stack-wise__ out of a __local folder__ from the _host_...
     ```yaml
     volumes:
@@ -1431,7 +1546,7 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
 ### Volumes (cont'd)
 
 - ... or it can be __manually created__ by means of the `docker volume create [OPTIONS] NAME` command
-    + in this case they can be referenced in several `docker-compose.yml` files:
+    + in this case they can be referenced in several `compose.yaml` files:
         ```yaml
         volumes:
             volume_name:
@@ -1461,9 +1576,9 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
 
 ### Networks
 
-From [Docker Compose documentation](https://docs.docker.com/compose/compose-file/06-networks/):
+From [Docker Compose documentation](https://docs.docker.com/reference/compose-file/networks/):
 - networks in compose are no different from the ones we have already discussed
-- they are declared in the `networks` section of the `docker-compose.yml` file
+- they are declared in the `networks` section of the `compose.yaml` file
 - one network may be declared __stack-wise__ in the stack file...
     ```yaml
     networks:
@@ -1474,7 +1589,7 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
     ```
 
 - ... or it can be __manually created__ by means of the `docker network create [OPTIONS] NAME` command
-    + in this case they can be referenced in several `docker-compose.yml` files:
+    + in this case they can be referenced in several `compose.yaml` files:
         ```yaml
         networks:
             network_name:
@@ -1483,7 +1598,7 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
                 # this may be different from network_name
         ```
 
-- in any case, the network's mount point should be specified at the service level:
+- in any case, the networks a service is attached to should be specified at the service level:
     ```yaml
     services:
         my-service:
@@ -1508,12 +1623,21 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
 
 - `docker compose down` stops the stack
     + if the stack is not present, nothing happens
-    + if the stack is present, it is stopped
+    + if the stack is present, its containers are stopped and __removed__, along with its networks
     + interesting optional flags (see all with `--help`)
         * `--remove-orphans` removes containers for services not defined in the Compose file (e.g. residuals from previous versions)
         * `-v` removes named volumes declared in the "volumes" section of the Compose file and anonymous volumes attached to containers
 
-> All commands assume a `docker-compose.yml` file is present in the __current working directory__
+> All commands assume a `compose.yaml` (or `docker-compose.yml`) file is present in the __current working directory__
+
+---
+
+## Docker Compose commands: what is created and removed
+
+![docker compose up creates the stack's containers, networks and volumes; docker compose down removes containers and networks but keeps volumes; docker compose down -v also removes volumes, losing their data](./compose-up-down.svg)
+
+- Names are prefixed by the _project name_, i.e. the name of the directory containing `compose.yaml` (e.g. `your-dir`)
+    + can be overridden via `-p <project name>` or the top-level `name` attribute
 
 ---
 
@@ -1523,12 +1647,9 @@ From [Docker Compose documentation](https://docs.docker.com/compose/compose-file
 {{% col %}}
 
 ```yaml
-version: "3.9"
-    
 services:
   db:
     image: mariadb:latest
-    command: '--default-authentication-plugin=mysql_native_password'
     volumes:
       - db_data:/var/lib/mysql
     restart: always
@@ -1549,7 +1670,8 @@ services:
     
   wordpress:
     depends_on:
-      - db
+      db:
+        condition: service_healthy # wait for the healthcheck to pass
     image: wordpress:latest
     volumes:
       - wordpress_data:/var/www/html
@@ -1577,7 +1699,7 @@ networks:
 
 ### TODO
 
-1. Copy-paste this code in a file named `your-dir/docker-compose.yml` 
+1. Copy-paste this code in a file named `your-dir/compose.yaml`
 
 2. `cd your-dir`
 
@@ -1623,7 +1745,6 @@ networks:
     wordpress-1  | AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.22.0.3. Set the 'ServerName' directive globally to suppress this message
     wordpress-1  | [Thu Nov 23 14:24:58.289485 2023] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.56 (Debian) PHP/8.0.30 configured -- resuming normal operations
     wordpress-1  | [Thu Nov 23 14:24:58.289516 2023] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
-    db-1         | 2023-11-23 14:24:58 0 [Warning] 'default-authentication-plugin' is MySQL 5.6 / 5.7 compatible option. To be implemented in later versions.
     ...
     ```
 
@@ -1654,20 +1775,20 @@ networks:
 
 ### Let's make the stack more secure
 
-1. Let's create a file containing the DB root password, say `db-root-password.txt`:
-    * `echo -n "..Password1.." > your-dir/db-root-password.txt`
+1. Let's create a file containing the DB root password, say `db_root_password.txt`:
+    * `echo -n "..Password1.." > your-dir/db_root_password.txt`
 
-2. Let's create a file containing the DB user password, say `db-password.txt`:
-    * `echo -n ",,Password2,," > your-dir/db-password.txt`
+2. Let's create a file containing the DB user password, say `db_password.txt`:
+    * `echo -n ",,Password2,," > your-dir/db_password.txt`
 
 3. Let's edit the stack as described on the right
+    * __remove__ the clear-text `MYSQL_ROOT_PASSWORD`, `MYSQL_PASSWORD`, and `WORDPRESS_DB_PASSWORD` variables
+    * replace them with their `_FILE` counterparts, pointing to the secrets
 
 {{% /col %}}
 {{% col %}}
 
 ```yaml
-version: "3.9"
-    
 services:
   db:
     ...
@@ -1721,6 +1842,12 @@ secrets:
     3. __stop__ the component
 
 - Docker Compose may be coupled with some __test framework__ of choice to __automate__ the process
+
+---
+
+## Docker Compose for testing: the workflow
+
+![Testing with Docker Compose: before all tests, the JUnit class runs docker compose up --wait, which starts MariaDB and waits for its healthcheck; each test then queries the database; after all tests, docker compose down stops and removes it](./compose-testing.svg)
 
 ---
 
@@ -1835,8 +1962,8 @@ package "java sql" {
 class TestMariaDBCustomerRepository {
 
     companion object {
-        @BeforeClass @JvmStatic fun setUpMariaDb() { TODO("start MariaDB via Docker Compose") }
-        @AfterClass @JvmStatic fun tearDownMariaDb() { TODO("stop MariaDB via Docker Compose") }
+        @BeforeClass @JvmStatic fun setUpMariaDb() { TODO("compose up") }
+        @AfterClass @JvmStatic fun tearDownMariaDb() { TODO("compose down") }
     }
 
     private val connectionFactory = MariaDBConnectionFactory(DATABASE, USER, PASSWORD, HOST, PORT)
@@ -1850,7 +1977,10 @@ class TestMariaDBCustomerRepository {
 
     private val taxCode = TaxCode("CTTGNN92D07D468M")
     private val person = Customer.person(taxCode, "Giovanni", "Ciatto", LocalDate.of(1992, 4, 7))
-    private val person2 = person.clone(birthDate = LocalDate.of(1992, 4, 8), id = TaxCode("CTTGNN92D08D468M"))
+    private val person2 = person.clone(
+        birthDate = LocalDate.of(1992, 4, 8),
+        id = TaxCode("CTTGNN92D08D468M"),
+    )
     private val vatNumber = VatNumber(12345678987L)
     private val company = Customer.company(vatNumber, "ACME", "Inc.", LocalDate.of(1920, 1, 1))
 
@@ -1897,10 +2027,14 @@ class TestMariaDBCustomerRepository {
 
 - Code for the exercise:
     * https://github.com/unibo-spe/docker-compose-testing
+
+- In practice, libraries like [Testcontainers](https://testcontainers.com/) automate this very pattern
 {{% /col %}}
 {{< /multicol >}}
 
 ---
+
+{{< slide id="swarm" >}}
 
 # Orchestration
 
@@ -1908,10 +2042,20 @@ class TestMariaDBCustomerRepository {
 
 ---
 
+## Swarm architecture
+
+![Docker Swarm architecture: the CLI sends the stack to a manager; managers agree on the cluster state via Raft and dispatch tasks (containers) to workers, possibly running tasks themselves](./swarm-architecture.svg)
+
+- Docker Compose deploys a stack on a _single_ host, Docker Swarm deploys it on a __cluster__ of hosts (_nodes_)
+- Users submit stacks to __managers__ (e.g. via `docker stack deploy`), which keep the cluster state _consistent_ via Raft
+- Managers turn services into __tasks__ (i.e. containers), and dispatch them onto nodes, workers or managers alike
+
+---
+
 ## Building the cluster (theory)
 
 - In a Docker Swarm cluster, there are two kinds of nodes:
-    + __manager__ nodes, which coordinate the cluster by means of the [RAFT consensus protocol](https://docs.docker.com/engine/swarm/raft/)
+    + __manager__ nodes, which coordinate the cluster by means of the [Raft consensus protocol](https://docs.docker.com/engine/swarm/raft/)
         * they may also act as worker nodes
     + __worker__ nodes, which simply run containers
 
@@ -1948,7 +2092,7 @@ class TestMariaDBCustomerRepository {
     * `docker swarm join --token <SECRET_TOKEN> <NODE_ADDRESS>:2377`
         + where `SECRET_TOKEN` and `NODE_ADDRESS` are the ones provided by the `docker swarm init` command above
 
-3. On the master node, one may inspect the node composition of the cluster via `docker node ls`
+3. On the manager node, one may inspect the node composition of the cluster via `docker node ls` (sample output)
     ```
     ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
     4q3q3q3q3q3q3q3q3q3q3q3q3q *  node-1              Ready               Active              Leader              24.0.7
@@ -1956,7 +2100,7 @@ class TestMariaDBCustomerRepository {
     6q5q5q5q5q5q5q5q5q5q5q5q5q    node-3              Ready               Active                                  24.0.7
     ```
 
-4. The master node may __promote__ other nodes to manager nodes via `docker node promote <NODE_ID>`...
+4. The manager node may __promote__ other nodes to manager nodes via `docker node promote <NODE_ID>`...
     * and it may __demote__ manager nodes to worker nodes via `docker node demote <NODE_ID>`
     * it also may __remove__ nodes from the cluster via `docker node rm <NODE_ID>`
 
@@ -1989,7 +2133,17 @@ class TestMariaDBCustomerRepository {
 
 ---
 
-## Troubleshooting example on Windows
+## Swarm on Docker Desktop
+
+![Swarm on Docker Desktop: the daemon runs in a VM whose address is not reachable from the LAN; port forwarding on the PC redirects TCP traffic from ACTUAL_IP to the VM, so other nodes must join via ACTUAL_IP](./desktop-swarm.svg)
+
+- The address printed by `docker swarm init` (`NODE_ADDRESS`) belongs to the Docker Desktop _VM_, which is not reachable from the LAN
+- Other nodes must join via the PC's address (`ACTUAL_IP`), and the PC must forward Swarm traffic to the VM (cf. next slide)
+- Forwarding via `netsh` is partial (TCP only): prefer Linux machines as Swarm nodes, or Docker Engine in WSL2 (cf. "Troubleshooting example on Windows (pt. 2)")
+
+---
+
+## Troubleshooting example on Windows (pt. 1)
 
 ### Opening ports on Windows Defender
 
@@ -2009,10 +2163,40 @@ On an administrator Powershell, run the following commands:
 ```powershell
 netsh interface portproxy add v4tov4 listenport=2377 listenaddress=$ACTUAL_IP connectport=2377 connectaddress=$NODE_ADDRESS
 netsh interface portproxy add v4tov4 listenport=7946 listenaddress=$ACTUAL_IP connectport=7946 connectaddress=$NODE_ADDRESS
-netsh interface portproxy add v4tov4 listenport=4789 listenaddress=$ACTUAL_IP connectport=4789 connectaddress=$NODE_ADDRESS
-``` 
+```
 
-- this operation should be done on the very first master node of the cluster, if it's running on Windows
+- `portproxy` only forwards __TCP__: UDP traffic (`7946/udp` gossip, `4789/udp` overlay data) cannot be forwarded this way (cf. next slide)
+
+- this operation should be done on the very first manager node of the cluster, if it's running on Windows
+
+---
+
+## Troubleshooting example on Windows (pt. 2)
+
+### Forwarding UDP traffic too: Docker Engine in WSL2, mirrored networking
+
+`netsh` cannot forward UDP: rather than forwarding, let the engine use the PC's own network interfaces
+
+1. Enable [mirrored networking](https://learn.microsoft.com/en-us/windows/wsl/networking#mirrored-mode-networking) for WSL2 (Windows 11 22H2 or later), in `%UserProfile%\.wslconfig`:
+    ```ini
+    [wsl2]
+    networkingMode=mirrored
+    ```
+    then restart WSL via `wsl --shutdown`
+
+2. Allow inbound traffic towards WSL2 through the Hyper-V firewall (administrator PowerShell):
+    ```powershell
+    Set-NetFirewallHyperVVMSetting -Name '{40E0AC32-46A5-438A-A0B2-2B479E8F2E90}' -DefaultInboundAction Allow
+    ```
+
+3. Install [Docker Engine](https://docs.docker.com/engine/install/ubuntu/) _inside_ a WSL2 distribution (e.g. Ubuntu), and use it instead of Docker Desktop
+    + Docker Desktop runs its engine in its own VM, which does not see the mirrored interfaces
+
+4. From that distribution, use the PC's address when creating / joining the Swarm, for both TCP and UDP ports:
+    + `docker swarm init --advertise-addr $ACTUAL_IP`, or
+    + `docker swarm join --advertise-addr $ACTUAL_IP --token <SECRET_TOKEN> <MANAGER_ADDRESS>:2377`
+
+> On macOS, the analogous solution is a Linux VM with a _bridged_ network adapter, running Docker Engine
 
 ---
 
@@ -2024,9 +2208,9 @@ netsh interface portproxy add v4tov4 listenport=4789 listenaddress=$ACTUAL_IP co
 
 - The command must be run on a client connected to some __manager__ node
     + try to run it on a _worker_ node and see what happens
-    + try to run it on a _manager_ node when _50% of the nodes are down_ and see what happens
+    + try to run it on a _manager_ node when _half or more of the manager nodes are down_ (i.e. no quorum) and see what happens
 
-- Other operations one may do on stacks (via a master node):
+- Other operations one may do on stacks (via a manager node):
     + `docker stack ls` to list stacks
     + `docker stack ps <STACK_NAME>` to list containers in a stack
     + `docker stack services <STACK_NAME>` to list services in a stack
@@ -2036,19 +2220,20 @@ netsh interface portproxy add v4tov4 listenport=4789 listenaddress=$ACTUAL_IP co
     + different services may be __allocated__ on different nodes
     + services may be __replicated__ on different nodes
     + networks must rely on the `overlay` driver, to support inter-node communication among containers
+    + some Compose attributes are __ignored__ (e.g. `depends_on`, `restart`, `build`), others only work in Swarm (e.g. `deploy`)
 
 ---
+
+{{< slide id="portainer" >}}
 
 ## Stack Deploy Example: [Portainer](https://www.portainer.io/)
 
 {{< multicol >}}
 {{% col %}}
 ```yaml
-version: '3.2'
-
 services:
   agent:
-    image: portainer/agent:latest
+    image: portainer/agent:lts
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
@@ -2058,7 +2243,7 @@ services:
       mode: global # i.e., one (and only one) replica per node
 
   webservice:
-    image: portainer/portainer-ce:latest
+    image: portainer/portainer-ce:lts
     command: -H tcp://tasks.agent:9001 --tlsskipverify
     ports:
       - "443:9443"
@@ -2098,7 +2283,7 @@ volumes:
 
 2. Let's deploy the stack via `docker stack deploy -c portainer.yml portainer`
 
-3. Let's then browse to <https://localhost> on some master node
+3. Let's then browse to <https://localhost> on some manager node
 {{% /col %}}
 {{< /multicol >}}
 
@@ -2106,7 +2291,7 @@ volumes:
 
 ## Portainer's Initial Configuration
 
-{{< figure src="./portainer-setup.png" width="50%" >}}
+{{< figure src="./portainer-setup.png" alt="Portainer initial setup page, asking for the admin password" width="50%" >}}
 
 let's use `software-process-engineering` as the password for the `admin` user
 
@@ -2117,7 +2302,7 @@ let's use `software-process-engineering` as the password for the `admin` user
 Upon login, you are presented with the _home page_, which asks you to select one __environment__
 + __environments__ are clusters (one Portainer instance may manage multiple clusters)
 
-{{< figure src="./portainer-hello.png" width="50%" >}}
+{{< figure src="./portainer-hello.png" alt="Portainer home page, listing the available environments" width="50%" >}}
 
 ---
 
@@ -2125,7 +2310,7 @@ Upon login, you are presented with the _home page_, which asks you to select one
 
 Upon environment selection, one is presented with the _dashboard_, showing the __status of the cluster__
 
-{{< figure src="./portainer-dashboard.png" width="50%" >}}
+{{< figure src="./portainer-dashboard.png" alt="Portainer dashboard, summarising the status of the cluster" width="50%" >}}
 
 --- 
 
@@ -2144,15 +2329,17 @@ After selecting the only environment available, one may observe:
 
 - which __containers__ are running on the cluster (_Containers_ section)
     + you may observe that the `portainer_agent` service is composed of _one container per node_
-    + you may observe that the `portainer_webservice` service is composed of _one container_ which is _running on some master node_
+    + you may observe that the `portainer_webservice` service is composed of _one container_ which is _running on some manager node_
 
 - which __volumes__ are present on the cluster (_Volumes_ section)
-    + you may observe that the `portainer_portainer_data` volume is present _on the same master node_ of `portainer_webservice`
+    + you may observe that the `portainer_portainer_data` volume is present _on the same manager node_ of `portainer_webservice`
 
 - which __networks__ are present on the cluster (_Networks_ section)
     + you may observe that the `portainer_agents_network` network is present, using the `overlay` driver
 
 ---
+
+{{< slide id="labelling-nodes" >}}
 
 ## Labelling nodes
 
@@ -2169,7 +2356,7 @@ After selecting the only environment available, one may observe:
 
 - ... or via __Portainer__:
 
-    {{< figure src="./portainer-node-labels.png" width="50%" >}}
+    {{< figure src="./portainer-node-labels.png" alt="Portainer node details page, where labels can be added to a node" width="50%" >}}
 
 - labels can be used to set _placement_ __constraints__ or __preferences__ for services:
     * placement _constraints_: one service can only be deployed onto nodes with given labels
@@ -2182,8 +2369,6 @@ After selecting the only environment available, one may observe:
 {{< multicol >}}
 {{% col %}}
 ```yaml
-version: "3.9"
-    
 services:
   db:
     image: mariadb:latest
@@ -2193,9 +2378,7 @@ services:
         constraints: 
           - node.labels.capabilities.storage==yes
   wordpress:
-    depends_on:
-      - db
-    image: wordpress:latest
+    image: wordpress:latest  # depends_on is ignored by Swarm
     ports:
       - "8889:80"
     ...
@@ -2215,12 +2398,13 @@ networks:
     + `db` service on a node with _storage_ capabilities
     + `wordpress` service on a node with _web_ capabilities
 
-- On the `stairwai` cluster:
-    - node `storage1.stairwai.ce.almaai.unibo.it` has _storage_ capabilities
-    - node `inference2.stairwai.ce.almaai.unibo.it` has _web_ capabilities
+- E.g., on a cluster with nodes `storage1`, `inference1`, `inference2`, and `inference4`:
+    - node `storage1` has _storage_ capabilities
+    - node `inference2` has _web_ capabilities
 
 - The deployment is as follows:
-    ![Deployment with labels](./portainer-wordpress-services.png)
+
+![Placement constraints: service db can only run on nodes labelled capabilities.storage=yes (storage1), service wordpress only on nodes labelled capabilities.web=yes (inference2)](./placement-constraints.svg)
 {{% /col %}}
 {{< /multicol >}}
 
@@ -2230,19 +2414,20 @@ networks:
 
 When a service _exposes a port_, and that's deployed on a _Swarm_:
 
-- the service is exposed on __all master nodes__ in the Swarm
+- the service is exposed on __all nodes__ in the Swarm (managers _and_ workers)
+    + this is the so-called [__routing mesh__](https://docs.docker.com/engine/swarm/ingress/)
+    + requests reaching _any_ node are forwarded to some node actually hosting a replica
 
-- so, the `wordpress` service above could be visited from several URLs:
-    + http://storage1.stairwai.ce.almaai.unibo.it:8889
-    + http://inference1.stairwai.ce.almaai.unibo.it:8889
-    + http://inference4.stairwai.ce.almaai.unibo.it:8889
+- so, the `wordpress` service above could be visited via _any_ node of the cluster, e.g.:
+    + `http://storage1:8889`
+    + `http://inference1:8889`
+    + `http://inference2:8889` (the node actually hosting the service)
 
-- ... as well as from the node which is actually hosting the service:
-    + http://inference2.stairwai.ce.almaai.unibo.it:8889
+![Swarm routing mesh: port 8889 is published on every node; a request to storage1:8889 enters the ingress network, which forwards it to the only wordpress replica, running on inference2](./routing-mesh.svg)
 
 ---
 
-## Service replication
+## Service replication (pt. 1)
 
 - Services may be __replicated__ for the sake of scalability / load-balancing / fault-tolerance, etc.
 
@@ -2274,14 +2459,21 @@ When a service _exposes a port_, and that's deployed on a _Swarm_:
     + no more than `M` replicas will be put on the same node
 
 ---
+
+## Service replication (pt. 2)
+
+![Service replication: in global mode, each node runs exactly one replica; in replicated mode, 5 replicas are spread over the nodes labelled capabilities.cpu=yes, at most 2 per node, while the unlabelled node runs none](./replication-modes.svg)
+
+- `global` services follow the cluster: when a node joins, it gets a replica; when it leaves, its replica is gone
+- `replicated` services keep _exactly_ `N` replicas alive, re-scheduling them when a node fails (if constraints allow)
+
+---
  
 ## Example of placement preferences
 
 {{< multicol >}}
 {{% col %}}
 ```yaml
-version: "3.9"
-    
 services:
   ws:
     image: pikalab/hitcounter:latest
@@ -2301,7 +2493,7 @@ services:
 2. Try to query it multiple times:
     ```bash
     while true; do
-        curl http://clusters.almaai.unibo.it:8890; 
+        curl http://<ANY_NODE_ADDRESS>:8890; 
         echo 
         sleep 1
     done
@@ -2331,7 +2523,7 @@ services:
 {{% col %}}
 1. Several replicas of the same service are created:
     
-    ![Deployment with replicas](./portainer-replicated-service.png)
+    ![Portainer services view: 10 replicas of service ws spread over the nodes](./portainer-replicated-service.png)
 
 <br/>
 
@@ -2350,13 +2542,12 @@ services:
 <br/>
 
 ```yaml
-version: "3.9"
-    
 services:
   simulation:
     image: pikalab/fakesim:latest
-    restart: on-failure
     deploy:
+      restart_policy:
+        condition: on-failure # restart is ignored by Swarm
       replicas: 3
       placement:
         constraints: 
@@ -2373,16 +2564,56 @@ volumes:
 {{% col %}}
 1. Several replicas of the simulation are created...
     
-    ![Deployment with replicas](./portainer-fake-simulation.png)
+    ![Portainer services view: 3 replicas of the simulation, on 3 different nodes](./portainer-fake-simulation.png)
 
 
 2. ... as well as several volumes!
 
-    ![Deployment with replicas](./portainer-fake-simulation-volumes.png)
+    ![Portainer volumes view: one shared_volume per node hosting a replica](./portainer-fake-simulation-volumes.png)
 
     - one per replica, on the same node as the replica
 
-3. How to share data?
+3. How to share data? (cf. next slide)
 
 {{% /col %}}
 {{< /multicol >}}
+
+---
+
+## Sharing data among nodes
+
+{{% multicol %}}
+{{% col class="col-6" %}}
+- Since volumes are _local_ to nodes, replicas on different nodes do __not__ see each other's data
+
+- To share data, volumes must be backed by some __network file system__ reachable from all nodes
+    + e.g. an [NFS](https://en.wikipedia.org/wiki/Network_File_System) server, as discussed for [volumes in Compose](#/compose)
+
+    ```yaml
+    services:
+      simulation:
+        ...
+        volumes:
+          - type: volume
+            source: shared_volume
+            target: /data
+    volumes:
+      shared_volume:
+        driver: local
+        driver_opts:
+          type: "nfs"
+          o: "addr=NFS_SERVER_ADDRESS,nolock,soft,rw"
+          device: ":/path/on/the/nfs/server/"
+    ```
+
+- Each node still creates its own _local_ volume, but all of them point to the same remote folder
+    + alternatives: _volume plugins_ for distributed storage, or object stores (e.g. S3) accessed by the application
+{{% /col %}}
+{{% col class="col-6" %}}
+![Sharing data among nodes: each node creates its own local shared_volume, but all of them are backed by the same folder exported by an NFS server, so all replicas see the same data](./nfs-volumes.svg)
+{{% /col %}}
+{{% /multicol %}}
+
+---
+
+{{% import path="reusable/back.md" %}}

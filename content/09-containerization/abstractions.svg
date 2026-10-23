@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 640" width="1600" height="640" role="img" aria-label="Main abstractions. Encapsulation level: the CLI talks to the engine of a host, which pulls/pushes images (stacks of layers) from/to a registry, runs containers as instances of images (each with its R/W layer), mounts volumes and attaches networks to them. Orchestration level: a cluster of nodes runs stacks, i.e. sets of services, each one consisting of replicated containers placed onto nodes, possibly using secrets"><title>Main abstractions. Encapsulation level: the CLI talks to the engine of a host, which pulls/pushes images (stacks of layers) from/to a registry, runs containers as instances of images (each with its R/W layer), mounts volumes and attaches networks to them. Orchestration level: a cluster of nodes runs stacks, i.e. sets of services, each one consisting of replicated containers placed onto nodes, possibly using secrets</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="arr-fade" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8bfc9"/></marker></defs>
+<rect width="1600" height="640" fill="white"/>
+<text x="510" y="22" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">encapsulation level</text>
+<rect x="30" y="80" width="170" height="56" rx="8" fill="#222222" stroke="#222222" stroke-width="2" opacity="1"/>
+<text x="115.0" y="108.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">docker CLI</text>
+<rect x="30" y="250" width="170" height="140" rx="10" fill="white" stroke="#f6a623" stroke-width="3" opacity="1"/>
+<text x="115" y="274" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#9a6200" font-weight="bold">registry</text>
+<text x="115" y="298" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">(e.g. Docker Hub)</text>
+<rect x="52" y="316" width="126" height="28" rx="4" fill="#fff4de" stroke="#f6a623" stroke-width="2" opacity="1"/>
+<text x="115.0" y="330.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">image</text>
+<rect x="52" y="350" width="126" height="28" rx="4" fill="#fff4de" stroke="#f6a623" stroke-width="2" opacity="1"/>
+<text x="115.0" y="364.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">image</text>
+<rect x="250" y="50" width="740" height="570" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M250,90 L250,64 Q250,50 264,50 L326,50 L326,72 Q326,90 308,90 Z" fill="#1f3b63"/>
+<text x="264" y="71" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">Host</text>
+<rect x="280" y="104" width="680" height="52" rx="8" fill="#1f3b63" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="620.0" y="130.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">Engine (daemon): manages everything below</text>
+<line x1="200" y1="108" x2="278" y2="128" stroke="#222222" stroke-width="3" marker-end="url(#arr-navy)"/>
+<rect x="280" y="190" width="220" height="230" rx="10" fill="white" stroke="#2b6cb0" stroke-width="2.5" opacity="1"/>
+<text x="390" y="212" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="middle" dominant-baseline="middle" fill="#2b6cb0" font-weight="bold">image</text>
+<rect x="300" y="370" width="180" height="36" rx="4" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<text x="390.0" y="388.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">base layer</text>
+<rect x="300" y="326" width="180" height="36" rx="4" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<text x="390.0" y="344.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">layer 1</text>
+<rect x="300" y="282" width="180" height="36" rx="4" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<text x="390.0" y="300.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">layer 2</text>
+<rect x="300" y="238" width="180" height="36" rx="4" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<text x="390.0" y="256.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">layer 3</text>
+<path d="M202,330 L278,330" fill="none" stroke="#f6a623" stroke-width="3" marker-end="url(#arr-gray)"/>
+<text x="226" y="318" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="14" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">pull</text>
+<path d="M278,350 L202,350" fill="none" stroke="#f6a623" stroke-width="3" marker-end="url(#arr-gray)"/>
+<text x="226" y="368" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="14" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">push</text>
+<rect x="580" y="190" width="380" height="230" rx="10" fill="white" stroke="#1f3b63" stroke-width="2.5" opacity="1"/>
+<text x="770" y="212" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">containers</text>
+<rect x="600" y="240" width="160" height="160" rx="8" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<rect x="610" y="250" width="140" height="36" rx="4" fill="#d8f0dc" stroke="#2e7d32" stroke-width="2" opacity="1"/>
+<text x="680.0" y="268.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">R/W layer</text>
+<text x="680" y="320" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">process</text>
+<text x="680" y="350" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">+ environment</text>
+<rect x="780" y="240" width="160" height="160" rx="8" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<rect x="790" y="250" width="140" height="36" rx="4" fill="#d8f0dc" stroke="#2e7d32" stroke-width="2" opacity="1"/>
+<text x="860.0" y="268.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">R/W layer</text>
+<text x="860" y="320" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">process</text>
+<text x="860" y="350" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">+ environment</text>
+<line x1="500" y1="300" x2="578" y2="300" stroke="#2b6cb0" stroke-width="3" marker-end="url(#arr-blue)"/>
+<text x="540" y="284" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#2b6cb0" font-weight="normal" font-style="italic">instance of</text>
+<path d="M300,490 v60 a90,19.8 0 0,0 180,0 v-60" fill="#fff4de" stroke="#f6a623" stroke-width="3"/><ellipse cx="390" cy="490" rx="90" ry="19.8" fill="#fff4de" stroke="#f6a623" stroke-width="3"/>
+<text x="390" y="528.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">volume</text>
+<rect x="580" y="480" width="380" height="52" rx="4" fill="#3fa9f5" stroke="#3fa9f5" stroke-width="2" opacity="1"/>
+<text x="770.0" y="506.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">network</text>
+<line x1="680" y1="402" x2="470" y2="488" stroke="#f6a623" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arr-gray)"/>
+<text x="560" y="452" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">mounts</text>
+<line x1="820" y1="402" x2="820" y2="478" stroke="#3fa9f5" stroke-width="3"/>
+<text x="832" y="444" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="start" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">attached to</text>
+<text x="1310" y="22" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">orchestration level</text>
+<rect x="1040" y="50" width="540" height="570" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M1040,90 L1040,64 Q1040,50 1054,50 L1155,50 L1155,72 Q1155,90 1137,90 Z" fill="#1f3b63"/>
+<text x="1054" y="71" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">Cluster</text>
+<rect x="1070" y="100" width="480" height="290" rx="10" fill="white" stroke="#6b7280" stroke-width="2" stroke-dasharray="8 5" opacity="1"/>
+<text x="1086" y="122" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="start" dominant-baseline="middle" fill="#6b7280" font-weight="bold">stack</text>
+<rect x="1090" y="140" width="440" height="100" rx="8" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<text x="1106" y="160" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="18" text-anchor="start" dominant-baseline="middle" fill="#2b6cb0" font-weight="bold">service web</text>
+<rect x="1106" y="182" width="124" height="40" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1168.0" y="202.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">replica</text>
+<rect x="1246" y="182" width="124" height="40" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1308.0" y="202.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">replica</text>
+<rect x="1386" y="182" width="124" height="40" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1448.0" y="202.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">replica</text>
+<rect x="1090" y="256" width="440" height="100" rx="8" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<text x="1106" y="276" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="18" text-anchor="start" dominant-baseline="middle" fill="#2b6cb0" font-weight="bold">service db</text>
+<rect x="1106" y="298" width="124" height="40" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1168.0" y="318.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">replica</text>
+<rect x="1380" y="300" width="140" height="40" rx="6" fill="#fff4de" stroke="#f6a623" stroke-width="2" stroke-dasharray="6 4" opacity="1"/>
+<text x="1450.0" y="320.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">secret</text>
+<rect x="1070" y="480" width="150" height="110" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="1145" y="512" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">node-1</text>
+<text x="1145" y="548" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">host + engine</text>
+<rect x="1235" y="480" width="150" height="110" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="1310" y="512" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">node-2</text>
+<text x="1310" y="548" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">host + engine</text>
+<rect x="1400" y="480" width="150" height="110" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="1475" y="512" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">node-3</text>
+<text x="1475" y="548" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">host + engine</text>
+<line x1="1168" y1="224" x2="1145" y2="478" stroke="#6b7280" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arr-gray)"/>
+<line x1="1308" y1="224" x2="1310" y2="478" stroke="#6b7280" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arr-gray)"/>
+<line x1="1448" y1="224" x2="1475" y2="478" stroke="#6b7280" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arr-gray)"/>
+<line x1="1168" y1="340" x2="1475" y2="478" stroke="#6b7280" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arr-gray)"/>
+<text x="1310" y="606" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">replicas (i.e. containers) placed onto nodes</text>
+</svg>

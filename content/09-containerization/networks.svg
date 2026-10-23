@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1290 530" width="1290" height="530" role="img" aria-label="Docker network drivers: bridge (default; either the predefined bridge network or user-defined ones such as my-network), host, and none for single hosts; overlay for clusters (Swarm)"><title>Docker network drivers: bridge (default; either the predefined bridge network or user-defined ones such as my-network), host, and none for single hosts; overlay for clusters (Swarm)</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="arr-fade" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8bfc9"/></marker></defs>
+<rect width="1290" height="530" fill="white"/>
+<rect x="470" y="20" width="460" height="70" rx="8" fill="#1f3b63" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="700.0" y="55.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="26" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="bold">Docker network drivers</text>
+<rect x="150" y="160" width="420" height="60" rx="8" fill="#f3f6fb" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="360.0" y="190.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="23" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">single host</text>
+<rect x="830" y="160" width="420" height="60" rx="8" fill="#f3f6fb" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1040.0" y="190.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="23" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">multiple hosts (cluster)</text>
+<line x1="620" y1="90" x2="400" y2="158" stroke="#1f3b63" stroke-width="3" marker-end="url(#arr-navy)"/>
+<line x1="780" y1="90" x2="1000" y2="158" stroke="#1f3b63" stroke-width="3" marker-end="url(#arr-navy)"/>
+<rect x="40" y="290" width="180" height="60" rx="8" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<text x="130.0" y="320.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="24" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">bridge</text>
+<line x1="360" y1="220" x2="130" y2="288" stroke="#2b6cb0" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+<rect x="270" y="290" width="180" height="60" rx="8" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<text x="360.0" y="320.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="24" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">host</text>
+<line x1="360" y1="220" x2="360" y2="288" stroke="#2b6cb0" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+<rect x="500" y="290" width="180" height="60" rx="8" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<text x="590.0" y="320.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="24" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">none</text>
+<line x1="360" y1="220" x2="590" y2="288" stroke="#2b6cb0" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+<rect x="950" y="290" width="180" height="60" rx="8" fill="#dbe7f5" stroke="#2b6cb0" stroke-width="2" opacity="1"/>
+<text x="1040.0" y="320.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="24" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">overlay</text>
+<text x="1040" y="372" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">(Swarm)</text>
+<line x1="1040" y1="220" x2="1040" y2="288" stroke="#2b6cb0" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+<rect x="40" y="430" width="170" height="52" rx="8" fill="white" stroke="#6b7280" stroke-width="2" opacity="1"/>
+<text x="125.0" y="456.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">bridge</text>
+<line x1="130" y1="352" x2="125" y2="428" stroke="#6b7280" stroke-width="2" marker-end="url(#arr-gray)"/>
+<rect x="250" y="430" width="190" height="52" rx="8" fill="white" stroke="#6b7280" stroke-width="2" opacity="1"/>
+<text x="345.0" y="456.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">my-network</text>
+<line x1="130" y1="352" x2="335" y2="428" stroke="#6b7280" stroke-width="2" marker-end="url(#arr-gray)"/>
+<text x="125" y="510" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">predefined (default)</text>
+<text x="345" y="510" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">user-defined</text>
+</svg>

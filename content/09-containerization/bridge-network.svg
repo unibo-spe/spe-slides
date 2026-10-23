@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" width="900" height="700" role="img" aria-label="Bridge network driver: containers dind and cli are attached to the user-defined network my-network, get private IPs 172.18.0.2 and 172.18.0.3, resolve each other by name, and reach the external network via NAT through the host's interface"><title>Bridge network driver: containers dind and cli are attached to the user-defined network my-network, get private IPs 172.18.0.2 and 172.18.0.3, resolve each other by name, and reach the external network via NAT through the host's interface</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="arr-fade" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b8bfc9"/></marker></defs>
+<rect width="900" height="700" fill="white"/>
+<rect x="20" y="20" width="860" height="560" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M20,60 L20,34 Q20,20 34,20 L96,20 L96,42 Q96,60 78,60 Z" fill="#1f3b63"/>
+<text x="34" y="41" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">Host</text>
+<rect x="70" y="80" width="330" height="170" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="88" y="104" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="start" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">container dind</text>
+<text x="235" y="146" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="20" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">dockerd :2375</text>
+<rect x="120" y="190" width="230" height="44" rx="4" fill="#3fa9f5" stroke="#3fa9f5" stroke-width="2" opacity="1"/>
+<text x="235.0" y="212.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">eth0: 172.18.0.2</text>
+<rect x="500" y="80" width="330" height="170" rx="10" fill="white" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<text x="518" y="104" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="21" text-anchor="start" dominant-baseline="middle" fill="#1f3b63" font-weight="bold">container cli</text>
+<text x="665" y="146" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="20" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">docker CLI</text>
+<rect x="550" y="190" width="230" height="44" rx="4" fill="#3fa9f5" stroke="#3fa9f5" stroke-width="2" opacity="1"/>
+<text x="665.0" y="212.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">eth0: 172.18.0.3</text>
+<text x="255" y="62" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">--hostname docker</text>
+<rect x="330" y="320" width="240" height="60" rx="8" fill="#1f3b63" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="450.0" y="350.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="22" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">my-network</text>
+<path d="M235,234 L235,350 L328,350" fill="none" stroke="#6b7280" stroke-width="3"/>
+<path d="M665,234 L665,350 L572,350" fill="none" stroke="#6b7280" stroke-width="3"/>
+<text x="450" y="296" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="18" text-anchor="middle" dominant-baseline="middle" fill="#2e7d32" font-weight="normal" font-style="italic">ping docker / ping cli: built-in DNS</text>
+<circle cx="450" cy="450" r="30" fill="#1f3b63"/><text x="450" y="451" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="bold">NAT</text>
+<line x1="450" y1="380" x2="450" y2="420" stroke="#6b7280" stroke-width="3"/>
+<rect x="335" y="510" width="230" height="44" rx="4" fill="#3fa9f5" stroke="#3fa9f5" stroke-width="2" opacity="1"/>
+<text x="450.0" y="532.0" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">eth0: 192.168.1.2</text>
+<line x1="450" y1="480" x2="450" y2="510" stroke="#6b7280" stroke-width="3"/>
+<text x="580" y="452" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="18" text-anchor="start" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">outbound traffic only,</text>
+<text x="580" y="476" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="18" text-anchor="start" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">unless ports are published (-p)</text>
+<line x1="450" y1="554" x2="450" y2="618" stroke="#6b7280" stroke-width="3"/>
+<rect x="40" y="620" width="820" height="56" rx="8" fill="#1f3b63" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="450.0" y="648.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">external network (LAN / Internet)</text>
+</svg>
