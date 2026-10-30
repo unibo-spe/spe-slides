@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1360 720" width="1360" height="720" role="img" aria-label="Testing with Docker Compose, in general: before all tests, the test suite asks Docker Compose to start the infrastructural component and waits until it is ready; for each test, the test suite exercises the system under test, which uses the component, then checks the result; after all tests, the test suite asks Docker Compose to stop and remove the component"><title>Testing with Docker Compose, in general: before all tests, the test suite asks Docker Compose to start the infrastructural component and waits until it is ready; for each test, the test suite exercises the system under test, which uses the component, then checks the result; after all tests, the test suite asks Docker Compose to stop and remove the component</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker></defs>
+<rect width="1360" height="720" fill="white"/>
+<g font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="bold">
+<rect x="40" y="20" width="250" height="56" rx="8" fill="#1f3b63"/><text x="165" y="48">Test suite</text>
+<rect x="390" y="20" width="250" height="56" rx="8" fill="#1f3b63"/><text x="515" y="48">System under test</text>
+<rect x="740" y="20" width="250" height="56" rx="8" fill="#1f3b63"/><text x="865" y="48">Docker Compose</text>
+<rect x="1070" y="20" width="270" height="56" rx="8" fill="#1f3b63"/><text x="1205" y="40">Infrastructural component</text>
+<text x="1205" y="62" font-size="14" font-weight="normal" font-style="italic">(DB, broker, cache, ...)</text>
+</g>
+<g stroke="#6b7280" stroke-width="2" stroke-dasharray="6 6">
+<line x1="165" y1="78" x2="165" y2="700"/><line x1="515" y1="78" x2="515" y2="700"/><line x1="865" y1="78" x2="865" y2="700"/><line x1="1205" y1="78" x2="1205" y2="700"/>
+</g>
+<!-- phase labels -->
+<g font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="bold" fill="#6b7280" dominant-baseline="middle">
+<rect x="20" y="96" width="1320" height="186" rx="6" fill="none" stroke="#b8bfc9" stroke-width="1.5"/><text x="30" y="110">before all tests</text>
+<rect x="20" y="296" width="1320" height="240" rx="6" fill="none" stroke="#b8bfc9" stroke-width="1.5"/><text x="30" y="310">for each test</text>
+<rect x="20" y="550" width="1320" height="140" rx="6" fill="none" stroke="#b8bfc9" stroke-width="1.5"/><text x="30" y="564">after all tests</text>
+</g>
+<g font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle">
+<!-- before all -->
+<line x1="165" y1="140" x2="859" y2="140" stroke="#1f3b63" stroke-width="2.5" marker-end="url(#arr-navy)"/>
+<text x="515" y="126" fill="#1f3b63">1. start the stack, and wait until it is ready</text>
+<line x1="865" y1="185" x2="1191" y2="185" stroke="#1f3b63" stroke-width="2.5" marker-end="url(#arr-navy)"/>
+<text x="1035" y="171" fill="#1f3b63">2. create + start</text>
+<path d="M1217,210 q50,0 50,12 q0,12 -44,12" fill="none" stroke="#2e7d32" stroke-width="2.5" marker-end="url(#arr-navy)"/>
+<text x="1272" y="222" fill="#2e7d32" font-style="italic" text-anchor="start">ready?</text>
+<line x1="865" y1="262" x2="171" y2="262" stroke="#2e7d32" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#arr-navy)"/>
+<text x="515" y="248" fill="#2e7d32">3. component is ready</text>
+<!-- for each test -->
+<line x1="165" y1="340" x2="509" y2="340" stroke="#2b6cb0" stroke-width="2.5" marker-end="url(#arr-navy)"/>
+<text x="340" y="326" fill="#2b6cb0">4. exercise</text>
+<line x1="515" y1="390" x2="1191" y2="390" stroke="#2b6cb0" stroke-width="2.5" marker-end="url(#arr-navy)"/>
+<text x="865" y="376" fill="#2b6cb0">5. use (e.g. queries, messages)</text>
+<line x1="1193" y1="430" x2="521" y2="430" stroke="#2b6cb0" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#arr-navy)"/>
+<line x1="515" y1="470" x2="171" y2="470" stroke="#2b6cb0" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#arr-navy)"/>
+<text x="340" y="456" fill="#2b6cb0">6. result</text>
+<path d="M165,492 q60,0 60,12 q0,12 -54,12" fill="none" stroke="#2b6cb0" stroke-width="2.5" marker-end="url(#arr-navy)"/>
+<text x="232" y="504" fill="#2b6cb0" font-style="italic" text-anchor="start">7. assert</text>
+<!-- after all -->
+<line x1="165" y1="600" x2="859" y2="600" stroke="#1f3b63" stroke-width="2.5" marker-end="url(#arr-navy)"/>
+<text x="515" y="586" fill="#1f3b63">8. stop the stack, and clean up</text>
+<line x1="865" y1="650" x2="1191" y2="650" stroke="#c62828" stroke-width="2.5" marker-end="url(#arr-navy)"/>
+<text x="1035" y="636" fill="#c62828">9. stop + remove</text>
+</g>
+<rect x="1193" y="195" width="24" height="460" rx="4" fill="#d8f0dc" stroke="#2e7d32" stroke-width="2"/>
+</svg>

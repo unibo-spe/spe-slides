@@ -443,7 +443,7 @@ Running a custom command *inside the container* can be achieved by writing the c
 
 ## Interaction with the outside world
 
-{{% multicol %}}
+{{< multicol >}}
 {{% col class="col-6" %}}
 A docker container runs *in isolation*, w.r.t. the host and other containers.
 
@@ -463,7 +463,7 @@ Sharing must be explicit and requires options to be specified after `docker run`
 {{% col class="col-6" %}}
 ![Interaction with the outside world: environment variables (-e), volumes (-v) and published ports (-p) are the only channels between container my-service and its host](./outside-world.svg)
 {{% /col %}}
-{{% /multicol %}}
+{{< /multicol >}}
 
 ---
 
@@ -1854,11 +1854,11 @@ secrets:
 
 ## Docker Compose for testing: the workflow
 
-![Testing with Docker Compose: before all tests, the JUnit class runs docker compose up --wait, which starts MariaDB and waits for its healthcheck; each test then queries the database; after all tests, docker compose down stops and removes it](./compose-testing.svg)
+![Testing with Docker Compose, in general: before all tests, the test suite asks Docker Compose to start the infrastructural component and waits until it is ready; for each test, the test suite exercises the system under test, which uses the component, then checks the result; after all tests, the test suite asks Docker Compose to stop and remove the component](./compose-testing-workflow.svg)
 
 ---
 
-## Example: Docker Compose for testing + JUnit (pt. 1)
+## Exercise: Docker Compose for testing + JUnit (pt. 1)
 
 ### Domain model
 
@@ -1910,7 +1910,7 @@ CustomerRepository o-r- Customer
 
 ---
 
-## Example: Docker Compose for testing + JUnit (pt. 2)
+## Exercise: Docker Compose for testing + JUnit (pt. 2)
 
 ### Implementation details
 
@@ -1961,7 +1961,7 @@ package "java sql" {
 
 ---
 
-## Example: Docker Compose for testing + JUnit (pt. 3)
+## Exercise: Docker Compose for testing + JUnit (pt. 3)
 
 {{< multicol >}}
 {{% col %}}
@@ -2033,11 +2033,217 @@ class TestMariaDBCustomerRepository {
         * does it require edits? why?
 
 - Code for the exercise:
-    * https://github.com/unibo-spe/docker-compose-testing
+    * https://github.com/unibo-spe/docker-compose-testing (branch `exercise`)
 
 - In practice, libraries like [Testcontainers](https://testcontainers.com/) automate this very pattern
 {{% /col %}}
 {{< /multicol >}}
+
+---
+
+## Exercise: Docker Compose for testing + JUnit (expected workflow)
+
+![Testing with Docker Compose: before all tests, the JUnit class runs docker compose up --wait, which starts MariaDB and waits for its healthcheck; each test then queries the database; after all tests, docker compose down stops and removes it](./compose-testing.svg)
+
+---
+
+{{% section %}}
+
+{{< slide id="compose-testing-walkthrough" >}}
+
+## Walkthrough: Docker Compose for testing + JUnit
+
+> __Goal__: make `TestMariaDBCustomerRepository` start MariaDB _before_ the tests, and stop it _after_ them, via `docker compose`
+
+1. Get the code, on the `exercise` branch (`master` contains the solution):
+    ```bash
+    git clone --branch exercise https://github.com/unibo-spe/docker-compose-testing
+    cd docker-compose-testing
+    ```
+
+2. Ensure Docker is running (`docker info` should not fail)
+
+3. Run the tests: `./gradlew test`
+    + they fail with a `NotImplementedError`: the `TODO()`s in the `companion object` of `TestMariaDBCustomerRepository` are our job
+
+4. Steps (one per slide, below):
+    1. understand the _template_ (and why there is a template at all)
+    2. generate the actual Docker Compose file from the template
+    3. call `docker compose` from Kotlin
+    4. start / stop the stack around the tests
+    5. run the tests, and fix the template
+
+---
+
+## Walkthrough: step 1, the template
+
+{{< multicol >}}
+{{% col class="col-6" %}}
+`src/test/resources/it/unibo/spe/compose/docker-compose.yml.template`
+{{< github repo="docker-compose-testing" branch="b8d37fed83b92a29f1af2da7d1b359ef3f077be6" path="src/test/resources/it/unibo/spe/compose/docker-compose.yml.template" language="yaml" >}}
+{{% /col %}}
+{{% col class="col-6" %}}
+- One service, `db`, running the `mariadb` image
+
+- `__NAME__` strings are _placeholders_, not Docker Compose syntax
+    + the test code chooses image version, credentials, and port...
+    + ... so they must be _substituted_ before calling `docker compose`
+
+- The test already lists the substitutions, in `setUpMariaDb`:
+    ```kotlin
+    "VERSION" to "11",
+    "ROOT_PASSWORD" to UUID.randomUUID().toString(),
+    "DB_NAME" to DATABASE,
+    "USER" to USER,
+    "PASSWORD" to PASSWORD,
+    "PORT" to "$PORT",
+    ```
+    + `PORT` is also the port the `MariaDBConnectionFactory` connects to
+
+- The `db_data` _named volume_ keeps the DB files
+    + it survives `docker compose down`, unless explicitly removed (cf. [volumes](#/volumes))
+
+- The `healthcheck` is commented out: keep it in mind for step 5
+{{% /col %}}
+{{< /multicol >}}
+
+---
+
+## Walkthrough: step 1 (bis), why a template in a temporary directory?
+
+- Why not a _static_ `docker-compose.yml`, used in place?
+    + because we want to allow __parallel runs__ of the test suite on the same machine
+        * e.g. two CI jobs on the same runner, two developers on the same server, two test classes run concurrently by Gradle
+    + and to prevent a run from __polluting__ another one (e.g. data left in the DB, containers left running)
+
+- What would clash between two runs, with a static file?
+    + _host ports_: they are global to the machine, so two stacks cannot both bind `3306`
+        * hence `__PORT__` is a _parameter_, and each run picks a _free_ port: `ServerSocket(0).use { it.localPort }`
+        * no other port is published by the template, for the same reason
+    + _containers_, _networks_, _volumes_: Compose names them after the __project name__ (e.g. `<project>-db-1`, `<project>_db_data`)
+        * the default project name is the __name of the directory__ containing the Compose file
+        * one directory for both runs $\rightarrow$ same project $\rightarrow$ the second `up` _reuses_ the containers of the first, and the first `down` removes them under the feet of the second
+
+- Hence: generate the Compose file from the template, into a _fresh temporary directory_ per run
+    + each run gets its own project, so its own containers, network, and volume
+    + credentials, too, can be chosen per run (e.g. the random `ROOT_PASSWORD`)
+    + the template in the resources stays untouched
+
+---
+
+## Walkthrough: step 2, from template to Compose file
+
+{{< multicol >}}
+{{% col class="col-7" %}}
+{{< github repo="docker-compose-testing" branch="5a26b3759a7cef0f057e83e76810c2e0578d1c96" path="src/test/kotlin/it/unibo/spe/compose/TestMariaDBCustomerRepository.kt" from="42" to="53" >}}
+{{% /col %}}
+{{% col class="col-5" %}}
+- `createComposeFile(assignments)` must:
+    1. create a fresh temporary _directory_ (`Files.createTempDirectory`)
+        + __not__ just a temporary file: `File.createTempFile` puts every file in the _same_ system temp directory, i.e. the same project for all runs
+    2. read the template _from the classpath_
+        + test resources are packed next to the test classes, in the same package
+        + hence `getResource(...)` on the test class
+        + fail loudly (`error(...)`) if the resource is missing
+    3. replace each `__KEY__` with its value
+    4. write the result into `docker-compose.yml`, inside the temporary directory, and return it
+{{% /col %}}
+{{< /multicol >}}
+
+---
+
+## Walkthrough: step 3, calling `docker compose` from Kotlin
+
+{{< multicol >}}
+{{% col class="col-7" %}}
+{{< github repo="docker-compose-testing" branch="5a26b3759a7cef0f057e83e76810c2e0578d1c96" path="src/test/kotlin/it/unibo/spe/compose/TestMariaDBCustomerRepository.kt" from="55" to="67" >}}
+{{% /col %}}
+{{% col class="col-5" %}}
+- Command line: `docker compose -f <composeFile> <arguments>`
+    + `-f` is needed, as the file is _not_ in the working directory, and _not_ named `compose.yaml`
+
+- `ProcessBuilder(command).start()` spawns the process
+    + `inheritIO()` forwards its output to the test's output, i.e. Docker's logs end up in Gradle's test report
+
+- `waitFor()` blocks until the process terminates, and returns its _exit value_
+
+- The exit value must be `0`, otherwise the test must __fail__
+    + `assertEquals(0, exitValue, ...)`, with an informative message
+    + otherwise a broken stack shows up as an obscure connection error, later
+{{% /col %}}
+{{< /multicol >}}
+
+---
+
+## Walkthrough: step 4, starting and stopping the stack
+
+{{< multicol >}}
+{{% col class="col-6" %}}
+{{< github repo="docker-compose-testing" branch="5a26b3759a7cef0f057e83e76810c2e0578d1c96" path="src/test/kotlin/it/unibo/spe/compose/TestMariaDBCustomerRepository.kt" from="69" to="90" >}}
+{{% /col %}}
+{{% col class="col-6" %}}
+- `@BeforeClass` / `@AfterClass` (JUnit 4): run _once_, before / after all tests of the class
+    + they must be `@JvmStatic` functions in the `companion object`
+    + one DB for all tests: starting MariaDB takes seconds
+    + isolation among tests is achieved by `@Before`, which re-creates the table
+
+- `up --wait`: starts the stack (detached), and returns only when services are _running_ / _healthy_
+    + no `--wait` $\rightarrow$ `up` would block forever, attached to the containers' logs
+
+- `down --volumes`: stops and removes containers, networks, __and__ named volumes
+    + no `--volumes` $\rightarrow$ `db_data` is left on the machine, at each run
+
+- Then, delete the temporary directory
+
+- `logs db`: not mandatory, but very useful to debug failures
+{{% /col %}}
+{{< /multicol >}}
+
+---
+
+## Walkthrough: step 5, running the tests (and fixing the template)
+
+{{< multicol >}}
+{{% col class="col-6" %}}
+- `./gradlew test` with the template _as is_ $\rightarrow$ likely __failure__ of `createFreshTable`, with a connection error:
+    + without a _healthcheck_, `up --wait` returns as soon as the container is _running_...
+    + ... but MariaDB needs a few more seconds to initialise and accept connections
+
+- Answer to "_does the template require edits? why?_": __yes__, un-comment the `healthcheck`
+    + Docker runs the `test` command periodically, inside the container
+    + [`healthcheck.sh`](https://mariadb.com/kb/en/using-healthcheck-sh/) ships with the official MariaDB image
+    + the container becomes _healthy_ once MariaDB accepts connections and InnoDB is initialised
+    + `up --wait` now waits for _healthy_ (cf. [`healthcheck` docs](https://docs.docker.com/reference/compose-file/services/#healthcheck))
+
+- Afterwards, `docker ps -a` and `docker volume ls` should show no leftovers
+
+- Try running the test suite twice, in parallel (e.g. from two clones of the repository)
+{{% /col %}}
+{{% col class="col-6" %}}
+Template, as in the solution:
+{{< github repo="docker-compose-testing" branch="5a26b3759a7cef0f057e83e76810c2e0578d1c96" path="src/test/resources/it/unibo/spe/compose/docker-compose.yml.template" from="16" to="26" >}}
+{{% /col %}}
+{{< /multicol >}}
+
+---
+
+## Walkthrough: wrap-up
+
+- Possible failures, and their causes:
+    + `Cannot connect to the Docker daemon` $\rightarrow$ Docker is not running
+    + `NotImplementedError` $\rightarrow$ some `TODO()` is still there
+    + connection errors in `createFreshTable` $\rightarrow$ MariaDB not ready yet (see step 5)
+    + `port is already allocated` $\rightarrow$ another process took the free port, between its choice and `docker compose up`: just re-run
+
+- Possible improvements:
+    + avoid the (small) race on the port: publish just `"3306"`, so that Docker picks a free host port, then ask which one (`docker compose port db 3306`)
+    + split `complexTestWhichShouldActuallyBeDecomposedInSmallerTests` into smaller tests
+
+- Full solution on the `master` branch of [unibo-spe/docker-compose-testing](https://github.com/unibo-spe/docker-compose-testing)
+
+- [Testcontainers](https://testcontainers.com/) provides the same pattern as a library (also [for Docker Compose](https://java.testcontainers.org/modules/docker_compose/))
+
+{{% /section %}}
 
 ---
 
@@ -2087,7 +2293,7 @@ No background in machine learning (ML) is needed: what matters is the _shape_ of
 
 ## Where experiments are born: Jupyter notebooks
 
-{{% multicol %}}
+{{< multicol >}}
 {{% col class="col-7" %}}
 ![A Jupyter notebook (experiment.ipynb): code cells run on demand by a kernel, with execution counters, text cells, hard-coded parameters, and outputs (text and plots) stored inside the file itself](./notebook.svg)
 {{% /col %}}
@@ -2101,7 +2307,7 @@ No background in machine learning (ML) is needed: what matters is the _shape_ of
 - Very common in data science and research
     + our running example _starts_ as a notebook ([`078562f`](https://github.com/unibo-spe/containerized-experiment/tree/078562ffb8887104e4c53355933f5a6c6bfbee54))
 {{% /col %}}
-{{% /multicol %}}
+{{< /multicol >}}
 
 ---
 
@@ -2141,7 +2347,7 @@ Inspect each step via `git checkout <commit>` in the [repository](https://github
 
 ## Step 1: from notebook to script
 
-{{% multicol %}}
+{{< multicol >}}
 {{% col class="col-6" %}}
 {{< github repo="containerized-experiment" branch="84d3822c777b8105e8dce1fa8736429399952a38" path="experiment.py" from="14" to="21" >}}
 
@@ -2156,13 +2362,13 @@ full script [here](https://github.com/unibo-spe/containerized-experiment/blob/84
 - The script runs top to bottom, with no human in the loop: `python experiment.py`
 - The notebook is _deleted_: one source of truth
 {{% /col %}}
-{{% /multicol %}}
+{{< /multicol >}}
 
 ---
 
 ## Step 2: dockerise
 
-{{% multicol %}}
+{{< multicol >}}
 {{% col class="col-6" %}}
 `Dockerfile`
 {{< github repo="containerized-experiment" branch="93457028ebe4fb9db5b4592fdcb06bd25ecc0d03" path="Dockerfile" language="dockerfile" >}}
@@ -2177,7 +2383,7 @@ full script [here](https://github.com/unibo-spe/containerized-experiment/blob/84
 - Parameters can be overridden in the Compose file (`environment`)
 - Running the experiment, on any machine with Docker: `docker compose up`
 {{% /col %}}
-{{% /multicol %}}
+{{< /multicol >}}
 
 ---
 
@@ -2185,7 +2391,7 @@ full script [here](https://github.com/unibo-spe/containerized-experiment/blob/84
 
 > Recall: files written by containers via bind mounts are [owned by `root`](#/bind-mounts-ownership) on the host
 
-{{% multicol %}}
+{{< multicol >}}
 {{% col class="col-6" %}}
 First attempt ([`9e78fce`](https://github.com/unibo-spe/containerized-experiment/tree/9e78fce8e24ddcb7fcf4dea8ed72be6c96eb100a)): `chown` at the end of the run
 {{< github repo="containerized-experiment" branch="9e78fce8e24ddcb7fcf4dea8ed72be6c96eb100a" path="Dockerfile" from="10" to="12" language="dockerfile" >}}
@@ -2202,7 +2408,7 @@ Final solution ([`b6823d3`](https://github.com/unibo-spe/containerized-experimen
     + that user has _no home_ in the image $\Rightarrow$ `ENV HOME=/tmp`, for libraries' caches
     + `./data` must _exist_ before starting, otherwise Docker creates it as `root` (hence `data/.gitkeep`)
 {{% /col %}}
-{{% /multicol %}}
+{{< /multicol >}}
 
 ---
 
@@ -2227,7 +2433,7 @@ Final solution ([`b6823d3`](https://github.com/unibo-spe/containerized-experimen
 
 ## Step 5: parameters out of the code
 
-{{% multicol %}}
+{{< multicol >}}
 {{% col class="col-6" %}}
 {{< github repo="containerized-experiment" branch="829353426f4044b1f72a5dc03027580580ad6246" path="docker-compose.yml" from="19" to="38" >}}
 {{% /col %}}
@@ -2239,13 +2445,13 @@ Final solution ([`b6823d3`](https://github.com/unibo-spe/containerized-experimen
 - Changing the experiments means changing the _Compose file_, not the code
 - Still, a _single_ container trains all models, _one after the other_
 {{% /col %}}
-{{% /multicol %}}
+{{< /multicol >}}
 
 ---
 
 ## Step 6: one service per configuration (pt. 1)
 
-{{% multicol %}}
+{{< multicol >}}
 {{% col class="col-6" %}}
 {{< github repo="containerized-experiment" branch="f63c7623017dfe09046459b467419a503d1d55ed" path="compose.yaml" from="1" to="38" >}}
 {{% /col %}}
@@ -2259,7 +2465,7 @@ Final solution ([`b6823d3`](https://github.com/unibo-spe/containerized-experimen
 
 shown in its _final_ version (after step 7), full file [here](https://github.com/unibo-spe/containerized-experiment/blob/master/compose.yaml)
 {{% /col %}}
-{{% /multicol %}}
+{{< /multicol >}}
 
 ---
 
@@ -2275,7 +2481,7 @@ shown in its _final_ version (after step 7), full file [here](https://github.com
 
 ## Step 7: polishing
 
-{{% multicol %}}
+{{< multicol >}}
 {{% col class="col-6" %}}
 `Dockerfile`
 {{< github repo="containerized-experiment" branch="f63c7623017dfe09046459b467419a503d1d55ed" path="Dockerfile" language="dockerfile" >}}
@@ -2291,13 +2497,13 @@ shown in its _final_ version (after step 7), full file [here](https://github.com
     + skipped experiments leave no empty directories behind
 - `CMD` in _exec_ form, `HOME=/tmp` for the host user (cf. step 3)
 {{% /col %}}
-{{% /multicol %}}
+{{< /multicol >}}
 
 ---
 
 ## Step 7: not overloading the machine
 
-{{% multicol %}}
+{{< multicol >}}
 {{% col class="col-5" %}}
 {{< github repo="containerized-experiment" branch="f63c7623017dfe09046459b467419a503d1d55ed" path="compose.yaml" from="12" to="17" >}}
 {{% /col %}}
@@ -2311,13 +2517,13 @@ shown in its _final_ version (after step 7), full file [here](https://github.com
     + e.g. `GridSearchCV(n_jobs=...)` should not exceed `cpus`
 - `docker stats` shows the actual usage of running containers
 {{% /col %}}
-{{% /multicol %}}
+{{< /multicol >}}
 
 ---
 
 ## Scaling out: experiments on a Swarm
 
-{{% multicol %}}
+{{< multicol >}}
 {{% col class="col-6" %}}
 ```yaml
 services:
@@ -2357,7 +2563,7 @@ volumes:
     + results must land on [storage shared among nodes](#/sharing-among-nodes), e.g. NFS
 - `docker service ls` reports progress, e.g. `0/1 (1/1 completed)`
 {{% /col %}}
-{{% /multicol %}}
+{{< /multicol >}}
 
 ---
 
@@ -2931,7 +3137,7 @@ volumes:
 
 ## Sharing data among nodes
 
-{{% multicol %}}
+{{< multicol >}}
 {{% col class="col-6" %}}
 - Since volumes are _local_ to nodes, replicas on different nodes do __not__ see each other's data
 
@@ -2961,7 +3167,7 @@ volumes:
 {{% col class="col-6" %}}
 ![Sharing data among nodes: each node creates its own local shared_volume, but all of them are backed by the same folder exported by an NFS server, so all replicas see the same data](./nfs-volumes.svg)
 {{% /col %}}
-{{% /multicol %}}
+{{< /multicol >}}
 
 ---
 
