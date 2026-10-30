@@ -1,0 +1,34 @@
+# A local Swarm cluster made of Docker-in-Docker nodes: 1 master + 3 workers
+x-node: &node
+  image: docker:dind
+  privileged: true            # required to run a Docker daemon inside a container
+  environment:
+    DOCKER_TLS_CERTDIR: ""    # plain TCP on port 2375 (no TLS), fine for a local playground
+
+services:
+  master:
+    <<: *node
+    hostname: master
+    ports:
+      - "127.0.0.1:2375:2375" # Docker API of the master, for the host's CLI
+  worker-1:
+    <<: *node
+    hostname: worker-1
+  worker-2:
+    <<: *node
+    hostname: worker-2
+  worker-3:
+    <<: *node
+    hostname: worker-3
+  gateway:                    # relays the ports of the services deployed on the Swarm, via master
+    image: alpine/socat
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        for port in 9443 8890; do
+          socat TCP-LISTEN:$$port,fork,reuseaddr TCP:master:$$port &
+        done
+        wait
+    ports:
+      - "9443:9443"           # Portainer
+      - "8890:8890"           # ports of the stacks deployed later in the lecture

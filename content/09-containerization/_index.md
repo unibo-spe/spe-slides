@@ -2626,7 +2626,119 @@ Repository: <https://github.com/unibo-spe/containerized-experiment>
 
 ---
 
-## Building the cluster (practice)
+{{< slide id="swarm-dind" >}}
+
+## A local Swarm via Docker-in-Docker
+
+> __Disclaimer__: in this lecture, the Swarm cluster is made of [Docker-in-Docker](#/networks) (DinD) containers, all running on _your own_ machine
+
+- Each __node__ is a `docker:dind` container, i.e. a _full_ Docker daemon, with its own images, containers, volumes, and networks
+    + nodes see each other via a Compose network, and they are reachable by _symbolic_ hostname (`master`, `worker-1`, ...)
+
+- Why? DinD is the __smoother__ way to obtain a __reproducible__ and __stable__ _didactical_ environment:
+    + _same_ cluster for everybody, regardless of OS (Linux, Mac, Windows) and of Docker flavour (Engine, Desktop)
+    + _no_ firewalls, VMs, or port forwarding in the way (cf. [troubleshooting](#/swarm-troubleshooting) for real machines)
+    + _no_ need for several machines, nor for a working LAN in the classroom
+    + _disposable_: the cluster is created and destroyed with one command, your own Docker daemon is left untouched
+
+- Caveats:
+    + nodes are __privileged__ containers $\Rightarrow$ fine for a playground, _not_ for production
+    + all nodes share the _same_ hardware $\Rightarrow$ no real scalability or fault-tolerance (but the _semantics_ is the same)
+    + each node has its _own_ image cache $\Rightarrow$ images are pulled once _per node_
+
+---
+
+## A local Swarm via Docker-in-Docker (pt. 2)
+
+{{< multicol >}}
+{{% col class="col-5" %}}
+```yaml
+x-node: &node
+  image: docker:dind
+  privileged: true
+  environment:
+    DOCKER_TLS_CERTDIR: "" # plain TCP on port 2375
+
+services:
+  master:
+    <<: *node
+    hostname: master
+    ports:
+      - "127.0.0.1:2375:2375" # Docker API
+  worker-1:
+    <<: *node
+    hostname: worker-1
+  worker-2: ...                # same as worker-1
+  worker-3: ...                # same as worker-1
+  gateway:
+    image: alpine/socat
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        for port in 9443 8890; do
+          socat TCP-LISTEN:$$port,fork,reuseaddr \
+                TCP:master:$$port &
+        done
+        wait
+    ports:
+      - "9443:9443"           # Portainer
+      - "8890:8890"           # later examples
+```
+(full file [here](./swarm-dind.yaml))
+{{% /col %}}
+{{% col class="col-7" %}}
+- A __Compose__ file describing a cluster of _4 nodes_: `master` + 3 _workers_
+    + `x-node` is a YAML _anchor_, i.e. the settings shared by all nodes, merged into each service via `<<: *node`
+    + `hostname` gives each node its _symbolic_ name in the cluster
+
+- `master` publishes port `2375`, i.e. its __Docker API__, so that the CLI on your machine can act as a _client of the manager_
+    + bound to `127.0.0.1` only, as it is unauthenticated!
+
+- `gateway` publishes the ports of the _services_ deployed later on the Swarm
+    + it simply _relays_ each TCP connection to the same port of `master` (via [`socat`](https://linux.die.net/man/1/socat))
+    + then the [routing mesh](#/routing-mesh) forwards it to the node actually running the service
+    + why not publishing them on `master` directly? Docker Desktop's port forwarding produces packets that the routing mesh of a _nested_ daemon drops, when the service runs on another node
+        * `gateway` opens _fresh_ connections, which are handled correctly
+{{% /col %}}
+{{< /multicol >}}
+
+---
+
+## A local Swarm via Docker-in-Docker (pt. 3)
+
+1. Save the file of the previous slide as `compose.yaml`, in an empty directory, and start the nodes:
+    ```bash
+    docker compose up -d
+    ```
+    + wait a few seconds for the daemons to start (`docker compose logs master` should say `API listen on [::]:2375`)
+
+2. __Initialise__ Swarm mode on `master`, and let the workers __join__ the cluster:
+    ```bash
+    docker compose exec master docker swarm init
+    TOKEN=$(docker compose exec master docker swarm join-token -q worker)
+    for i in 1 2 3; do
+        docker compose exec worker-$i docker swarm join --token $TOKEN master:2377
+    done
+    ```
+
+3. Let your Docker CLI __connect to `master`__ (rather than to your local daemon), in the current shell:
+    + `export DOCKER_HOST=tcp://localhost:2375` (Bash) or `$env:DOCKER_HOST="tcp://localhost:2375"` (PowerShell)
+    + from now on, _all_ `docker` commands (e.g. `docker node ls`, `docker stack deploy`) are executed by `master`:
+        ```
+        ID                            HOSTNAME   STATUS    AVAILABILITY   MANAGER STATUS   ENGINE VERSION
+        h7kxqxjgxqnr5bc4zp4pxfsgc *   master     Ready     Active         Leader           29.9.2
+        9ig5gfqmiwslf637gzidl9y6d     worker-1   Ready     Active                          29.9.2
+        mlipjs2czcoapauecp1haswlf     worker-2   Ready     Active                          29.9.2
+        7or20sft5peegyexrb1m9yuax     worker-3   Ready     Active                          29.9.2
+        ```
+
+4. Whenever done, __destroy__ the cluster: `unset DOCKER_HOST` (or `Remove-Item Env:DOCKER_HOST`), then `docker compose down -v`
+
+---
+
+## Building the cluster on real machines
+
+> Not needed for this lecture (cf. [DinD Swarm](#/swarm-dind)), but this is how a _real_ cluster is built
 
 1. On one node running the Docker daemon (say, the teacher's machine), initialise Swarm mode as follows:
     * `docker swarm init`
@@ -2657,10 +2769,12 @@ Repository: <https://github.com/unibo-spe/containerized-experiment>
     * and it may __demote__ manager nodes to worker nodes via `docker node demote <NODE_ID>`
     * it also may __remove__ nodes from the cluster via `docker node rm <NODE_ID>`
 
-5. Whenever done with this lecture, one may leave the Swarm via `docker swarm leave --force`
-    + _remember to do this after the lecture_, otherwise you won't be able to use Swarm at home!
+5. Whenever done, one may leave the Swarm via `docker swarm leave --force`
+    + _remember to do this_, otherwise you won't be able to use Swarm elsewhere!
 
 ---
+
+{{< slide id="swarm-troubleshooting" >}}
 
 ## Building the cluster (troubleshooting)
 
@@ -2799,9 +2913,7 @@ services:
     image: portainer/portainer-ce:lts
     command: -H tcp://tasks.agent:9001 --tlsskipverify
     ports:
-      - "443:9443"
-      - "9000:9000"
-      - "8000:8000"
+      - "9443:9443"
     volumes:
       - portainer_data:/data
     networks:
@@ -2834,9 +2946,10 @@ volumes:
 
 1. Let's save the code on the left in a file named `portainer.yml`
 
-2. Let's deploy the stack via `docker stack deploy -c portainer.yml portainer`
+2. Let's deploy the stack on the [DinD Swarm](#/swarm-dind) (i.e. with `DOCKER_HOST` pointing to `master`) via `docker stack deploy -c portainer.yml portainer`
 
-3. Let's then browse to <https://localhost> on some manager node
+3. Let's then browse to <https://localhost:9443> (via `gateway`)
+    + the certificate is _self-signed_: accept it
 {{% /col %}}
 {{< /multicol >}}
 
@@ -2844,9 +2957,24 @@ volumes:
 
 ## Portainer's Initial Configuration
 
-{{< figure src="./portainer-setup.png" alt="Portainer initial setup page, asking for the admin password" width="50%" >}}
+{{< multicol >}}
+{{% col class="col-5" %}}
+{{< figure src="./portainer-setup.png" alt="Portainer initial setup page, asking for the admin username, password, and setup token" width="100%" >}}
+{{% /col %}}
+{{% col class="col-7" %}}
+- let's use `software-process-engineering` as the password for the `admin` user
 
-let's use `software-process-engineering` as the password for the `admin` user
+- the __setup token__ is printed in the logs of the dashboard:
+    ```bash
+    docker service logs portainer_webservice | grep setup_token
+    ```
+
+- this page must be filled within _5 minutes_ from the deployment, otherwise Portainer locks itself
+    + if so, restart it via `docker service update --force portainer_webservice`
+
+- upon creation of the user, Portainer proposes to set up _Edge Compute_: let's just __skip__ it
+{{% /col %}}
+{{< /multicol >}}
 
 ---
 
@@ -2871,8 +2999,7 @@ Upon environment selection, one is presented with the _dashboard_, showing the _
 
 After selecting the only environment available, one may observe:
 - which and how many __nodes__ compose the cluster (_Dashboard_ section)
-    + you may use the _cluster visualiser_ to spot your machine in the cluster
-        * (assuming that you managed to join the cluster)
+    + you may use the _cluster visualiser_ to spot `master`, `worker-1`, `worker-2`, and `worker-3`
 
 - which __stacks__ are running on the cluster (_Services_ section)
     + you may observe that the `portainer` stack is running
@@ -2881,11 +3008,11 @@ After selecting the only environment available, one may observe:
     + you may observe that the `portainer` stack is composed of two services: `agent` and `webservice`
 
 - which __containers__ are running on the cluster (_Containers_ section)
-    + you may observe that the `portainer_agent` service is composed of _one container per node_
-    + you may observe that the `portainer_webservice` service is composed of _one container_ which is _running on some manager node_
+    + you may observe that the `portainer_agent` service is composed of _one container per node_ (i.e. 4 containers)
+    + you may observe that the `portainer_webservice` service is composed of _one container_ which is _running on_ `master` (the only manager)
 
 - which __volumes__ are present on the cluster (_Volumes_ section)
-    + you may observe that the `portainer_portainer_data` volume is present _on the same manager node_ of `portainer_webservice`
+    + you may observe that the `portainer_portainer_data` volume is present _on the same node_ of `portainer_webservice`, i.e. `master`
 
 - which __networks__ are present on the cluster (_Networks_ section)
     + you may observe that the `portainer_agents_network` network is present, using the `overlay` driver
@@ -2905,11 +3032,15 @@ After selecting the only environment available, one may observe:
         * e.g. `capabilities.storage=yes`
 
 - This can be done _programmatically_....
-    + e.g. via `docker node update --label-add KEY=VALUE NODE_ID`
+    + e.g. via `docker node update --label-add KEY=VALUE NODE` (where `NODE` is the node's ID or hostname)
+    + e.g. let's mark all workers of the [DinD Swarm](#/swarm-dind) as CPU-capable, for the next examples:
+        ```bash
+        for i in 1 2 3; do docker node update --label-add capabilities.cpu=yes worker-$i; done
+        ```
 
 - ... or via __Portainer__:
 
-    {{< figure src="./portainer-node-labels.png" alt="Portainer node details page, where labels can be added to a node" width="50%" >}}
+    {{< figure src="./portainer-node-labels.png" alt="Portainer node details page, where labels can be added to a node" width="35%" >}}
 
 - labels can be used to set _placement_ __constraints__ or __preferences__ for services:
     * placement _constraints_: one service can only be deployed onto nodes with given labels
@@ -2962,6 +3093,8 @@ networks:
 {{< /multicol >}}
 
 ---
+
+{{< slide id="routing-mesh" >}}
 
 ## Exposing ports on the Swarm
 
@@ -3046,7 +3179,7 @@ services:
 2. Try to query it multiple times:
     ```bash
     while true; do
-        curl http://<ANY_NODE_ADDRESS>:8890; 
+        curl http://localhost:8890; # published by master
         echo 
         sleep 1
     done
@@ -3074,7 +3207,7 @@ services:
     ```
 {{% /col %}}
 {{% col %}}
-1. Several replicas of the same service are created:
+1. Several replicas of the same service are created, spread over the CPU-capable nodes (i.e. the 3 workers):
     
     ![Portainer services view: 10 replicas of service ws spread over the nodes](./portainer-replicated-service.png)
 
@@ -3124,7 +3257,7 @@ volumes:
 
     ![Portainer volumes view: one shared_volume per node hosting a replica](./portainer-fake-simulation-volumes.png)
 
-    - one per replica, on the same node as the replica
+    - one per replica, on the same node as the replica (i.e. one on each worker of the [DinD Swarm](#/swarm-dind))
 
 3. How to share data? (cf. next slide)
 
