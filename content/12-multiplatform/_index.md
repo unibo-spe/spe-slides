@@ -28,6 +28,23 @@ enableSourceMap = true
 
 ---
 
+## Outline
+
+1. [Preliminaries](#/preliminaries): _software platforms, API and runtimes, platform choice, technological silos_
+2. [Approaches](#/mp-approaches): _write once, build anywhere_ vs. _write first, wrap elsewhere_
+3. [Write once, build anywhere with Kotlin](#/kotlin-mp): _targets, project structure, build configuration, `expect`/`actual`_
+4. [Running example](#/running-example): _a multi-platform CSV library, for the JVM and JS_
+5. [Calling Kotlin from other platforms](#/kotlin-interop): _Kotlin–Java and Kotlin–JS mappings_
+6. [Multi-platform CI/CD](#/mp-cicd): _testing and releasing on several platforms_
+7. [Write first, wrap elsewhere with JPype](#/jpype): _wrapping the JVM library into a Pythonic package_
+8. [Wrap-up](#/wrap-up): _comparing the two approaches_
+
+> Example code: [`unibo-spe/multiplatform-example`](https://github.com/unibo-spe/multiplatform-example)
+
+---
+
+{{< slide id="preliminaries" >}}
+
 # Multi-platform programming
 
 ## Preliminaries
@@ -81,13 +98,13 @@ enableSourceMap = true
 > **Software platform** $\stackrel{\Delta}{=}$ anything having an **API** enabling the writing of applications,
 > and the **runtime** supporting the execution of those applications
 
-- thank you chap, what are API and runtimes then?
+- what are APIs and runtimes, then?
 
 ---
 
 {{% section %}}
 
-# What are API and runtimes?
+# What are APIs and runtimes?
 
 > [**API**](https://en.wikipedia.org/wiki/API) $\equiv$ application programming interface(s) $\stackrel{\Delta}{=}$ a _formal_ specification of the set of **functionalities** provided by a software (sub-)system for _external_ usage, including their **inputs**, **outputs**, and _environmental_ **preconditions** and **effects**
 - client-server metaphor is implicit
@@ -97,9 +114,9 @@ enableSourceMap = true
 
 ---
 
-# What are API and runtimes?
+# What are APIs and runtimes?
 
-## Examples of API
+## Examples of APIs
 
 - all possible _public interfaces_ / classes / structures in an __OOP module__
   * and their public/protected methods / fields / properties / constructors
@@ -116,14 +133,14 @@ enableSourceMap = true
 
 ---
 
-# What are API and runtimes?
+# What are APIs and runtimes?
 
 ## Examples of runtimes
 
-- any _interpreter_ (JVM, CLR, CPython, V8)
+- any _virtual machine_ or _interpreter_ (JVM, CLR, CPython, V8)
   * and their standard libraries
   * and their type system and internal conventions
-    + e.g. value/reference types in JVM/CLR, global lock in CPython
+    + e.g. primitive/reference types in the JVM, value/reference types in the CLR, global lock in CPython
 
 - any _operating system_ (Win, Mac, Linux)
   * and their system calls, daemons, package managers, default commands, etc.
@@ -144,17 +161,19 @@ enableSourceMap = true
 - The __Java Virtual Machine__ (JVM)
   * supported languages: Java, Kotlin, Scala, Clojure, etc.
 
-- .NET's [pronounced "dot NET"] __Common Language Runtime__ (CLR)
+- .NET's [pronounced "dot NET"] __Common Language Runtime__ (CLR), cross-platform since .NET Core
   * supported languages: C#, VB.NET, F#, etc.
 
 - __Python__ 3
   * supported language: Python
 
-- __NodeJS__ (V8)
-  * supported languages: JavaScript, TypeScript, etc.
+- __NodeJS__ (V8), and alternative JS runtimes such as [Deno](https://deno.com/) and [Bun](https://bun.sh/)
+  * supported languages: JavaScript, TypeScript (via type stripping or transpilation), etc.
 
 - Each __browser__ may be considered as a platform per se
-  * supported language: JavaScript
+  * supported languages: JavaScript, plus anything compiled to [WebAssembly](https://webassembly.org/) (Wasm)
+
+- __Native__ code for each OS + CPU architecture (e.g. via LLVM), and __mobile__ platforms (Android, iOS)
 
 - ...
 
@@ -166,13 +185,13 @@ enableSourceMap = true
   * i.e. ready-made functionalities developers / users may exploit
 
 - predefined _design decisions_ 
-  * e.g. global lock in Python, event loop in JavaScript, etc.
+  * e.g. global interpreter lock in CPython, event loop in JavaScript, etc.
 
 - organizational, stylistic, technical _conventions_
   * e.g. project structure, code linting, nomenclature, etc.
 
 - _packaging_ conventions, _import mechanisms_, and _software repositories_
-  * e.g. classpath for the JVM, NPM for JS, Pip + Pypi for Python, etc.
+  * e.g. classpath for the JVM, npm for JS, pip + PyPI for Python, etc.
 
 - user _communities_
   * e.g. many Data scientists use Python, many Web developers use JVM / JS
@@ -211,7 +230,7 @@ enableSourceMap = true
 - Default methods inherited from the `Object` class
   * e.g. `toString`, `equals`, `hashCode`
 
-- All methods are _virtual by default_
+- In Java, instance methods are _virtual by default_ (whereas in Kotlin they are `final` by default)
 
 - ...
 
@@ -226,27 +245,28 @@ enableSourceMap = true
   * e.g. getters/setters in Java vs. Kotlin's or Scala's properties
 
 - Many technical conventions:
- * _iterable_ data structures should implement the `Iterable` interface
- * _variadic_ arguments are considered _arrays_
- * _constructors_ for collection subclasses accept `Iterable`s as input
- * ...
+  * _iterable_ data structures should implement the `Iterable` interface
+  * _variadic_ arguments are considered _arrays_
+  * _constructors_ for collection subclasses accept `Collection`s as input
+  * ...
 
 ---
 
 ## Packaging conventions, import mechanisms, and software repositories
 
 * _Project files_ are organized into _packages_
-  - packages must correspond to _directory structures_
+  - packages should correspond to _directory structures_ (mandatory in Java, recommended in Kotlin)
 
 * Code _archives_ (`.jar`) are _Zip files_ containing compiled classes
 
 * Basic _import mechanism_: the __class path__
   * i.e. the path where classes are looked for
   * commonly set at application startup
+  * since Java 9, also the __module path__ ([JPMS](https://openjdk.org/projects/jigsaw/spec/))
 
 * Many _third-party repositories_ for JVM libraries
   - [Maven central repository](https://central.sonatype.com) is the most relevant one
-  - many tools for dependency management (e.g. Maven, Gradle)
+  - many tools for dependency management (e.g. Maven, Gradle, cf. [build automation](../04-build-automation/))
 
 ---
 
@@ -258,7 +278,7 @@ enableSourceMap = true
 
 - _Desktop applications_ developers
 
-- Researchers in the fields of: _semantic Web_, _multi-agent systems_, etc.
+- Researchers in the fields of: _Semantic Web_, _multi-agent systems_, etc.
 
 - ...
 
@@ -290,12 +310,14 @@ enableSourceMap = true
 - Everything is (indirectly) a _subclass/instance_ of `object`
   * no exceptions
 
-- [Global Interpreter Lock](https://realpython.com/python-gil/) (GIL)
+- [Global Interpreter Lock](https://realpython.com/python-gil/) (GIL) in the default CPython build
+  * an optional [free-threaded build](https://docs.python.org/3/howto/free-threading-python.html) exists since Python 3.13
 
 - _Magic methods_ supporting various language features
   * e.g. `__str__`, `__eq__`, `__iter__`
 
-- No support for _overloading_
+- No signature-based _method overloading_
+  * operators can be overloaded via magic methods
 
 - _Variadic_ and _keywords_ __arguments__
 
@@ -305,19 +327,19 @@ enableSourceMap = true
 
 ## Organizational, stylistic, technical conventions
 
-- _Project files_ should be organized according to [Kenneth Reitz's layout](https://docs.python-guide.org/writing/structure/)
+- _Project files_ are described by a [`pyproject.toml`](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/) file, and organized according to either the _flat_ or the [_src_ layout](https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/)
 
-- Official _stylistic conventions_ for Python ([PEP8](https://peps.python.org/pep-0008/))
+- Official _stylistic conventions_ for Python ([PEP 8](https://peps.python.org/pep-0008/))
   * e.g. type names in `PascalCase`, member names in `snake_case`
-  * e.g. _indentation-aware_ syntax, blank line conventions, etc.
+  * e.g. 4-space indentation, blank line conventions, etc.
   * ...
 
 - Many _technical conventions_:
- * [duck typing](https://realpython.com/lessons/duck-typing/)
- * iterable data structures should implement the `__iter__` method
- * _variadic_ arguments are considered _tuples_
- * _keyword_ arguments are considered _dictionaries_
- * ...
+  * [duck typing](https://realpython.com/lessons/duck-typing/)
+  * iterable data structures should implement the `__iter__` method
+  * _variadic_ arguments are considered _tuples_
+  * _keyword_ arguments are considered _dictionaries_
+  * ...
 
 ---
 
@@ -327,14 +349,17 @@ enableSourceMap = true
   - packages $\leftrightarrow$ _directories_
   - modules $\leftrightarrow$ _files_
 
-* Code _archives_ (`.whl`) are _Zip files_ containing Python sources
+* Code _archives_:
+  * _wheels_ (`.whl`): _Zip files_ containing a ready-to-install package (Python sources, possibly compiled extensions, metadata)
+  * _source distributions_ (`.tar.gz`), to be built upon installation
 
 * Each Python _environment_ has an _internal folder_ where __installed libraries__ are stored
-  * `pip` simply _unzips_ modules/packages in there
+  * `pip` simply _unzips_ wheels in there
   * `import` statements _look for_ packages/modules in there
 
-* [Pypi](https://pypi.org/) as the _official repository_ for Python libraries
-  * `pip` as the official tool for dependency management
+* [PyPI](https://pypi.org/) as the _official repository_ for Python libraries
+  * `pip` as the reference _installer_
+  * project / dependency management via tools such as [uv](https://docs.astral.sh/uv/) or [Poetry](https://python-poetry.org/) (cf. [build automation](../04-build-automation/))
 
 ---
 
@@ -376,11 +401,13 @@ enableSourceMap = true
 
 ## Predefined design decisions
 
-- _Object orientation_ based on [prototypes](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes)
+- _Object orientation_ based on [prototypes](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Advanced_JavaScript_objects/Object_prototypes)
 
-- _Single threaded_ design + [event loop](https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick)
+- _Single-threaded_ [event loop](https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick)
+  * parallelism via [worker threads](https://nodejs.org/api/worker_threads.html) or child processes
 
-- _Asynchronous programming_ via [continuation-passing style](https://matt.might.net/articles/by-example-continuation-passing-style/)
+- _Asynchronous programming_ via _promises_ and `async`/`await`
+  * historically, via callbacks, i.e. [continuation-passing style](https://matt.might.net/articles/by-example-continuation-passing-style/)
 
 ---
 
@@ -390,8 +417,8 @@ enableSourceMap = true
   * the project must contain a `package.json` file in the _root_ directory
   * declaring the entry point of the project
 
-- Many _structure conventions_ co-exist
-  * e.g. [W3School's one](https://www.w3schools.com/js/js_conventions.asp)
+- Many _style conventions_ co-exist
+  * e.g. [W3Schools' one](https://www.w3schools.com/js/js_conventions.asp)
 
 - Many _technical conventions_:
   * duck typing
@@ -405,15 +432,15 @@ enableSourceMap = true
 * _Project files_ are organized into __modules__
   - modules are files containing anything
   - and declaring what to export
+  - two module systems: _CommonJS_ (`require`) and _ES modules_ (`import`/`export`), the latter being the standard one
 
-* Code _archives_ (`.tar.?z`) are compressed _tarball files_ containing JS sources
+* Code _archives_ (`.tgz`) are compressed _tarball files_ containing JS sources
 
 * Third-party _libraries_ can be __installed__ via `npm`
-  * locally, for the user, or globally
+  * locally (per project), or globally (`npm install -g`)
 
-
-* [NPM](https://www.npmjs.com/) as the official _repository_ for JS libraries
-  * `npm` as the official tool for dependency management
+* The [npm registry](https://www.npmjs.com/) as the official _repository_ for JS libraries
+  * `npm` as the reference tool for dependency management (alternatives: `yarn`, `pnpm`)
 
 ---
 
@@ -454,7 +481,7 @@ The __choice__ of a _platform_ impacts developers during:
 > __Abstraction gap__ $\approx$ the space between the __problem__ and the pre-existing functionalities offered by a __platform__. 
 > Intuitively, the bigger the space, the more _effort_ is required to build the solution 
 
-{{< figure src="abstraction-gap.svg" width="70%" >}}
+{{< figure src="abstraction-gap.svg" width="70%" alt="The abstraction gap: the distance between the problem and the functionalities offered by the platform" >}}
 
 ---
 
@@ -464,19 +491,21 @@ The __choice__ of a _platform_ impacts developers during:
 
 - ... as well as the API of any __third-party library__ available for that platform
 
-{{< figure src="third-party.svg" width="80%" >}}
+{{< figure src="third-party.svg" width="80%" alt="A software project built on top of third-party libraries, in turn built on top of the platform" >}}
 
 ---
 
 ## How the platform affects the **testing** phase
 
 - _Test suites_ are a __"project in the project"__
-  * so remarks are similar w.r.t. the implementation phase
+  * so remarks are similar to the implementation phase
 
 - One may test the system against _as many versions as possible_ of the underlying platforms
 
 - One may test the system against _as many OSs_ as possible
   * virtual platforms may behave differently depending on the OS
+
+- Both are typically automated via CI _build matrices_ (cf. [CI lecture](../07-ci/))
 
 ---
 
@@ -488,7 +517,7 @@ The __choice__ of a _platform_ impacts developers during:
 
 - _Repositories_ are platform-specific...
 
-- ... _release_ is therefore platform specific
+- ... _release_ is therefore platform specific (cf. [version selection](../05-version-selection/) and [CI](../07-ci/))
 
 {{% /section %}}
 
@@ -506,25 +535,10 @@ The __choice__ of a _platform_ impacts developers during:
 - Business decision: which user communities to target?
   + what are the most relevant platforms for those communities?
 
-- Coherency is key for success in platform selection
+- Coherence is key for success in platform selection
   1. coherently choose the target community w.r.t. the SW goal
   2. coherently choose the platform w.r.t. target community
   
----
-
-## General benefits of coherence
-
-+ The abstraction gap is likely lower
-
-+ More third party libraries are likely available
-
-+ The potential audience is wider
-  * implies the SW project is more valuable
-
-+ Easier to find support / help in case of issues
-
-+ More likely that third-party issues are timely fixed
-
 ---
 
 {{% section %}}
@@ -552,7 +566,7 @@ The __choice__ of a _platform_ impacts developers during:
 
 - Personnel can only dedicate a fraction of their time to development
 
-- Most software artifacts are disposable (1, 2, 4)
+- Most software artifacts are disposable (data elaboration, in-silico experiments, personal tools)
 
 - Development efforts are discontinuous
 
@@ -582,9 +596,9 @@ The __choice__ of a _platform_ impacts developers during:
 
 ---
 
-## General benefits of coherence, __for researchers__
+## General benefits of coherence (in general, and __for researchers__)
 
-> Choosing the right community / platform is strategic for research-oriented software
+> Choosing the right community / platform is strategic, especially for research-oriented software
 
 + The abstraction gap is likely lower
   * less development effort
@@ -598,7 +612,7 @@ The __choice__ of a _platform_ impacts developers during:
 + Easier to find support / help in case of issues
   * potentially, less development effort
 
-+ More likely that third-party issues are timely fixed
++ More likely that third-party issues are fixed in a timely manner
   * potentially, less development effort
 
 {{% /section %}}
@@ -618,18 +632,18 @@ The __choice__ of a _platform_ impacts developers during:
 
 - Examples:
   * intra-platform: Kotlin program calling Java library
-  * inter-platform: Python program calling native library
+  * inter-platform: Python program calling a JVM library (e.g. via JPype, see later)
 
 --- 
 
 ## Open research communities vs. technological silos
 
-- Research communities in CS / AI may overlap with platform communities:
+- Research communities in CS / AI may overlap with platform (or language) communities:
   * e.g. neural networks researchers $\rightarrow$ Python
   * e.g. data science $\rightarrow$ Python | R
   * e.g. symbolic AI $\rightarrow$ JVM | Prolog
   * e.g. multi-agent systems $\rightarrow$ JVM
-  * e.g. semantic-web $\rightarrow$ JVM | Python
+  * e.g. Semantic Web $\rightarrow$ JVM | Python
 
 - What about inter-community research efforts?
   * they may need interoperability among different silos
@@ -644,23 +658,27 @@ The __choice__ of a _platform_ impacts developers during:
 ## The need for multi-platform programming
 
 - Ideal goal:
-> let the same software tool run on multiple platforms
+  > let the same software tool run on multiple platforms
 
 - More reasonable goal:
-> Create multiple artifacts, one for each supported platform, sharing the same design and functioning
+  > create multiple artifacts, one for each supported platform, sharing the same design and functioning
 
-- Practical goal: 
-> design and write the software once, then port it to several platforms
+- Practical goal:
+  > design and write the software once, then port it to several platforms
 
 ---
 
 {{% section %}}
+
+{{< slide id="mp-approaches" >}}
 
 ## Approaches for multi-platform programming
 
 1. Write once, build anywhere
     - software is developed using some sort of "super-language"
     - code from the "super-language" is automatically compiled for all platforms
+    - e.g. [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform/), [Haxe](https://haxe.org/), [Scala.js](https://www.scala-js.org/) + [Scala Native](https://scala-native.org/)
+    - not to be confused with Java's _"write once, run anywhere"_, where one artifact runs on one (virtual) platform, available on many OSs
 
 2. Write first, wrap elsewhere
     - software is developed for some principal platform
@@ -670,7 +688,7 @@ The __choice__ of a _platform_ impacts developers during:
 
 ## Write once, build anywhere (concept)
 
-{{< figure src="write-once-build-everywhere.svg" width="70%" >}}
+{{< figure src="write-once-build-everywhere.svg" width="70%" alt="Write once, build anywhere: one code base in a super-language, compiled into one artifact per target platform" >}}
 
 ---
 
@@ -684,14 +702,11 @@ The __choice__ of a _platform_ impacts developers during:
 
 - Workflow:
   1. Design, implement, and test most of the project via the super-language
-      - this is the platform-agnostic (a.k.a. "common") part of the project
-
-  2. Complete, refine, or optimise platform-specific aspects via 
-      - platform-specific code
-      - platform-specific third-party libraries
-
+     - this is the platform-agnostic (a.k.a. "common") part of the project
+  2. Complete, refine, or optimise platform-specific aspects via
+     - platform-specific code
+     - platform-specific third-party libraries
   3. Build platform-specific artifacts, following platform-specific rules
-  
   4. Upload platform-specific artifacts on platform-specific repositories
 
 ---
@@ -716,9 +731,10 @@ Let `N` be the number of supported platforms
 
 ### Takeaway
 
-> The abstraction gap of the common code is as wide as the one of the platform having the widest abstraction gap
+> The abstraction gap of the common code is at least as wide as the one of the platform having the widest abstraction gap
+> (the common std-lib is roughly the _intersection_ of what all platforms offer)
 
-{{< figure src="abstraction-gap-mp.svg" width="50%" >}}
+{{< figure src="abstraction-gap-mp.svg" width="50%" alt="Abstraction gap of the common code, compared to the abstraction gaps of each target platform" >}}
 
 ---
 
@@ -729,17 +745,17 @@ Whenever a new functionality needs to be developed:
 1. Try to realise it with common std-lib only
 
 2. If not possible, try to maximise the portion of platform-agnostic code
-  * make it possible to plug platform-specific aspects
+   * make it possible to plug platform-specific aspects
 
 3. For each functionality which cannot be realised as purely platform-agnostic:
-  1. design a platform-agnostic interface
-  2. implement the interface `N` times, one per target platform
+   1. design a platform-agnostic interface
+   2. implement the interface `N` times, one per target platform
 
 ---
 
 ## Write first, wrap elsewhere (concept)
 
-{{< figure src="write-first-wrap-elsewhere.svg" width="70%" >}}
+{{< figure src="write-first-wrap-elsewhere.svg" width="70%" alt="Write first, wrap elsewhere: the software is implemented on a main platform, other platforms wrap it" >}}
 
 ---
 
@@ -754,11 +770,10 @@ Whenever a new functionality needs to be developed:
   1. Fully implement, test, and deploy the software for the main platform
 
   2. For all other platforms:
-    1. re-design and re-write platform-specific API code
-    2. implement platform-specific API by calling the main platform's code
-    3. re-write test for API code
-    4. build platform-specific packages, wrapping the main platform's package and runtime
-  
+     1. re-design and re-write platform-specific API code
+     2. implement platform-specific API by calling the main platform's code
+     3. re-write tests for API code
+     4. build platform-specific packages, wrapping the main platform's package and runtime
   3. Upload platform-specific artifacts on platform-specific repositories
 
 ---
@@ -771,7 +786,7 @@ Let `N` be the number of supported platforms
 
 - The effort required for writing API code is virtually the same on all platforms
 
-- Global effort is sub-linearly dependent on `N`
+- Global effort is still linear in `N`, but with a much smaller constant
   * implementing API and wrapper code is a manual task
   * still less effort than implementing the same design `N` times
 
@@ -785,6 +800,8 @@ Let `N` be the number of supported platforms
 
 ---
 
+{{< slide id="kotlin-mp" >}}
+
 # Multi-platform programming
 
 ## Write once, build anywhere
@@ -797,8 +814,8 @@ Let `N` be the number of supported platforms
 - JetBrains-made modern programming language
     * focused on "practical use" (whatever that means)
 
-- Gaining momentum since Google adopted it as the *official Android language*
-    * along with Java and C++
+- Gaining momentum since Google adopted it as the *official Android language* (2017)
+    * Android development has been _Kotlin-first_ since 2019
 
 - Clearly inspired by a mixture of Java, C#, Scala, and Groovy
     * standard library clearly inspired by Java's
@@ -815,43 +832,54 @@ Let `N` be the number of supported platforms
 
 ## Kotlin: supported platforms (a.k.a. targets)
 
-Reference: https://kotlinlang.org/docs/reference/mpp-dsl-reference.html
+Reference: [Kotlin Multiplatform DSL reference](https://kotlinlang.org/docs/multiplatform/multiplatform-dsl-reference.html)
 
 - JVM
     + first and best supported platform
-    + may target a specific JDK version: prefer `11`
+    + the JDK to compile against should be selected explicitly, e.g. `kotlin { jvmToolchain(17) }`
 
 - JavaScript (JS)
     + requires choosing among Browser support, Node support or both
     + the two sub-targets have different runtimes
 
+- WebAssembly (Wasm)
+    + `wasmJs` (browsers, Node) and `wasmWasi` (WASI runtimes)
+
+- Android
+    + Android libraries and apps, via the Android Gradle plugin
+
 - Native
-    + supporting native may imply dealing with 3+ targets
-    + cross-compilation is not yet supported
+    + supporting native may imply dealing with 3+ targets (OS $\times$ CPU architecture)
+    + any host can compile _libraries_ (`.klib`s) for any target, but final binaries for Apple targets require macOS
 
 --- 
 
 ## Kotlin: supported platforms, Native sub-targets
 
-Reference: https://kotlinlang.org/docs/reference/mpp-dsl-reference.html
+Reference: [Kotlin/Native target support](https://kotlinlang.org/docs/native-target-support.html)
 
-- Win by [MinGW](https://sourceforge.net/projects/mingw), Linux
+- Targets come in __tiers__, i.e. levels of testing on JetBrains' CI:
+    + _Tier 1_ (compiled _and_ run on CI): `macosArm64`, `iosArm64`, `iosSimulatorArm64`
+    + _Tier 2_ (compiled on CI): e.g. `linuxX64`, `linuxArm64`, `watchosArm64`, `tvosArm64`
+    + _Tier 3_ (not guaranteed to be tested): e.g. `mingwX64` (Windows), `androidNative*`
+    + some targets are deprecated (e.g. `macosX64` since Kotlin 2.3.20)
+
+- Windows via [MinGW](https://www.mingw-w64.org/), Linux
     + must pay attention to architecture
     + MinGW is not exactly a "vanilla" Windows environment
 
-- iOS, macOS
-    + requires Apple facilities (e.g. XCode)
-    + may imply further costs
+- iOS, macOS, watchOS, tvOS
+    + requires Apple facilities (e.g. Xcode), hence macOS machines
 
-- Android
-    + requires Android SDK
+- Android Native (`androidNative*`)
+    + native code for Android (via the NDK), as opposed to the JVM-based `android` target
 
 ---
 
 ## __Gradle__ as the tool for build automation
 
-- Building a multi-platform Kotlin project is _only_ supported via [Gradle](https://gradle.com/)
-    * no real alternatives here
+- Building a multi-platform Kotlin project is supported via [Gradle](https://gradle.org/) (cf. [build automation](../04-build-automation/))
+    * JetBrains' [Amper](https://github.com/JetBrains/amper) is an experimental alternative
 
 - Gradle is a build automation + dependency management system
 
@@ -863,9 +891,7 @@ Reference: https://kotlinlang.org/docs/reference/mpp-dsl-reference.html
 
 ---
 
-## Kotlin multi-platform project structure
-
-### Common
+## Kotlin multi-platform project structure (common)
 
 Kotlin enforces strong segregation of the platform-agnostic and platform-specific parts
 
@@ -875,13 +901,11 @@ Kotlin enforces strong segregation of the platform-agnostic and platform-specifi
 
 - __common *test* code__: platform-agnostic _test_ code which only depends on:
     * the common main code and all its dependencies
-    * some Kotlin multi-platform testing library (e.g. [`kotlin.test`](https://kotlinlang.org/api/latest/kotlin.test/) or [Kotest](https://kotest.io/))
+    * some Kotlin multi-platform testing library (e.g. [`kotlin.test`](https://kotlinlang.org/api/core/kotlin-test/) or [Kotest](https://kotest.io/))
 
 ---
 
-## Kotlin multi-platform project structure 
-
-### Platform-specific
+## Kotlin multi-platform project structure (platform-specific)
 
 - for each target platform `T` (e.g. `jvm`, `js`, etc.)
     * __`T`-specific *main* code__: main Kotlin code targeting the `T` platform, depending on:
@@ -905,27 +929,27 @@ Kotlin enforces strong segregation of the platform-agnostic and platform-specifi
 │
 └── src/
     ├── commonMain/
-    │   └── kotlin/         # platform-agnostic Kotlin code here
+    │   └── kotlin/         # platform-agnostic Kotlin code here
     │
     ├── commonTest/
-    │   └── kotlin/         # platform-agnostic test code written in Kotlin here
+    │   └── kotlin/         # platform-agnostic test code written in Kotlin here
     │
     ├── jvmMain/
-    │   ├── java/           # JVM-specific Java code here
-    │   ├── kotlin/         # JVM-specific Kotlin code here
-    │   └── resources/      # JVM-specific resources here
-    ├── jvmTest
-    │   ├── java/           # JVM-specific test code written in Java here
-    │   ├── kotlin/         # JVM-specific test code written in Kotlin here
-    │   └── resources/      # JVM-specific test resources here
+    │   ├── java/           # JVM-specific Java code here
+    │   ├── kotlin/         # JVM-specific Kotlin code here
+    │   └── resources/      # JVM-specific resources here
+    ├── jvmTest/
+    │   ├── java/           # JVM-specific test code written in Java here
+    │   ├── kotlin/         # JVM-specific test code written in Kotlin here
+    │   └── resources/      # JVM-specific test resources here
     │
     ├── jsMain/
-    │   └── kotlin/         # JS-specific Kotlin code here
+    │   └── kotlin/         # JS-specific Kotlin code here
     ├── jsTest/
-    │   └── kotlin/         # JS-specific Kotlin code here
+    │   └── kotlin/         # JS-specific test code written in Kotlin here
     │
     ├── <TARGET>Main/       
-    │   └── kotlin/         # <TARGET>-specific Kotlin code here
+    │   └── kotlin/         # <TARGET>-specific Kotlin code here
     └── <TARGET>Test/
         └── kotlin/         # <TARGET>-specific test code written in Kotlin here
 ```
@@ -939,9 +963,10 @@ Defines several aspects of the project:
 - which version of the Kotlin compiler to adopt
     ```kotlin
     plugins {
-        kotlin("multiplatform") version "1.9.10" // defines plugin and compiler version
+        kotlin("multiplatform") version "2.4.21" // defines plugin and compiler version
     }
     ```
+    * better: declare versions in a [version catalog](https://docs.gradle.org/current/userguide/version_catalogs.html) (`gradle/libs.versions.toml`)
 
 - which repositories Gradle should use when looking for dependencies
     ```kotlin
@@ -961,30 +986,29 @@ Defines several aspects of the project:
 - which platforms to target (reference [here](https://kotlinlang.org/docs/multiplatform-dsl-reference.html#targets))
     ```kotlin
     kotlin {
-        // declares JVM as target
-        jvm {
-            withJava() // jvm-specific targets may include java sources
-        }
+        jvmToolchain(17) // JDK used to compile (and run tests on) the JVM target
+
+        // declares JVM as target (Java sources in src/jvmMain/java are supported out of the box)
+        jvm()
+
         // declares JavaScript as target
         js {
-            useCommonJs() // use CommonJS for JS dependencies management
-            // or useEsModules() 
-            binaries.executable() // enables tasks for Node packages generation
+            useEsModules() // generate ES modules (or useCommonJs())
+            binaries.library() // generate a reusable npm package (or binaries.executable())
             // the target will consist of a Node project (with NodeJS's stdlib)
             nodejs {
-                runTask { /* configure project running in Node here */ }
-                testRuns { /* configure Node's testing frameworks */ }
+                testTask { /* configure Node's testing frameworks */ }
             }
             // alternatively, or additionally to nodejs:
-            browser { /* ... */ } 
+            browser { /* ... */ }
         }
 
         // other targets here
     }
     ```
 
-- other admissible targets: 
-    * `android`
+- other admissible targets:
+    * `wasmJs`, `wasmWasi`, `android`
     * various native sub-targets (details [here](https://kotlinlang.org/docs/native-target-support.html))
 
 ---
@@ -995,154 +1019,104 @@ Defines several aspects of the project:
     ```kotlin
     kotlin {
         sourceSets {
-            val commonMain by getting {
-                dependencies {
-                    api(kotlin("stdlib-common"))
-                    implementation("group.of", "multiplatform-library", "X.Y.Z") // or api
-                }
+            // the Kotlin std-lib is added automatically to all source sets
+            commonMain.dependencies {
+                implementation("group.of:multiplatform-library:X.Y.Z") // or api
             }
-            val commonTest by getting {
-                dependencies {
-                    implementation(kotlin("test-common"))
-                }
+            commonTest.dependencies {
+                // kotlin.test, automatically resolved to the right variant for each target
+                implementation(kotlin("test"))
             }
-            val jvmMain by getting {
-                dependencies {
-                    api(kotlin("stdlib-jdk8"))
-                    implementation("group.of", "jvm-library", "X.Y.Z") // or api
-                }
+            jvmMain.dependencies {
+                implementation("group.of:jvm-library:X.Y.Z") // or api
             }
-            val jvmTest by getting {
-                dependencies {
-                    implementation(kotlin("test-junit"))
-                }
-            }
-            val jsMain by getting {
-                dependencies {
-                    api(kotlin("stdlib-js"))
-                    implementation(npm("npm-module", "X.Y.Z")) // lookup on https://www.npmjs.com
-                }
-            }
-            val jsTest by getting {
-                dependencies {
-                    implementation(kotlin("test-js"))
-                }
+            jsMain.dependencies {
+                implementation(npm("npm-module", "X.Y.Z")) // lookup on https://www.npmjs.com
             }
         }
     }
     ```
+    * platform-specific test source sets (e.g. `jvmTest`, `jsTest`) can declare their own dependencies too
 
 ---
 
 ## Kotlin multi-platform build configuration (pt. 4)
 
-- configure Kotlin compiler options
+- configure Kotlin compiler options, for all targets (or per target, e.g. `jvm { compilerOptions { ... } }`)
     ```kotlin
     kotlin {
-        sourceSets.all {
-            languageSettings.apply {
-                // provides source compatibility with the specified version of Kotlin.
-                languageVersion = "1.8" // possible values: "1.4", "1.5", "1.6", "1.7", "1.8", "1.9"
-
-                // allows using declarations only from the specified version of Kotlin bundled libraries.
-                apiVersion = "1.8" // possible values: "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9"
-
-                // enables the specified language feature
-                enableLanguageFeature("InlineClasses") // language feature name
-
-                // allow using the specified opt-in
-                optIn("kotlin.ExperimentalUnsignedTypes") // annotation FQ-name
-
-                // enables/disable progressive mode
-                progressiveMode = true // false by default
-            }
+        compilerOptions {
+            // source compatibility with the specified version of Kotlin
+            languageVersion = KotlinVersion.KOTLIN_2_3
+            // allows using declarations only from the specified version of Kotlin bundled libraries
+            apiVersion = KotlinVersion.KOTLIN_2_3
+            // allows using the specified opt-in API
+            optIn.add("kotlin.ExperimentalUnsignedTypes") // annotation FQ-name
+            // enables progressive mode
+            progressiveMode = true // false by default
+            // turns warnings into errors
+            allWarningsAsErrors = true
         }
     }
     ```
-    
+
 - details about:
-    * progressive mode [here](https://kotlinlang.org/docs/whatsnew13.html#progressive-mode)
+    * compiler options [here](https://kotlinlang.org/docs/gradle-compiler-options.html)
     * opt-ins [here](https://kotlinlang.org/docs/opt-in-requirements.html#opt-in-to-using-api)
 
 ---
 
 ## Build configuration: full example
 
-
+{{% multicol %}}{{% col class="col-6" %}}
 ```kotlin
 plugins {
-    kotlin("multiplatform") version "1.9.10"
+    kotlin("multiplatform") version "2.4.21"
 }
 
-repositories { 
-    mavenCentral() 
-} 
+repositories {
+    mavenCentral()
+}
 
 kotlin {
-    jvm {
-        withJava()
-    }
-
+    jvmToolchain(17)
+    jvm()
     js {
-        nodejs {
-            runTask { /* ... */ }
-            testRuns { /* ... */ }
-        }
-        // alternatively, or additionally to nodejs:
-        browser { /* ... */ } 
+        useEsModules()
+        binaries.library()
+        nodejs()
     }
-
+    compilerOptions {
+        allWarningsAsErrors = true
+    }
+```
+{{% /col %}}{{% col class="col-6" %}}
+```kotlin
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                api(kotlin("stdlib-common"))
-                implementation("group.of", "multiplatform-library", "X.Y.Z") // or api
-            }
+        commonMain.dependencies {
+            implementation("group.of:multiplatform-library:X.Y.Z")
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test-common"))
-            }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
         }
-        val jvmMain by getting {
-            dependencies {
-                api(kotlin("stdlib-jdk8"))
-                implementation("group.of", "jvm-library", "X.Y.Z") // or api
-            }
+        jvmMain.dependencies {
+            implementation("group.of:jvm-library:X.Y.Z")
         }
-        val jvmTest by getting {
-            dependencies {
-                implementation(kotlin("test-junit"))
-            }
-        }
-        val jsMain by getting {
-            dependencies {
-                api(kotlin("stdlib-js"))
-                implementation(npm("npm-module", "X.Y.Z")) // lookup on https://www.npmjs.com
-            }
-        }
-        val jsTest by getting {
-            dependencies {
-                implementation(kotlin("test-js"))
-            }
-        }
-
-        all {
-            languageVersion = "1.8"
-            apiVersion = "1.8"
-            enableLanguageFeature("InlineClasses")
-            optIn("kotlin.ExperimentalUnsignedTypes")
-            progressiveMode = true // false by default
+        jsMain.dependencies {
+            implementation(npm("npm-module", "X.Y.Z"))
         }
     }
 }
 ```
+{{% /col %}}{{% /multicol %}}
+
+- The build file of the running example is [here](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-core/build.gradle.kts)
 
 ---
 
 ## Gradle tasks for multi-platform projects (pt. 1)
 
-Let `T` denote the target name (e.g. `jvm`, `js`, etc.)
+Let `T` denote the target name (e.g. `jvm`, `js`, etc.); recall Gradle's lifecycle tasks from the [build automation lecture](../04-build-automation/)
 
 - `<T>MainClasses` compiles the main code for platform `T`
     + e.g. `jvmMainClasses`, `jsMainClasses`
@@ -1157,42 +1131,43 @@ Let `T` denote the target name (e.g. `jvm`, `js`, etc.)
 - `<T>Test` executes tests for platform `T`
     + e.g. `jvmTest`, `jsTest`
     + depends on (hence implies) `<T>MainClasses`, AND on `<T>TestClasses`
+    + `jsTest` aggregates `jsNodeTest` and `jsBrowserTest` (depending on the enabled sub-targets)
 
 ---
 
 ## Gradle tasks for multi-platform projects (pt. 2)
 
-- `compileProductionExecutableKotlinJs` compiles the JS main code into a Node project
+- `jsProductionExecutableCompileSync` (resp. `jsProductionLibraryCompileSync`) compiles the JS main code into a Node project
     * requires the `js` target to be enabled
-    * requires the `binaries.executable()` configuration to be enabled
+    * requires the `binaries.executable()` (resp. `binaries.library()`) configuration to be enabled
 
-- `assemble` creates all JARs (hence compiling the main code for all platforms)
+- `assemble` creates all JARs / klibs (hence compiling the main code for all platforms)
     + it also generates documentation and sources JARs
         * if publishing is configured
 
-- `test` executes tests for all platforms
+- `allTests` executes tests for all platforms, and creates an aggregated report
 
-- `check` like `test` but it may also include other checks (e.g. style) if configured
+- `check` like `allTests` but it may also include other checks (e.g. style) if configured
 
 - `build` $\approx$ `check` + `assemble`
 
 ---
 
-## Multi-platform Kotlin sources
+## Multi-platform Kotlin sources (common)
 
 - Ordinary Kotlin sources
 
 - When in `common`:
     + only the platform-agnostic std-lib can be used
-        * API reference [here](https://kotlinlang.org/api/latest/jvm/stdlib/) (remember to disable all targets except `Common`)
+        * API reference [here](https://kotlinlang.org/api/core/kotlin-stdlib/) (filter by the `Common` platform)
     + one may use third-party libraries, as long as they are __multi-platform__ too
-    + one may use the [`expect` keyword](https://kotlinlang.org/docs/multiplatform-connect-to-apis.html)
+    + one may use the [`expect` keyword](https://kotlinlang.org/docs/multiplatform/multiplatform-expect-actual.html)
     + one may use platform-specific annotations 
         * e.g. `@JvmStatic`, `@JsName`, etc.
 
 ---
 
-## Multi-platform Kotlin sources
+## Multi-platform Kotlin sources (platform-specific)
 
 Let `T` denote some target platform
 
@@ -1200,7 +1175,7 @@ Let `T` denote some target platform
     + one may use the `T`-specific std-lib
     + one may use the `T`-specific Kotlin libraries
     + one may use the `T`-specific libraries
-    + one may use the [`actual` keyword](https://kotlinlang.org/docs/multiplatform-connect-to-apis.html)
+    + one may use the [`actual` keyword](https://kotlinlang.org/docs/multiplatform/multiplatform-expect-actual.html)
 
 - Each platform `T` may allow for specific keywords
     * e.g. the [`external` modifier](https://kotlinlang.org/docs/js-interop.html#external-modifier)
@@ -1214,7 +1189,7 @@ Let `T` denote some target platform
 - ... enforces the existence of a corresponding `actual` __definition__ for _all_ platforms
     * compiler won't succeed until an actual definition is provided _for each target_
 
-{{< figure src="expect-actual.png" width="50%" >}}
+{{< figure src="expect-actual.png" width="50%" alt="An expect declaration in common code, with one actual definition per target platform (JVM, JS, Native)" >}}
 
 ---
 
@@ -1242,6 +1217,8 @@ Let `T` denote some target platform
 ---
 
 {{% section %}}
+
+{{< slide id="running-example" >}}
 
 # Running example
 
@@ -1285,11 +1262,13 @@ Let `T` denote some target platform
     - `Header`: special row containing the names of the columns
     - `Record`: special row containing the values of a line in a CSV file
 
-- Main functionalities (require platform specific code):
+- Main functionalities (some of which require platform-specific code):
     1. creating a `Table` programmatically
     2. reading columns, rows, and values from a `Table`
     3. parsing a CSV file into a `Table`
     4. saving a `Table` into a CSV file
+
+- Full code: [`unibo-spe/multiplatform-example`](https://github.com/unibo-spe/multiplatform-example) (module `csv-core`)
 
 ---
 
@@ -1347,81 +1326,27 @@ package "io github gciatto csv" {
 
 ## The `Row` interface
 
-```kotlin
-// Represents a single row in a CSV file.
-interface Row : Iterable<String> {
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/Row.kt" from="6" to="16" >}}
 
-    // Gets the value of the field at the given index.
-    operator fun get(index: Int): String
-
-    // Gets the number of fields in this row.
-    val size: Int
-}
-```
+- Please ignore the `@JsExport` and `@JsName` annotations for now, they are explained [later](#/kotlin-interop)
 
 --- 
 
 ## The `Header` interface
 
-```kotlin
-// Represents the header of a CSV file.
-// A header is a special row containing the names of the columns.
-interface Header : Row {
-
-    // Gets the names of the columns.
-    val columns: List<String>
-
-    // Checks whether the given column name is present in this header.
-    operator fun contains(column: String): Boolean
-
-    // Gets the index of the given column name.
-    fun indexOf(column: String): Int
-}
-```
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/Header.kt" from="8" to="22" >}}
 
 ---
 
 ## The `Record` interface
 
-```kotlin
-// Represents a record in a CSV file.
-interface Record : Row {
-
-    // Gets the header of this record (useful to know column names).
-    val header: Header
-
-    // Gets the values of the fields in this record.
-    val values: List<String>
-
-    // Checks whether the given value is present in this record.
-    operator fun contains(value: String): Boolean
-
-    // Gets the value of the field in the given column.
-    operator fun get(column: String): String
-}
-```
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/Record.kt" from="8" to="26" >}}
 
 ---
 
 ## The `Table` interface
 
-```kotlin
-// Represents a table (i.e. an in-memory representation of a CSV file).
-interface Table : Iterable<Row> {
-
-    // Gets the header of this table (useful to know column names).
-    val header: Header
-
-    // Gets the records in this table.
-    val records: List<Record>
-
-    // Gets the row at the given index.
-    operator fun get(row: Int): Row
-
-    // Gets the number of rows in this table.
-    val size: Int
-}
-```
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/Table.kt" from="8" to="26" >}}
 
 ---
 
@@ -1476,125 +1401,29 @@ package "io github gciatto csv **impl**" {
 
 ## The `AbstractRow` class
 
-```kotlin
-// Base implementation for the Row interface.
-internal abstract class AbstractRow(protected open val values: List<String>) : Row {
-    override val size: Int
-        get() = values.size
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/impl/AbstractRow.kt" from="5" to="34" >}}
 
-    override fun get(index: Int): String = values[index]
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || this::class != other::class) return false
-        return values == (other as AbstractRow).values
-    }
-
-    override fun hashCode(): Int = values.hashCode()
-
-    // Returns a string representation of this row as "<type>(field1, field2, ...)".
-    protected fun toString(type: String?): String {
-        var prefix = ""
-        var suffix = ""
-        if (type != null) {
-            prefix = "$type("
-            suffix = ")"
-        }
-        return values.joinToString(", ", prefix, suffix) { "\"$it\"" }
-    }
-
-    // Returns a string representation of this row as "Row(field1, field2, ...)".
-    override fun toString(): String = toString("Row")
-
-    // Makes it possible to iterate over the fields of this row, via for-each loops.
-    override fun iterator(): Iterator<String> = values.iterator()
-}
-```
+- Base implementation for the `Row` interface: `toString(type)` renders rows as `<type>("field1", "field2", ...)`
 
 ---
 
 ## The `DefaultHeader` class
 
-```kotlin
-// Default implementation for the Header interface.
-internal class DefaultHeader(columns: Iterable<String>) : Header, AbstractRow(columns.toList()) {
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/impl/DefaultHeader.kt" from="5" to="20" >}}
 
-    // Cache of column indexes, for faster lookup.
-    private val indexesByName = columns.mapIndexed { index, name -> name to index }.toMap()
-
-    override val columns: List<String>
-        get() = values
-
-    override fun contains(column: String): Boolean = column in indexesByName.keys
-
-    override fun indexOf(column: String): Int = indexesByName[column] ?: -1
-
-    override fun iterator(): Iterator<String> = values.iterator()
-
-    override fun toString(): String = toString("Header")
-}
-```
+- `indexesByName` is a lazily-computed cache of column indexes, for faster lookup
 
 ---
 
 ## The `DefaultRecord` class
 
-```kotlin
-internal class DefaultRecord(override val header: Header, values: Iterable<String>) : Record, AbstractRow(values.toList()) {
-
-    init {
-        require(header.size == super.values.size) {
-            "Inconsistent number of values (${super.values.size}) w.r.t. header size (${header.size})"
-        }
-    }
-
-    override fun contains(value: String): Boolean = values.contains(value)
-
-    override val values: List<String>
-        get() = super.values
-
-    override fun get(column: String): String =
-        header.indexOf(column).takeIf { it in 0 ..< size }?.let { values[it] }
-            ?: throw NoSuchElementException("No such column: $column")
-
-    override fun toString(): String = toString("Record")
-}
-```
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/impl/DefaultRecord.kt" from="6" to="27" >}}
 
 ---
 
 ## The `DefaultTable` class
 
-```kotlin
-internal class DefaultTable(override val header: Header, records: Iterable<Record>) : Table {
-
-    // Lazy, defensive copy of the records.
-    override val records: List<Record> by lazy { records.toList() }
-
-    override fun get(row: Int): Row = if (row == 0) header else records[row - 1]
-
-    override val size: Int
-        get() = records.size + 1
-
-    override fun iterator(): Iterator<Row> = (sequenceOf(header) + records.asSequence()).iterator()
-    
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || other !is DefaultTable) return false
-        if (header != other.header) return false
-        if (records != other.records) return false
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = header.hashCode()
-        result = 31 * result + records.hashCode()
-        return result
-    }
-
-    override fun toString(): String = this.joinToString(", ", "Table(", ")")
-}
-```
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/impl/DefaultTable.kt" from="8" to="34" >}}
 
 ---
 
@@ -1629,80 +1458,42 @@ internal class DefaultTable(override val header: Header, records: Iterable<Recor
 
 ---
 
-## The `Csv.kt` file
+## The `Csv.kt` file (pt. 1)
 
-```kotlin
-// Header creation from column names
-fun headerOf(columns: Iterable<String>): Header = DefaultHeader(columns)
-fun headerOf(vararg columns: String): Header = headerOf(columns.asIterable())
+Factories for headers (possibly _anonymous_, i.e. with columns named after their index), records, and tables:
 
-// Creates anonymous headers, with columns named after their index
-fun anonymousHeader(size: Int): Header = headerOf((0 ..< size).map { it.toString() })
-
-// Record creation from header and values
-fun recordOf(header: Header, columns: Iterable<String>): Record = DefaultRecord(header, columns)
-fun recordOf(header: Header, vararg columns: String): Record = recordOf(header, columns.asIterable())
-
-// Table creation from header and records
-fun tableOf(header: Header, records: Iterable<Record>): Table = DefaultTable(header, records)
-fun tableOf(header: Header, vararg records: Record): Table = tableOf(header, records.asIterable())
-
-// Table creation from rows (anonymous header if none is provided)
-fun tableOf(rows: Iterable<Row>): Table {
-    val records = mutableListOf<Record>()
-    var header: Header? = null
-    for (row in rows) {
-        when (row) {
-            is Header -> header = row
-            is Record -> records.add(row)
-        }
-    }
-    require(header != null || records.isNotEmpty())
-    return tableOf(header ?: anonymousHeader(records[0].size), records)
-}
-```
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/Csv.kt" from="19" to="39" >}}
 
 - Notice that each factory method is __overloaded__
-    + to support both `Iterable` and `vararg` arguments
+    + to support `Iterable`, `Sequence`, and `vararg` arguments
     + this is convenient for Kotlin programmers who will use our library
 
 ---
 
-## Time for unit testing
+## The `Csv.kt` file (pt. 2)
 
-- Dummy instances object:
-    ```kotlin
-    object Tables {
-        val irisShortHeader = headerOf("sepal_length", "sepal_width", "petal_length", "petal_width", "class")
+Table creation from rows (anonymous header if none is provided):
 
-        val irisLongHeader = headerOf("sepal length in cm", "sepal width, in cm", "petal length", "petal width", "class")
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/Csv.kt" from="41" to="58" >}}
 
-        fun iris(header: Header): Table = tableOf(
-            header,
-            recordOf(header, "5.1", "3.5", "1.4", "0.2", "Iris-setosa"),
-            recordOf(header, "4.9", "3.0", "1.4", "0.2", "Iris-setosa"),
-            recordOf(header, "4.7", "3.2", "1.3", "0.2", "Iris-setosa")
-        )
-    }
-    ```
+---
 
-- Some basic tests in file `TestCSV.kt`, e.g. (bad way of writing test methods, don't do this at home)
-    ```kotlin
-    @Test
-    fun recordBasics() {
-        val record = Tables.iris(Tables.irisShortHeader).records[0]
-        assertEquals("5.1", record[0])
-        assertEquals("5.1", record["sepal_length"])
-        assertEquals("0.2", record[3])
-        assertEquals("0.2", record["petal_width"])
-        assertEquals("Iris-setosa", record[4])
-        assertEquals("Iris-setosa", record["class"])
-        assertFailsWith<IndexOutOfBoundsException> { record[5] }
-        assertFailsWith<NoSuchElementException> { record["missing"] }
-    }
-    ```
-    
-- Run tests via Gradle task `test` (also try to run tests for specific platforms, e.g. `jvmTest` or `jsTest`)
+## Time for unit testing (pt. 1)
+
+Dummy instances object, in [Tables.kt](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-core/src/commonTest/kotlin/io/github/gciatto/csv/Tables.kt):
+
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonTest/kotlin/io/github/gciatto/csv/Tables.kt" from="3" to="20" >}}
+
+---
+
+## Time for unit testing (pt. 2)
+
+Some basic tests in [TestCSV.kt](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-core/src/commonTest/kotlin/io/github/gciatto/csv/TestCSV.kt) (bad way of writing test methods, don't do this at home):
+
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonTest/kotlin/io/github/gciatto/csv/TestCSV.kt" from="19" to="34" >}}
+
+
+- Run tests via Gradle task `allTests` (also try to run tests for specific platforms, e.g. `jvmTest` or `jsTest`)
 
 --- 
 
@@ -1729,7 +1520,7 @@ fun tableOf(rows: Iterable<Row>): Table {
 ## How much platform-specific code is needed?
 
 - I/O functionalities are supported by fairly different APIs in the JVM and JS
-    * e.g. JVM's [`java.io` package](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/package-summary.html) vs. JS' [`fs` module](https://nodejs.org/docs/latest-v20.x/api/fs.html)
+    * e.g. JVM's [`java.io` package](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/package-summary.html) vs. JS' [`fs` module](https://nodejs.org/api/fs.html)
     * sadly, Kotlin std-lib does not provide a common API for I/O
 
 - Do we need to rewrite the same business logic twice? (once for JVM, once for JS)
@@ -1751,7 +1542,7 @@ fun tableOf(rows: Iterable<Row>): Table {
 - `Configuration`: set of characters to be used to parse / represent CSV files
     * e.g. separator, delimiter, comment, etc.
 
-- `Formatter`: converts `Rows` into strings, according to some `Configuration`
+- `Formatter`: converts `Row`s into strings, according to some `Configuration`
 
 - `Parser`: converts some source into a `Table`, according to some `Configuration`
     * source $\approx$ anything that can be interpreted as a string to be parsed (e.g. file, string, etc.)
@@ -1801,64 +1592,40 @@ package "io github gciatto csv" {
 
 ```kotlin
 data class Configuration(val separator: Char, val delimiter: Char, val comment: Char) {
-
     // Checks whether the given string is a comment (i.e. starts with the comment character).
-    fun isComment(string: String): Boolean = // ...
+    fun isComment(string: String): Boolean = TODO()
 
     // Gets the content of the comment line (i.e. removes the initial comment character).
-    fun getComment(string: String): String? = // ...
+    fun getComment(string: String): String? = TODO()
 
-    // Checks whether the given string is a record (i.e. it contains the delimiter character)
-    fun isRecord(string: String): Boolean = // ...
+    // Checks whether the given string is a record (i.e. it contains at least one field)
+    fun isRecord(string: String): Boolean = TODO()
 
     // Retrieves the fields in the given record (i.e. splits the string at the separator character)
-    fun getFields(string: String): List<String> = // ...
+    fun getFields(string: String): List<String> = TODO()
 
-    // Checks whether the given string is a header (i.e. simultaneously a record and a comment)
-    fun isHeader(string: String): Boolean = // ...
+    // Checks whether the given string is a header (i.e. a comment whose content is a record)
+    fun isHeader(string: String): Boolean = TODO()
 
     // Retrieves the column names in the given header
-    fun getColumnNames(string: String): List<String> = // ...
+    fun getColumnNames(string: String): List<String> = TODO()
 }
 ```
 * implementation of methods is long and boring, but straightforward
     - it relies on regular expressions, which are supported by Kotlin's common std-lib
-    - details [here](https://github.com/unibo-spe/multiplatform-example)
+    - details in [Configuration.kt](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-core/src/commonMain/kotlin/io/github/gciatto/csv/Configuration.kt)
 
 ---
 
 ## The `Formatter` interface
 
-```kotlin
-interface Formatter {
-    
-    // The source of this formatter (i.e. the rows to be formatted).
-    val source: Iterable<Row>
-
-    // The configuration of this formatter (i.e. the characters to be used).
-    val configuration: Configuration
-
-    // Formats the source of this formatter into a sequence of strings (one for each row in the source)
-    fun format(): Iterable<String>
-}
-```
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/Formatter.kt" from="8" to="22" >}}
 
 ---
 
 ## The `Parser` interface
 
-```kotlin
-interface Parser {
-    // The source to be parsed by this parser (must be interpretable as string)
-    val source: Any
-
-    // The configuration of this parser (i.e. the characters to be used).
-    val configuration: Configuration
-
-    // Parses the source of this parser into a sequence of rows (one for each row in the source)
-    fun parse(): Iterable<Row>
-}
-```
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/Parser.kt" from="8" to="22" >}}
 
 --- 
 
@@ -1910,201 +1677,95 @@ package "io github gciatto csv impl" {
 
 ## The `DefaultFormatter` class
 
-```kotlin
-class DefaultFormatter(override val source: Iterable<Row>, override val configuration: Configuration) : Formatter {
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/impl/DefaultFormatter.kt" from="8" to="26" >}}
 
-    // Lazily converts each row from the source into a string, according to the configuration.
-    override fun format(): Iterable<String> = source.asSequence().map(this::formatRow).asIterable()
-
-    // Converts the given row into a string, according to the configuration.
-    private fun formatRow(row: Row): String = when (row) {
-        is Header -> formatAsHeader(row)
-        else -> formatAsRecord(row)
-    }
-
-    // Formats the given row as a header (putting the comment character at the beginning).
-    private fun formatAsHeader(row: Row): String = "${configuration.comment} ${formatAsRecord(row)}"
-
-    // Formats the given row as a record (using the separator and delimiter characters accordingly).
-    private fun formatAsRecord(row: Row): String =
-        row.joinToString("${configuration.separator} ") {
-            val delimiter = configuration.delimiter
-            "$delimiter$it$delimiter"
-        }
-}
-```
+- `format` _lazily_ converts each row into a string: headers are prefixed by the comment character, fields are wrapped by the delimiter character
 
 ---
 
-## The `AbstractParser` class
+## The `AbstractParser` class (pt. 1)
 
-```kotlin
-abstract class AbstractParser(override val source: Any, override val configuration: Configuration) : Parser {
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/impl/AbstractParser.kt" from="11" to="21" >}}
 
-    // Empty methods to be overridden by sub-classes to initialize/finalise parsing.
-    protected open fun beforeParsing() { /* does nothing by default */ }
-    protected open fun afterParsing() { /* does nothing by default */ }
+- `beforeParsing` / `afterParsing` are _hooks_, `sourceAsLines` is the _abstract step_ of a [template method](https://en.wikipedia.org/wiki/Template_method_pattern)
 
-    // Template method that parses the source into a sequence of strings (one per line).
-    protected abstract fun sourceAsLines(): Sequence<String>
+---
 
-    // Parses the source into a sequence of rows (skipping comments, looking for at most 1 header).
-    override fun parse(): Iterable<Row> = sequence {
-        beforeParsing()
-        var header: Header? = null
-        var i = 0
-        for (line in sourceAsLines()) {
-            if (line.isBlank()) {
-                continue
-            } else if (configuration.isHeader(line)) {
-                if (header == null) {
-                    header = headerOf(configuration.getColumnNames(line))
-                    yield(header)
-                }
-            } else if (configuration.isComment(line)) {
-                continue
-            } else if (configuration.isRecord(line)) {
-                val fields = configuration.getFields(line)
-                if (header == null) {
-                    header = anonymousHeader(fields.size)
-                    yield(header)
-                }
-                try {
-                    yield(recordOf(header, fields))
-                } catch (e: IllegalArgumentException) {
-                    throw IllegalStateException("Invalid CSV at line $i: $line", e)
-                }
-            } else {
-                error("Invalid CSV line at $i: $line")
-            }
-            i++
-        }
-        afterParsing()
-    }.asIterable()
-}
-```
+## The `AbstractParser` class (pt. 2)
+
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/impl/AbstractParser.kt" from="24" to="56" >}}
+
+- `sequence { ... yield(...) }` produces rows _lazily_, one at a time
+- `finally` ensures `afterParsing()` is called upon errors too (not if the consumer stops iterating early)
 
 ---
 
 ## The `StringParser` class
 
-```kotlin
-class StringParser(override val source: String, configuration: Configuration) 
-    : AbstractParser(source, configuration) {
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/impl/StringParser.kt" from="5" to="7" >}}
 
-    // Splits the source string into lines.
-    override fun sourceAsLines(): Sequence<String> = source.lineSequence()
-}
-```
+- it simply splits the source string into lines
 
 --- 
 
 ## Providing functionalities via extension methods
 
-- Additions to the `Csv.kt` file:
+Additions to the `Csv.kt` file:
 
-    ```kotlin
-    const val DEFAULT_SEPARATOR = ','
-    const val DEFAULT_DELIMITER = '"'
-    const val DEFAULT_COMMENT = '#'
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/Csv.kt" from="15" to="17" >}}
 
-    // Converts the current container of rows into a CSV string, using the given characters.
-    fun Iterable<Row>.formatAsCSV(
-        separator: Char = DEFAULT_SEPARATOR,
-        delimiter: Char = DEFAULT_DELIMITER,
-        comment: Char = DEFAULT_COMMENT
-    ): String = DefaultFormatter(this, Configuration(separator, delimiter, comment)).format().joinToString("\n")
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/Csv.kt" from="60" to="72" >}}
 
-    // Parses the current CSV string into a table, using the given characters.
-    fun String.parseAsCSV(
-        separator: Char = DEFAULT_SEPARATOR,
-        delimiter: Char = DEFAULT_DELIMITER,
-        comment: Char = DEFAULT_COMMENT
-    ): Table = StringParser(this, Configuration(separator, delimiter, comment)).parse().let(::tableOf)
-    ```
+- `formatAsCSV` converts any container of rows into a CSV string, `parseAsCSV` parses a CSV string into a table
 
 ---
 
 ## Unit tests and usage examples (pt. 1)
 
-- Dummy instances for testing:
-    ```kotlin
-    object CsvStrings {
-        val iris: String = """
-        |# sepal_length, sepal_width, petal_length, petal_width, class
-        |5.1,3.5,1.4,0.2,Iris-setosa
-        |4.9,3.0,1.4,0.2,Iris-setosa
-        |4.7,3.2,1.3,0.2,Iris-setosa
-        """.trimMargin()
+Dummy instances for testing (other constants in [CsvStrings.kt](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-core/src/commonTest/kotlin/io/github/gciatto/csv/CsvStrings.kt)):
 
-        val irisWellFormatted: String = """
-        |# "sepal_length", "sepal_width", "petal_length", "petal_width", "class"
-        |"5.1", "3.5", "1.4", "0.2", "Iris-setosa"
-        |"4.9", "3.0", "1.4", "0.2", "Iris-setosa"
-        |"4.7", "3.2", "1.3", "0.2", "Iris-setosa"
-        """.trimMargin()
-
-        // other dummy constants here
-    }
-    ```
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonTest/kotlin/io/github/gciatto/csv/CsvStrings.kt" from="3" to="16" >}}
     
 ---
 
 ## Unit tests and usage examples (pt. 2)
 
-- Tests involving parsing be like:
-    ```kotlin
-    @Test
-    fun parsingFromCleanString() {
-        val parsed: Table = CsvStrings.iris.parseAsCSV()
-        assertEquals(
-            expected = Tables.iris(Tables.irisShortHeader),
-            actual = parsed
-        )
-    }
-    ```
+{{% multicol %}}{{% col class="col-6" %}}
 
-- Tests involving formatting be like:
-    ```kotlin
-    @Test
-    fun formattingToString() {
-        val iris: Table = Tables.iris(Tables.irisShortHeader)
-        assertEquals(
-            expected = CsvStrings.irisWellFormatted,
-            actual = iris.formatAsCSV()
-        )
-    }
-    ```
+Tests involving parsing be like:
+
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonTest/kotlin/io/github/gciatto/csv/TestCSV.kt" from="50" to="57" >}}
+
+{{% /col %}}{{% col class="col-6" %}}
+
+Tests involving formatting be like:
+
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonTest/kotlin/io/github/gciatto/csv/TestCSV.kt" from="93" to="100" >}}
+
+{{% /col %}}{{% /multicol %}}
 
 --- 
 
 ## Time to go platform-specific
 
-- Further additions to the `Csv.kt` file:
-    ```kotlin
-    // Reads and parses a CSV file from the given path, using the given characters.
-    expect fun parseCsvFile(
-        path: String,
-        separator: Char = DEFAULT_SEPARATOR,
-        delimiter: Char = DEFAULT_DELIMITER,
-        comment: Char = DEFAULT_COMMENT
-    ): Table
-    ```
+- Further additions to the `Csv.kt` file (reading and parsing a CSV file from the given path):
 
-    * notice the `expect` keyword, and the lack of function body
-    * we're just declaring the signature of a platform-specific function
-    * there is no type for representing paths in Kotlin's common std-lib
-        + hence we're using `String` as a platform-agnostic representation of paths
-            - this is a suboptimal choice
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonMain/kotlin/io/github/gciatto/csv/Csv.kt" from="74" to="79" >}}
+
+- notice the `expect` keyword, and the lack of function body
+- we're just declaring the signature of a platform-specific function
+- there is no type for representing paths in Kotlin's common std-lib
+    - hence we're using `String` as a platform-agnostic representation of paths
+        - this is a suboptimal choice
 
 --- 
 
 ## Time to go platform-specific on the JVM (pt. 1)
 
 - I/O (over textual files) is mainly supported by means of the following classes:
-    * [`java.io.File`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html)
-    * [`java.io.BufferedReader`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/BufferedReader.html)
-    * [`java.io.BufferedWriter`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/BufferedWriter.html)
+    * [`java.io.File`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html)
+    * [`java.io.BufferedReader`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/BufferedReader.html)
+    * [`java.io.BufferedWriter`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/BufferedWriter.html)
 
 - Buffered readers support reading a file __line-by-line__
 
@@ -2122,48 +1783,35 @@ class StringParser(override val source: String, configuration: Configuration)
 
 In the `jvmMain` source set
 
-- let's define the following JVM-specific class:
-    ```kotlin
-    class FileParser(
-        override val source: File, // source is now forced to be a File
-        configuration: Configuration
-    ) : AbstractParser(source, configuration) {
+A JVM-specific parser, [FileParser.kt](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-core/src/jvmMain/kotlin/io/github/gciatto/csv/FileParser.kt):
 
-        // Lately initialised reader, corresponding to source
-        private lateinit var reader: BufferedReader
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/jvmMain/kotlin/io/github/gciatto/csv/FileParser.kt" from="8" to="20" >}}
 
-        // Opens the source file, hence initialising the reader, before each parsing
-        override fun beforeParsing() { reader = source.bufferedReader() }
+- the source is now forced to be a `File`
+- the `lateinit` reader is opened before parsing, and closed afterwards
+- the file is read lazily, line-by-line
 
-        // Closes the reader, after each parsing
-        override fun afterParsing() { reader.close() }
+---
 
-        // Lazily reads the source file line-by-line
-        override fun sourceAsLines(): Sequence<String> = reader.lines().asSequence()
-    }
-    ```
+## Time to go platform-specific on the JVM (pt. 3)
 
-- let's create the `Csv.jvm.kt` file containing:
-    ```kotlin
-    actual fun parseCsvFile(
-        path: String,
-        separator: Char,
-        delimiter: Char,
-        comment: Char
-    ): Table = FileParser(File(path), Configuration(separator, delimiter, comment)).parse().let(::tableOf)
-    ```
+The [Csv.jvm.kt](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-core/src/jvmMain/kotlin/io/github/gciatto/csv/Csv.jvm.kt) file:
 
-    * this is how the `parseCsvFile` is implemented __on the JVM__
-    * notice the `actual` keyword, and the presence of a function body
-    * notice the usage of `FileParser` in the function body
-        + class `FileParser` is internal class for filling the abstraction gap on the JVM
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/jvmMain/kotlin/io/github/gciatto/csv/Csv.jvm.kt" from="1" to="13" >}}
+
+- this is how `parseCsvFile` is implemented __on the JVM__
+- notice the `actual` keyword, and the presence of a function body
+- notice the usage of `FileParser` in the function body
+    + `FileParser` is an `internal` class filling the abstraction gap on the JVM
+- `@file:JvmName` is explained [later](#/kotlin-interop)
+
 
 --- 
 
 ## Time to go platform-specific on the JS (pt. 1)
 
 - I/O (over textual files) is mainly supported by means of the following things:
-    * the [`fs` module](https://nodejs.org/docs/latest-v20.x/api/fs.html)
+    * the [`fs` module](https://nodejs.org/api/fs.html)
     * the [`fs.readFileSync` function](https://nodejs.org/api/fs.html#fsreadfilesyncpath-options)
     * the [`fs.writeFileSync` function](https://nodejs.org/api/fs.html#fswritefilesyncfile-data-options)
 
@@ -2187,51 +1835,37 @@ In the `jvmMain` source set
 
 In the `jsMain` source set
 
-1. let's create the `NodeFs.kt` file (containing `external` declarations for the `fs` module):
-    ```kotlin
-    @file:JsModule("fs")
-    @file:JsNonModule
+First, let's create the [NodeFs.kt](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-core/src/jsMain/kotlin/io/github/gciatto/csv/NodeFs.kt) file (containing `external` declarations for the `fs` module):
 
-    package io.github.gciatto.csv
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/jsMain/kotlin/io/github/gciatto/csv/NodeFs.kt" from="1" to="7" >}}
 
-    // Kotlin mapping for: https://nodejs.org/api/fs.html#fsreadfilesyncpath-options
-    external fun readFileSync(path: String, options: dynamic = definedExternally): String
-
-    // Kotlin mapping for: https://nodejs.org/api/fs.html#fswritefilesyncfile-data-options
-    external fun writeFileSync(file: String, data: String, options: dynamic = definedExternally)
-    ```
-
-    * the `@JsModule` annotation instructs the compiler about where to look up the `fs` module
-    * `external` declarations are Kotlin signatures of JS functions
-    * `dynamic` is a special type that can be used to represent any JS object
-        + it overrides Kotlin's type system, hence it should be used with care
-        + it prevents developers from declaring too much `external` stuff
-        + good to use when the JS API is not known in advance or uses union types
-    * `definedExternally` is stating that a parameter is optional (default value is defined in JS)
+- Kotlin mappings for [`readFileSync`](https://nodejs.org/api/fs.html#fsreadfilesyncpath-options) and [`writeFileSync`](https://nodejs.org/api/fs.html#fswritefilesyncfile-data-options)
+- the `@file:JsModule("fs")` annotation instructs the compiler that the declarations of this file come from the `fs` module
+- `external` declarations are Kotlin signatures of JS functions
+- `dynamic` is a special type that can be used to represent any JS object
+    - it overrides Kotlin's type system, hence it should be used with care
+    - it prevents developers from declaring too much `external` stuff
+    - good to use when the JS API is not known in advance or uses union types
+- `definedExternally` is stating that a parameter is optional (default value is defined in JS)
 
 --- 
 
 ## Time to go platform-specific on the JS (pt. 3)
 
-2. let's create the `Csv.js.kt` file containing:
-    ```kotlin
-    actual fun parseCsvFile(
-        path: String,
-        separator: Char,
-        delimiter: Char,
-        comment: Char
-    ): Table = readFileSync(path, js("{encoding: 'utf8'}")).parseAsCSV(separator, delimiter, comment)
-    ```
+Then, let's create the [Csv.js.kt](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-core/src/jsMain/kotlin/io/github/gciatto/csv/Csv.js.kt) file containing:
 
-    * this is how the `parseCsvFile` is implemented __on JS__
-    * notice the `actual` keyword, and the presence of a function body
-    * notice the usage of `readFileSync` to read a file as a string in one shot
-    * notice the exploitation of common code for parsing the string into a `Table` (namely, `parseAsCSV`)
-    * notice the `js("...")` magic function
-        + it allows JS code to be written directly in Kotlin
-        + the provided string should contain bare JS code, which the compiler will output as-is
-        + it's a way to fill the abstraction gap on JS
-        + we use it to create a JS object on the fly, to provide optional parameters to `readFileSync`
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/jsMain/kotlin/io/github/gciatto/csv/Csv.js.kt" from="5" to="11" >}}
+
+- this is how the `parseCsvFile` is implemented __on JS__
+- notice the `actual` keyword, and the presence of a function body
+- notice the usage of `readFileSync` to read a file as a string in one shot
+- notice the exploitation of common code for parsing the string into a `Table` (namely, `parseAsCSV`)
+- `@JsExport` makes the function callable from JS code (see [later](#/kotlin-interop))
+- notice the `js("...")` magic function
+    - it allows JS code to be written directly in Kotlin
+    - the provided string should contain bare JS code, which the compiler will output as-is
+    - it's a way to fill the abstraction gap on JS
+    - we use it to create a JS object on the fly, to provide optional parameters to `readFileSync`
 
 ---
 
@@ -2251,74 +1885,46 @@ In the `jsMain` source set
 
 --- 
 
-## Multi-platform testing (preliminaries)
+## Multi-platform testing (preliminaries, pt. 1)
 
-- file `Utils.kt` in `commonTest`:
-    ```kotlin
-    // Creates a temporary file with the given name, extension, and content, and returns its path.
-    expect fun createTempFile(name: String, extension: String, content: String): String
-    ```
+- file [Utils.kt](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-core/src/commonTest/kotlin/io/github/gciatto/csv/Utils.kt) in `commonTest` (creates a temporary file with the given name and content, and returns its path):
 
-    notice the `expect`ed function
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonTest/kotlin/io/github/gciatto/csv/Utils.kt" from="3" to="12" >}}
 
-- file `Utils.jvm.kt` in `jvmTest`:
-    ```kotlin
-    import java.io.File
+- notice the `expect`ed function
 
-    actual fun createTempFile(name: String, extension: String, content: String): String {
-        val file = File.createTempFile(name, extension)
-        file.writeText(content)
-        return file.absolutePath
-    }
-    ```
-    + cf. documentation of method [`File.createTempFile`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html#createTempFile(java.lang.String,java.lang.String)) 
+- file [Utils.jvm.kt](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-core/src/jvmTest/kotlin/io/github/gciatto/csv/Utils.jvm.kt) in `jvmTest`:
 
-- file `Utils.js.kt` in `jsTest`:
-    ```kotlin
-    private val Math: dynamic by lazy { js("Math") }
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/jvmTest/kotlin/io/github/gciatto/csv/Utils.jvm.kt" from="5" to="10" >}}
 
-    @JsModule("os") @JsNonModule
-    external fun tmpdir(): String
+- cf. documentation of method [`File.createTempFile`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html#createTempFile(java.lang.String,java.lang.String))
 
-    actual fun createTempFile(name: String, extension: String, content: String): String {
-        val tag = Math.random().toString().replace(".", "")
-        val path = "${tmpdir()}/$name-$tag.$extension"
-        writeFileSync(path, content)
-        return path
-    }
-    ```
-    + cf. documentation of [`os.tmpdir`](https://nodejs.org/docs/latest-v20.x/api/os.html#ostmpdir) and [`Math`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math) 
+---
+
+## Multi-platform testing (preliminaries, pt. 2)
+
+- file [NodeOs.kt](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-core/src/jsMain/kotlin/io/github/gciatto/csv/NodeOs.kt) in `jsMain` (`external` declaration for the `os` module):
+
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/jsMain/kotlin/io/github/gciatto/csv/NodeOs.kt" from="1" to="5" >}}
+
+- file [Utils.js.kt](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-core/src/jsTest/kotlin/io/github/gciatto/csv/Utils.js.kt) in `jsTest`:
+
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/jsTest/kotlin/io/github/gciatto/csv/Utils.js.kt" from="3" to="15" >}}
+
+- cf. documentation of [`os.tmpdir`](https://nodejs.org/api/os.html#ostmpdir)
+- `kotlin.random.Random` is part of the common std-lib, so no JS-specific code is needed for random numbers
 
 ---
 
 ## Multi-platform testing (actual tests)
 
-- file `CsvFiles.kt` in `commonTest`:
-    ```kotlin
-    object CsvFiles {
-        // Path of the temporary file containing the string CsvStrings.iris
-        // (file lazily created upon first usage).
-        val iris: String by lazy { createTempFile("iris", ".csv", CsvStrings.iris) }
+- file [CsvFiles.kt](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-core/src/commonTest/kotlin/io/github/gciatto/csv/CsvFiles.kt) in `commonTest` (paths of temporary files, lazily created upon first usage, containing the strings in `CsvStrings`):
 
-        // Path of the temporary file containing the string CsvStrings.irisWellFormatted
-        // (file lazily created upon first usage).
-        val irisWellFormatted: String by lazy {
-            createTempFile("irisWellFormatted", ".csv", CsvStrings.irisWellFormatted)
-        }
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonTest/kotlin/io/github/gciatto/csv/CsvFiles.kt" from="3" to="10" >}}
 
-        // other paths here, corresponding to other constants in CsvStrings
-    }
-    ```
+- tests for parsing (in [TestCsvFiles.kt](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-core/src/commonTest/kotlin/io/github/gciatto/csv/TestCsvFiles.kt)) be like:
 
-- tests for parsing be like:
-    ```kotlin
-    @Test
-    fun testParseIris() {
-        val parsedFromString = CsvStrings.iris.parseAsCSV()
-        val readFromFile = parseCsvFile(CsvFiles.iris)
-        assertEquals(parsedFromString, readFromFile)
-    }
-    ```
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-core/src/commonTest/kotlin/io/github/gciatto/csv/TestCsvFiles.kt" from="8" to="13" >}}
 
 {{% /section %}}
 
@@ -2328,7 +1934,7 @@ In the `jsMain` source set
 
 ## Output of a multi-platform build
 
-- Kotlin multi-platform projects can be assembled as JARs
+- Kotlin multi-platform libraries are published as a set of artifacts (one per target, plus _Gradle module metadata_)
     * enabling importing the project as a dependency in other multi-platform projects
 
 - The `jvmMain` source set is compiled into a JVM-compliant JAR
@@ -2340,7 +1946,7 @@ In the `jsMain` source set
     * a Kotlin library (`.klib`), enabling importing the project as a dependency in Kotlin/JS projects
         + via the various `*Jar` or `assemble` tasks
     * a NodeJS project
-        + via the `compileProductionExecutableKotlinJs` task
+        + via the `jsProductionExecutableCompileSync` (or `jsProductionLibraryCompileSync`) task
 
 --- 
 
@@ -2351,32 +1957,36 @@ In the `jsMain` source set
 - Effect: 
     1. compile the project as JVM bytecode 
     2. pack the bytecode into a JAR file
-    3. move the JAR file into `$PROJ_DIR/build/libs/$PROJ_NAME-jvm-$PROJ_VERSION`
+    3. move the JAR file into `$PROJ_DIR/build/libs/$PROJ_NAME-jvm-$PROJ_VERSION.jar`
 
 - The JAR does not contain dependencies
 
 - Ad-hoc Gradle plugins or code are needed to create a [fat JAR](https://www.baeldung.com/gradle-fat-jar)
+    * e.g. the running example uses the [Shadow](https://gradleup.com/shadow/) plugin, cf. task `shadowJar`
 
 --- 
 
 ## Output of JS compilation
 
-- Task for JS-only compilation of re-usable packages: `compileProductionExecutableKotlinJs`
+- Task for JS-only compilation of re-usable packages: `jsProductionLibraryCompileSync` (with `binaries.library()`)
+    * or `jsProductionExecutableCompileSync` (with `binaries.executable()`)
 
-- Effect: 
+- Effect:
     1. Generate Node project into `$ROOT_PROJ_DIR/build/js/packages/$ROOT_PROJ_NAME-$PROJ_NAME`:
-        - JS code
+        - JS code (`.mjs` files, when using ES modules)
         - `package.json` file
-    2. [Dead code elimination](https://kotlinlang.org/docs/javascript-dce.html) (DCE) removing unused code
-        - i.e. code not (indirectly) called by main
+    2. [Dead code elimination](https://kotlinlang.org/docs/js-ir-compiler.html) removing unused code
+        - i.e. code which is neither exported nor (indirectly) called by `main`
 
-- Support for packing as NPM package via the [`npm-publish`](https://npm-publish.petuska.dev/3.4/) Gradle plugin
+- Support for packing as npm package via the [`npm-publish`](https://npm-publish.petuska.dev/) Gradle plugin
 
 {{% /section %}}
 
 ---
 
 {{% section %}}
+
+{{< slide id="kotlin-interop" >}}
 
 ## Calling Kotlin from other platforms
 
@@ -2500,7 +2110,7 @@ public class MyType {
 {{% /col %}}
 {{% /multicol %}}
 
-- Kotlin's package functions in file `X.kt` are mapped to static methods of class `XKt`
+- Kotlin's top-level functions in file `X.kt` are mapped to static methods of class `XKt`
 
 {{% multicol %}}
 {{% col %}}
@@ -2518,7 +2128,7 @@ public final class MyFileKt {
 {{% /col %}}
 {{% /multicol %}}
 
-- ... unless the `JvmName` annotation is exploited
+- ... unless the `JvmName` annotation is exploited (e.g. `@file:JvmName("Csv")` in our `Csv.kt`)
 
 {{% multicol %}}
 {{% col %}}
@@ -2530,7 +2140,7 @@ fun f() {}
 {{% /col %}}
 {{% col %}}
 ```java
-public class MyModule {
+public final class MyModule {
     public static void f() {}
 }
 ```
@@ -2645,11 +2255,12 @@ void f(int... xs) {
 {{% /col %}}
 {{% /multicol %}}
 
-- Kotlin's extension methods are mapped to ordinary Java methods with one more argument
+- Kotlin's extension methods are mapped to static Java methods with one more argument (the receiver)
 
 {{% multicol %}}
 {{% col %}}
 ```kotlin
+// file MyFile.kt
 class MyType { }
 fun MyType.myMethod() {}
 
@@ -2660,12 +2271,13 @@ x.myMethod() // postfix
 {{% /col %}}
 {{% col %}}
 ```java
-public class MyType {}
-public void myMethod(MyType self) {}
+public final class MyFileKt {
+    public static void myMethod(MyType $this$myMethod) {}
+}
 
 // usage:
 MyType x = new MyType();
-myMethod(x); // prefix
+MyFileKt.myMethod(x); // prefix
 ```
 {{% /col %}}
 {{% /multicol %}}
@@ -2712,7 +2324,7 @@ int x = sumOfInt(
 {{% multicol %}}
 {{% col %}}
 ```kotlin
-fun f(a: Int = 1, b: Int = 2, c: Int = 3) = // ...
+fun f(a: Int = 1, b: Int = 2, c: Int = 3) { /* ... */ }
 
 // usage:
 f(b = 5)
@@ -2736,7 +2348,7 @@ f(1, 5, 3);
     + optional arguments are handy in Kotlin, but...
     + ... they are painful to use in Java
     + mitigation strategy: use `@JvmOverloads` to generate overloaded methods for Java
-        * sadly, the annotation does not take into account all possible ordered combinations of arguments
+        * by design, the annotation only generates overloads dropping _trailing_ parameters
 
 {{% multicol %}}
 {{% col %}}
@@ -2744,7 +2356,7 @@ f(1, 5, 3);
 import kotlin.jvm.JvmOverloads
 
 @JvmOverloads
-fun f(a: Int = 1, b: Int = 2, c: Int = 3) = // ...
+fun f(a: Int = 1, b: Int = 2, c: Int = 3) { /* ... */ }
 ```
 {{% /col %}}
 {{% col %}}
@@ -2754,7 +2366,7 @@ void f(int a, int b) { f(a, b, 3); }
 void f(int a) { f(a, 2, 3); }
 void f() { f(1, 2, 3); }
 
-// overloads that cannot be generated (same erasure):
+// overloads that are not generated (some would even clash, having the same JVM signature):
 // void f(int a, int c) { f(a, 2, c); }
 // void f(int b, int c) { f(1, b, c); }
 // void f(int c) { f(1, 2, c); }
@@ -2762,6 +2374,24 @@ void f() { f(1, 2, 3); }
 ```
 {{% /col %}}
 {{% /multicol %}}
+
+---
+
+## Kotlin--Java Mapping (pt. 7)
+
+- Kotlin has no _checked_ exceptions: use `@Throws` to let Java callers catch them
+    ```kotlin
+    @Throws(IOException::class)
+    fun readFile(path: String): String { /* ... */ }  // Java: String readFile(String path) throws IOException
+    ```
+
+- Kotlin's nullability is exposed to Java via annotations (`@NotNull`, `@Nullable`)
+    + Java types are seen in Kotlin as _platform types_ (e.g. `String!`), whose nullability is unknown
+
+- `internal` members are `public` in the bytecode, but their names are _mangled_
+    + e.g. `internal fun f()` in module `csv-core` becomes `f$csv_core()`, which is discouraging to call from Java
+
+- Reference: [calling Kotlin from Java](https://kotlinlang.org/docs/java-to-kotlin-interop.html)
 
 ---
 
@@ -2780,37 +2410,39 @@ void f() { f(1, 2, 3); }
 > __Disclaimer__: the generated JS code is not really meant to be read by humans
 
 - DCE will eliminate unused code
-    + "unused" $\equiv$ "not explicitly labelled as exported"
+    + "unused" $\equiv$ "neither exported, nor (indirectly) used by exported code or `main`"
     + code is exported by means of the `@JsExport` annotation
         * to be used on API types and functions
         * requires the `kotlin.js.ExperimentalJsExport` __opt-in__
     + not all syntactical constructs or types are currently exportable
-        * you should ignore the warning explicitly
+        * members that cannot be exported can be excluded via `@JsExport.Ignore`
+        * as a last resort, the warning can be suppressed (as the running example does)
 
 {{% multicol %}}
 {{% col %}}
 ```kotlin
-@file:Suppress("NON_EXPORTABLE_TYPE")
-
-package my.package
+package my.pkg
 
 import kotlin.js.JsExport
-import kotlin.js.JsName
 
 @JsExport
 class MyType {
-    val nonExportableType: Long
+    @JsExport.Ignore // Sequence is not exportable
+    val numbers: Sequence<Int> = sequenceOf(1, 2, 3)
 }
 
 @JsExport
-fun myFunction() = // ...
+fun myFunction() { /* ... */ }
 ```
 {{% /col %}}
 {{% col %}}
 ```js
-var module = require("project-name");
-var MyType = module.my.package.MyType;
-var myFunction = module.my.package.myFunction;
+// ES modules: packages are flattened
+import { MyType, myFunction } from "project-name";
+
+// CommonJS / UMD: packages are preserved
+const pkg = require("project-name").my.pkg;
+const { MyType, myFunction } = pkg;
 ```
 {{% /col %}}
 {{% /multicol %}}
@@ -2827,29 +2459,30 @@ var myFunction = module.my.package.myFunction;
 {{% multicol %}}
 {{% col %}}
 ```kotlin
-package my.package
+package my.pkg
 
 @JsName("sumNumbers")
-fun sum(vararg numbers: Int): Int = // ...
+fun sum(vararg numbers: Int): Int = numbers.sum()
 
 @JsName("sumIterableOfNumbers")
-fun sum(numbers: Iterable<Int>): Int = // ...
+fun sum(numbers: Iterable<Int>): Int = numbers.sum()
 
 @JsName("sumSequenceOfNumbers")
-fun sum(numbers: Sequence<Int>): Int = // ...
+fun sum(numbers: Sequence<Int>): Int = numbers.sum()
 ```
 {{% /col %}}
 {{% col %}}
 ```js
-var module = require("project-name");
-var sumNumbers = module.my.package.sumNumbers;
-var sumIterableOfNumbers = module.my.package.sumIterableOfNumbers;
-var sumSequenceOfNumbers = module.my.package.sumSequenceOfNumbers;
+import {
+    sumNumbers,
+    sumIterableOfNumbers,
+    sumSequenceOfNumbers
+} from "project-name";
 ```
 {{% /col %}}
 {{% /multicol %}}
 
-- Kotlin class $\equiv$ [JS prototype](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes)
+- Kotlin class $\equiv$ [JS prototype](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Advanced_JavaScript_objects/Object_prototypes) (with the default ES5 target)
 
 {{% multicol %}}
 {{% col %}}
@@ -2883,7 +2516,8 @@ MyClass.prototype.method = function () {
 
     + Kotlin preserves overflow semantics for `kotlin.Int`, `kotlin.Byte`, `kotlin.Short`, `kotlin.Char` and `kotlin.Long`
 
-    + `kotlin.Long` is not mapped to any JS object, as there is no 64-bit integer number type in JS. It is emulated by a Kotlin class
+    + `kotlin.Long` is emulated by a Kotlin class by default
+        * it can be mapped to JS `BigInt` (_experimental_), with the `es2020` target or the `-Xes-long-as-bigint` compiler option
 
     + `kotlin.String` is mapped to JS `String`
 
@@ -2891,7 +2525,8 @@ MyClass.prototype.method = function () {
 
     + `kotlin.Array` is mapped to JS `Array`
 
-    + Kotlin collections (`List`, `Set`, `Map`, and so on) are not mapped to any specific JS type
+    + Kotlin collections are mapped to `KtList`, `KtSet`, `KtMap` (and their mutable variants)
+        * which expose JS views via, e.g., `asJsReadonlyArrayView()`
 
     + `kotlin.Throwable` is mapped to JS `Error`
 
@@ -2900,7 +2535,6 @@ MyClass.prototype.method = function () {
 ## Kotlin--JavaScript Mapping (pt. 4)
 
 - practical consequence: no way to distinguish numbers by type
-
     ```kotlin
     val x: Int = 23
     val y: Any = x
@@ -2918,7 +2552,7 @@ string2.missingMethod() // compilation ok, runtime error
 ```
 
 - Kotlin's common std-lib is implemented in JS
-    * cf. NPM package [`kotlin`](https://www.npmjs.com/package/kotlin)
+    * it is bundled into the compiled output (e.g. `kotlin-kotlin-stdlib.mjs`), and dead code is eliminated
 
 --- 
 
@@ -2934,7 +2568,7 @@ string2.missingMethod() // compilation ok, runtime error
 {{% multicol %}}
 {{% col %}}
 ```kotlin
-fun f(vararg xs: String) = // ...
+fun f(vararg xs: String) { /* ... */ }
 
 // usage:
 f("a")
@@ -2956,9 +2590,11 @@ f(["a", "b", "c"])
 
 ---
 
+{{< slide id="mp-cicd" >}}
+
 ## Multi-platform CI/CD
 
-Conceptual workflow:
+Conceptual workflow (cf. build matrices in the [CI lecture](../07-ci/)):
 1. Check style (e.g. via [KtLint](https://ktlint.github.io/)) of all Kotlin sources
 2. Automatic bug detection (e.g. via [Detekt](https://github.com/detekt/detekt))
 3. For each operating system `O` (e.g. Win, Mac, Linux):
@@ -2967,24 +2603,28 @@ Conceptual workflow:
             1. ensure main code compiles (e.g. via Gradle task `<T>MainClasses`)
             2. ensure test code compiles (e.g. via Gradle task `<T>TestClasses`)
             3. ensure test passes (e.g. via Gradle task `<T>Test`)
-4. If a release is needed (e.g. commit on `master` branch)
+    - Apple targets require macOS runners
+4. If a release is needed (e.g. commit on the default branch)
     - for each target platform `T` $\cup$ `kotlin-multiplatform`:
         1. assemble compiled code into archive
         2. push archive on main repository `R` of platform `T`
+
+- The running example's [workflows](https://github.com/unibo-spe/multiplatform-example/tree/master/.github/workflows) test the JVM and JS targets on 3 OSs $\times$ several JDK / Node versions
 
 --- 
 
 ## About the practical CI/CD
 
 - Even more complicated, because release on Maven Central is complex
+    + since June 2025, via the [Central Publisher Portal](https://central.sonatype.org/publish/publish-portal-gradle/) (the legacy OSSRH service has been shut down)
 
 - Setting up a CI/CD pipeline of this kind requires a lot of work
     + and Gradle / GitHub Actions boilerplate
 
 - Recommendations:
-    1. Use templates, such as: https://github.com/gciatto/template-kt-mpp-project/
-    2. Use Gradle plugins, such as: https://github.com/gciatto/kt-mpp
-    3. Use existing projects as examples, e.g. https://github.com/tuProlog/2p-kt
+    1. Use templates, such as [`template-kt-mpp-project`](https://github.com/gciatto/template-kt-mpp-project/)
+    2. Use Gradle plugins, such as [`kt-mpp`](https://github.com/gciatto/kt-mpp) or [`vanniktech/gradle-maven-publish-plugin`](https://github.com/vanniktech/gradle-maven-publish-plugin)
+    3. Use existing projects as examples, e.g. [`2p-kt`](https://github.com/tuProlog/2p-kt)
 
 ---
 
@@ -2997,30 +2637,32 @@ Conceptual workflow:
 
 - Kotlin / Multiplatform $\rightarrow$ MCR
 
-- `JS` $\rightarrow$ [NPM](https://www.npmjs.com/)
+- `JS` $\rightarrow$ [npm registry](https://www.npmjs.com/)
 
-- `Android` $\rightarrow$ [Google Play](https://play.google.com/store?hl=en)
+- `Android` $\rightarrow$ libraries: MCR or [Google's Maven repository](https://maven.google.com/); apps: [Google Play](https://play.google.com/store)
 
-- `Mac` / `iOS` $\rightarrow$ [App Store](https://www.apple.com/ios/app-store/)
-    * or [Homebrew](https://brew.sh/)
+- `Mac` / `iOS` $\rightarrow$ libraries: [Swift Package Manager](https://www.swift.org/documentation/package-manager/) or [CocoaPods](https://cocoapods.org/); apps: [App Store](https://www.apple.com/app-store/)
+    * or [Homebrew](https://brew.sh/), for command-line tools
 
 ---
 
 ## Repositories by platform (pt. 2)
 
-- `Windows` $\rightarrow$ [Microsoft Store](https://www.microsoft.com/en-us/store/apps/windows)
+- `Windows` $\rightarrow$ [Microsoft Store](https://apps.microsoft.com/)
     * or [Chocolatey](https://chocolatey.org/)
     * or [Scoop](https://scoop.sh/)
 
 - `Linux` $\rightarrow$ depends on the distro   
     * e.g. [Arch Linux](https://archlinux.org/) $\rightarrow$ [AUR](https://aur.archlinux.org/)
-    * inter-distro: [Flatpak](https://flatpak.org/) $\rightarrow$ [Flathub](https://flathub.org/home) 
+    * inter-distro: [Flatpak](https://flatpak.org/) $\rightarrow$ [Flathub](https://flathub.org/)
 
 - `Python` $\rightarrow$ [PyPI](https://pypi.org/)
 
 - `.NET` $\rightarrow$ [NuGet](https://www.nuget.org/)
 
 ---
+
+{{< slide id="jpype" >}}
 
 # Multi-platform programming
 
@@ -3036,11 +2678,12 @@ Conceptual workflow:
 
 - Put simply, the JVM too is C++ software
 
-- Can Python code be written in Java and then wrapped into Python?
+- Can Python libraries be written in Java (or Kotlin/JVM) and then wrapped into Python?
 
 - Apparently yes, via several ad-hoc bridging technologies:
     * [JPype](https://jpype.readthedocs.io/) a bridge for calling JVM code from Python as a native library
-    * [Jython](https://jython.org/) a JVM-based Python interpreter
+    * [Jython](https://www.jython.org/) a JVM-based Python interpreter (supporting Python 2.7 only)
+    * [GraalPy](https://www.graalvm.org/python/) a Python 3 implementation on GraalVM, interoperating with Java
     * [Py4J](https://www.py4j.org/) an RPC based bridge for calling Java from Python
     * [Pyjnius](https://pyjnius.readthedocs.io/) similar to JPype, but based on [Cython](https://cython.org)
     * and many others...
@@ -3050,7 +2693,7 @@ Conceptual workflow:
 
 ---
 
-## JPype Overview:
+## JPype overview
 
 1. Ensure you have a JVM installed on your system
     + with the `JAVA_HOME` environment variable set to the JVM installation directory
@@ -3079,6 +2722,9 @@ Conceptual workflow:
 
     System.out.println("Hello World!")
     ```
+    + `jpype.imports` works for well-known top-level domains (e.g. `java`, `javax`, `com`, `org`)
+        * for other ones (e.g. `io.github.*`) use `jpype.JClass("...")` / `jpype.JPackage("...")`, or `jpype.imports.registerDomain("io")`
+    + by default (`convertStrings=False`), Java methods return Java strings, to be converted via `str(...)` when needed
 
 ---
 
@@ -3089,8 +2735,22 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
 - Java __classes__ are __presented__ as similarly to Python classes as possible
 
 - the only major difference is that __Java classes__ and objects are _closed_ and __cannot be modified__
+    + except via _customisers_ (see [later](#/jpype-customisers))
 
-{{< figure src="jpype-types.png" width="50%" alt="Java classes vs. Python classes in JPype" >}}
+<div style="font-size: 0.70em">
+
+| Description | Java | Python |
+|---|---|---|
+| Import a class | `import org.pkg.MyClass` | `from org.pkg import MyClass` |
+| Import a class without a well-known TLD | `import zippy.NonStandard` | `NonStandard = JClass('zippy.NonStandard')` |
+| Construct an object | `MyClass o = new MyClass(1);` | `o = MyClass(1)` |
+| Get / set a static field | `MyClass.staticField = 2;` | `MyClass.staticField = 2` |
+| Call a static / member method | `MyClass.callStatic(1); o.callMember(1);` | `MyClass.callStatic(1); o.callMember(1)` |
+| Member with Python naming conflict | `o.pass()` | `o.pass_()` |
+| Check inheritance | `o instanceof MyClass` | `isinstance(o, MyClass)` |
+| Cast to a specific type | `(BaseClass) o` | `BaseClass @ o` |
+
+</div>
 
 ---
 
@@ -3105,15 +2765,24 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
 
 - `JException` serves as the base class for all Java exceptions
 
-<!-- ![Java exceptions vs. Python exceptions in JPype](./jpype-exceptions.png) -->
-{{< figure src="jpype-exceptions.png" width="50%" alt="Java exceptions vs. Python exceptions in JPype" >}}
+<div style="font-size: 0.65em">
 
+| Description | Java | Python |
+|---|---|---|
+| Catch an exception | `try { o.throwsException(); } catch (java.lang.Exception ex) { ... }` | `try: o.throwsException()`<br>`except java.lang.Exception as ex: ...` |
+| Throw an exception to Java | `throw new java.lang.Exception("Problem");` | `raise java.lang.Exception("Problem")` |
+| Check if an object is a Java exception | | `isinstance(obj, JException)` |
+| Closeable items | `try (InputStream is = Files.newInputStream(file)) { ... }` | `with Files.newInputStream(file) as is: ...` |
+
+</div>
 
 ---
 
 ## JPype's Bridging Model (pt. 3)
 
 Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/quickguide.html#primitives)
+
+<div class="multiCol"><div class="col" style="width: 38%">
 
 - most Python primitives __directly map__ into Java primitives
 
@@ -3123,13 +2792,32 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
 
 - each primitive Java type is __exposed__ in JPype (`jpype.JBoolean`, `.JByte`, `.JChar`, `.JShort`, `.JInt`, `.JLong`, `.JFloat`, `.JDouble`).
 
-{{< figure src="jpype-primitives.png" width="50%" alt="Java primitives vs. Python primitives in JPype" >}}
+</div><div class="col">
+
+<div style="font-size: 0.6em">
+
+| Description | Java | Python |
+|---|---|---|
+| Cast to hit an overload | `o.call((int) v);` | `o.call(JInt(v))` |
+| Create a primitive array | `int[] array = new int[5];` | `array = JInt[5]` |
+| Create a rectangular primitive array | `int[][] array = new int[5][10];` | `array = JInt[5, 10]` |
+| Create an array of arrays | `int[][] array = new int[5][];` | `array = JInt[5, :]` |
+| Create an initialised primitive array | `int[] array = new int[]{1, 2, 3};` | `array = JInt[:]([1, 2, 3])` |
+| Create an initialised boxed array | `Integer[] array = new Integer[]{1, 2, 3};` | `array = java.lang.Integer[:]([1, 2, 3])` |
+| Put a specific primitive type on a list | `List<Integer> l = new ArrayList<>();`<br>`l.add(1);` | `l = ArrayList()`<br>`l.add(JInt(1))` |
+| Box a primitive | `Integer boxed = 1;` | `boxed = JObject(JInt(1))` |
+
+</div>
+
+</div></div>
 
 ---
 
 ## JPype's Bridging Model (pt. 4)
 
 Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/quickguide.html#strings)
+
+<div class="multiCol"><div class="col" style="width: 38%">
 
 - Java strings are __similar__ to Python strings
 
@@ -3140,7 +2828,22 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
 
 - when comparing or using strings as dictionary keys, all `JString` objects should be converted to Python
 
-{{< figure src="jpype-strings.png" width="50%" alt="Java strings vs. Python strings in JPype" >}}
+</div><div class="col">
+
+<div style="font-size: 0.6em">
+
+| Description | Java | Python |
+|---|---|---|
+| Create a Java string | `String s = new String("foo");` | `s = JString("foo")` |
+| Create a Java string from bytes | `byte[] b;`<br>`String s = new String(b, "UTF-8");` | `b = b'foo'`<br>`s = JString(b, "UTF-8")` |
+| Convert a Java string | | `str(javaStr)` |
+| Compare Python and Java strings | | `str(javaStr) == pyString` |
+| Compare Java strings | `javaStr.equals("foo")` | `javaStr == "foo"` |
+| Check if an object is a Java string | | `isinstance(obj, JString)` |
+
+</div>
+
+</div></div>
 
 ---
 
@@ -3148,7 +2851,9 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
 
 Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/quickguide.html#arrays)
 
-- Java arrays are __mapped__ to Python __lists__ 
+<div class="multiCol"><div class="col" style="width: 38%">
+
+- Java arrays are __mapped__ to Python __lists__
 
 - more precisely, they __operate like__ Python _lists_, but they are __fixed in size__
 
@@ -3156,8 +2861,26 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
 
 - passing a __slice__ of a Python list to Java will create a __copy__ of the sub-list
 
-{{< figure src="jpype-arrays.png" width="50%" alt="Java arrays vs. Python lists in JPype" >}}
+</div><div class="col">
 
+<div style="font-size: 0.6em">
+
+| Description | Java | Python |
+|---|---|---|
+| Create a single-dimension array | `MyClass[] array = new MyClass[5];` | `array = MyClass[5]` |
+| Create a multi-dimension array | `MyClass[][] array2 = new MyClass[5][];` | `array2 = MyClass[5, :]` |
+| Access an element | `array[0] = new MyClass();` | `array[0] = MyClass()` |
+| Size of an array | `array.length` | `len(array)` |
+| Get last element | `MyClass a = array[array.length - 1];` | `a = array[-1]` |
+| Slice an array | | `a = array[2:5]` |
+| Clone an array | `MyClass[] a = array.clone();` | `a = array.clone()` |
+| Convert to Python list | | `pylist = list(array)` |
+| Iterate elements | `for (MyClass element : array) { ... }` | `for element in array: ...` |
+| Check if an object is a Java array | | `isinstance(obj, JArray)` |
+
+</div>
+
+</div></div>
 
 ---
 
@@ -3165,7 +2888,9 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
 
 Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/quickguide.html#collections)
 
-- Java collections are __overloaded__ with Python __syntax__ where possible 
+<div class="multiCol"><div class="col" style="width: 38%">
+
+- Java collections are __overloaded__ with Python __syntax__ where possible
     + to operate similarly to Python collections
 
 - Java's `Iterable`s are __mapped__ to Python _iterables_ by overriding the `__iter__` method
@@ -3176,7 +2901,28 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
 
 - Java's `List`s support Python's __list__ syntax by overriding `__getitem__` and `__setitem__`
 
-{{< figure src="jpype-collections.png" width="50%" alt="Java collections vs. Python collections in JPype" >}}
+</div><div class="col">
+
+<div style="font-size: 0.6em">
+
+| Description | Java | Python |
+|---|---|---|
+| Import list type | `import java.util.ArrayList;` | `from java.util import ArrayList` |
+| Construct a list | `List<Integer> l = new ArrayList<>();` | `l = ArrayList()` |
+| Get length of list | `int sz = l.size();` | `sz = len(l)` |
+| Get list item | `Integer i = l.get(0);` | `i = l[0]` |
+| Set list item | `l.set(0, 1);` | `l[0] = JInt(1)` |
+| Iterate list elements | `for (Integer e : l) { ... }` | `for e in l: ...` |
+| Import map type | `import java.util.HashMap;` | `from java.util import HashMap` |
+| Construct a map | `Map<String, Integer> m = new HashMap<>();` | `m = HashMap()` |
+| Get length of map | `int sz = m.size();` | `sz = len(m)` |
+| Get map item | `Integer i = m.get("foo");` | `i = m["foo"]` |
+| Set map item | `m.put("foo", 1);` | `m["foo"] = JInt(1)` |
+| Iterate map entries | `for (Map.Entry<String, Integer> e : m.entrySet()) { ... }` | `for e in m.entrySet(): ...` |
+
+</div>
+
+</div></div>
 
 ---
 
@@ -3184,35 +2930,80 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
 
 Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/quickguide.html#implements-and-extension)
 
-- Java _interfaces_ can be __implemented__ in Python, via JPype's __decorators__
+- Java _interfaces_ can be __implemented__ in Python, via JPype's `@JImplements` and `@JOverride` __decorators__
 
-- Java's non-final / abstract classes __cannot be extended__ in Python
+- No Java class (not even abstract ones) __can be extended__ in Python
 
 - Python __lambda expressions__ can be cast to Java's __functional interfaces__
 
-{{< figure src="jpype-implements.png" width="50%" alt="Implementing Java interfaces in Python" >}}
+<div style="font-size: 0.65em">
+
+| Description | Java | Python |
+|---|---|---|
+| Implement an interface | <code>public class PyImpl implements MyInterface {<br>&nbsp;&nbsp;public void call() { &#46;&#46;&#46; }<br>}</code> | <code>@JImplements(MyInterface)<br>class PyImpl:<br>&nbsp;&nbsp;@JOverride<br>&nbsp;&nbsp;def call(self): &#46;&#46;&#46;</code> |
+| Extend a class | `public class PyImpl extends MyClass { ... }` | _not supported_ |
+| Lambdas | `DoubleUnaryOperator u = (p -> p * 2);` | `u = DoubleUnaryOperator @ (lambda x: x * 2)` |
+| Add methods to an existing Java class | | <code>@JImplementationFor(&quot;java.util.Map&quot;)<br>class _JMap:<br>&nbsp;&nbsp;def \_\_len\_\_(self): return self.size()</code> |
+
+</div>
 
 ---
 
-## JPype type conversion model (pt. 1)
+## JPype type conversion model
 
 Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/userguide.html#type-matching)
 
-{{< figure src="jpype-conversions.png" width="70%" alt="Explicit and implicit type conversions in JPype" >}}
+<div class="multiCol"><div class="col" style="width: 70%">
 
----
+<div style="font-size: 0.5em">
 
-## JPype type conversion model (pt. 2)
+| Python \ Java | `byte` | `short` | `int` | `long` | `float` | `double` | `boolean` | `char` | `String` | Array | Object | `j.l.Object` | `j.l.Class` |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `int` | I<sup>1</sup> | I<sup>1</sup> | X | I | I<sup>3</sup> | I<sup>3</sup> | X<sup>8</sup> | | | | | I<sup>11</sup> | |
+| `float` | | | | | I<sup>1</sup> | X | | | | | | I<sup>11</sup> | |
+| `str` | | | | | | | | I<sup>2</sup> | X | | | I | |
+| `JByte` | X | | | | | | | | | | | I<sup>9</sup> | |
+| `JShort` | | X | | | | | | | | | | I<sup>9</sup> | |
+| `JInt` | | | X | | | | | | | | | I<sup>9</sup> | |
+| `JLong` | | | | X | | | | | | | | I<sup>9</sup> | |
+| `JFloat` | | | | | X | | | | | | | I<sup>9</sup> | |
+| `JDouble` | | | | | | X | | | | | | I<sup>9</sup> | |
+| `JBoolean` | | | | | | | X | | | | | I<sup>9</sup> | |
+| `JChar` | | | | | | | | X | | | | I<sup>9</sup> | |
+| `JString` | | | | | | | | | X | | | I | |
+| `JArray` | | | | | | | | | | I/X<sup>4</sup> | | I | |
+| `JObject` | | | | | | | | | | I/X<sup>6</sup> | I/X<sup>7</sup> | I/X<sup>7</sup> | |
+| `JClass` | | | | | | | | | | | | I | X |
+| boxed<sup>10</sup> | I | I | I | I | I | I | I | | | | | I | |
 
-### Legend
+</div>
 
-- none, there is no way to convert
+</div><div class="col">
 
-- __explicit__ (_E_), JPype can convert the desired type, but only explicitly via casting
+<div style="font-size: 0.6em">
 
-- __implicit__ (_I_), JPype will convert as needed
+__Legend__ (`j.l` = `java.lang`):
 
-- __exact__ (_X_), like implicit, but takes _priority_ in __overload selection__
+- _empty_: there is no way to convert
+- __explicit__ (_E_): only via casting
+- __implicit__ (_I_): JPype will convert as needed
+- __exact__ (_X_): like implicit, but takes _priority_ in __overload selection__
+
+__Notes__:
+- <sup>1</sup> only if the value fits the Java type
+- <sup>2</sup> only strings of length 1
+- <sup>3</sup> may be lossy, as in Java
+- <sup>4</sup> dimensions and types must match
+- <sup>6</sup> only for compatible array classes
+- <sup>7</sup> exact for the object's own class, implicit otherwise
+- <sup>8</sup> only `True` and `False`
+- <sup>9</sup> boxed as per Java rules
+- <sup>10</sup> Java boxed types: always implicit, to disambiguate from primitives
+- <sup>11</sup> boxed to `java.lang.Number`
+
+</div>
+
+</div></div>
 
 ---
 
@@ -3228,13 +3019,14 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
     System.out.println('A')
     ```
 
-- Which overload of `System.out.println` is called among the [many admissible ones](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/PrintStream.html)?
-    * Python's `1` is convertible to Java's `int`, `long`, and `short` 
-        + but Java's `int` is the __exact__ match
+- Which overload of `System.out.println` is called among the [many admissible ones](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/PrintStream.html)?
     * Python's `2.0` is convertible to Java's `float` and `double`
         + but Java's `double` is the __exact__ match
-    * Python's `'A'` is convertible to Java's `String` and `char` 
+    * Python's `'A'` is convertible to Java's `String` and `char`
         + but Java's `String` is the __exact__ match
+    * Python's `1` is _implicitly_ convertible to many types (e.g. `int`, `long`, `char`, `boolean`, `Object`)
+        + as of JPype 1.7, this call raises `TypeError: Ambiguous overloads found for java.io.PrintStream.println(int)`
+        + an explicit cast solves the issue: `System.out.println(jpype.JInt(1))`
 
 ---
 
@@ -3244,7 +3036,7 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
     ```python
     import jpype
 
-    csv = jpype.JPackage("io.github.gciatto.csv.Csv")
+    csv = jpype.JClass("io.github.gciatto.csv.Csv")
 
     csv.headerOf(["field", "another field"])
     ```
@@ -3274,6 +3066,8 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
 
 ---
 
+{{< slide id="jpype-customisers" >}}
+
 ## Customising Java types in Python (pt. 1)
 
 - One may customise the behaviour of Java types in Python by __providing custom implementations__ for them
@@ -3289,38 +3083,35 @@ Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/
 
 Consider for instance the following customisations, allowing _Java collections_ to be used with __Python syntax__
 
+{{% multicol %}}{{% col class="col-6" %}}
 ```python
-from typing import Iterable, Sequence
+from collections.abc import Sequence
 
 
 @jpype.JImplementationFor("java.lang.Iterable")
 class _JIterable:
-    def __jclass_init__(self):
-        Iterable.register(self) # makes this class a subtype of Iterable, to speed up isinstance checks 
-
     def __iter__(self):
-        return self.iterator()
+        return self.iterator()  # supports "for x in coll" syntax
 
 
 @jpype.JImplementationFor("java.util.Collection")
 class _JCollection:
     def __len__(self):
-        return self.size()      # supports "len(coll)" syntax
-
-    def __delitem__(self, i):
-        return self.remove(i)   # supports "del coll[i]" syntax
+        return self.size()       # supports "len(coll)" syntax
 
     def __contains__(self, i):
-        return self.contains(i) # supports "i in coll" syntax
+        return self.contains(i)  # supports "i in coll" syntax
 
     # __iter__ is inherited from _JIterable
     # because in Java: Collection extends Iterable
-
-
-@jpype.JImplementationFor('java.util.List')
-class _JList(object):
+```
+{{% /col %}}{{% col class="col-6" %}}
+```python
+@jpype.JImplementationFor("java.util.List")
+class _JList:
     def __jclass_init__(self):
-        Sequence.register(self) # makes this class a subtype of Sequence, to speed up isinstance checks
+        # makes isinstance(x, Sequence) true for Java lists
+        Sequence.register(self)
 
     def __getitem__(self, ndx):
         return self.get(ndx)   # supports "list[i]" syntax
@@ -3328,10 +3119,12 @@ class _JList(object):
     def append(self, obj):
         return self.add(obj)   # supports "list.append(obj)" syntax
 
-    # __len__, __delitem__, __contains__, __iter__ are inherited from _JCollection
+    # __len__, __contains__, __iter__ are inherited
+    # from _JCollection
 ```
+{{% /col %}}{{% /multicol %}}
 
-this is taken directly from [JPype's codebase](https://github.com/jpype-project/jpype/blob/7363ce8a357d0b64f537c31849bd4e43732d9cdf/jpype/_jcollection.py)
+simplified from [JPype's codebase](https://github.com/jpype-project/jpype/blob/master/jpype/_jcollection.py)
 
 ---
 
@@ -3377,363 +3170,205 @@ For all __public types__ in the wrapped _Java library_:
 
 ## Example: the `jcsv` package (pt. 1)
 
-- The `jcsv` package is a Pythonic wrapper for our JVM-based `io.github.gciatto.csv` library
+- The `jcsv` package ([module `csv-python`](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-python/)) is a Pythonic wrapper for our JVM-based `io.github.gciatto.csv` library
 
-- Java's type definitions are brought to Python in `jcsv/__init__.py`:
+- Java's type definitions are brought to Python in [jcsv/__init__.py](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-python/jcsv/__init__.py):
 
-    ```python
-    import jpype
-    import jpype.imports
-    from java.lang import Iterable as JIterable
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-python/jcsv/__init__.py" from="1" to="22" >}}
 
-    _csv = jpype.JPackage("io.github.gciatto.csv")
-
-    Table = _csv.Table
-    Row = _csv.Row
-    Record = _csv.Record
-    Header = _csv.Header
-    Formatter = _csv.Formatter
-    Parser = _csv.Parser
-    Configuration = _csv.Configuration
-    Csv = _csv.Csv
-    CsvJvm = _csv.CsvJvm
-    ```
-
-    making it possible to write the following code on the user side:
-    
-    ```python
-    from jcsv import Table, Record, Header
-    ```
+- importing `jcsv.jvm` _starts the JVM_ (see [later](#/jpype-packaging)), hence it must come before any access to Java types
+- `Csv` and `CsvJvm` are the Java classes generated from `Csv.kt` and `Csv.jvm.kt`, thanks to `@file:JvmName`
+- this makes it possible to write `from jcsv import Table, Record, Header` on the user side
 
 ---
 
 ## Example: the `jcsv` package (pt. 2)
 
-- __Parsing__ and **formatting** operations are mapped _straightforwardly_ to Python functions:
+__Parsing__ and **formatting** operations are mapped _straightforwardly_ to Python functions (with _optional parameters_ replacing Kotlin's default arguments):
 
-    ```python
-    # jcsv/__init__.py
-
-    def parse_csv_string(string, separator = Csv.DEFAULT_SEPARATOR, delimiter = Csv.DEFAULT_DELIMITER, comment = Csv.DEFAULT_COMMENT):
-        return Csv.parseAsCSV(string, separator, delimiter, comment)
-
-
-    def parse_csv_file(path, separator = Csv.DEFAULT_SEPARATOR, delimiter = Csv.DEFAULT_DELIMITER, comment = Csv.DEFAULT_COMMENT):
-        return CsvJvm.parseCsvFile(str(path), separator, delimiter, comment)
-
-
-    def format_as_csv(rows, separator = Csv.DEFAULT_SEPARATOR, delimiter = Csv.DEFAULT_DELIMITER, comment = Csv.DEFAULT_COMMENT):
-        return Csv.formatAsCSV(JIterable@rows, separator, delimiter, comment)
-    ```
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-python/jcsv/__init__.py" from="54" to="78" >}}
 
 ---
 
 ## Example: the `jcsv` package (pt. 3)
 
-- Ad-hoc _factory method_ is provided for building `Header` instances:
-    
-    ```python
-    # jcsv/__init__.py
-    from jcsv.python import iterable_or_varargs
+{{% multicol %}}{{% col class="col-6" %}}
 
-    def header(*args):
-        if len(args) == 1 and isinstance(args[0], int):
-            return Csv.anonymousHeader(args[0])
-        return iterable_or_varargs(args, lambda xs: Csv.headerOf(JIterable@map(str, xs)))
-    ```
+Ad-hoc _factory method_ for building `Header` instances:
 
-    making it possible to write the following code on the user side:
-    
-    ```python
-    import jcsv
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-python/jcsv/__init__.py" from="25" to="28" >}}
 
-    header1 = jcsv.header("column1", "column2", "column3") 
-    header2 = jcsv.header(3) # anonymous header with 3 columns
-    columns = (f"column{i}" for i in range(1, 4)) # generator expression
-    header3 = jcsv.header(columns) # same as header1, but passing an iterable
-    ```
+making it possible to write the following code on the user side:
 
-- Function `iterable_or_varargs` aims at _simulating_ **multiple overloads**:
-    
-    ```python
-    # jcsv/python.py
-    from typing import Iterable
+```python
+import jcsv
 
-    def iterable_or_varargs(args, f):
-        assert isinstance(args, Iterable)
-        if len(args) == 1:
-            item = args[0]
-            if isinstance(item, Iterable):
-                return f(item)
-            else:
-                return f([item])
-        else:
-            return f(args)
-    ```
+header1 = jcsv.header("column1", "column2", "column3")
+header2 = jcsv.header(3) # anonymous header with 3 columns
+columns = (f"column{i}" for i in range(1, 4)) # generator
+header3 = jcsv.header(columns) # same as header1
+```
+
+{{% /col %}}{{% col class="col-6" %}}
+
+Function `iterable_or_varargs` (in [jcsv/python.py](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-python/jcsv/python.py)) _simulates_ **multiple overloads**:
+
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-python/jcsv/python.py" from="8" to="22" >}}
+
+- strings are iterable too, but `header("col")` must not split `"col"` into characters
+
+{{% /col %}}{{% /multicol %}}
 
 ---
 
 ## Example: the `jcsv` package (pt. 4)
 
-- Ad-hoc _factory method_ is provided for building `Record` instances:
+- How can `jvm.Iterable @ map(str, xs)` work, if Python's `map` is not convertible to Java's `Iterable`?
 
-    ```python
-    # jcsv/__init__.py
+- A _custom conversion_ is registered in [jcsv/jvm/__jvmutils.py](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-python/jcsv/jvm/__jvmutils.py), via the `@JConversion` decorator:
 
-    def record(header, *args):
-        return iterable_or_varargs(args, lambda xs: Csv.recordOf(header, JIterable@map(str, xs)))
-    ```
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-python/jcsv/jvm/__jvmutils.py" from="116" to="123" >}}
 
-- Ad-hoc _factory method_ is provided for building `Table` instances:
+- where `_IterableAdapter` is a Python class _implementing_ Java's `Iterable` interface:
 
-    ```python
-    # jcsv/__init__.py
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-python/jcsv/jvm/__jvmutils.py" from="66" to="74" >}}
 
-    def __ensure_header(h):
-        return h if isinstance(h, Header) else header(h)
-    def __ensure_record(r, h):
-        return r if isinstance(r, Record) else record(h, r)
-
-    def table(header, *args):
-        header = __ensure_header(header)
-        args = [__ensure_record(row, header) for row in args]
-        return iterable_or_varargs(args, lambda xs: Csv.tableOf(header, JIterable@xs))
-    ```
+- `_IteratorAdapter` similarly implements `java.util.Iterator` on top of Python iterators
 
 ---
 
 ## Example: the `jcsv` package (pt. 5)
 
-- The `Row` class is customised to make it more Pythonic:
+Ad-hoc _factory methods_ for building `Record` and `Table` instances:
+
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-python/jcsv/__init__.py" from="31" to="51" >}}
+
+- `table` accepts headers and records either as Java objects or as Python iterables, e.g.:
     ```python
-    # jcsv/__init__.py
-
-    @jpype.JImplementationFor("io.github.gciatto.csv.Row")
-    class _Row:
-        def __len__(self):
-            return self.getSize()
-
-        def __getitem__(self, item):
-            if isinstance(item, int) and item < 0:
-                item = len(self) + item
-            try:
-                return self.get(item)
-            except _java.IndexOutOfBoundsException as e:
-                raise IndexError(f"index {item} out of range") from e
-
-        @property
-        def size(self):
-            return len(self)
+    jcsv.table(["a", "b"], [1, 2], [3, 4])
     ```
-
-    + supporting the syntax `len(row)` instead of `row.getSize()`
-    + supporting the syntax `row[i]` instead of `row.get(i)`
-    + supporting the syntax `row[-i]` instead of `row.get(row.getSize() - i - 1)`
-    + letting `IndexError` be raised instead of `IndexOutOfBoundsException`
-    + supporting the syntax `row.size` instead of `row.getSize()`
 
 ---
 
 ## Example: the `jcsv` package (pt. 6)
 
-- The `Header` shall inherit all customisations of `Row`, plus the following ones:
-    ```python
-    @jpype.JImplementationFor("io.github.gciatto.csv.Header")
-    class _Header:
-        @property
-        def columns(self):
-            return [str(c) for c in self.getColumns()]
+The `Row` class is customised to make it more Pythonic:
 
-        def __contains__(self, item):
-            return self.contains(item)
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-python/jcsv/__init__.py" from="96" to="111" >}}
 
-        def index_of(self, column):
-            return self.indexOf(column)
-    ```
-
-    + supporting the syntax `header.columns` instead of `header.getColumns()`
-    + supporting the syntax `column in header` instead of `header.contains(column)`
-    + supporting the syntax `header.index_of(column)` instead of `header.indexOf(column)`
+- supporting the syntax `len(row)` instead of `row.getSize()`
+- supporting the syntax `row[i]` instead of `row.get(i)`
+- supporting the syntax `row[-i]` instead of `row.get(row.getSize() - i)`
+- letting `IndexError` be raised instead of `IndexOutOfBoundsException`
+- supporting the syntax `row.size` instead of `row.getSize()`
 
 ---
 
 ## Example: the `jcsv` package (pt. 7)
 
-- The `Record` shall inherit all customisations of `Row`, plus the following ones:
-    ```python
-    @jpype.JImplementationFor("io.github.gciatto.csv.Record")
-    class _Record:
-        @property
-        def header(self):
-            return self.getHeader()
+`Header` inherits all customisations of `Row` (since `Header extends Row`), plus the following ones:
 
-        @property
-        def values(self):
-            return [str(v) for v in self.getValues()]
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-python/jcsv/__init__.py" from="128" to="138" >}}
 
-        def __contains__(self, item):
-            return self.contains(item)
-    ```
-
-    + supporting the syntax `record.header` instead of `record.getHeader()`
-    + supporting the syntax `record.values` instead of `record.getValues()`
-    + supporting the syntax `value in record` instead of `record.contains(value)`
+- supporting the syntax `header.columns` instead of `header.getColumns()`
+- supporting the syntax `column in header` instead of `header.contains(column)`
+- supporting the syntax `header.index_of(column)` instead of `header.indexOf(column)`
 
 ---
 
 ## Example: the `jcsv` package (pt. 8)
 
-- The `Table` class is customised too, to make it more Pythonic:
-    ```python
-    @jpype.JImplementationFor("io.github.gciatto.csv.Table")
-    class _Table:
-        @property
-        def header(self):
-            return self.getHeader()
+`Record` inherits all customisations of `Row` (since `Record extends Row`), plus the following ones:
 
-        def __len__(self):
-            return self.getSize()
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-python/jcsv/__init__.py" from="114" to="125" >}}
 
-        def __getitem__(self, item):
-            if isinstance(item, int) and item < 0:
-                item = len(self) + item
-            try:
-                return self.get(item)
-            except _java.IndexOutOfBoundsException as e:
-                raise IndexError(f"index {item} out of range") from e
-
-        @property
-        def records(self):
-            return self.getRecords()
-
-        @property
-        def size(self):
-            return len(self)
-    ```
-
-    + supporting the syntax `table.header` instead of `table.getHeader()`
-    + supporting the syntax `len(table)` instead of `table.getSize()`
-    + supporting the syntax `table[i]` instead of `table.get(i)`
-    + supporting the syntax `table[-i]` instead of `table.get(table.getSize() - i - 1)`
-    + supporting the syntax `table.records` instead of `table.getRecords()`
+- supporting the syntax `record.header` instead of `record.getHeader()`
+- supporting the syntax `record.values` instead of `record.getValues()`
+- supporting the syntax `value in record` instead of `record.contains(value)`
 
 ---
+
+## Example: the `jcsv` package (pt. 9)
+
+The `Table` class is customised too, to make it more Pythonic:
+
+{{% multicol %}}{{% col class="col-8" %}}
+
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-python/jcsv/__init__.py" from="141" to="164" >}}
+
+{{% /col %}}{{% col class="col-4" %}}
+
+- supporting the syntax `table.header` instead of `table.getHeader()`
+- supporting the syntax `len(table)` instead of `table.getSize()`
+- supporting the syntax `table[i]` instead of `table.get(i)`
+- supporting the syntax `table[-i]` instead of `table.get(table.getSize() - i)`
+- supporting the syntax `table.records` instead of `table.getRecords()`
+
+{{% /col %}}{{% /multicol %}}
+
+---
+
+{{< slide id="jpype-packaging" >}}
 
 ## Including `.jar`s in JPype projects (pt. 1)
 
 ```bash
 csv-python/
-├── build.gradle.kts            # this is where the generation of csv.jar is automated
-├── jcsv
-│   ├── __init__.py
-│   ├── jvm
-│   │   ├── __init__.py         # this is where JPype is loaded
-│   │   └── csv.jar             # this is the Fat-JAR of the JVM-based library
-│   └── python.py
-├── requirements.txt
-└── test
-    ├── __init__.py
-    ├── test_parsing.py
-    └── test_python_api.py
+├── build.gradle.kts            # Gradle build: generation of csv.jar + Python tasks
+├── pyproject.toml              # Python project description (generated from Gradle, tracked)
+├── uv.lock                     # pinned versions of Python dependencies
+├── .python-version             # Python version used for development
+├── jcsv/
+│   ├── __init__.py
+│   ├── __main__.py             # CLI, installed as the `jcsv` command
+│   ├── jvm/
+│   │   ├── __init__.py         # this is where the JVM is started via JPype
+│   │   ├── __jvmutils.py       # Java <-> Python conversions
+│   │   └── csv.jar             # the fat JAR of the JVM-based library (generated, not tracked)
+│   └── python.py
+└── tests/
+    ├── __init__.py
+    ├── test_parsing.py
+    └── test_python_api.py
 ```
 
 1. We need to __ensure__ that the _JVM-based library_ is available on the system where `jcsv` is installed
     + why not include it in the Python package?
 
 2. The `build.gradle.kts` file automates the generation of the `csv.jar` file
-    + it is a _Fat-JAR_ containing all the dependencies of the JVM-based library
-    + such JAR is placed in the `jcsv/jvm` directory
-    + it is part of Python sources, so that it can be distributed with the Python library
+    + it is a _fat JAR_ containing all the dependencies of the JVM-based library
+    + such JAR is placed in the `jcsv/jvm` directory, i.e. _inside_ the Python package
+    + so it is included in the wheel built by `uv build`, and distributed with the Python library
 
-3. The `jcsv/jvm/__init__.py` file loads JPype and the `csv.jar` file
+3. The `jcsv/jvm/__init__.py` file starts the JVM, with `csv.jar` on the class path
 
 ---
 
 ## Including `.jar`s in JPype projects (pt. 2)
 
-1. Snippet from the `build.gradle.kts`:
+The [build.gradle.kts](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-python/build.gradle.kts) of `csv-python` relies on the [`gradle-python-uv`](https://github.com/gciatto/gradle-python-uv) plugin, mapping Gradle's lifecycle tasks (`test`, `check`, `assemble`, ...) onto [uv](https://docs.astral.sh/uv/) commands:
 
-    ```kotlin
-    tasks.create<Copy>("createCoreJar") {
-        group = "Python"
-        val shadowJar by project(":csv-core").tasks.getting(Jar::class)
-        dependsOn(shadowJar)
-        from(shadowJar.archiveFile) {
-            rename(".*?\\.jar", "csv.jar")
-        }
-        into(projectDir.resolve("jcsv/jvm"))
-    }
-    ```
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-python/build.gradle.kts" from="3" to="31" >}}
 
-2. Content of the `jcsv/jvm/__init__.py` file:
-
-    ```python
-    import jpype
-    from pathlib import Path
-
-    # the directory where csv.jar is placed
-    CLASSPATH = Path(__file__).parent
-
-    # the list of all .jar files in CLASSPATH
-    JARS = [str(j.resolve()) for j in CLASSPATH.glob('*.jar')]
-
-    jpype.startJVM(classpath=JARS)
-    ```
-
-3. Important line in `jcsv/__init__.py`:
-    ```python
-    import jcsv.jvm
-    ```
-
-    this is forcing the startup of the JVM with the correct classpath whenever someone is using the `jcsv` module
+- `pyproject.toml` is generated from the `python { pyproject { ... } }` block (`./gradlew generatePyproject`)
+- `createCoreJar` copies the fat JAR of `csv-core` (created by the [Shadow](https://gradleup.com/shadow/) plugin) into the Python package
 
 ---
 
-## Including JVM in JPype projects
+## Including the JVM in JPype projects
 
 - We need to __ensure__ that some __JVM is available__ on the system where `jcsv` is installed
 
-- Notice that the JVM is available as a __Python dependency__ too:
-    + https://pypi.org/project/jdk4py/
+- Notice that the JVM is available as a __Python dependency__ too: [jdk4py](https://pypi.org/project/jdk4py/)
+    + a minimal JDK runtime, shipped as platform-specific wheels (Linux, macOS, Windows; x86_64 and arm64)
 
-- This means that the JVM can be __automatically downloaded__ and __installed__ via `pip`:
+- So, the JVM can be __automatically downloaded__ and __installed__ as a dependency of `jcsv` (see `dependency("jdk4py>=25.0.2.1")` in the build file)
 
-    ```bash
-    pip install jdk4py
-    ```
+- Then, one may simply configure JPype to use _that_ JVM, in [jcsv/jvm/__init__.py](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-python/jcsv/jvm/__init__.py):
 
-- ... or added as a dependency to the `requirements.txt` file:
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-python/jcsv/jvm/__init__.py" from="1" to="17" >}}
 
-    ```
-    JPype1==1.4.1
-    jdk4py==17.0.7.0
-    ``` 
-
-- so, one may simply need to configure JPype to use _that_ JVM:
-
-    ```python
-    # jcsv/jvm/__init__.py
-    import jpype, sys
-    from jdk4py import JAVA_HOME
-
-    def jvm_lib_file_names():
-        if sys.platform == "win32":
-            return {"jvm.dll"}
-        elif sys.platform == "darwin":
-            return {"libjli.dylib"}
-        else:
-            return {"libjvm.so"}
-
-
-    def jvmlib(): 
-        for name in __jvm_lib_file_names():
-            for path in JAVA_HOME.glob(f"**/{name}"):
-                if path.exists:
-                    return str(path)
-        return None
-
-    jpype.startJVM(jvmpath=jvmlib())
-    ```
+- Try it: `./gradlew :csv-python:assemble`, then `pip install csv-python/build/python/dist/*.whl` in a clean virtual environment
 
 ---
 
@@ -3742,9 +3377,36 @@ csv-python/
 - Unit tests are __essential__ to ensure the _correctness_ of the Pythonic API
     + they prevent _corruption_ of the Pythonic API when the JAR is __updated__
 
-- Consider for instance tests in:
-    + `test/test_parsing.py`
-    + `test/test_python_api.py`
-
 - It is important to __test__ all the _customisations_ and _factory methods_
     + because these are __not covered__ by the unit tests of the _JVM-based library_
+
+- Consider for instance tests in [tests/test_parsing.py](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-python/tests/test_parsing.py) and [tests/test_python_api.py](https://github.com/unibo-spe/multiplatform-example/blob/dfd35b4ad7b929239309bfe39f55b5149aca22bb/csv-python/tests/test_python_api.py), e.g.:
+
+{{< github repo="multiplatform-example" branch="dfd35b4ad7b929239309bfe39f55b5149aca22bb" path="csv-python/tests/test_python_api.py" from="99" to="110" >}}
+
+- Run them via `./gradlew :csv-python:test` (i.e. `uv run poe test`, i.e. `pytest`)
+    + they depend on `createCoreJar`, so the JAR is always up to date
+
+---
+
+{{< slide id="wrap-up" >}}
+
+## Wrap-up
+
+<div style="font-size: 0.80em">
+
+| | Write once, build anywhere (e.g. Kotlin MP) | Write first, wrap elsewhere (e.g. JPype) |
+|---|---|---|
+| Code base | one, in a "super-language", plus platform-specific parts | one main implementation, plus one wrapper per platform |
+| Effort vs. `N` platforms | common code written once, platform-specific code `N` times | API / wrapper code (and its tests) written `N` times |
+| Runtime | native runtime of each platform | the main platform's runtime is shipped along (e.g. JVM inside a Python wheel) |
+| Idiomatic API | partially (e.g. `@JvmName`, `@JsExport`, `@JsName`) | fully customisable in each wrapper |
+| Limitations | small common std-lib, platform-specific build/release tooling | bridging overhead, type-conversion ambiguities, larger packages |
+
+</div>
+
+> Both approaches require __clear separation__ between API and implementation, and __tests on every platform__
+
+---
+
+{{% import path="reusable/back.md" %}}
