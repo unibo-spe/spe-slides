@@ -2504,10 +2504,10 @@ shown in its _final_ version (after step 7), full file [here](https://github.com
 ## Step 7: not overloading the machine
 
 {{< multicol >}}
-{{% col class="col-5" %}}
+{{% col class="col-6" %}}
 {{< github repo="containerized-experiment" branch="f63c7623017dfe09046459b467419a503d1d55ed" path="compose.yaml" from="12" to="17" >}}
 {{% /col %}}
-{{% col class="col-7" %}}
+{{% col class="col-6" %}}
 - Parallel containers compete for the _same_ CPUs and memory
     + without limits, one hungry experiment may slow down (or _kill_, by memory exhaustion) the others
 - `deploy.resources.limits` caps each container

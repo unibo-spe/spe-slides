@@ -439,6 +439,13 @@ section.has-light-background {
             padding-left: 0;
         }
 
+        // Bootstrap-like widths: a col with class col-N spans N/12 of the row
+        @for $i from 1 through 12 {
+            &.col-#{$i} {
+                width: calc(100% * #{$i} / 12);
+            }
+        }
+
         // there's nothing before col1
     }
 }
