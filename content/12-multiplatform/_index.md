@@ -919,6 +919,12 @@ Kotlin enforces strong segregation of the platform-agnostic and platform-specifi
 
 ---
 
+## Kotlin multi-platform project structure (overview)
+
+{{< figure src="source-sets.svg" width="75%" alt="Six source sets in a grid: jvmMain, commonMain, jsMain on the main row, and jvmTest, commonTest, jsTest on the test row. Platform-specific source sets depend on the common one of the same row, and each test source set sees the main source set of its column. Each box lists what the code may use, e.g. the JDK for jvmMain, Node.js APIs and npm packages for jsMain, only the common stdlib for commonMain, plus examples of what each kind of source set typically contains." >}}
+
+---
+
 ## Kotlin multi-platform project structure (example)
 
 ```bash
@@ -1189,7 +1195,7 @@ Let `T` denote some target platform
 - ... enforces the existence of a corresponding `actual` __definition__ for _all_ platforms
     * compiler won't succeed until an actual definition is provided _for each target_
 
-{{< figure src="expect-actual.png" width="50%" alt="An expect declaration in common code, with one actual definition per target platform (JVM, JS, Native)" >}}
+{{< figure src="expect-actual.svg" width="60%" alt="The expect declaration of a readText(path, encoding) function in commonMain (Files.kt), with its two actual definitions: in jvmMain (Files.jvm.kt) it reads the file via java.io.File, in jsMain (Files.js.kt) via Node's fs.readFileSync, declared as an external object. Adding a target without an actual definition is a compilation error." >}}
 
 ---
 
@@ -1516,6 +1522,8 @@ Some basic tests in [TestCSV.kt](https://github.com/unibo-spe/multiplatform-exam
 > I/O is platform-specific, hence we need platform-specific code
 
 ---
+
+{{< slide id="platform-specific-plan" >}}
 
 ## How much platform-specific code is needed?
 
@@ -1869,6 +1877,14 @@ Then, let's create the [Csv.js.kt](https://github.com/unibo-spe/multiplatform-ex
 
 ---
 
+## How much platform-specific code did we write?
+
+{{< figure src="platform-code.svg" width="70%" alt="Bar chart of the lines of Kotlin code per source set of csv-core: commonMain 288 (91% of main code), jvmMain 17, jsMain 13; commonTest 227 (93% of test code), jvmTest 6, jsTest 10, the latter two being the actual definitions of a test helper creating temporary files. Only the file-to-string I/O is platform-specific." >}}
+
+- Recall the [plan](#/platform-specific-plan): only the "file $\leftrightarrow$ string(s)" part is platform-specific
+
+---
+
 ## Platform-agnostic testing (strategy)
 
 - We may test our CSV library in common-code
@@ -1981,6 +1997,12 @@ Then, let's create the [Csv.js.kt](https://github.com/unibo-spe/multiplatform-ex
 - Support for packing as npm package via the [`npm-publish`](https://npm-publish.petuska.dev/) Gradle plugin
 
 {{% /section %}}
+
+---
+
+## Output of a multi-platform build (overview)
+
+{{< figure src="build-outputs.svg" width="75%" alt="Pipeline from source sets to repositories: commonMain plus each platform-specific source set (JS, JVM, Native, Wasm) goes through the shared K2 front-end, producing IR, then through one back-end per target. The JS back-end produces .klib or .mjs plus package.json, the JVM back-end a .jar, the Native back-end .klib or executables and libraries, the Wasm back-end .klib or .wasm plus a JS loader. Artifacts are published to Maven Central, tied together by Gradle module metadata, and JS packages optionally to npm." >}}
 
 ---
 
@@ -2728,6 +2750,12 @@ Conceptual workflow (cf. build matrices in the [CI lecture](../07-ci/)):
 
 ---
 
+## JPype at runtime
+
+{{< figure src="jpype-runtime.svg" width="75%" alt="One OS process containing the Python interpreter, the _jpype native module and the JVM. For instance, a Python script creates a java.util.ArrayList and adds an item to it. A Python call on a proxy object goes through the native module (overload selection, argument conversion, JNI call) to the JVM; the result is converted back or wrapped in a new proxy. The Python proxy holds a JNI global reference to the Java object in the JVM heap. There is no inter-process communication, and the JVM can be started only once per process." >}}
+
+---
+
 ## JPype's Bridging Model (pt. 1)
 
 Overview on the [official documentation](https://jpype.readthedocs.io/en/latest/quickguide.html#classes-objects)
@@ -3066,6 +3094,12 @@ __Notes__:
 
 ---
 
+## Overload selection in a nutshell
+
+{{< figure src="jpype-overloads.svg" width="75%" alt="Flowchart of JPype's method dispatch: collect all methods with the called name, rate each argument as none, explicit, implicit or exact, discard overloads with none or explicit matches; if none is left raise No matching overloads, if exactly one is best call it, otherwise raise Ambiguous overloads, to be fixed with a cast. Side table of System.out.println outcomes with JPype 1.7.1: 2.0 calls println(double), 'A' println(String), True println(boolean), 1 is ambiguous among boolean, char and Object, JInt(1) calls println(int)." >}}
+
+---
+
 {{< slide id="jpype-customisers" >}}
 
 ## Customising Java types in Python (pt. 1)
@@ -3167,6 +3201,7 @@ For all __public types__ in the wrapped _Java library_:
 - write __unit tests__ for _Pythonic API_
 
 ---
+
 
 ## Example: the `jcsv` package (pt. 1)
 
@@ -3386,6 +3421,12 @@ The [build.gradle.kts](https://github.com/unibo-spe/multiplatform-example/blob/d
 
 - Run them via `./gradlew :csv-python:test` (i.e. `uv run poe test`, i.e. `pytest`)
     + they depend on `createCoreJar`, so the JAR is always up to date
+
+---
+
+## Example: the `jcsv` package (recap)
+
+{{< figure src="jcsv-layers.svg" width="75%" alt="Layers of the jcsv package, from top to bottom: user code; the Pythonic API in jcsv/__init__.py and python.py; Java utilities in jcsv/jvm/__jvmutils.py; the JVM bootstrap in jcsv/jvm/__init__.py; csv.jar; and the JPype1 and jdk4py dependencies from PyPI. The four middle layers form the wheel. On the right, Gradle tasks: csv-core:shadowJar feeds createCoreJar, which copies csv.jar; uvSync installs the dependencies; uvBuild packages the wheel; Poe tasks run ruff and pytest." >}}
 
 ---
 

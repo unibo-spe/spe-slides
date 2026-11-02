@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+<title>Source sets of a Kotlin multi-platform project (JVM + JS)</title>
+<style>
+text{font-family:"Fira Sans","Helvetica Neue",Arial,sans-serif;font-size:18px;fill:#222}
+.mono{font-family:"Fira Mono",Menlo,Consolas,monospace;font-size:15px;fill:#555}
+.title{font-weight:bold;font-size:21px}
+.head{font-weight:bold;font-size:22px;fill:#000080}
+.small{font-size:16px;fill:#444}
+.common{fill:#eef6cc;stroke:#7a9a00;stroke-width:2}
+.jvm{fill:#fff2bf;stroke:#c99a00;stroke-width:2}
+.js{fill:#dce6ff;stroke:#3366ff;stroke-width:2}
+.arrow{stroke:#333;stroke-width:2.5;fill:none;marker-end:url(#a)}
+.dashed{stroke-dasharray:8 6}
+</style>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
+<rect width="100%" height="100%" fill="#fff"/>
+
+<!-- column headers -->
+<text class="head" x="200" y="36" text-anchor="middle">JVM-specific</text>
+<text class="head" x="600" y="36" text-anchor="middle">platform-agnostic (common)</text>
+<text class="head" x="1000" y="36" text-anchor="middle">JS-specific</text>
+<text class="head" x="22" y="160" transform="rotate(-90 22 160)" text-anchor="middle">main</text>
+<text class="head" x="22" y="390" transform="rotate(-90 22 390)" text-anchor="middle">test</text>
+
+<!-- main row -->
+<rect class="jvm" x="40" y="60" width="320" height="180" rx="10"/>
+<text class="title" x="60" y="92">jvmMain</text>
+<text class="mono" x="60" y="116">src/jvmMain/kotlin</text>
+<text x="60" y="150">may use: everything in commonMain</text>
+<text x="60" y="176">+ the JDK (java.*)</text>
+<text x="60" y="202">+ JVM libraries (Maven)</text>
+<text class="small" x="60" y="228">e.g. code reading files via java.io</text>
+
+<rect class="common" x="440" y="60" width="320" height="180" rx="10"/>
+<text class="title" x="460" y="92">commonMain</text>
+<text class="mono" x="460" y="116">src/commonMain/kotlin</text>
+<text x="460" y="150">may use: the common Kotlin stdlib</text>
+<text x="460" y="176">+ multi-platform libraries</text>
+<text x="460" y="202">(no java.*, no Node.js API)</text>
+<text class="small" x="460" y="228">e.g. domain model, pure logic</text>
+
+<rect class="js" x="840" y="60" width="320" height="180" rx="10"/>
+<text class="title" x="860" y="92">jsMain</text>
+<text class="mono" x="860" y="116">src/jsMain/kotlin</text>
+<text x="860" y="150">may use: everything in commonMain</text>
+<text x="860" y="176">+ JS / Node.js API (external)</text>
+<text x="860" y="202">+ npm packages</text>
+<text class="small" x="860" y="228">e.g. code reading files via Node’s fs</text>
+
+<!-- test row -->
+<rect class="jvm" x="40" y="310" width="320" height="160" rx="10"/>
+<text class="title" x="60" y="342">jvmTest</text>
+<text class="mono" x="60" y="366">src/jvmTest/kotlin</text>
+<text x="60" y="400">may use: commonTest + jvmMain</text>
+<text x="60" y="426">kotlin.test, run via JUnit</text>
+<text class="small" x="60" y="456">e.g. JVM-specific test helpers</text>
+
+<rect class="common" x="440" y="310" width="320" height="160" rx="10"/>
+<text class="title" x="460" y="342">commonTest</text>
+<text class="mono" x="460" y="366">src/commonTest/kotlin</text>
+<text x="460" y="400">may use: commonMain</text>
+<text x="460" y="426">+ kotlin.test (common API)</text>
+<text class="small" x="460" y="456">e.g. most test cases</text>
+
+<rect class="js" x="840" y="310" width="320" height="160" rx="10"/>
+<text class="title" x="860" y="342">jsTest</text>
+<text class="mono" x="860" y="366">src/jsTest/kotlin</text>
+<text x="860" y="400">may use: commonTest + jsMain</text>
+<text x="860" y="426">kotlin.test, run via Mocha</text>
+<text class="small" x="860" y="456">e.g. JS-specific test helpers</text>
+
+<!-- dependsOn arrows (platform -> common) -->
+<line class="arrow" x1="362" y1="150" x2="436" y2="150"/>
+<line class="arrow" x1="838" y1="150" x2="764" y2="150"/>
+<line class="arrow" x1="362" y1="390" x2="436" y2="390"/>
+<line class="arrow" x1="838" y1="390" x2="764" y2="390"/>
+<!-- test sees main -->
+<line class="arrow dashed" x1="200" y1="308" x2="200" y2="244"/>
+<line class="arrow dashed" x1="600" y1="308" x2="600" y2="244"/>
+<line class="arrow dashed" x1="1000" y1="308" x2="1000" y2="244"/>
+
+<!-- legend -->
+<line class="arrow" x1="40" y1="520" x2="110" y2="520"/>
+<text x="122" y="526">depends on (refines): may use it, and provides its own actual definitions</text>
+<line class="arrow dashed" x1="40" y1="562" x2="110" y2="562"/>
+<text x="122" y="568">test code sees the main code of the same platform</text>
+<text class="small" x="1160" y="526" text-anchor="end">each target compiles</text>
+<text class="small" x="1160" y="548" text-anchor="end">common + its own source sets</text>
+<text class="small" x="1160" y="570" text-anchor="end">together</text>
+</svg>

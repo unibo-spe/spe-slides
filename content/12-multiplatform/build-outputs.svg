@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 640" width="1300" height="640">
+<title>From one Kotlin code base to per-target artifacts and repositories</title>
+<style>
+text{font-family:"Fira Sans","Helvetica Neue",Arial,sans-serif;font-size:18px;fill:#222}
+.mono{font-family:"Fira Mono",Menlo,Consolas,monospace;font-size:15px}
+.title{font-weight:bold;font-size:19px}
+.head{font-weight:bold;font-size:22px;fill:#000080}
+.small{font-size:15px;fill:#444}
+.common{fill:#eef6cc;stroke:#7a9a00;stroke-width:2}
+.jvm{fill:#fff2bf;stroke:#c99a00;stroke-width:2}
+.js{fill:#dce6ff;stroke:#3366ff;stroke-width:2}
+.native{fill:#eeeeee;stroke:#777;stroke-width:2}
+.wasm{fill:#efe3ff;stroke:#8a4fd8;stroke-width:2}
+.repo{fill:#f6f6f6;stroke:#555;stroke-width:2}
+.arrow{stroke:#333;stroke-width:2;fill:none;marker-end:url(#a)}
+.dashed{stroke-dasharray:8 6}
+</style>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
+<rect width="100%" height="100%" fill="#fff"/>
+
+<text class="head" x="130" y="34" text-anchor="middle">Source sets</text>
+<text class="head" x="470" y="34" text-anchor="middle">Kotlin compiler</text>
+<text class="head" x="845" y="34" text-anchor="middle">Artifacts (one per target)</text>
+<text class="head" x="1175" y="34" text-anchor="middle">Repositories</text>
+
+<!-- sources -->
+<rect class="common" x="20" y="60" width="220" height="460" rx="10"/>
+<text class="title" x="130" y="88" text-anchor="middle">commonMain</text>
+<rect class="jvm" x="40" y="215" width="180" height="70" rx="8"/>
+<text x="130" y="256" text-anchor="middle">+ jvmMain</text>
+<rect class="js" x="40" y="105" width="180" height="70" rx="8"/>
+<text x="130" y="146" text-anchor="middle">+ jsMain</text>
+<rect class="native" x="40" y="325" width="180" height="70" rx="8"/>
+<text x="130" y="356" text-anchor="middle">+ nativeMain,</text>
+<text x="130" y="378" text-anchor="middle">linuxX64Main, …</text>
+<rect class="wasm" x="40" y="435" width="180" height="70" rx="8"/>
+<text x="130" y="476" text-anchor="middle">+ wasmJsMain</text>
+
+<!-- compiler -->
+<rect class="common" x="280" y="60" width="150" height="460" rx="10"/>
+<text class="title" x="355" y="200" text-anchor="middle">front-end</text>
+<text class="small" x="355" y="226" text-anchor="middle">(K2, shared)</text>
+<text class="small" x="355" y="262" text-anchor="middle">parsing,</text>
+<text class="small" x="355" y="284" text-anchor="middle">type checking,</text>
+<text class="small" x="355" y="306" text-anchor="middle">expect/actual</text>
+<text class="small" x="355" y="328" text-anchor="middle">matching</text>
+<text class="small" x="355" y="364" text-anchor="middle">⇒ IR</text>
+<rect class="jvm" x="470" y="215" width="170" height="70" rx="8"/>
+<text x="555" y="256" text-anchor="middle">JVM back-end</text>
+<rect class="js" x="470" y="105" width="170" height="70" rx="8"/>
+<text x="555" y="146" text-anchor="middle">JS back-end</text>
+<rect class="native" x="470" y="325" width="170" height="70" rx="8"/>
+<text x="555" y="356" text-anchor="middle">Native back-end</text>
+<text class="small" x="555" y="378" text-anchor="middle">(LLVM)</text>
+<rect class="wasm" x="470" y="435" width="170" height="70" rx="8"/>
+<text x="555" y="476" text-anchor="middle">Wasm back-end</text>
+
+<line class="arrow" x1="222" y1="250" x2="278" y2="250"/>
+<line class="arrow" x1="222" y1="140" x2="278" y2="140"/>
+<line class="arrow" x1="222" y1="360" x2="278" y2="360"/>
+<line class="arrow" x1="222" y1="470" x2="278" y2="470"/>
+<line class="arrow" x1="432" y1="250" x2="468" y2="250"/>
+<line class="arrow" x1="432" y1="140" x2="468" y2="140"/>
+<line class="arrow" x1="432" y1="360" x2="468" y2="360"/>
+<line class="arrow" x1="432" y1="470" x2="468" y2="470"/>
+
+<!-- artifacts -->
+<rect class="jvm" x="690" y="205" width="310" height="90" rx="8"/>
+<text class="mono" x="705" y="234">.jar (bytecode, no deps)</text>
+<text class="small" x="705" y="260">task jvmJar (fat JAR: shadowJar)</text>
+<text class="small" x="705" y="282">for JVM / Kotlin-JVM users</text>
+<rect class="js" x="690" y="95" width="310" height="90" rx="8"/>
+<text class="mono" x="705" y="124">.klib | .mjs + package.json</text>
+<text class="small" x="705" y="150">task js…CompileSync (+ .d.ts)</text>
+<text class="small" x="705" y="172">for Kotlin/JS | plain JS users</text>
+<rect class="native" x="690" y="315" width="310" height="90" rx="8"/>
+<text class="mono" x="705" y="344">.klib | executable, .so, .a,</text>
+<text class="mono" x="705" y="366">.framework</text>
+<text class="small" x="705" y="392">one per OS / CPU target</text>
+<rect class="wasm" x="690" y="425" width="310" height="90" rx="8"/>
+<text class="mono" x="705" y="454">.klib | .wasm + .mjs loader</text>
+<text class="small" x="705" y="480">for Kotlin/Wasm | browsers,</text>
+<text class="small" x="705" y="502">Node.js</text>
+
+<line class="arrow" x1="642" y1="250" x2="688" y2="250"/>
+<line class="arrow" x1="642" y1="140" x2="688" y2="140"/>
+<line class="arrow" x1="642" y1="360" x2="688" y2="360"/>
+<line class="arrow" x1="642" y1="470" x2="688" y2="470"/>
+
+<!-- repositories -->
+<rect class="repo" x="1070" y="95" width="210" height="90" rx="10"/>
+<text class="title" x="1175" y="133" text-anchor="middle">npm</text>
+<text class="small" x="1175" y="160" text-anchor="middle">JS packages</text>
+<rect class="repo" x="1070" y="205" width="210" height="310" rx="10"/>
+<text class="title" x="1175" y="300" text-anchor="middle">Maven Central</text>
+<text class="small" x="1175" y="332" text-anchor="middle">.jar and .klib files,</text>
+<text class="small" x="1175" y="354" text-anchor="middle">tied together by</text>
+<text class="small" x="1175" y="376" text-anchor="middle">Gradle module</text>
+<text class="small" x="1175" y="398" text-anchor="middle">metadata (.module)</text>
+
+<line class="arrow dashed" x1="1002" y1="140" x2="1068" y2="140"/>
+<line class="arrow" x1="1002" y1="170" x2="1068" y2="225"/>
+<line class="arrow" x1="1002" y1="250" x2="1068" y2="250"/>
+<line class="arrow" x1="1002" y1="360" x2="1068" y2="360"/>
+<line class="arrow" x1="1002" y1="470" x2="1068" y2="470"/>
+
+<line class="arrow" x1="20" y1="575" x2="90" y2="575"/>
+<text x="100" y="581">published via maven-publish</text>
+<line class="arrow dashed" x1="420" y1="575" x2="490" y2="575"/>
+<text x="500" y="581">published via npm-publish (optional)</text>
+<text class="small" x="20" y="620">The running example only enables the JVM and JS targets.</text>
+</svg>

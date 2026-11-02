@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="1200" height="560">
+<title>expect/actual: one common declaration, one actual definition per platform</title>
+<style>
+text{font-family:"Fira Sans","Helvetica Neue",Arial,sans-serif;font-size:18px;fill:#222}
+.mono{font-family:"Fira Mono",Menlo,Consolas,monospace;font-size:15px;white-space:pre}
+.kw{font-weight:bold;fill:#000080}
+.title{font-weight:bold;font-size:20px}
+.small{font-size:16px;fill:#444}
+.common{fill:#eef6cc;stroke:#7a9a00;stroke-width:2}
+.jvm{fill:#fff2bf;stroke:#c99a00;stroke-width:2}
+.js{fill:#dce6ff;stroke:#3366ff;stroke-width:2}
+.err{fill:#fff;stroke:#c0392b;stroke-width:2;stroke-dasharray:8 6}
+.arrow{stroke:#333;stroke-width:2.5;fill:none;marker-end:url(#a)}
+.dashed{stroke-dasharray:8 6}
+</style>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
+<rect width="100%" height="100%" fill="#fff"/>
+
+<rect class="common" x="290" y="20" width="620" height="170" rx="10"/>
+<text class="title" x="310" y="50">commonMain — Files.kt</text>
+<text class="mono" x="310" y="84" xml:space="preserve"><tspan class="kw">expect fun</tspan> readText(</text>
+<text class="mono" x="310" y="106" xml:space="preserve">    path: String,</text>
+<text class="mono" x="310" y="128" xml:space="preserve">    encoding: String = "utf-8",</text>
+<text class="mono" x="310" y="150" xml:space="preserve">): String</text>
+<text class="small" x="310" y="178">declaration only: signature + default values, no body</text>
+
+<rect class="jvm" x="20" y="270" width="560" height="200" rx="10"/>
+<text class="title" x="40" y="300">jvmMain — Files.jvm.kt</text>
+<text class="mono" x="40" y="334" xml:space="preserve"><tspan class="kw">actual fun</tspan> readText(</text>
+<text class="mono" x="40" y="356" xml:space="preserve">    path: String, encoding: String,</text>
+<text class="mono" x="40" y="378" xml:space="preserve">): String = File(path)</text>
+<text class="mono" x="40" y="400" xml:space="preserve">    .readText(Charset.forName(encoding))</text>
+<text class="small" x="40" y="436">reads the file via java.io.File</text>
+<text class="small" x="40" y="458">(the JDK is available in jvmMain)</text>
+
+<rect class="js" x="620" y="270" width="560" height="200" rx="10"/>
+<text class="title" x="640" y="300">jsMain — Files.js.kt</text>
+<text class="mono" x="640" y="334" xml:space="preserve"><tspan class="kw">actual fun</tspan> readText(</text>
+<text class="mono" x="640" y="356" xml:space="preserve">    path: String, encoding: String,</text>
+<text class="mono" x="640" y="378" xml:space="preserve">): String = fs.readFileSync(</text>
+<text class="mono" x="640" y="400" xml:space="preserve">    path, encoding)</text>
+<text class="small" x="640" y="436">reads the file via Node's fs module</text>
+<text class="small" x="640" y="458">(declared to Kotlin as an external object)</text>
+
+<path class="arrow" d="M500,192 C500,230 300,230 300,266"/>
+<path class="arrow" d="M700,192 C700,230 900,230 900,266"/>
+<text class="small" x="290" y="228" text-anchor="end">actual for jvm</text>
+<text class="small" x="910" y="228">actual for js</text>
+
+<rect class="err" x="300" y="500" width="600" height="50" rx="10"/>
+<text class="small" x="600" y="531" text-anchor="middle">adding a target (e.g. linuxX64) with no actual for it ⇒ compilation error</text>
+</svg>

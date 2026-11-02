@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 640" width="1300" height="640">
+<title>Layers of the jcsv Python package, and the Gradle tasks building them</title>
+<style>
+text{font-family:"Fira Sans","Helvetica Neue",Arial,sans-serif;font-size:18px;fill:#222}
+.mono{font-family:"Fira Mono",Menlo,Consolas,monospace;font-size:15px}
+.title{font-weight:bold;font-size:19px}
+.head{font-weight:bold;font-size:22px;fill:#000080}
+.small{font-size:15px;fill:#444}
+.user{fill:#fff;stroke:#555;stroke-width:2;stroke-dasharray:8 6}
+.py{fill:#d8f1ec;stroke:#2a9d8f;stroke-width:2}
+.lib{fill:#eeeeee;stroke:#777;stroke-width:2}
+.jvm{fill:#fff2bf;stroke:#c99a00;stroke-width:2}
+.gradle{fill:#f4f8fb;stroke:#02303a;stroke-width:2}
+.wheel{fill:none;stroke:#2a9d8f;stroke-width:2.5;stroke-dasharray:12 6}
+.arrow{stroke:#333;stroke-width:2;fill:none;marker-end:url(#a)}
+</style>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
+<rect width="100%" height="100%" fill="#fff"/>
+
+<text class="head" x="400" y="34" text-anchor="middle">Layers at runtime (top uses bottom)</text>
+<text class="head" x="1075" y="34" text-anchor="middle">Built by Gradle</text>
+
+<!-- layers -->
+<rect class="user" x="40" y="55" width="720" height="70" rx="8"/>
+<text class="title" x="60" y="83">user code</text>
+<text class="mono" x="60" y="109">jcsv.parse_csv_file("iris.csv")   or   python -m jcsv iris.csv</text>
+
+<rect class="py" x="40" y="140" width="720" height="70" rx="8"/>
+<text class="title" x="60" y="168">Pythonic API — jcsv/__init__.py, jcsv/python.py</text>
+<text class="small" x="60" y="194">factories header(), record(), table(), parse_csv_*; customisers of Table, Row, Header, …</text>
+
+<rect class="py" x="40" y="225" width="720" height="70" rx="8"/>
+<text class="title" x="60" y="253">Java utilities — jcsv/jvm/__jvmutils.py</text>
+<text class="small" x="60" y="279">@JConversion (Python iterables → Iterable, Pair), iterator adapters, kfunction</text>
+
+<rect class="py" x="40" y="310" width="720" height="70" rx="8"/>
+<text class="title" x="60" y="338">JVM bootstrap — jcsv/jvm/__init__.py</text>
+<text class="mono" x="60" y="364">jpype.startJVM(jvmpath=…, classpath=[csv.jar])</text>
+
+<rect class="jvm" x="40" y="395" width="720" height="70" rx="8"/>
+<text class="title" x="60" y="423">jcsv/jvm/csv.jar</text>
+<text class="small" x="60" y="449">csv-core compiled for the JVM, plus the Kotlin stdlib (fat JAR)</text>
+
+<rect class="lib" x="40" y="480" width="350" height="70" rx="8"/>
+<text class="title" x="60" y="508">JPype1 (from PyPI)</text>
+<text class="small" x="60" y="534">the Python ↔ JVM bridge</text>
+<rect class="jvm" x="410" y="480" width="350" height="70" rx="8"/>
+<text class="title" x="430" y="508">jdk4py (from PyPI)</text>
+<text class="small" x="430" y="534">a JDK, so users need no Java installed</text>
+
+<!-- wheel boundary -->
+<rect class="wheel" x="28" y="132" width="744" height="342" rx="12"/>
+<rect class="wheel" x="40" y="578" width="50" height="24" rx="4"/>
+<text class="small" x="102" y="596">content of the jcsv-*.whl wheel built by uvBuild</text>
+
+<!-- gradle tasks -->
+<rect class="gradle" x="890" y="380" width="370" height="60" rx="8"/>
+<text class="mono" x="905" y="406">:csv-core:shadowJar</text>
+<text class="small" x="905" y="428">compiles jvmMain + commonMain, adds deps</text>
+<rect class="gradle" x="890" y="290" width="370" height="60" rx="8"/>
+<text class="mono" x="905" y="316">:csv-python:createCoreJar</text>
+<text class="small" x="905" y="338">copies the fat JAR as jcsv/jvm/csv.jar</text>
+<rect class="gradle" x="890" y="490" width="370" height="60" rx="8"/>
+<text class="mono" x="905" y="516">uvSync</text>
+<text class="small" x="905" y="538">venv + JPype1, jdk4py, … (pinned in uv.lock)</text>
+<rect class="gradle" x="890" y="140" width="370" height="60" rx="8"/>
+<text class="mono" x="905" y="166">Poe tasks (via check)</text>
+<text class="small" x="905" y="188">ruff checks, pytest on the whole stack</text>
+<rect class="gradle" x="890" y="215" width="370" height="60" rx="8"/>
+<text class="mono" x="905" y="241">uvBuild</text>
+<text class="small" x="905" y="263">packages the wheel (and sdist)</text>
+
+<line class="arrow" x1="1075" y1="378" x2="1075" y2="352"/>
+<path class="arrow" d="M888,320 C840,320 840,430 764,430"/>
+<line class="arrow" x1="888" y1="520" x2="764" y2="515"/>
+<line class="arrow" x1="888" y1="245" x2="776" y2="245"/>
+<line class="arrow" x1="888" y1="170" x2="764" y2="175"/>
+
+<text class="small" x="890" y="586">all :csv-python tasks come from the</text>
+<text class="small" x="890" y="606">gradle-python-uv plugin, except createCoreJar</text>
+<text class="small" x="890" y="626">(custom, in csv-python/build.gradle.kts)</text>
+</svg>

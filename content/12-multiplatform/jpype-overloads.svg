@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 640" width="1300" height="640">
+<title>How JPype selects a Java overload for a Python call</title>
+<style>
+text{font-family:"Fira Sans","Helvetica Neue",Arial,sans-serif;font-size:18px;fill:#222}
+.mono{font-family:"Fira Mono",Menlo,Consolas,monospace;font-size:15px}
+.title{font-weight:bold;font-size:19px}
+.head{font-weight:bold;font-size:22px;fill:#000080}
+.small{font-size:15px;fill:#444}
+.step{fill:#eeeeee;stroke:#777;stroke-width:2}
+.dec{fill:#fff;stroke:#555;stroke-width:2}
+.ok{fill:#e3f5e1;stroke:#2e8b57;stroke-width:2}
+.err{fill:#fde2e2;stroke:#c0392b;stroke-width:2}
+.row{fill:#f8f8f8;stroke:#ccc;stroke-width:1}
+.arrow{stroke:#333;stroke-width:2;fill:none;marker-end:url(#a)}
+</style>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
+<rect width="100%" height="100%" fill="#fff"/>
+
+<text class="head" x="300" y="34" text-anchor="middle">Method dispatch (on each call)</text>
+
+<rect class="step" x="90" y="55" width="420" height="60" rx="8"/>
+<text x="300" y="80" text-anchor="middle">collect all methods with that name</text>
+<text class="small" x="300" y="102" text-anchor="middle">(in the class and in its parents)</text>
+
+<rect class="step" x="90" y="145" width="420" height="60" rx="8"/>
+<text x="300" y="170" text-anchor="middle">rate each argument against each overload:</text>
+<text class="small" x="300" y="192" text-anchor="middle">none / explicit / implicit / exact (conversion table)</text>
+
+<rect class="step" x="90" y="235" width="420" height="60" rx="8"/>
+<text x="300" y="260" text-anchor="middle">discard overloads with a none or explicit</text>
+<text x="300" y="282" text-anchor="middle">match for some argument</text>
+
+<polygon class="dec" points="300,325 430,370 300,415 170,370"/>
+<text x="300" y="376" text-anchor="middle">any left?</text>
+
+<polygon class="dec" points="300,445 470,500 300,555 130,500"/>
+<text x="300" y="494" text-anchor="middle">exactly one best?</text>
+<text class="small" x="300" y="516" text-anchor="middle">exact beats implicit</text>
+
+<rect class="err" x="560" y="345" width="260" height="50" rx="8"/>
+<text class="small" x="690" y="375" text-anchor="middle">TypeError: No matching overloads</text>
+<rect class="err" x="560" y="475" width="260" height="50" rx="8"/>
+<text class="small" x="690" y="505" text-anchor="middle">TypeError: Ambiguous overloads</text>
+<rect class="ok" x="200" y="585" width="200" height="45" rx="8"/>
+<text x="300" y="613" text-anchor="middle">call it</text>
+
+<line class="arrow" x1="300" y1="117" x2="300" y2="143"/>
+<line class="arrow" x1="300" y1="207" x2="300" y2="233"/>
+<line class="arrow" x1="300" y1="297" x2="300" y2="323"/>
+<line class="arrow" x1="300" y1="417" x2="300" y2="443"/>
+<line class="arrow" x1="300" y1="557" x2="300" y2="583"/>
+<line class="arrow" x1="432" y1="370" x2="558" y2="370"/>
+<line class="arrow" x1="472" y1="500" x2="558" y2="500"/>
+<text class="small" x="445" y="360">no</text>
+<text class="small" x="485" y="490">no</text>
+<text class="small" x="312" y="438">yes</text>
+<text class="small" x="312" y="577">yes</text>
+<text class="small" x="580" y="545">fix: cast the argument, e.g. JInt(1),</text>
+<text class="small" x="580" y="567">or JIterable@[…]</text>
+
+<!-- examples -->
+<text class="head" x="1075" y="34" text-anchor="middle">System.out.println(…) with JPype 1.7</text>
+<rect class="row" x="870" y="55" width="410" height="40"/>
+<text class="title" x="885" y="82">Python argument</text>
+<text class="title" x="1080" y="82">outcome</text>
+<rect class="row" x="870" y="95" width="410" height="50"/>
+<text class="mono" x="885" y="125">2.0</text>
+<text x="1080" y="125">println(double)</text>
+<rect class="row" x="870" y="145" width="410" height="50"/>
+<text class="mono" x="885" y="175">'A'</text>
+<text x="1080" y="175">println(String)</text>
+<rect class="row" x="870" y="195" width="410" height="50"/>
+<text class="mono" x="885" y="225">True</text>
+<text x="1080" y="225">println(boolean)</text>
+<rect class="err" x="870" y="245" width="410" height="100"/>
+<text class="mono" x="885" y="275">1</text>
+<text x="1080" y="275">ambiguous among</text>
+<text class="mono" x="1080" y="300">boolean, char,</text>
+<text class="mono" x="1080" y="322">Object</text>
+<rect class="ok" x="870" y="345" width="410" height="50"/>
+<text class="mono" x="885" y="375">JInt(1)</text>
+<text x="1080" y="375">println(int)</text>
+<text class="small" x="870" y="425">observed with JPype 1.7.1 on Java 25;</text>
+<text class="small" x="870" y="447">the outcome for plain ints may change</text>
+<text class="small" x="870" y="469">across JPype versions: cast when in doubt</text>
+</svg>
