@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 760" width="1500" height="760" role="img" aria-label="Local Swarm via Docker-in-Docker: on your machine, the local Docker daemon runs five containers attached to one Compose network: master, worker-1, worker-2 and worker-3 are privileged docker:dind containers, each running its own Docker daemon and its own containers (tasks), with the workers joining the Swarm via master:2377; the docker CLI on your machine reaches the Docker API of master via localhost:2375 (DOCKER_HOST), while the browser reaches the services of the Swarm via the gateway container (alpine/socat), which relays ports 9443, 8889 and 8890 to master"><title>Local Swarm via Docker-in-Docker: on your machine, the local Docker daemon runs five containers attached to one Compose network: master, worker-1, worker-2 and worker-3 are privileged docker:dind containers, each running its own Docker daemon and its own containers (tasks), with the workers joining the Swarm via master:2377; the docker CLI on your machine reaches the Docker API of master via localhost:2375 (DOCKER_HOST), while the browser reaches the services of the Swarm via the gateway container (alpine/socat), which relays ports 9443, 8889 and 8890 to master</title>
+<defs><marker id="arr-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3b63"/></marker><marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker><marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b6cb0"/></marker><marker id="arr-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#00a6a6"/></marker></defs>
+<rect width="1500" height="760" fill="white"/>
+<rect x="20" y="20" width="1460" height="720" rx="14" fill="#f4f4f4" stroke="#6b7280" stroke-width="2" stroke-dasharray="8 5" opacity="1"/>
+<text x="40" y="46" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="start" dominant-baseline="middle" fill="#6b7280" font-weight="bold">your machine</text>
+<rect x="50" y="120" width="260" height="60" rx="4" fill="#222222" stroke="#222222" stroke-width="2" opacity="1"/>
+<text x="180.0" y="150.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">docker CLI</text>
+<text x="180" y="202" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="14" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">DOCKER_HOST=</text>
+<text x="180" y="222" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="14" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">tcp://localhost:2375</text>
+<rect x="50" y="380" width="260" height="60" rx="10" fill="white" stroke="#222222" stroke-width="2" opacity="1"/>
+<text x="180" y="410" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="19" text-anchor="middle" dominant-baseline="middle" fill="#222222" font-weight="normal">browser</text>
+<text x="180" y="462" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="14" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">https://localhost:9443</text>
+<rect x="360" y="70" width="1100" height="650" rx="14" fill="#e7f0fb" stroke="#2b6cb0" stroke-width="2" stroke-dasharray="8 5" opacity="1"/>
+<text x="380" y="94" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="20" text-anchor="start" dominant-baseline="middle" fill="#2b6cb0" font-weight="bold">local Docker daemon (Engine or Desktop)</text>
+<rect x="380" y="120" width="1060" height="580" rx="12" fill="#eefafa" stroke="#00a6a6" stroke-width="2" stroke-dasharray="6 4" opacity="1"/>
+<text x="400" y="682" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#006b6b" font-weight="normal" font-style="italic">Compose network: nodes reach each other by hostname</text>
+<rect x="410" y="330" width="240" height="170" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M410,370 L410,344 Q410,330 424,330 L540,330 L540,352 Q540,370 522,370 Z" fill="#1f3b63"/>
+<text x="424" y="351" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">gateway</text>
+<text x="530" y="395" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">alpine/socat</text>
+<text x="530" y="440" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">relays ports</text>
+<text x="530" y="466" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">9443, 8889, 8890</text>
+<rect x="830" y="170" width="420" height="200" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M830,210 L830,184 Q830,170 844,170 L950,170 L950,192 Q950,210 932,210 Z" fill="#1f3b63"/>
+<text x="844" y="191" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">master</text>
+<text x="1234" y="191" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="end" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">manager</text>
+<text x="1040.0" y="236" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">docker:dind (privileged)</text>
+<rect x="870" y="262" width="340" height="40" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1040.0" y="282" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">dockerd (Swarm mode)</text>
+<rect x="935.0" y="316" width="100" height="34" rx="4" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="985.0" y="333.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">task</text>
+<rect x="1045.0" y="316" width="100" height="34" rx="4" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="1095.0" y="333.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">task</text>
+<rect x="660" y="465" width="240" height="192" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M660,505 L660,479 Q660,465 674,465 L800,465 L800,487 Q800,505 782,505 Z" fill="#1f3b63"/>
+<text x="674" y="486" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">worker-1</text>
+<text x="780.0" y="531" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">docker:dind</text>
+<rect x="690" y="557" width="180" height="40" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="780.0" y="577" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">dockerd</text>
+<rect x="730.0" y="611" width="100" height="34" rx="4" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="780.0" y="628.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">task</text>
+<path d="M780.0,463 L920.0,374" fill="none" stroke="#6b7280" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arr-gray)"/>
+<rect x="920" y="465" width="240" height="192" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M920,505 L920,479 Q920,465 934,465 L1060,465 L1060,487 Q1060,505 1042,505 Z" fill="#1f3b63"/>
+<text x="934" y="486" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">worker-2</text>
+<text x="1040.0" y="531" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">docker:dind</text>
+<rect x="950" y="557" width="180" height="40" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1040.0" y="577" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">dockerd</text>
+<rect x="990.0" y="611" width="100" height="34" rx="4" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="1040.0" y="628.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">task</text>
+<path d="M1040.0,463 L1040.0,374" fill="none" stroke="#6b7280" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arr-gray)"/>
+<rect x="1180" y="465" width="240" height="192" rx="14" fill="#f3f6fb" stroke="#1f3b63" stroke-width="3" opacity="1"/>
+<path d="M1180,505 L1180,479 Q1180,465 1194,465 L1320,465 L1320,487 Q1320,505 1302,505 Z" fill="#1f3b63"/>
+<text x="1194" y="486" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="22" text-anchor="start" dominant-baseline="middle" fill="white" font-weight="bold">worker-3</text>
+<text x="1300.0" y="531" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#6b7280" font-weight="normal">docker:dind</text>
+<rect x="1210" y="557" width="180" height="40" rx="6" fill="white" stroke="#1f3b63" stroke-width="2" opacity="1"/>
+<text x="1300.0" y="577" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal">dockerd</text>
+<rect x="1250.0" y="611" width="100" height="34" rx="4" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="1300.0" y="628.0" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">task</text>
+<path d="M1300.0,463 L1160.0,374" fill="none" stroke="#6b7280" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arr-gray)"/>
+<text x="1430" y="415" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="end" dominant-baseline="middle" fill="#6b7280" font-weight="normal" font-style="italic">join via master:2377</text>
+<rect x="775.0" y="197" width="110" height="36" rx="18" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="830" y="215" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">:2375</text>
+<path d="M312,150 L700,150 L700,215 L773,215" fill="none" stroke="#1f3b63" stroke-width="3" marker-end="url(#arr-navy)"/>
+<text x="510" y="172" font-family="'Fira Sans', 'Helvetica Neue', Arial, sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="#1f3b63" font-weight="normal" font-style="italic">Docker API (127.0.0.1 only)</text>
+<rect x="365.0" y="392" width="90" height="36" rx="18" fill="#c62828" stroke="#c62828" stroke-width="2" opacity="1"/>
+<text x="410" y="410" font-family="'Fira Code', Menlo, Consolas, monospace" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="white" font-weight="normal">:9443</text>
+<path d="M312,410 L362,410" fill="none" stroke="#c62828" stroke-width="4" marker-end="url(#arr-red)"/>
+<path d="M652,415 L760,415 L760,310 L828,310" fill="none" stroke="#c62828" stroke-width="4" marker-end="url(#arr-red)"/>
+</svg>

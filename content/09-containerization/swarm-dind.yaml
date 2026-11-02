@@ -25,10 +25,11 @@ services:
     entrypoint: ["sh", "-c"]
     command:
       - |
-        for port in 9443 8890; do
+        for port in 9443 8889 8890; do
           socat TCP-LISTEN:$$port,fork,reuseaddr TCP:master:$$port &
         done
         wait
     ports:
       - "9443:9443"           # Portainer
-      - "8890:8890"           # ports of the stacks deployed later in the lecture
+      - "8889:8889"           # ports of the stacks deployed later in the lecture
+      - "8890:8890"

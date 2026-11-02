@@ -61,7 +61,7 @@ To govern the _deployment_ of __software systems__ onto some __infrastructure__
     * hardware $\approx$ CPU, memory, storage, network
     * software $\approx$ operating system, drivers, runtimes, libraries
 
-- __deployment__: orderly _instantiating_ software components onto the infrastructure, while 
+- __deployment__: orderly _instantiating_ software components onto the infrastructure, while
     * _satisfying_ the computational _requirements_ of each component
     * _optimising_ the _exploitation_ of the infrastructural facilities
 
@@ -87,14 +87,14 @@ To govern the _deployment_ of __software systems__ onto some __infrastructure__
 
 > __Short-lived__ tasks are bare computational activities aimed at __processing/generating__ some data
 
-- Pure __algorithms__ _accepting data_ as input and/or _producing data_ as output. 
+- Pure __algorithms__ _accepting data_ as input and/or _producing data_ as output.
 
-- They will eventually reach their natural __termination__ 
+- They will eventually reach their natural __termination__
     + _without_ requiring external _intervention_
-    
+
 - Common workflow:
-    1. users _provide_ the _code_ and the _input_ data, 
-    2. they _start_ the task, 
+    1. users _provide_ the _code_ and the _input_ data,
+    2. they _start_ the task,
     3. they are interested in _getting the output_ data
 
 - __Parallelism__ may be exploited to _speed up_ the computations
@@ -109,8 +109,8 @@ To govern the _deployment_ of __software systems__ onto some __infrastructure__
 
 - Infinite _loops_, just _waiting_ for _requests_, and _serving_ them as soon as possible
 
-- __Interactivity__ is a key aspect: 
-    + __clients__ _interact_ with the service, 
+- __Interactivity__ is a key aspect:
+    + __clients__ _interact_ with the service,
     + the service __reacts__ to the clients' requests
     + clients may be _humans_ or _other software_ components
 
@@ -142,7 +142,7 @@ Regardless of their life-span, computational tasks may require __computational r
 
 - specific __runtime platforms__ (e.g. JVM, Python, .NET etc.)
 
-- specific __infrastructural components__ (e.g. database, reverse proxy, load-balancer, broker, etc.) 
+- specific __infrastructural components__ (e.g. database, reverse proxy, load-balancer, broker, etc.)
 
 - specific __libraries__ (e.g. CUDA, `numpy`, etc.)
 
@@ -178,10 +178,10 @@ Regardless of their life-span, computational tasks may require __computational r
 
 ## The need for encapsulation (pt. 2)
 
-Some abstraction is needed to encapsulate applications, and their computational environment, into a single unit 
+Some abstraction is needed to encapsulate applications, and their computational environment, into a single unit
 
 > __Encapsulation__ is the __hiding__ of the __implementation details__ of a __component__ from its __clients__.
-> Encapsulated components have a clear __interface__ which is the only way to interact with them. 
+> Encapsulated components have a clear __interface__ which is the only way to interact with them.
 
 ---
 
@@ -235,7 +235,7 @@ Some abstraction is needed to encapsulate applications, and their computational 
 - each container __shares the OS kernel__ of the host, yet having its own runtime(s), storage, and network facilities
     + in the eyes of the user, the container is a _process_ running on top of a _minimal OS_
 
-- each container is an _instance_ of an __image__, i.e. a _read-only template_ containing deployment instructions 
+- each container is an _instance_ of an __image__, i.e. a _read-only template_ containing deployment instructions
     + differences w.r.t. that image constitute the _state of the container_ (these can be _snapshotted_ into a file of minimal size)
 
 - containers are __fine__-grained __encapsulation__ units
@@ -346,7 +346,7 @@ Containers provide **runtime isolation** _without_ **operating system replicatio
 - __Container__: a sandbox for running a process and its computational environment
 - __Image__: a template for creating containers
 - __Layer__: a single, cacheable, step in the creation of an image
-- __Host__: the machine hosting the containers 
+- __Host__: the machine hosting the containers
 - __Registry__: a repository of images (possibly external w.r.t. the host)
 - __Network__: a virtual network for connecting containers (with each other and with the host)
 - __Volume__: a bridge for letting containers share data with the host
@@ -355,7 +355,7 @@ Containers provide **runtime isolation** _without_ **operating system replicatio
 {{% fragment %}}
 ### Orchestration level
 
-- __Cluster__: a set of machines joined together by the same container orchestrator 
+- __Cluster__: a set of machines joined together by the same container orchestrator
 - __Node__: a machine in the cluster (each one acting as a host, and running the container engine)
 - __Service__: a set of replicas of the same container
 - __Stack__: a set of inter-related services
@@ -395,7 +395,7 @@ __Docker__: the most famous container technology, actually consisting of several
     + `sudo usermod -aG docker $USER`
     + log out and log in again
     + beware: members of the `docker` group are _de facto_ `root` on the host
-3. Enable and start the Docker service 
+3. Enable and start the Docker service
     + on most Linux distributions `sudo systemctl enable docker; sudo systemctl start docker`
     + on macOS and Windows, start the Docker Desktop application
 4. Test your installation
@@ -575,16 +575,16 @@ const serverID = randomBytes(8).toString('hex')
 const server = express()
 
 let counter = 0
- 
+
 server.get('/', function (req, res) {
   counter++
   res.send(`[${serverID}@${hostname}:${port}] Hit ${counter} times`)
 })
- 
+
 console.log(`Service ${serverID} listening on ${hostname}:${port}`)
 server.listen(port)
 ```
-i.e. a Web service listening on the port indicated by the `SERVICE_PORT` env var, showing Web pages of the form 
+i.e. a Web service listening on the port indicated by the `SERVICE_PORT` env var, showing Web pages of the form
 ```
 [$SERVER_ID@$HOST_NAME:PORT] Hit $VIEW_COUNT times
 ```
@@ -690,7 +690,7 @@ Images get published in **registries**
 
 - Of course, like any other software, *custom docker images should get built in CI*
 
-- Several integrators use _containers_ as __build environments__: 
+- Several integrators use _containers_ as __build environments__:
     * it is possible to *build a container using a container*
 
 - More generally: there is *no inherent limit to nesting containers*
@@ -830,7 +830,7 @@ They support several use cases:
 
 3. Let's have a look at the shared directory: `ls -la ./shared`
     ```
-    ls -la ./shared 
+    ls -la ./shared
     totale 56
     drwxr-xr-x  2 user    user     4096  2 nov 10.51 .
     drwxr-xr-x 79 user    user    12288  2 nov 10.56 ..
@@ -943,7 +943,7 @@ They support several use cases:
 
 6. Let's look into that position (may require _super-user_ access rights, Linux only):
     * `sudo ls -la /var/lib/docker/volumes/my-volume/_data`
-    
+
         ```
         totale 48
         drwxr-xr-x 2 root root 4096  2 nov 11.15 .
@@ -1158,7 +1158,7 @@ Let's create a non-trivial scenario with 2 containers attached to the same netwo
 1. let's create the network: `docker network create --driver bridge my-network`
     * a random string is returned: that's the network's ID
 
-2. let's create the daemon: 
+2. let's create the daemon:
     * `docker run --privileged -d --rm --network my-network --hostname dind docker:dind`
 
 3. let's create the client: `docker run -it --rm --network my-network --hostname cli docker:cli`
@@ -1168,7 +1168,7 @@ Let's create a non-trivial scenario with 2 containers attached to the same netwo
         ```
         error during connect: Get "http://docker:2375/v1.24/containers/json": dial tcp: lookup docker on 127.0.0.11:53: no such host
         ```
-    
+
     3. apparently the `docker:cli` image is preconfigured to contact a daemon on the `docker` hostname
 
 4. let's stop `dind`:
@@ -1335,7 +1335,7 @@ services:                       # section defining services composing the stack
     secrets:                    # section for secrets to be injected
       - server-certificate      # reference to the secret (by name)
       - db-credentials          # reference to the secret (by name)
-    
+
       # assumption: image example/webapp is programmed to load secrets
       # from /run/secrets/<secret_name>
 
@@ -1349,7 +1349,7 @@ services:                       # section defining services composing the stack
       retries: 3
       start_period: 40s
     volumes:                    # section for volumes to be attached to the container
-      - db-data:/etc/data       # the volume db-data (reference by name) will be mounted 
+      - db-data:/etc/data       # the volume db-data (reference by name) will be mounted
                                 # as read-write in /etc/data
     networks:
       - back-tier               # attach to back-tier network (by name)
@@ -1375,7 +1375,7 @@ secrets:                   # section for secrets to be created in the stack
     file: path/to/certificate/file/on/the/host
   db-credentials:          # name of the secret, to be referenced by services
     external: true         # not created by the stack, but expected to exist
-    name: my-db-creds      # name of the secret, as created by the user 
+    name: my-db-creds      # name of the secret, as created by the user
 
 networks:
   # The presence of these objects is sufficient to define them
@@ -1591,7 +1591,7 @@ From [Docker Compose documentation](https://docs.docker.com/reference/compose-fi
     networks:
         network_name:
             driver: overlay # default choice in swarm
-            driver_opts: 
+            driver_opts:
                 # many options, covering many advanced use cases for network engineering
     ```
 
@@ -1674,7 +1674,7 @@ services:
       interval: 1m
       timeout: 5s
       retries: 3
-    
+
   wordpress:
     depends_on:
       db:
@@ -1715,7 +1715,7 @@ networks:
 4. open your browser and browse to <http://localhost:8000>
 
 5. `docker ps` and have a look at the running containers
-    + and `docker network ls` 
+    + and `docker network ls`
     + and `docker volume ls`
 
 6. Press `Ctrl+C` to stop the stack
@@ -1735,11 +1735,11 @@ networks:
     docker compose up
     [+] Building 0.0s (0/0) docker:default
     [+] Running 5/5
-    ✔ Network your-dir_back-tier        Created  0.1s 
-    ✔ Volume "your-dir_wordpress_data"  Created  0.1s 
-    ✔ Volume "your-dir_db_data"         Created  0.0s 
-    ✔ Container your-dir-db-1           Created  0.8s 
-    ✔ Container your-dir-wordpress-1    Created  0.9s 
+    ✔ Network your-dir_back-tier        Created  0.1s
+    ✔ Volume "your-dir_wordpress_data"  Created  0.1s
+    ✔ Volume "your-dir_db_data"         Created  0.0s
+    ✔ Container your-dir-db-1           Created  0.8s
+    ✔ Container your-dir-wordpress-1    Created  0.9s
     Attaching to db-1, wordpress-1
     db-1         | 2023-11-23 14:24:57+00:00 [Note] [Entrypoint]: Entrypoint script for MariaDB Server 1:11.2.2+maria~ubu2204 started.
     db-1         | 2023-11-23 14:24:57+00:00 [Note] [Entrypoint]: Switching to dedicated user 'mysql'
@@ -1803,11 +1803,11 @@ services:
       ...
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_PASSWORD_FILE: /run/secrets/db_password
-    ...    
+    ...
     secrets:
       - db_root_password
       - db_password
-    
+
   wordpress:
     ...
     environment:
@@ -1865,7 +1865,7 @@ secrets:
 {{< plantuml >}}
 interface Customer {
     + id: CustomerID
-    + firstName: String 
+    + firstName: String
     + lastName: String
     + birthDate: LocalDate
     ...
@@ -2595,16 +2595,6 @@ Repository: <https://github.com/unibo-spe/containerized-experiment>
 
 ---
 
-## Swarm architecture
-
-![Docker Swarm architecture: the CLI sends the stack to a manager; managers agree on the cluster state via Raft and dispatch tasks (containers) to workers, possibly running tasks themselves](./swarm-architecture.svg)
-
-- Docker Compose deploys a stack on a _single_ host, Docker Swarm deploys it on a __cluster__ of hosts (_nodes_)
-- Users submit stacks to __managers__ (e.g. via `docker stack deploy`), which keep the cluster state _consistent_ via Raft
-- Managers turn services into __tasks__ (i.e. containers), and dispatch them onto nodes, workers or managers alike
-
----
-
 ## Building the cluster (theory)
 
 - In a Docker Swarm cluster, there are two kinds of nodes:
@@ -2623,6 +2613,16 @@ Repository: <https://github.com/unibo-spe/containerized-experiment>
         + it is better to have __multiple__ manager nodes for redundancy
         + it is better to have an __odd__ number of manager nodes
             * e.g. 3, 5, 7, etc.
+
+---
+
+## Swarm architecture
+
+![Docker Swarm architecture: the CLI sends the stack to a manager; managers agree on the cluster state via Raft and dispatch tasks (containers) to workers, possibly running tasks themselves](./swarm-architecture.svg)
+
+- Docker Compose deploys a stack on a _single_ host, Docker Swarm deploys it on a __cluster__ of hosts (_nodes_)
+- Users submit stacks to __managers__ (e.g. via `docker stack deploy`), which keep the cluster state _consistent_ via Raft
+- Managers turn services into __tasks__ (i.e. containers), and dispatch them onto nodes, workers or managers alike
 
 ---
 
@@ -2648,10 +2648,21 @@ Repository: <https://github.com/unibo-spe/containerized-experiment>
 
 ---
 
+{{< slide id="swarm-dind-figure" >}}
+
 ## A local Swarm via Docker-in-Docker (pt. 2)
 
+{{< figure src="./swarm-dind.svg" width="60%" alt="Local Swarm via Docker-in-Docker: on your machine, the local Docker daemon runs five containers attached to one Compose network: master, worker-1, worker-2 and worker-3 are privileged docker:dind containers, each running its own Docker daemon and its own containers (tasks), with the workers joining the Swarm via master:2377; the docker CLI on your machine reaches the Docker API of master via localhost:2375 (DOCKER_HOST), while the browser reaches the services of the Swarm via the gateway container (alpine/socat), which relays ports 9443, 8889 and 8890 to master" >}}
+
+- Your _local_ daemon runs the nodes as containers, each node's daemon runs the _tasks_ of the Swarm
+- Your CLI talks to `master` (the only manager) via `DOCKER_HOST`, your browser reaches the Swarm's services via `gateway`
+
+---
+
+## A local Swarm via Docker-in-Docker (pt. 3)
+
 {{< multicol >}}
-{{% col class="col-5" %}}
+{{% col class="col-4" %}}
 ```yaml
 x-node: &node
   image: docker:dind
@@ -2675,18 +2686,19 @@ services:
     entrypoint: ["sh", "-c"]
     command:
       - |
-        for port in 9443 8890; do
+        for port in 9443 8889 8890; do
           socat TCP-LISTEN:$$port,fork,reuseaddr \
                 TCP:master:$$port &
         done
         wait
     ports:
       - "9443:9443"           # Portainer
-      - "8890:8890"           # later examples
+      - "8889:8889"           # later examples
+      - "8890:8890"
 ```
 (full file [here](./swarm-dind.yaml))
 {{% /col %}}
-{{% col class="col-7" %}}
+{{% col class="col-8" %}}
 - A __Compose__ file describing a cluster of _4 nodes_: `master` + 3 _workers_
     + `x-node` is a YAML _anchor_, i.e. the settings shared by all nodes, merged into each service via `<<: *node`
     + `hostname` gives each node its _symbolic_ name in the cluster
@@ -2704,7 +2716,7 @@ services:
 
 ---
 
-## A local Swarm via Docker-in-Docker (pt. 3)
+## A local Swarm via Docker-in-Docker (pt. 4)
 
 1. Save the file of the previous slide as `compose.yaml`, in an empty directory, and start the nodes:
     ```bash
@@ -2896,7 +2908,7 @@ netsh interface portproxy add v4tov4 listenport=7946 listenaddress=$ACTUAL_IP co
 ## Stack Deploy Example: [Portainer](https://www.portainer.io/)
 
 {{< multicol >}}
-{{% col %}}
+{{% col class="col-4" %}}
 ```yaml
 services:
   agent:
@@ -2922,7 +2934,7 @@ services:
       mode: replicated
       replicas: 1
       placement:
-        constraints: 
+        constraints:
           - node.role == manager
 
 networks:
@@ -2934,7 +2946,7 @@ volumes:
   portainer_data:
 ```
 {{% /col %}}
-{{% col %}}
+{{% col class="col-8" %}}
 - Portainer is a Web-based dashboard for cluster administration
     * it works with both Docker Swarm and Kubernetes
 
@@ -2952,6 +2964,17 @@ volumes:
     + the certificate is _self-signed_: accept it
 {{% /col %}}
 {{< /multicol >}}
+
+---
+
+{{< slide id="portainer-allocation" >}}
+
+## Portainer's allocation onto the Swarm
+
+{{< figure src="./portainer-allocation.svg" width="75%" alt="Allocation of the portainer stack onto the DinD Swarm: service agent is global, so one agent container runs on each of master, worker-1, worker-2 and worker-3; service webservice has one replica, constrained to manager nodes, hence it runs on master, together with volume portainer_data and published port 9443; all containers are attached to the overlay network agents_network, through which webservice contacts the agents at tasks.agent:9001" >}}
+
+- `deploy.mode: global` $\rightarrow$ _one_ `agent` per node, `placement.constraints` $\rightarrow$ `webservice` on the _only_ manager (`master`)
+- Volumes are created _where_ the containers mounting them run, overlay networks _span_ all the nodes hosting their containers
 
 ---
 
@@ -2993,7 +3016,7 @@ Upon environment selection, one is presented with the _dashboard_, showing the _
 
 {{< figure src="./portainer-dashboard.png" alt="Portainer dashboard, summarising the status of the cluster" width="50%" >}}
 
---- 
+---
 
 ## Things to notice via Portainer
 
@@ -3047,11 +3070,11 @@ After selecting the only environment available, one may observe:
     * placement _preferences_: one service's _replicas_ will be _spread_ among nodes with given labels
 
 ---
- 
+
 ## Example of placement constraints
 
 {{< multicol >}}
-{{% col %}}
+{{% col class="col-4" %}}
 ```yaml
 services:
   db:
@@ -3059,7 +3082,7 @@ services:
     ...
     deploy:
       placement:
-        constraints: 
+        constraints:
           - node.labels.capabilities.storage==yes
   wordpress:
     image: wordpress:latest  # depends_on is ignored by Swarm
@@ -3068,7 +3091,7 @@ services:
     ...
     deploy:
       placement:
-        constraints: 
+        constraints:
           - node.labels.capabilities.web==yes
 volumes:
   db_data: {}
@@ -3077,18 +3100,18 @@ networks:
   back-tier: {}
 ```
 {{% /col %}}
-{{% col %}}
+{{% col class="col-8" %}}
 - Let's define a stack for Wordpress, with __placement constraints__
     + `db` service on a node with _storage_ capabilities
     + `wordpress` service on a node with _web_ capabilities
 
-- E.g., on a cluster with nodes `storage1`, `inference1`, `inference2`, and `inference4`:
-    - node `storage1` has _storage_ capabilities
-    - node `inference2` has _web_ capabilities
+- E.g., on the [DinD Swarm](#/swarm-dind) (nodes `master`, `worker-N`):
+    - node `worker-1` has _storage_ capabilities (`docker node update --label-add capabilities.storage=yes worker-1`)
+    - node `worker-2` has _web_ capabilities (`docker node update --label-add capabilities.web=yes worker-2`)
 
 - The deployment is as follows:
 
-![Placement constraints: service db can only run on nodes labelled capabilities.storage=yes (storage1), service wordpress only on nodes labelled capabilities.web=yes (inference2)](./placement-constraints.svg)
+![Placement constraints: service db can only run on nodes labelled capabilities.storage=yes (worker-1), service wordpress only on nodes labelled capabilities.web=yes (worker-2)](./placement-constraints.svg)
 {{% /col %}}
 {{< /multicol >}}
 
@@ -3105,11 +3128,11 @@ When a service _exposes a port_, and that's deployed on a _Swarm_:
     + requests reaching _any_ node are forwarded to some node actually hosting a replica
 
 - so, the `wordpress` service above could be visited via _any_ node of the cluster, e.g.:
-    + `http://storage1:8889`
-    + `http://inference1:8889`
-    + `http://inference2:8889` (the node actually hosting the service)
+    + `http://master:8889` (i.e. <http://localhost:8889> on your machine, via `gateway`)
+    + `http://worker-1:8889`
+    + `http://worker-2:8889` (the node actually hosting the service)
 
-![Swarm routing mesh: port 8889 is published on every node; a request to storage1:8889 enters the ingress network, which forwards it to the only wordpress replica, running on inference2](./routing-mesh.svg)
+![Swarm routing mesh: port 8889 is published on every node; a request to master:8889 enters the ingress network, which forwards it to the only wordpress replica, running on worker-2](./routing-mesh.svg)
 
 ---
 
@@ -3130,7 +3153,7 @@ When a service _exposes a port_, and that's deployed on a _Swarm_:
           mode: replicated
           replicas: N                  # this should be a number!
           placement:
-            constraints: 
+            constraints:
               - node.role == manager
               - node.labels.mylabel==myvalue
             preferences:
@@ -3154,7 +3177,7 @@ When a service _exposes a port_, and that's deployed on a _Swarm_:
 - `replicated` services keep _exactly_ `N` replicas alive, re-scheduling them when a node fails (if constraints allow)
 
 ---
- 
+
 ## Example of placement preferences
 
 {{< multicol >}}
@@ -3168,7 +3191,7 @@ services:
     deploy:
       replicas: 10
       placement:
-        constraints: 
+        constraints:
           - node.labels.capabilities.cpu==yes
         preferences:
           - spread: node.labels.capabilities.cpu
@@ -3180,7 +3203,7 @@ services:
     ```bash
     while true; do
         curl http://localhost:8890; # published by master
-        echo 
+        echo
         sleep 1
     done
     ```
@@ -3208,7 +3231,7 @@ services:
 {{% /col %}}
 {{% col %}}
 1. Several replicas of the same service are created, spread over the CPU-capable nodes (i.e. the 3 workers):
-    
+
     ![Portainer services view: 10 replicas of service ws spread over the nodes](./portainer-replicated-service.png)
 
 <br/>
@@ -3236,7 +3259,7 @@ services:
         condition: on-failure # restart is ignored by Swarm
       replicas: 3
       placement:
-        constraints: 
+        constraints:
           - node.labels.capabilities.cpu==yes
         max_replicas_per_node: 1
     volumes:
@@ -3249,7 +3272,7 @@ volumes:
 {{% /col %}}
 {{% col %}}
 1. Several replicas of the simulation are created...
-    
+
     ![Portainer services view: 3 replicas of the simulation, on 3 different nodes](./portainer-fake-simulation.png)
 
 
