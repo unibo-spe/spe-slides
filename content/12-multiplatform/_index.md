@@ -305,6 +305,103 @@ __Organization__: [Maven directory layout](https://maven.apache.org/guides/intro
 
 {{% section %}}
 
+# Example: the .NET platform
+
+---
+
+## Standard and community libraries: .NET
+
+{{< figure src="dotnet-libraries.svg" width="92%" alt="A .NET application uses the base class library for collections and LINQ, files and HTTP, JSON and tasks; CsvHelper, Serilog and Dapper are separately installed community packages." >}}
+
+- The [__base class library__](https://learn.microsoft.com/en-us/dotnet/standard/class-library-overview) provides common APIs for C#, F#, VB.NET, etc.
+- __Community packages__ add higher-level abstractions, distributed through __NuGet__
+
+---
+
+## Predefined design decisions: .NET / C#
+
+{{% multicol %}}{{% col class="col-5" %}}
+
+- [__Value types__](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/value-types) (`struct`, `int`, etc.) vs. __reference types__ (`class`)
+  * assignment copies a value or a reference
+  * boxing wraps a copy of a value as an `object`
+- C# instance methods are __non-virtual__ by default
+  * opt in with `virtual`; specialize with `override`
+  * `Object.ToString()` is already virtual
+- __Properties__ expose accessors with field-like syntax: `counter.Value`
+
+[Runnable project](platform-examples/dotnet/PlatformExamples.csproj) (.NET 10 SDK): save it beside [DesignDecisions.cs](platform-examples/dotnet/DesignDecisions.cs) and [CsvRow.cs](platform-examples/dotnet/CsvRow.cs), then run `dotnet run`
+
+{{% /col %}}{{% col class="col-7 platform-code" %}}
+
+{{% code path="platform-examples/dotnet/DesignDecisions.cs" from="5" to="13" language="csharp" %}}
+
+{{% code path="platform-examples/dotnet/DesignDecisions.cs" from="21" to="26" language="csharp" %}}
+
+{{% /col %}}{{% /multicol %}}
+
+---
+
+## Organizational, stylistic, technical conventions: .NET
+
+{{% multicol %}}{{% col class="col-5" %}}
+
+__Organization__: one possible solution layout
+
+<pre class="platform-tree">project/
+├── CsvDemo.sln
+├── src/CsvDemo/
+│   ├── CsvDemo.csproj
+│   └── CsvRow.cs
+└── tests/CsvDemo.Tests/
+    └── CsvRowTests.cs</pre>
+
+- [__Naming__](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-guidelines): `CsvRow`, `Count`, `GetEnumerator`; interface names start with `I`
+- __Properties__: `row.Count`, rather than a getter method
+- __Protocols__: `IEnumerable<T>` enables `foreach`; `params` accepts variadic arguments
+
+{{% /col %}}{{% col class="col-7 platform-code" %}}
+
+{{% code path="platform-examples/dotnet/CsvRow.cs" from="1" to="21" language="csharp" %}}
+
+{{% /col %}}{{% /multicol %}}
+
+---
+
+## Packaging, imports, repositories: .NET
+
+{{< figure src="dotnet-packaging.svg" width="96%" alt="nuget.org hosts packages identified by ID and version. NuGet restores package references from the project file, making DLL assemblies available to the compiler. C# using directives make namespace types available by short names." >}}
+
+{{% multicol %}}{{% col class="col-6" %}}
+
+- __NuGet package__ (`.nupkg`) → ZIP with assemblies, metadata and other assets
+- __Assembly__ (`.dll`) → compiled types and metadata, targeting a framework
+- __Repository__: [nuget.org](https://www.nuget.org/packages/CsvHelper), or a private package feed
+
+{{% /col %}}{{% col class="col-6" %}}
+
+- __Dependency__: `dotnet add package CsvHelper` records a reference in `.csproj` and restores it
+- __Namespace__: `using CsvHelper;` allows the short name `CsvReader`
+- [`using`](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/using-directive) neither downloads a package nor loads an assembly; namespaces and assemblies are distinct
+
+{{% /col %}}{{% /multicol %}}
+
+> __NuGet__ resolves packages; __assembly references__ make types available to the compiler
+
+---
+
+## User communities: .NET / C#
+
+{{< figure src="dotnet-communities.svg" width="96%" alt="Phone, server, desktop and game-controller icons represent .NET and C# communities building mobile apps with .NET MAUI, Web back ends with ASP.NET Core, desktop apps with WPF or Avalonia, and games with Unity." >}}
+
+> Frameworks have their own __target platforms__: e.g. WPF is Windows-only; Unity uses its own runtime tooling
+
+{{% /section %}}
+
+---
+
+{{% section %}}
+
 # Example: the Python platform
 
 ---
