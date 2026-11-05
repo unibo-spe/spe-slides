@@ -330,13 +330,15 @@ __Organization__: [Maven directory layout](https://maven.apache.org/guides/intro
   * `Object.ToString()` is already virtual
 - __Properties__ expose accessors with field-like syntax: `counter.Value`
 
-[Runnable project](platform-examples/dotnet/PlatformExamples.csproj) (.NET 10 SDK): save it beside [DesignDecisions.cs](platform-examples/dotnet/DesignDecisions.cs) and [CsvRow.cs](platform-examples/dotnet/CsvRow.cs), then run `dotnet run`
+[Complete solution](https://github.com/unibo-spe/spe-slides/tree/master/content/12-multiplatform/platform-examples/dotnet/PlatformExamples) (.NET 10 SDK): from `PlatformExamples/`, run `dotnet run --project CsvDemo`
 
 {{% /col %}}{{% col class="col-7 platform-code" %}}
 
-{{% code path="platform-examples/dotnet/DesignDecisions.cs" from="5" to="13" language="csharp" %}}
+{{% code path="platform-examples/dotnet/PlatformExamples/CsvDemo/Program.cs" from="11" to="19" language="csharp" %}}
 
-{{% code path="platform-examples/dotnet/DesignDecisions.cs" from="21" to="26" language="csharp" %}}
+{{% code path="platform-examples/dotnet/PlatformExamples/CsvDemo/Point.cs" from="3" to="6" language="csharp" %}}
+
+{{% code path="platform-examples/dotnet/PlatformExamples/CsvDemo/Counter.cs" from="3" to="7" language="csharp" %}}
 
 {{% /col %}}{{% /multicol %}}
 
@@ -346,23 +348,28 @@ __Organization__: [Maven directory layout](https://maven.apache.org/guides/intro
 
 {{% multicol %}}{{% col class="col-5" %}}
 
-__Organization__: one possible solution layout
+__Organization__: solution → projects → namespaces
 
-<pre class="platform-tree">project/
-├── CsvDemo.sln
-├── src/CsvDemo/
-│   ├── CsvDemo.csproj
-│   └── CsvRow.cs
-└── tests/CsvDemo.Tests/
-    └── CsvRowTests.cs</pre>
+<pre class="platform-tree">PlatformExamples/
+├── PlatformExamples.sln
+└── CsvDemo/
+    ├── CsvDemo.csproj
+    ├── Program.cs
+    ├── Point.cs
+    ├── Counter.cs
+    ├── Models/
+    │   └── CsvRow.cs
+    ├── bin/  (generated assemblies)
+    └── obj/  (generated build files)</pre>
 
-- [__Naming__](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-guidelines): `CsvRow`, `Count`, `GetEnumerator`; interface names start with `I`
-- __Properties__: `row.Count`, rather than a getter method
+- Each project builds an __assembly__; directories reflect __namespaces__: `Models/` → `CsvDemo.Models`
+- __One type per file__, named after it; `Program.Main` is the entry point
+- [__Naming__](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-guidelines): `CsvRow`, `Count`, `GetEnumerator`; interfaces start with `I`
 - __Protocols__: `IEnumerable<T>` enables `foreach`; `params` accepts variadic arguments
 
 {{% /col %}}{{% col class="col-7 platform-code" %}}
 
-{{% code path="platform-examples/dotnet/CsvRow.cs" from="1" to="21" language="csharp" %}}
+{{% code path="platform-examples/dotnet/PlatformExamples/CsvDemo/Models/CsvRow.cs" from="1" to="21" language="csharp" %}}
 
 {{% /col %}}{{% /multicol %}}
 

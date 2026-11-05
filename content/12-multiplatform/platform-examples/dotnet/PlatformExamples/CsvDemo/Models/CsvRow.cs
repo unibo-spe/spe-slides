@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Unibo.Spe;
+namespace CsvDemo.Models;
 
 public class CsvRow : IEnumerable<string>
 {
