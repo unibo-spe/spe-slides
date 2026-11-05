@@ -1,0 +1,52 @@
+version: "3.8"
+services:
+  db:
+    image: mariadb:latest
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - back-tier
+    environment:
+      MYSQL_ROOT_PASSWORD: "..Password1.."
+      MYSQL_DATABASE: wordpress_db
+      MYSQL_USER: wordpress_user
+      MYSQL_PASSWORD: ",,Password2,,"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh",
+        "--su-mysql", "--connect",
+        "--innodb_initialized"]
+      start_period: 1m
+      interval: 1m
+      timeout: 5s
+      retries: 3
+    deploy:
+      restart_policy:
+        condition: any
+      placement:
+        constraints:
+          - node.labels.capabilities.storage==yes
+  wordpress:
+    image: wordpress:latest
+    volumes:
+      - wordpress_data:/var/www/html
+    ports:
+      - "8889:80"
+    networks:
+      - back-tier
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress_user
+      WORDPRESS_DB_PASSWORD: ",,Password2,,"
+      WORDPRESS_DB_NAME: wordpress_db
+    deploy:
+      restart_policy:
+        condition: any
+      placement:
+        constraints:
+          - node.labels.capabilities.web==yes
+volumes:
+  db_data: {}
+  wordpress_data: {}
+networks:
+  back-tier:
+    driver: overlay

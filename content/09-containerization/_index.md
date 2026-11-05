@@ -3073,43 +3073,39 @@ After selecting the only environment available, one may observe:
 
 ## Example of placement constraints
 
+Full stack: [wordpress-swarm.yaml](./wordpress-swarm.yaml) (continued in the right column).
+
 {{< multicol >}}
-{{% col class="col-4" %}}
-```yaml
-services:
-  db:
-    image: mariadb:latest
-    ...
-    deploy:
-      placement:
-        constraints:
-          - node.labels.capabilities.storage==yes
-  wordpress:
-    image: wordpress:latest  # depends_on is ignored by Swarm
-    ports:
-      - "8889:80"
-    ...
-    deploy:
-      placement:
-        constraints:
-          - node.labels.capabilities.web==yes
-volumes:
-  db_data: {}
-  wordpress_data: {}
-networks:
-  back-tier: {}
-```
+{{% col class="col-6" %}}
+{{% code path="wordpress-swarm.yaml" from="1" to="27" %}}
 {{% /col %}}
-{{% col class="col-8" %}}
+{{% col class="col-6" %}}
+{{% code path="wordpress-swarm.yaml" from="28" to="52" %}}
+{{% /col %}}
+{{< /multicol >}}
+
+---
+
+## Example of placement constraints (pt. 2)
+
+{{< multicol >}}
+{{% col class="col-6" %}}
 - Let's define a stack for Wordpress, with __placement constraints__
     + `db` service on a node with _storage_ capabilities
     + `wordpress` service on a node with _web_ capabilities
+
+- Full file: [wordpress-swarm.yaml](./wordpress-swarm.yaml)
+    + deploy from a manager: `docker stack deploy -c wordpress-swarm.yaml wordpress`
+    + `depends_on` is ignored by Swarm
 
 - E.g., on the [DinD Swarm](#/swarm-dind) (nodes `master`, `worker-N`):
     - node `worker-1` has _storage_ capabilities (`docker node update --label-add capabilities.storage=yes worker-1`)
     - node `worker-2` has _web_ capabilities (`docker node update --label-add capabilities.web=yes worker-2`)
 
 - The deployment is as follows:
+
+{{% /col %}}
+{{% col class="col-6" %}}
 
 ![Placement constraints: service db can only run on nodes labelled capabilities.storage=yes (worker-1), service wordpress only on nodes labelled capabilities.web=yes (worker-2)](./placement-constraints.svg)
 {{% /col %}}

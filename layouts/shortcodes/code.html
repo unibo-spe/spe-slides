@@ -1,4 +1,4 @@
-{{- $here := $.Page.File | path.Dir -}}
+{{- $here := printf "content/%s" $.Page.File.Dir -}}
 {{ $path := .Get "path" | default "README.md" | printf "%s/%s" ($here) -}}
 {{- $content := safeHTML (readFile $path) -}}
 {{- $content := split $content "\n" -}}
