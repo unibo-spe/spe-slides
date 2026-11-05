@@ -20,6 +20,12 @@ enableSourceMap = true
 .reveal blockquote::after{
     content: "";
 }
+.reveal .platform-code pre {
+    font-size: .70em;
+}
+.reveal .platform-tree {
+    font-size: .65em;
+}
 </style>
 
 # Multi-platform programming
@@ -204,83 +210,94 @@ enableSourceMap = true
 
 ---
 
-## Standard libraries
+## Standard and community libraries: JVM
 
-- Types from the `java.*` and `javax.*` packages are usable from _any_ JVM language 
+{{< figure src="jvm-libraries.svg" width="92%" alt="A JVM application uses JDK collections, file and networking APIs, threads and numbers, plus separately installed Jackson, Apache Commons CSV and Spring libraries." >}}
 
-- Many nice _functionalities_ covering:
-  * multi-threading, non-blocking IO, asynchronous programming
-  * OS-independent GUI, or IO management
-  * data structures and algorithms for collections and streams
-  * unlimited precision arithmetic
-
-- Many functionalities are provided by _community-driven_ **third party** _libraries_
-  * e.g. YAML/JSON parsing / generation, CSV parsing, complex numbers
+- __JDK APIs__ are shared across JVM languages: Java, Kotlin, Scala, etc.
+- __Community libraries__ add domain-specific abstractions (e.g. [Commons CSV](https://commons.apache.org/proper/commons-csv/)), resolved by Maven / Gradle
 
 ---
 
-## Predefined design decisions
+## Predefined design decisions: JVM
 
-- Everything is (indirectly) a _subclass/instance_ of `Object`
-  * except a fixed set of primitive types, and static stuff
+{{% multicol %}}{{% col class="col-5" %}}
 
-- Every object is potentially a _lock_
-  * useful for concurrency
+- Every class extends [`Object`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html)
+  * primitives are distinct; _boxing_ wraps them
+- Every object has a __monitor__
+  * `synchronized` instance methods lock the receiver
+- Java instance methods are __virtual__ by default
+  * `toString()` dispatches to the runtime class
+  * Kotlin methods are `final` by default
 
-- Default methods inherited from the `Object` class
-  * e.g. `toString`, `equals`, `hashCode`
+Run the [full example](platform-examples/jvm/DesignDecisions.java):
 
-- In Java, instance methods are _virtual by default_ (whereas in Kotlin they are `final` by default)
+`java -ea DesignDecisions.java`
 
-- ...
+{{% /col %}}{{% col class="col-7 platform-code" %}}
 
----
+{{% code path="platform-examples/jvm/DesignDecisions.java" from="1" to="21" %}}
 
-## Organizational, stylistic, technical conventions
-
-- _Project_ should be organized according to the Maven's [standard directory layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html)
-
-- Official _stylistic conventions_ for most JVM languages
-  * e.g. type names in `PascalCase`, member names in `camelCase`
-  * e.g. getters/setters in Java vs. Kotlin's or Scala's properties
-
-- Many technical conventions:
-  * _iterable_ data structures should implement the `Iterable` interface
-  * _variadic_ arguments are considered _arrays_
-  * _constructors_ for collection subclasses accept `Collection`s as input
-  * ...
+{{% /col %}}{{% /multicol %}}
 
 ---
 
-## Packaging conventions, import mechanisms, and software repositories
+## Organizational, stylistic, technical conventions: JVM
 
-* _Project files_ are organized into _packages_
-  - packages should correspond to _directory structures_ (mandatory in Java, recommended in Kotlin)
+{{% multicol %}}{{% col class="col-5" %}}
 
-* Code _archives_ (`.jar`) are _Zip files_ containing compiled classes
+__Organization__: [Maven directory layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html)
 
-* Basic _import mechanism_: the __class path__
-  * i.e. the path where classes are looked for
-  * commonly set at application startup
-  * since Java 9, also the __module path__ ([JPMS](https://openjdk.org/projects/jigsaw/spec/))
+<pre class="platform-tree">project/
+├── pom.xml (or build.gradle.kts)
+└── src/
+    ├── main/java/it/unibo/spe/
+    │   └── CsvRow.java
+    └── test/java/it/unibo/spe/
+        └── CsvRowTest.java</pre>
 
-* Many _third-party repositories_ for JVM libraries
-  - [Maven central repository](https://central.sonatype.com) is the most relevant one
-  - many tools for dependency management (e.g. Maven, Gradle, cf. [build automation](../04-build-automation/))
+- __Style__: `CsvRow`, `getValues`, `values`
+- __Technical protocols__: `Iterable` enables the enhanced `for` loop
+- Collections accept `Collection`; variadic `String...` is a `String[]`
+
+[Full code](platform-examples/jvm/CsvRow.java), including a `main` and assertions
+
+{{% /col %}}{{% col class="col-7 platform-code" %}}
+
+{{% code path="platform-examples/jvm/CsvRow.java" from="1" to="28" %}}
+
+{{% /col %}}{{% /multicol %}}
 
 ---
 
-## User communities
+## Packaging, imports, repositories: JVM
 
-- _Android_ developers
+{{< figure src="jvm-packaging.svg" width="96%" alt="Maven Central supplies dependency coordinates to Gradle or Maven, which place JAR files on the class path so Java can resolve imported classes." >}}
 
-- _Back-end_ Web developers
+{{% multicol %}}{{% col class="col-6" %}}
 
-- _Desktop applications_ developers
+- __Package__ → namespace, e.g. `org.apache.commons.csv`
+- __JAR__ → ZIP archive of compiled classes and resources
+- __Dependency coordinates__ → `org.apache.commons:commons-csv:1.14.1`
 
-- Researchers in the fields of: _Semantic Web_, _multi-agent systems_, etc.
+{{% /col %}}{{% col class="col-6" %}}
 
-- ...
+- __Import__ → `import org.apache.commons.csv.CSVFormat;`
+- __Class path__ → where the JVM finds classes (`java -cp ...`)
+- __Module path__ → also available for [JPMS](https://openjdk.org/projects/jigsaw/spec/) modules since Java 9
+
+{{% /col %}}{{% /multicol %}}
+
+> Resolve __dependencies__ first; __import__ classes in source code
+
+---
+
+## User communities: JVM
+
+{{< figure src="jvm-communities.svg" width="96%" alt="Four example JVM user communities, represented by phone, server, desktop and laboratory icons: Android developers, back-end Web developers, desktop application developers, and researchers working on Semantic Web or multi-agent systems." >}}
+
+> The same JVM library can reach __several communities__ through their preferred JVM language
 
 {{% /section %}}
 
@@ -292,88 +309,95 @@ enableSourceMap = true
 
 ---
 
-## Standard libraries
+## Standard and community libraries: Python
 
-- Notably, one of the _richest_ __standard libraries__ ever
+{{< figure src="python-libraries.svg" width="92%" alt="Python supplies JSON and CSV handling, file and concurrency APIs, complex numbers and SQLite; NumPy, pandas, scikit-learn, PyTorch, Django and FastAPI are separately installed community libraries." >}}
 
-- Many nice _functionalities_ covering:
-  * all the stuff covered by Java
-  * plus many more, e.g. complex numbers, JSON and CSV parsing, etc.
-
-- Many functionalities are provided by community-driven _third party libraries_
-  * e.g. _scientific_ or _ML_ libraries
+- The [__standard library__](https://docs.python.org/3.13/library/) already covers CSV / JSON, complex numbers, etc.
+- __Community packages__ add arrays, tables, ML models and Web frameworks
 
 ---
 
-## Predefined design decisions
+## Predefined design decisions: Python
 
-- Everything is (indirectly) a _subclass/instance_ of `object`
-  * no exceptions
+{{% multicol %}}{{% col class="col-5" %}}
 
-- [Global Interpreter Lock](https://realpython.com/python-gil/) (GIL) in the default CPython build
-  * an optional [free-threaded build](https://docs.python.org/3/howto/free-threading-python.html) exists since Python 3.13
+- __Everything is an object__, including numbers
+- __Magic methods__ connect objects to language features
+  * `str(row)` → `row.__str__()`
+  * `len(row)` → `row.__len__()`
+- No signature-based method overloading
+  * a later `def` with the same name replaces the earlier binding
+- Default CPython builds have a __GIL__
+  * optional [free-threaded builds](https://docs.python.org/3/howto/free-threading-python.html) exist since Python 3.13
 
-- _Magic methods_ supporting various language features
-  * e.g. `__str__`, `__eq__`, `__iter__`
+Run the [full example](platform-examples/python/design_decisions.py):
 
-- No signature-based _method overloading_
-  * operators can be overloaded via magic methods
+`python3 design_decisions.py`
 
-- _Variadic_ and _keywords_ __arguments__
+{{% /col %}}{{% col class="col-7 platform-code" %}}
 
-- ...
+{{% code path="platform-examples/python/design_decisions.py" from="1" to="15" %}}
 
----
-
-## Organizational, stylistic, technical conventions
-
-- _Project files_ are described by a [`pyproject.toml`](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/) file, and organized according to either the _flat_ or the [_src_ layout](https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/)
-
-- Official _stylistic conventions_ for Python ([PEP 8](https://peps.python.org/pep-0008/))
-  * e.g. type names in `PascalCase`, member names in `snake_case`
-  * e.g. 4-space indentation, blank line conventions, etc.
-  * ...
-
-- Many _technical conventions_:
-  * [duck typing](https://realpython.com/lessons/duck-typing/)
-  * iterable data structures should implement the `__iter__` method
-  * _variadic_ arguments are considered _tuples_
-  * _keyword_ arguments are considered _dictionaries_
-  * ...
+{{% /col %}}{{% /multicol %}}
 
 ---
 
-## Packaging conventions, import mechanisms, and software repositories
+## Organizational, stylistic, technical conventions: Python
 
-* _Project files_ are organized into __packages__ and __modules__
-  - packages $\leftrightarrow$ _directories_
-  - modules $\leftrightarrow$ _files_
+{{% multicol %}}{{% col class="col-5" %}}
 
-* Code _archives_:
-  * _wheels_ (`.whl`): _Zip files_ containing a ready-to-install package (Python sources, possibly compiled extensions, metadata)
-  * _source distributions_ (`.tar.gz`), to be built upon installation
+__Organization__: [src layout](https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/) (flat layout is also common)
 
-* Each Python _environment_ has an _internal folder_ where __installed libraries__ are stored
-  * `pip` simply _unzips_ wheels in there
-  * `import` statements _look for_ packages/modules in there
+<pre class="platform-tree">project/
+├── pyproject.toml
+├── src/csv_demo/
+│   ├── __init__.py
+│   └── csv_row.py
+└── tests/
+    └── test_csv_row.py</pre>
 
-* [PyPI](https://pypi.org/) as the _official repository_ for Python libraries
-  * `pip` as the reference _installer_
-  * project / dependency management via tools such as [uv](https://docs.astral.sh/uv/) or [Poetry](https://python-poetry.org/) (cf. [build automation](../04-build-automation/))
+- __Style__: [PEP 8](https://peps.python.org/pep-0008/), `CsvRow`, `join_values`, four spaces
+- __Duck typing__: same function accepts our object or a built-in list
+- `*values` → tuple; `**metadata` → dictionary
+
+[Full code](platform-examples/python/csv_row.py), including assertions
+
+{{% /col %}}{{% col class="col-7 platform-code" %}}
+
+{{% code path="platform-examples/python/csv_row.py" from="1" to="16" %}}
+
+{{% /col %}}{{% /multicol %}}
 
 ---
 
-## User communities
+## Packaging, imports, repositories: Python
 
-- _Data-science_ community
+{{< figure src="python-packaging.svg" width="96%" alt="PyPI hosts distributions; pip installs the requests wheel into a virtual environment's site-packages directory; Python resolves import requests from its module search path." >}}
 
-- _Back-end_ Web developers
+{{% multicol %}}{{% col class="col-6" %}}
 
-- _Desktop applications_ developers
+- __Module__ → `.py` file; regular __package__ → directory with `__init__.py`
+- __Wheel__ (`.whl`) → installable ZIP (sources, optional native extensions, metadata)
+- __Source distribution__ (`.tar.gz`) → must first be built
 
-- _System administrators_
+{{% /col %}}{{% col class="col-6" %}}
 
-- ...
+- [__pip__](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/) installs distributions from __PyPI__ into an environment
+- `import` searches `sys.path`, including `site-packages`
+- Distribution and import names can differ: `pip install scikit-learn` → `import sklearn`
+
+{{% /col %}}{{% /multicol %}}
+
+> __pip__ installs a distribution; __import__ loads a module
+
+---
+
+## User communities: Python
+
+{{< figure src="python-communities.svg" width="96%" alt="Chart, server, desktop and gear icons represent Python communities in data science and machine learning, back-end Web, desktop applications, and system administration." >}}
+
+> Scientific libraries reach users who expect __Python objects and protocols__, even when implemented in C / C++
 
 {{% /section %}}
 
@@ -385,74 +409,95 @@ enableSourceMap = true
 
 ---
 
-## Standard library
+## Standard and community libraries: NodeJS
 
-- Very __limited__ _standard library_ from JavaScript
-  + enriched with many _Node modules_
+{{< figure src="node-libraries.svg" width="92%" alt="NodeJS combines JavaScript built-ins with Node file, HTTP, process and crypto APIs; Express, csv-parse, React tooling and Electron come from the community ecosystem." >}}
 
-- Many nice _functionalities_ covering:
-  * networking and IPC
-  * OS, multiprocess, and cryptographic utilities
-
-- Many functionalities are provided by _community-driven_ **third party** _libraries_
-  * you can find virtually anything on [npmjs.com](https://www.npmjs.com/)
+- __JavaScript built-ins__ + [__Node APIs__](https://nodejs.org/api/) form the platform's standard facilities
+- __Community packages__ add higher-level abstractions; browser DOM APIs are not part of Node
 
 ---
 
-## Predefined design decisions
+## Predefined design decisions: NodeJS
 
-- _Object orientation_ based on [prototypes](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Advanced_JavaScript_objects/Object_prototypes)
+{{% multicol %}}{{% col class="col-5" %}}
 
-- _Single-threaded_ [event loop](https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick)
-  * parallelism via [worker threads](https://nodejs.org/api/worker_threads.html) or child processes
+- __Prototype-based__ object orientation
+  * `row` inherits `toString` from its prototype
+- JavaScript callbacks run on the [__event loop__](https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick)
+  * CPU-heavy work blocks other callbacks
+  * worker threads / processes enable parallelism
+- __Promises__ and `async` / `await`
+  * `await` suspends this async function
+  * the caller continues before it resumes
 
-- _Asynchronous programming_ via _promises_ and `async`/`await`
-  * historically, via callbacks, i.e. [continuation-passing style](https://matt.might.net/articles/by-example-continuation-passing-style/)
+Run the [full example](platform-examples/node/design-decisions.mjs):
 
----
+`node design-decisions.mjs`
 
-## Organizational, stylistic, technical conventions
+{{% /col %}}{{% col class="col-7 platform-code" %}}
 
-- _Project structure_ is somewhat __arbitrary__ (no established convention)
-  * the project must contain a `package.json` file in the _root_ directory
-  * declaring the entry point of the project
+{{% code path="platform-examples/node/design-decisions.mjs" from="3" to="19" %}}
 
-- Many _style conventions_ co-exist
-  * e.g. [W3Schools' one](https://www.w3schools.com/js/js_conventions.asp)
-
-- Many _technical conventions_:
-  * duck typing
-  * magic variables, e.g. for prototype
-  * ...
+{{% /col %}}{{% /multicol %}}
 
 ---
 
-## Packaging conventions, import mechanisms, and software repositories
+## Organizational, stylistic, technical conventions: NodeJS
 
-* _Project files_ are organized into __modules__
-  - modules are files containing anything
-  - and declaring what to export
-  - two module systems: _CommonJS_ (`require`) and _ES modules_ (`import`/`export`), the latter being the standard one
+{{% multicol %}}{{% col class="col-5" %}}
 
-* Code _archives_ (`.tgz`) are compressed _tarball files_ containing JS sources
+__Organization__: one possible layout
 
-* Third-party _libraries_ can be __installed__ via `npm`
-  * locally (per project), or globally (`npm install -g`)
+<pre class="platform-tree">project/
+├── package.json
+├── src/
+│   └── csv-row.mjs
+└── test/
+    └── csv-row.test.mjs</pre>
 
-* The [npm registry](https://www.npmjs.com/) as the official _repository_ for JS libraries
-  * `npm` as the reference tool for dependency management (alternatives: `yarn`, `pnpm`)
+- No mandatory source-directory layout
+- __Style__: `CsvRow`, `joinValues`; teams choose a linter / formatter
+- __Duck typing__ and the iterable protocol (`Symbol.iterator`)
+- Rest parameters → arrays; `.mjs` explicitly selects ES modules
+
+[Full code](platform-examples/node/csv-row.mjs), including assertions
+
+{{% /col %}}{{% col class="col-7 platform-code" %}}
+
+{{% code path="platform-examples/node/csv-row.mjs" from="3" to="19" %}}
+
+{{% /col %}}{{% /multicol %}}
 
 ---
 
-## User communities
+## Packaging, imports, repositories: NodeJS
 
-- _Front-end_ Web developers
+{{< figure src="node-packaging.svg" width="96%" alt="The npm registry hosts packages; npm installs a tarball into node_modules; Node resolves ES module imports using the installed package and its package.json metadata." >}}
 
-- _Back-end_ Web developers
+{{% multicol %}}{{% col class="col-6" %}}
 
-- _GUI_ developers
+- __Package__ → `package.json` + sources / assets, distributed as `.tgz`
+- __npm registry__ → repository; `npm` → dependency tool (also `yarn`, `pnpm`)
+- `npm install csv-parse` → local dependency in `node_modules`
 
-- ...
+{{% /col %}}{{% col class="col-6" %}}
+
+- __ES modules__: `import { parse } from 'csv-parse';`
+- __CommonJS__: `const { parse } = require('csv-parse');`
+- [__Resolution__](https://nodejs.org/api/packages.html): package entry points via `exports` / `main`; relative ESM imports include the extension, e.g. `./csv-row.mjs`
+
+{{% /col %}}{{% /multicol %}}
+
+> __npm__ installs packages; `import` / `require` loads their exported modules
+
+---
+
+## User communities: NodeJS
+
+{{< figure src="node-communities.svg" width="96%" alt="Browser, server, desktop and gear icons represent front-end developers using Node build tooling and server-side rendering, back-end developers, Electron desktop developers, and CLI or automation authors." >}}
+
+> Front-end code runs in the __browser__; Node often runs its __build tools__ or server-side rendering
 
 {{% /section %}}
 
