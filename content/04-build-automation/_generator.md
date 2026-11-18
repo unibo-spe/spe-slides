@@ -2152,6 +2152,8 @@ Test coverage tools measure **how much of the code is executed while running tes
 * Helps identify *untested* parts of the codebase
 * {{% fragment %}} Coverage cannot tell anything about the **covered** code, it can only spot **uncovered** fragments {{% /fragment %}}
 
+---
+
 ## Quality control in Gradle
 
 If the `lifecycle-base` plugin is applied (it is auto-applied by most language-specific plugins), then a `check` task is available
@@ -2219,6 +2221,8 @@ In the JVM world, the de-facto standard format is **jar** (Java ARchive)
 * Runnable Jars can be created via the "shadowJar" third-party plugin
 * Runnable software including the Java runtime can be created using JPackage
 
+---
+
 ## Signing artifacts
 
 Many repositories require artifacts to be **signed** in order for them to be delivered/deployed
@@ -2256,8 +2260,7 @@ Software repositories are services hosting software artifacts for distribution
 
 * [Maven Central](https://search.maven.org/) is the de-facto standard repository for JVM artifacts
   * It can host any artifact compatible with the Maven format, including non-JVM artifacts, as long as they are packaged as JARs
-  * **No-retract**, **no-yanking** policy
-      * **Errors** [stay there forever](https://central.sonatype.com/artifact/commons-io/commons-io/versions)
+  * **No-retract**, **no-yanking** policy: **Errors** [stay there forever](https://central.sonatype.com/artifact/commons-io/commons-io/versions) ([issue](https://issues.apache.org/jira/browse/IO-881) and [workaround](https://www.mail-archive.com/issues%40commons.apache.org/msg151503.html))
   * *Requires* both *sources* and *Javadoc* artifacts
   * Artifacts on Central *should* only depend on other artifacts on Central
     * Not really enforced, but strongly recommended
