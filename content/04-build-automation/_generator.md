@@ -33,6 +33,7 @@ enableSourceMap = true
     * The build system as a dependency
     * Hierarchical organization
     * Isolation of imperativity
+    * Configuration cache and build performance
     * Declarativity via DSLs
     * Reuse via plug-ins
     * Testing plug-ins
@@ -170,21 +171,24 @@ include(CPack)
 
 ---
 
-## Declarative build tool example: Python Poetry
+## Declarative build tool example: Python uv
 
 
-[Poetry](https://python-poetry.org/) is a modern, *declarative* build and dependency management tool for Python.
+[uv](https://docs.astral.sh/uv/) is a modern, *declarative* project and dependency management tool for Python.
 
-* **Declarative configuration**: All project metadata, dependencies, and build instructions are specified in `pyproject.toml`.
+* **Declarative configuration**: All project metadata and dependencies are specified in the *standard* `pyproject.toml`.
     * Declarative build tools tend to favor markup files over scripts:
         * XML (Maven)
-        * TOML (Poetry, Rust's Cargo)
+        * TOML (Python's `pyproject.toml`, Rust's Cargo)
         * JSON (Node.js's npm)
         * YAML (JetBrains' Amper)
-* **Scripted tasks**: Allows definition of custom scripts for automation.
-* **Dependency resolution**: Handles dependency resolution and locking via `poetry.lock`.
+* **Python management**: Downloads and selects the Python interpreter required by the project.
+* **Dependency resolution**: Handles dependency resolution and locking via `uv.lock`.
+    * Can export the lock to the *standard* [PEP 751](https://peps.python.org/pep-0751/) `pylock.toml` format
 * **Virtual environments**: Automatically manages isolated Python environments per project.
 * **Build and publish**: Supports building and publishing packages to PyPI or other repositories.
+
+Written in Rust by [Astral](https://astral.sh/) (acquired by OpenAI in 2026), released under MIT/Apache-2.0.
 
 ---
 
@@ -224,16 +228,18 @@ multiple tools *proliferated*
 
 * `PyEnv` is a tool to manage _multiple_ Python __installations__ _on the same system_
     + *tackles Problem 1*
-    + **Poetry** checks that the right Python version is used, but does not manage Python installations
+    + **uv** downloads and manages Python installations itself (`uv python install`, `.python-version`)
 
 * `virtualenv` and `venv` create _virtual_ Python installations _on the same system_
     + `virtualenv` is a _third-party_ tool, `venv` is _built into_ Python 3.3 and later
     + *tackles Problem 2*
-    + **Poetry** automatically creates and manages virtual environments for each project
+    + **uv** automatically creates and manages a virtual environment for each project (in `.venv`)
+
+$\Rightarrow$ A single tool replaces `pyenv` + `venv` + `pip` + `pip-tools` + `pipx`
 
 ---
 
-## Poetry's canonical project structure
+## uv's canonical project structure
 
 ```bash
 root-directory/
@@ -243,94 +249,118 @@ root-directory/
 │   └── sub_package/ 
 │       ├── __init__.py 
 │       └── sub_sub_module.py 
-├── test/
+├── tests/
 │   ├── test_something.py
 │   └── test_something_else.py
+├── .python-version # The Python version to be used for development
 ├── pyproject.toml # File where project configuration (metadata, dependencies, etc.) is stored
-├── poetry.toml # File where Poetry configuration is stored
-├── poetry.lock # File where Poetry locks the dependencies
+├── uv.lock # File where uv locks the dependencies
 └── README.md
 ```
 
 If you already use Python, notice:
 - no `requirements.txt` nor `requirements-dev.txt`
-- `pyproject.toml`, `poetry.toml`, and `poetry.lock` are **Poetry-specific**
-- `poetry.lock` is generated _automatically_ by Poetry, and should not be edited manually
+- `pyproject.toml` is **standard**: any compliant tool can read the metadata and dependencies
+- `uv.lock` is **uv-specific**, generated _automatically_ by uv, and should not be edited manually
+    - `uv export --format pylock.toml` produces a standard, tool-independent lock file
+- `uv init --package` creates a similar structure, with the package in a `src/` folder
 
 ---
 
 ## A Python [`calculator`](https://github.com/unibo-dtm-se/calculator)
 
-(courtesy of Giovanni Ciatto)
+(adapted from Giovanni Ciatto)
 
 ```toml
-[tool.poetry]
-
-# publication metadata
+# publication metadata (standard, PEP 621)
+[project]
 name = "unibo-dtm-se-calculator"
-packages = [ # files to be included for publication
-    { include = "calculator" },
-]
-version = "0.1.1"
+version = "1.0.0"
 description = "A simple calculator toolkit written in Python, with several UIs."
-authors = ["Giovanni Ciatto <giovanni.ciatto@unibo.it>"]
-license = "Apache 2.0"
+authors = [{ name = "Giovanni Ciatto", email = "giovanni.ciatto@unibo.it" }]
+license = "Apache-2.0" # SPDX identifier
 readme = "README.md"
-
 # dependencies (notice that Python is considered a dependency)
-[tool.poetry.dependencies] 
-python = "^3.10.0"
-Kivy = "^2.3.0"
-
-# development dependencies
-[tool.poetry.group.dev.dependencies]
-poetry = "^1.7.0"
-pytest = "^8.1.0"
-coverage = "^7.4.0"
-mypy = "^1.9.0"
+requires-python = ">=3.10"
+dependencies = [
+    "kivy>=2.3.0,<3",
+]
 
 # executable commands that will be created when installing this package
-[tool.poetry.scripts]
+[project.scripts]
 calculator-gui = "calculator.ui.gui:start_app"
 calculator = "calculator.ui.cli:start_app"
 
-# where to download the dependencies from
-[[tool.poetry.source]]
-name = "PyPI"
-priority = "primary"
+# development dependencies (standard, PEP 735)
+[dependency-groups]
+dev = [
+    "pytest>=8.1",
+    "coverage>=7.4",
+    "mypy>=1.9",
+]
 
-# packaging dependencies
+# packaging dependencies (standard, PEP 517/518)
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.12,<0.13"]
+build-backend = "uv_build"
 
-# the project-specific environment will be created in the local .venv folder
-[virtualenvs]
-in-project = true 
+# tool-specific configuration: the package is in the root folder, not in src/
+[tool.uv.build-backend]
+module-name = "calculator"
+module-root = ""
 ```
 
-Pure TOML: completely declarative
+Pure TOML: completely declarative.
+<br>
+PyPI is the default source; further indexes can be declared with `[[tool.uv.index]]`.
 
 ---
 
-## Poetry: build lifecycle
+## uv: build lifecycle
 
-Poetry is used via the `poetry` command line tool:
-* `poetry install` -- resolves and installs dependencies
-* `poetry run <command>` -- runs a command within the virtual environment
+uv is used via the `uv` command line tool:
+* `uv sync` -- resolves and installs dependencies
+* `uv run <command>` -- runs a command within the virtual environment (syncing first, if needed)
+* `uv add <dependency>` / `uv remove <dependency>` -- edits `pyproject.toml`, re-locks, and syncs
+* `uv build` / `uv publish` -- creates and uploads the distribution archives
+* `uvx <tool>` -- runs a Python tool in a temporary, isolated environment
 
-### Actual behavior of `poetry install`
+### Actual behavior of `uv sync`
 
 1. *Validate* the project is correct and all necessary information is available
-2. *Verify* the version of Python is correct
-3. *Resolve* the dependencies, or use the ones in `poetry.lock` if already available
+2. *Find* a Python interpreter satisfying `requires-python`, *downloading it* if needed
+3. *Resolve* the dependencies, or use the ones in `uv.lock` if already available and up to date
 4. *Retrieve* the dependencies from the specified sources
 5. *Create* a virtual environment if not already available
-6. *Install* the dependencies in the virtual environment
+6. *Install* the dependencies (and the project itself, in editable mode) in the virtual environment
 
-Subsequent lifecycle phases are managed by the `poetry run` command, and are thus custom.
+Subsequent lifecycle phases are managed by the `uv run` command, and are thus custom.
+<br>
+(Task runners such as [Poe the Poet](https://poethepoet.natn.io/) can add named tasks, e.g., `uv run poe test`)
 
-❗ Except for `install`, Poetry does not provide a predefined lifecycle
+❗ Except for `sync` (and `build`), uv does not provide a predefined lifecycle
+
+---
+
+## Poetry: same idea, different dialect
+
+[Poetry](https://python-poetry.org/) was the most popular declarative Python tool before uv, and is still widely used
+
+* Since Poetry 2, metadata can be written in the *standard* `[project]` table
+    * Older projects use the Poetry-specific `[tool.poetry]` table, with its own syntax (e.g., `Kivy = "^2.3.0"`)
+* Locks in `poetry.lock`, tool configuration in `poetry.toml` (e.g., `virtualenvs.in-project = true`)
+* Manages virtual environments; interpreter management (`poetry python install`) is still *experimental*
+
+| Operation                  | uv                  | Poetry                   |
+|----------------------------|---------------------|--------------------------|
+| Create a project           | `uv init`           | `poetry new`             |
+| Add a dependency           | `uv add pkg`        | `poetry add pkg`         |
+| Install the environment    | `uv sync`           | `poetry install`         |
+| Run in the environment     | `uv run cmd`        | `poetry run cmd`         |
+| Update the lock            | `uv lock --upgrade` | `poetry update`          |
+| Build / publish            | `uv build` / `uv publish` | `poetry build` / `poetry publish` |
+
+The *concepts* (standard manifest, lock file, per-project environment, no fixed lifecycle) are **the same**
 
 ---
 
@@ -625,6 +655,7 @@ Starting task: tasks
 Configuring task: help        # Configuration happens only when a task is needed!
 Configuring task: projects
 ... list of tasks ...
+Configuring task: kotlinDslAccessorsReport
 Configuring task: helloWorld
 
 ------------------------------------------------------------
@@ -756,7 +787,10 @@ Execution:
 ```bash
 gradle compileJava
 
-BUILD SUCCESSFUL in 693ms
+> Task :compileJava
+[/home/danysk/LocalProjects/spe-slides/examples/compile-java/src/HelloWorld.java]
+
+BUILD SUCCESSFUL in 419ms
 ```
 Compiled files are in `build/bin`!
 
@@ -799,6 +833,10 @@ tasks.register<Exec>("compileJava") {
     )
 }
 ```
+
+⚠️ `org.gradle.internal.jvm.Jvm` is an **internal** Gradle class: fine for exploring, but not a stable API.
+<br>
+Production builds should rely on *toolchains* (see later).
 
 ---
 
@@ -1125,6 +1163,48 @@ for gradle to mark it as an *input* or an *output*.
 ```
 {{% /col %}}
 {{% /multicol %}} 
+
+---
+
+## The configuration cache
+
+The configuration phase can be *expensive*, and its result is often the same across invocations
+* **Configuration cache**: Gradle *serializes the task graph* (tasks and their configured inputs) and *reuses it*
+    * the configuration phase gets skipped entirely if nothing that affects it changed
+    * enable it with `--configuration-cache`, or `org.gradle.configuration-cache=true` in `gradle.properties`
+    * it is the *preferred* mode of execution since Gradle 9
+        * (every build without it ends with: `Consider enabling configuration cache to speed up this build`)
+
+**Requirement**: tasks must *not* capture live build-script objects (the `Project`, the script itself...)
+* the task state must be *serializable*, and *self-contained*
+
+{{% multicol %}}
+{{% col %}}
+Our `run-java-deps` example: `doFirst { ... }` lambdas capture the build script
+```text
+❯ ./gradlew runJava --configuration-cache
+...
+2 problems were found storing the configuration cache.
+- Task `:compileJava` of type `org.gradle.api.tasks.Exec`:
+  cannot serialize Gradle script object references
+  as these are not supported with the configuration cache.
+- Task `:runJava` of type `org.gradle.api.tasks.Exec`:
+  cannot serialize Gradle script object references
+  as these are not supported with the configuration cache.
+```
+{{% /col %}}
+{{% col %}}
+Our `custom-tasks` example: task state lives in typed, annotated properties
+```text
+❯ ./gradlew runJava --configuration-cache
+...
+BUILD SUCCESSFUL
+```
+
+$\Rightarrow$ *typed tasks with declared inputs and outputs* are not just cleaner:
+they enable **incremental builds**, **build caching**, and **configuration caching**
+{{% /col %}}
+{{% /multicol %}}
 
 ---
 

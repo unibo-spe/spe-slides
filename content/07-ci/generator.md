@@ -434,6 +434,18 @@ They are usually integrated with the repository hosting provider
 
 ---
 
+<!-- write-here "shared-slides/ci/merge-queues.md" -->
+
+<!-- end-write -->
+
+---
+
+<!-- write-here "shared-slides/ci/mergify.md" -->
+
+<!-- end-write -->
+
+---
+
 ## Copilot coding agent: what it is
 
 * Cloud-hosted *autonomous LLM agent* inside GitHub.
