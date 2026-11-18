@@ -658,11 +658,11 @@ Tasks of unspecified type are plain `DefaultTask`s
 
 ```bash
 > Task :printJavaVersion
-Ready to invoke /usr/lib/jvm/java-11-openjdk/bin/java
-openjdk version "11.0.8" 2020-07-14
-OpenJDK Runtime Environment (build 11.0.8+10)
-OpenJDK 64-Bit Server VM (build 11.0.8+10, mixed mode)
-/usr/lib/jvm/java-11-openjdk/bin/java invocation complete
+Ready to invoke /usr/lib/jvm/java-25-openjdk/bin/java
+openjdk version "25.0.4.1" 2026-08-18
+OpenJDK Runtime Environment (build 25.0.4.1)
+OpenJDK 64-Bit Server VM (build 25.0.4.1, mixed mode, sharing)
+/usr/lib/jvm/java-25-openjdk/bin/java invocation complete
 ```
 
 ---
