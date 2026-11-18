@@ -446,35 +446,6 @@ They are usually integrated with the repository hosting provider
 
 ---
 
-## Copilot coding agent: what it is
-
-* Cloud-hosted *autonomous LLM agent* inside GitHub.
-  * Can be *assigned issues*
-  * Spins up an isolated runner, clones the repo, makes changes, builds, and proceeds iteratively until the issue is solved.
-     * (or Copilot *"thinks"* it is solved)
-  * Responds with *a draft PR* for review.
-* Operates through GitHub Actions with full audit trail in commits and logs (consuming actions minutes).
-
-## How to use it
-
-* Start from: **assign an Issue to Copilot**.
-* It **opens a draft PR**, and requests your review.
-    * At the first assignment on a new repo, it will ask for an **onboarding procedure**
-       * When onboarding, Copilot runs through the repository and prepares a document
-         in `.github/copilot-instructions.md`
-         for its future self with a summary of the codebase.
-       * On subsequent runs, this summary is used as context for Copilot, speeding up its understanding of the codebase.
-* Tag `@Copilot` in PR comments to guide it.
-
-### Impact
-
-The literature is emerging, initial results are mixed.
-* GenAI seems to *speed up inexperienced* developers in *small and simple projects*.
-* *Experienced developers* on *large projects* seem to be *slowed down* (**-19%**) by the need to review AI-generated code.
-    * https://arxiv.org/abs/2507.09089, https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/
-
----
-
 # Issue and PR templating
 
 ---

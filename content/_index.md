@@ -34,6 +34,7 @@ targetPath = "css/custom-theme.css"
     * [Software licensing](06-licenses)
 * [Continuous integration/delivery/deployment](07-ci)
 * [Advanced version control](08-advanced-git)
+* [Agentic DevOps](13-agentic-devops)
 
 {{% /col %}}
 {{% col %}}
