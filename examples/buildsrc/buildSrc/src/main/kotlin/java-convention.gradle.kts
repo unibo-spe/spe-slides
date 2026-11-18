@@ -1,6 +1,6 @@
 val compilationDestination = project.layout.buildDirectory.dir("bin").get().asFile
-val compileClasspath: Configuration by configurations.creating
-val runtimeClasspath: Configuration by configurations.creating {
+val compileClasspath: Configuration = configurations.create("compileClasspath")
+val runtimeClasspath: Configuration = configurations.create("runtimeClasspath") {
     extendsFrom(compileClasspath)
 }
 
