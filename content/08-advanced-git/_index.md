@@ -1650,3 +1650,9 @@ git config core.hooksPath .githooks
 * **Hook managers** (e.g., `pre-commit`, Husky, Lefthook): hooks declared in a versioned configuration file, installed with one command
 * Hooks run on *developer machines*, and can be skipped (`git commit --no-verify`)
     * They give *fast feedback*: **enforcement** belongs to CI
+
+---
+
+# Advanced Versioning Techniques
+
+{{% import path="reusable/header.md" %}}
