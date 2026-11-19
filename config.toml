@@ -51,6 +51,14 @@ startOnLoad = false
 theme = "default"
 fontFamily = "Inconsolata"
 useMaxWidth = false
+look = "classic"
+
+[params.reveal_hugo.mermaid.flowchart]
+curve = "rounded"
+# mermaid 12 defaults to 120px: nodes would be much larger than their labels
+minNodeWidth = 0
+# mermaid 12 defaults to 120px, wrapping labels that fit on one line in mermaid 10
+wrappingWidth = 200
 
 [params.reveal_hugo.mermaid.gitGraph]
 mainBranchName = 'master'

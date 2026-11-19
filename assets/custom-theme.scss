@@ -287,37 +287,38 @@ section.has-light-background {
 }
 
 // Mermaid flowcharts as git graphs
+// Shapes are matched regardless of the SVG element: mermaid >= 11 draws many shapes as paths
 
-.mermaid .cluster.repo > rect {
+.mermaid .cluster.repo > :is(rect, path) {
     stroke-width: 0.2em !important;
     fill: ghostwhite !important;
     stroke: gray !important;
 }
-.mermaid .remote > path {
+.mermaid .remote :is(rect, path, polygon) {
     stroke-width: 0.2em !important;
     fill: rgb(253, 189, 253) !important;
     stroke: rgb(170, 0, 255) !important;
 }
 
-.mermaid .head > polygon {
+.mermaid .head :is(rect, path, polygon) {
     fill:#ff7274 !important;
     stroke:#aa1d1f !important;
     stroke-width: 0.2em !important;
 }
 
-.mermaid .branch > rect {
+.mermaid .branch :is(rect, path, polygon) {
     stroke-width: 0.2em !important;
     fill: greenyellow !important;
     stroke: green !important;
 }
 
-.mermaid .commit > rect {
+.mermaid .commit :is(rect, path, polygon) {
     fill: white !important;
     stroke:#333 !important;
     stroke-width: 0.2em !important;
 }
 
-.mermaid .tag > polygon {
+.mermaid .tag :is(rect, path, polygon) {
     fill: cyan !important;
     stroke: blue !important;
     stroke-width: 0.2em !important;

@@ -59,6 +59,9 @@ jobs:
         run: shared-slides/preprocess.rb
       - name: Build slides with hugo
         run: hugo
+      - name: Install the diagram font
+        # the inliner measures labels in a headless browser: without the font, it measures a fallback
+        run: sudo apt-get update && sudo apt-get install -y fonts-inconsolata
       - name: Transform and Inline Mermaid charts
         uses: cric96/inline-mermaid@1.25.0
         with:
