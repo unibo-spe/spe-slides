@@ -2,7 +2,7 @@
 +++
 
 title = "Advanced Versioning Techniques"
-description = "Submodules, rebasing, squashing, cherry-picking"
+description = "Worktrees, rebasing, squashing, history rewriting, submodules, large repositories"
 outputs = ["Reveal"]
 
 [reveal_hugo]
@@ -48,11 +48,79 @@ Nice people *sign* commits, certifying their authorship.
 If you do not have a signature yet, [time to create one](https://central.sonatype.org/pages/working-with-pgp-signatures.html)
 * Creation: `gpg --gen-key`
 * List: `gpg --list-keys`
-* Distribution: `gpg --keyserver hkp://pool.sks-keyservers.net --send-keys`
+* Distribution: `gpg --keyserver hkps://keys.openpgp.org --send-keys <YOUR_KEY_ID>`
 
 Once you have a private key to sign with, you can configure Git to use it for signing things by setting the user.signingkey config setting.
 
 `git config --global user.signingkey <YOUR_KEY_ID>`
+
+---
+
+## Signing with SSH keys
+
+Since Git 2.34, commits and tags can be signed with an **SSH key** instead of a GPG key
+
+* No GPG toolchain, no keyservers: you likely already have an SSH key (e.g., for GitHub)
+
+```bash
+git config --global gpg.format ssh
+git config --global user.signingkey ~/.ssh/id_ed25519.pub
+git config --global commit.gpgsign true   # sign every commit
+git config --global tag.gpgsign true      # sign every annotated tag
+```
+
+* On GitHub, add the public key as a **Signing Key** (separate from *Authentication Keys*, even if it is the same key)
+* Local verification (`git log --show-signature`) requires a list of trusted keys:
+    * `git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers`
+    * one line per key: `<email> <public key>`
+
+---
+
+# Commit trailers
+
+**Trailers** are `Key: value` lines at the *end* of a commit message, used to add *structured metadata*
+
+```text
+feat(parser): support multi-line string literals
+
+Literals delimited by triple quotes can now span multiple lines.
+
+Closes: #142
+Co-authored-by: Jane Doe <jane.doe@example.com>
+Signed-off-by: John Smith <john.smith@example.com>
+```
+
+* `Co-authored-by:` multiple authors for one commit (GitHub shows all of them)
+* `Signed-off-by:` the author certifies they have the *right to submit* the change
+    * *Developer Certificate of Origin* (DCO), required by many projects (e.g., Linux)
+    * Added automatically with `git commit -s`
+* `Closes:`, `Fixes:`, `Reviewed-by:`, `Assisted-by:`...: project conventions
+
+---
+
+## Working with trailers
+
+Adding trailers without editing the message by hand:
+
+```bash
+git commit -s -m "fix: handle empty input"            # adds Signed-off-by
+git commit --trailer "Co-authored-by: Jane Doe <jane.doe@example.com>"
+```
+
+Querying trailers:
+
+```bash
+# list co-authors across the history
+git log --format='%(trailers:key=Co-authored-by,valueonly)' | sort -u
+# parse trailers of a message
+git log -1 --format=%B | git interpret-trailers --parse
+```
+
+**Trailers and AI assistance**:
+* Many projects require *disclosing* AI-generated contributions, typically via a trailer
+    * e.g., `Co-authored-by:` an agent identity, or `Assisted-by:`
+* Coding agents often add such trailers by default
+* A `Signed-off-by:` is a statement *by a human*: an agent cannot certify the origin of the code for you
 
 ---
 
@@ -86,6 +154,79 @@ Stashing takes the dirty state of the working directory and saves it on a **st
 * `git stash pop`
   * **Re-applies** *the most recent* stash, *removing* it from the stash
   * Same as `git stash apply && git stash drop stash@{0}`
+
+---
+
+# Multiple working trees
+
+Stashing works for *quick* interruptions, but:
+
+* The *urgent fix* may take hours, and you would like to keep your work *open*
+* You need to *build or test* another branch while you keep working (e.g., a long test suite)
+* You want to *review* a colleague's PR *running* it, without touching your work
+* You want *several agents* working *in parallel* on different tasks, without interfering
+
+<br>
+
+A second `git clone` works, but duplicates *the whole history*, and the clones do not share branches
+
+**Worktrees**: *multiple working directories* attached to the *same* repository
+
+---
+
+## `git worktree`
+
+```mermaid
+flowchart LR
+  subgraph repo["project/.git — shared"]
+    objects[("objects<br><small>commits, trees, blobs</small>")]
+    refs[("refs<br><small>branches, tags, stash</small>")]
+    config[("config")]
+  end
+  wt1["📁 project/<br><small>HEAD → feat/parser</small>"] --- repo
+  wt2["📁 ../project-hotfix/<br><small>HEAD → hotfix/crash</small>"] --- repo
+  wt3["📁 ../project-review/<br><small>HEAD → detached (PR #42)</small>"] --- repo
+
+  class repo repo;
+```
+
+* **Shared**: objects, branches, tags, remotes, configuration, stash
+    * A commit made in a worktree is *immediately visible* from the others
+* **Per worktree**: `HEAD`, index (staging area), working files
+    * Including *untracked and ignored* files: build outputs, dependencies, IDE settings...
+* A branch can be checked out in **only one** worktree at a time
+
+---
+
+## Working with worktrees
+
+```bash
+git worktree add ../project-hotfix hotfix/crash # check out an existing branch
+git worktree add -b feat/cli ../project-cli master # create a new branch from master
+git fetch origin pull/42/head # GitHub exposes PRs as refs
+git worktree add --detach ../project-review FETCH_HEAD
+git worktree list # show all worktrees
+git worktree remove ../project-hotfix # delete a worktree (not the branch!)
+git worktree prune # clean up worktrees deleted by hand
+```
+
+Practical notes:
+
+* Place worktrees *outside* the main working directory (e.g., *siblings*), or in an *ignored* folder
+* Plan for disk space!
+* *Agents*: many coding agents can create a worktree per task, so that parallel sessions do not overwrite each other's files
+
+---
+
+## Stash, worktree, or clone?
+
+| | `git stash` | `git worktree` | second `git clone` |
+|---|---|---|---|
+| Use for | Short interruptions | Parallel work on the same repo | Independent copies |
+| Working directories | One | Many | Many |
+| History | Shared | Shared (one `.git`) | *Duplicated* |
+| Branches | Shared | Shared, one checkout per branch | *Independent*, sync via remote |
+| Cost | None | Working files + build | Full repository + build |
 
 ---
 
@@ -147,7 +288,7 @@ flowchart RL
 
 # Advanced merging: rebase
 
-* Merging is not the only way to reunite diverging branches
+* Merging is not the only way to reconcile diverging branches
 * We may want, for instance, to simulate that `4` was developed after `3`
     * For instance, because it was on a separate part of the codebase
 * Merging *forces you* to record the creation and reunion of a development line, but in some cases it may be undesirable
@@ -158,7 +299,7 @@ flowchart RL
 
 ---
 
-## Rebase merge
+## Rebase reconciliation
 
 ```mermaid
 flowchart RL
@@ -322,14 +463,14 @@ Or: *pick all commits from `client`, remove all those in `server`, then replay t
 
 ## Pull with rebase
 
-`pull` is a non-atomic operation equivalent to `git fetch && git merge FETCH_HEAD`
+`pull` is a non-atomic operation (roughly) equivalent to `git fetch && git merge FETCH_HEAD`
 
 There is no reason for the operation of reconciliation to be `merge`: it could well be `rebase`!
 
-`git fetch && git rebase FETCH_HEAD`
+`git fetch && git rebase FETCH_HEAD` (roughly)
 
 *Both operations* are actually supported! The full commands would be:
-* `git pull --rebase=false` $\Rightarrow$ default behaviour (in old `git` versions)
+* `git pull --rebase=false` $\Rightarrow$ reunite using merge (the historical default)
 * `git pull --rebase=true` $\Rightarrow$ reunite using rebase!
 
 * **Note:** new versions of git require explicit configuration!
@@ -353,6 +494,252 @@ Rebasing *rewrites the project history* and as such generates *incompatible hist
 
 ---
 
+## Rebasing with multiple remotes
+
+A (very common) situation: the same repository is pushed to *two* remotes, both receiving changes
+* e.g., a LaTeX paper on **GitHub** (CI, issues) and on **Overleaf** (co-authors edit online)
+* We configured `pull.rebase true`, and we push to both
+
+```mermaid
+flowchart RL
+subgraph Grepo["github"]
+  direction RL
+  Gmaster(master)
+  G1(["A"]) --> G0(["1"])
+  Gmaster -.-> G1
+end
+subgraph Orepo["overleaf"]
+  direction RL
+  Omaster(master)
+  O1(["B"]) --> O0(["1"])
+  Omaster -.-> O1
+end
+subgraph Lrepo["local"]
+  direction RL
+  Lmaster(master)
+  L1(["L"]) --> L0(["1"])
+  Lmaster -.-> L1
+  rg[(github)]
+  ro[(overleaf)]
+  HEADL{{"HEAD"}}
+  HEADL -.-> L1
+  HEADL --"fas:fa-link"--o Lmaster
+end
+rg ==o Grepo
+ro ==o Orepo
+class Grepo,Orepo,Lrepo repo;
+class rg,ro remote;
+class HEADL head;
+class Gmaster,Omaster,Lmaster branch;
+class G0,G1,O0,O1,L0,L1 commit;
+```
+
+* A collaborator pushed `A` on GitHub, a co-author added `B` on Overleaf, we committed `L` locally
+
+---
+
+## Rebasing with multiple remotes
+
+`git pull --rebase github master && git push github master`
+
+```mermaid
+flowchart RL
+subgraph Grepo["github"]
+  direction RL
+  Gmaster(master)
+  G2(["L'"]) --> G1(["A"]) --> G0(["1"])
+  Gmaster -.-> G2
+end
+subgraph Orepo["overleaf"]
+  direction RL
+  Omaster(master)
+  O1(["B"]) --> O0(["1"])
+  Omaster -.-> O1
+end
+subgraph Lrepo["local"]
+  direction RL
+  Lmaster(master)
+  L2(["L'"]) --> L1(["A"]) --> L0(["1"])
+  Lmaster -.-> L2
+  rg[(github)]
+  ro[(overleaf)]
+  HEADL{{"HEAD"}}
+  HEADL -.-> L2
+  HEADL --"fas:fa-link"--o Lmaster
+end
+rg ==o Grepo
+ro ==o Orepo
+class Grepo,Orepo,Lrepo repo;
+class rg,ro remote;
+class HEADL head;
+class Gmaster,Omaster,Lmaster branch;
+class G0,G1,O0,O1,L0,L1 commit;
+classDef copy fill:#ffe0b2,stroke:#ef6c00,stroke-width:3px;
+class G2,L2 copy;
+```
+
+* `L` is replayed on top of `A`, becoming `L'`, and published on GitHub
+* So far, so good
+
+---
+
+## Rebasing with multiple remotes
+
+`git pull --rebase overleaf master && git push overleaf master`
+
+```mermaid
+flowchart RL
+subgraph Grepo["github"]
+  direction RL
+  Gmaster(master)
+  G2(["L'"]) --> G1(["A"]) --> G0(["1"])
+  Gmaster -.-> G2
+end
+subgraph Orepo["overleaf"]
+  direction RL
+  Omaster(master)
+  O3(["L''"]) --> O2(["A'"]) --> O1(["B"]) --> O0(["1"])
+  Omaster -.-> O3
+end
+subgraph Lrepo["local"]
+  direction RL
+  Lmaster(master)
+  L3(["L''"]) --> L2(["A'"]) --> L1(["B"]) --> L0(["1"])
+  Lmaster -.-> L3
+  rg[(github)]
+  ro[(overleaf)]
+  HEADL{{"HEAD"}}
+  HEADL -.-> L3
+  HEADL --"fas:fa-link"--o Lmaster
+end
+rg ==o Grepo
+ro ==o Orepo
+class Grepo,Orepo,Lrepo repo;
+class rg,ro remote;
+class HEADL head;
+class Gmaster,Omaster,Lmaster branch;
+class G0,G1,O0,O1,L0,L1 commit;
+classDef copy fill:#ffe0b2,stroke:#ef6c00,stroke-width:3px;
+class G2,O2,O3,L2,L3 copy;
+```
+
+* *Both* `A` and `L'` are local commits not on Overleaf: they get **replayed** on top of `B`
+* `A'` and `L''` are *copies* of `A` and `L'` (same changes, *different hashes*), and now they are **published**
+* We just *rebased commits that exist outside our repository*!
+
+---
+
+## Rebasing with multiple remotes
+
+`git push github master` ❌ *rejected* (non-fast-forward), so: `git pull --rebase github master && git push github master`
+
+```mermaid
+flowchart RL
+subgraph Grepo["github"]
+  direction RL
+  Gmaster(master)
+  G3(["B'"]) --> G2(["L'"]) --> G1(["A"]) --> G0(["1"])
+  Gmaster -.-> G3
+end
+subgraph Orepo["overleaf"]
+  direction RL
+  Omaster(master)
+  O3(["L''"]) --> O2(["A'"]) --> O1(["B"]) --> O0(["1"])
+  Omaster -.-> O3
+end
+subgraph Lrepo["local"]
+  direction RL
+  Lmaster(master)
+  L3(["B'"]) --> L2(["L'"]) --> L1(["A"]) --> L0(["1"])
+  Lmaster -.-> L3
+  rg[(github)]
+  ro[(overleaf)]
+  HEADL{{"HEAD"}}
+  HEADL -.-> L3
+  HEADL --"fas:fa-link"--o Lmaster
+end
+rg ==o Grepo
+ro ==o Orepo
+class Grepo,Orepo,Lrepo repo;
+class rg,ro remote;
+class HEADL head;
+class Gmaster,Omaster,Lmaster branch;
+class G0,G1,O0,O1,L0,L1 commit;
+classDef copy fill:#ffe0b2,stroke:#ef6c00,stroke-width:3px;
+class G2,G3,O2,O3,L2,L3 copy;
+```
+
+* `A'` and `L''` are *skipped*: git detects that GitHub already has the same changes
+* `B` is replayed as `B'`, and published on GitHub
+* GitHub and Overleaf now have the *same content*, but **no common commit** after `1`
+
+---
+
+## Rebasing with multiple remotes: no convergence
+
+`git push overleaf master` ❌ *rejected*, so: `git pull --rebase overleaf master`
+
+```mermaid
+flowchart LR
+  G["local = GitHub's history<br><small>1 A L' B'</small>"]
+  O["local = Overleaf's history<br><small>1 B A' L''</small>"]
+  G -- "push overleaf ❌<br>pull --rebase overleaf" --> O
+  O -- "push github ❌<br>pull --rebase github" --> G
+
+  classDef state fill:#ffe0b2,stroke:#ef6c00,stroke-width:3px;
+  class G,O state;
+```
+
+* Every local commit is skipped: the local branch simply *jumps* to the other history, and the other push fails
+* The two histories **never converge**
+* Every *new* commit on either side gets replayed, and its copy published on the other remote
+    * Duplicates *accumulate*, conflicts get solved *twice* (possibly differently)
+
+---
+
+## Rebasing with multiple remotes: the way out
+
+**Merge** creates a commit that *both* histories contain
+
+`git pull --no-rebase github master && git push github master && git push overleaf master`
+
+```mermaid
+flowchart RL
+  HEAD{{"HEAD"}}
+  master(master)
+  gm(github/master)
+  om(overleaf/master)
+
+  C1([1])
+  CA([A]) --> C1
+  CL1(["L'"]) --> CA
+  CB1(["B'"]) --> CL1
+  CB([B]) --> C1
+  CA1(["A'"]) --> CB
+  CL2(["L''"]) --> CA1
+  M([M]) --> CL2
+  M --> CB1
+
+  master -.-> M
+  gm -.-> M
+  om -.-> M
+  HEAD -.-> M
+  HEAD --"fas:fa-link"--o master
+
+  class HEAD head;
+  class master,gm,om branch;
+  class C1,CA,CB,M commit;
+  classDef copy fill:#ffe0b2,stroke:#ef6c00,stroke-width:3px;
+  class CL1,CB1,CA1,CL2 copy;
+```
+
+* Both remotes are now at `M`: from now on, pulls and pushes are *fast-forwards*
+* The duplicated commits stay in the history *forever*
+* **Lesson**: a commit pushed to *any* remote *exists outside your repository*
+    * With multiple writable remotes, integrate with **merge** (e.g., `git config pull.rebase false` in that repository)
+
+---
+
 ## Rebasing or merging?
 
 Select depending on what you *conceptually* want:
@@ -366,6 +753,25 @@ Select depending on what you *conceptually* want:
 They tell two stories:
 * *rebase* is the book
 * *merge* is the story of how the book was written
+
+---
+
+## Resolving the same conflict again: `rerere`
+
+Rebasing *repeatedly* (e.g., a long-lived branch kept up to date with `master`) means
+solving **the same conflicts over and over**
+
+**rerere** (*reuse recorded resolution*) remembers how you solved a conflict, and re-applies the resolution automatically
+
+```bash
+git config --global rerere.enabled true
+```
+
+* When a conflict is resolved and committed, git *records* the conflicting hunks and their resolution
+* When the *same* conflict appears again (in a merge, a rebase, a cherry-pick), git *re-applies* the resolution
+    * The file is still reported as conflicting, for you to *check* (or set `rerere.autoUpdate true`)
+* `git rerere diff`: shows what would be re-applied
+* `git rerere forget <path>`: drops a wrong recorded resolution
 
 ---
 
@@ -456,7 +862,7 @@ Commits `3` to `6` have been *squashed* into a single commit `3'`!
 
 ---
 
-## Squash with branches (squash-merge)
+## Squash with `merge --squash`
 
 ```mermaid
 flowchart RL
@@ -476,6 +882,7 @@ flowchart RL
 ```
 
 Use a branch to "keep alive" the commits discarded by the `reset`
+(or we remember the hash, or we use a tag)
 
 `git branch target`
 
@@ -502,7 +909,7 @@ now move `master` back to the last commit to preserve
 
 ---
 
-## Squash with branches (squash-merge)
+## Squash with `merge --squash`
 
 now move `master` back to the last commit to preserve
 
@@ -531,7 +938,7 @@ Ready: merge all changes in `target`, creating a single commit!
 
 ---
 
-## Squash with branches (squash-merge)
+## Squash with `merge --squash`
 
 `git merge --squash target && git commit`
 
@@ -656,6 +1063,99 @@ edit 17743ec migrate from `GetJSON` to `resources.GetRemote` with `transform.Unm
 
 ---
 
+## Fixup commits and autosquash
+
+Typical situation: during a review, you find a mistake in a commit *three commits ago*
+
+Instead of editing the history by hand, record the fix *declaring which commit it fixes*:
+
+```bash
+git commit --fixup=a1b2c3d               # creates "fixup! <message of a1b2c3d>"
+git commit --fixup=amend:a1b2c3d         # also replaces the message of a1b2c3d
+git commit --fixup=reword:a1b2c3d        # only replaces the message
+```
+
+When the branch is ready, let git reorder and meld the fixups:
+
+```bash
+git rebase -i --autosquash master
+git config --global rebase.autoSquash true   # make it the default
+```
+
+```text
+pick a1b2c3d feat(parser): support multi-line strings
+fixup 9f8e7d6 fixup! feat(parser): support multi-line strings
+pick 4c5d6e7 test(parser): multi-line strings
+```
+
+* Fixes stay *visible* as separate commits *during review*
+* History is *clean* after the final rebase
+
+---
+
+## Stacked branches
+
+Large features are better delivered as *small, dependent* pull requests: a **stack**
+
+```mermaid
+flowchart RL
+  master(master)
+  model(feat/model)
+  api(feat/api)
+  ui(feat/ui)
+
+  C4([4]) --> C3([3]) --> C2([2]) --> C1([1])
+  C6([6]) --> C5([5]) --> C4
+  C7([7]) --> C3
+
+  master -.-> C7
+  model -.-> C4
+  api -.-> C5
+  ui -.-> C6
+
+  class master,model,api,ui branch;
+  class C1,C2,C3,C4,C5,C6,C7 commit;
+```
+
+* Each branch is a pull request *targeting the previous one*: `feat/api` $\rightarrow$ `feat/model` $\rightarrow$ `master`
+* Small PRs are *easier to review*, and flow better through *merge queues*
+* Problem: `master` moved to `7`. Rebasing `feat/ui` rewrites `4`, `5`, and `6`...
+  <br>but `feat/model` and `feat/api` would still point to the *old* commits!
+
+---
+
+## Stacked branches: `--update-refs`
+
+`git rebase --update-refs master` (from `feat/ui`)
+
+```mermaid
+flowchart RL
+  master(master)
+  model(feat/model)
+  api(feat/api)
+  ui(feat/ui)
+
+  C3([3]) --> C2([2]) --> C1([1])
+  C7([7]) --> C3
+  C4a(["4'"]) --> C7
+  C6a(["6'"]) --> C5a(["5'"]) --> C4a
+
+  master -.-> C7
+  model -.-> C4a
+  api -.-> C5a
+  ui -.-> C6a
+
+  class master,model,api,ui branch;
+  class C1,C2,C3,C4a,C5a,C6a,C7 commit;
+```
+
+* Every branch pointing *inside* the rebased range is *moved* along with its commits
+* `git config --global rebase.updateRefs true` to make it the default
+* Then, push all branches (`git push --force-with-lease origin feat/model feat/api feat/ui`)
+* Merge *bottom-up*: once `feat/model` is merged, `feat/api` is retargeted to `master`
+
+---
+
 # The golden rule of history rewriting
 
 > **Don’t push your work until you’re happy with it**
@@ -757,6 +1257,8 @@ If the repository has been cloned plainly, then submodules can be initialized ma
 * Recursively updates all submodules
 * It *must* be executed also **after a pull**
     * *Pulling does not update submodules by default*
+* *Worktrees*: a new worktree starts with *empty* submodule directories
+    * run `git submodule update --init --recursive` in each new worktree
 
 Changes in submodules are dealt with as if they were in a *separate repository*
 
@@ -809,6 +1311,28 @@ Shows what revision and author last modified each line of a file
 
 * It is possible to use a regular expression as an argument to `-L`,
 finding who did something specific
+
+---
+
+## Better blame
+
+Blame often points to the *wrong* commit: whoever *reformatted* or *moved* the code
+
+* `git blame -w`: ignore whitespace changes
+* `git blame -C -C -C`: detect lines *moved or copied* from other files
+* **Ignore** selected commits (e.g., a mass reformatting):
+
+```bash
+# .git-blame-ignore-revs, committed in the repository
+# Reformat the whole project with ktlint
+4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d
+```
+
+```bash
+git config blame.ignoreRevsFile .git-blame-ignore-revs
+```
+
+* GitHub uses `.git-blame-ignore-revs` automatically, if present in the repository root
 
 ---
 
@@ -972,7 +1496,7 @@ flowchart RL
 {{% /fragment %}}
 
 {{% fragment %}}
-![](https://wompampsupport.azureedge.net/fetchimage?siteId=7575&v=2&jpgQuality=100&width=700&url=https%3A%2F%2Fi.kym-cdn.com%2Fphotos%2Fimages%2Fnewsfeed%2F001%2F623%2F463%2Fd90.jpg)
+![](withered-wojack.jpg)
 {{% /fragment %}}
 
 ---
@@ -1011,7 +1535,79 @@ Any of the `tree-ish`es can be used to check out!
 
 ### `git reflog`
 
-![](https://i.kym-cdn.com/entries/icons/facebook/000/006/077/so_good.jpg)
+![](so_good.jpg)
+
+---
+
+# Large repositories
+
+Git clones the *whole* history, of *all* files. This becomes a problem with:
+
+* *Long* histories (hundreds of thousands of commits)
+* *Monorepos* (many projects in one repository: you need only a few)
+* *Large binary files* (images, datasets, models): every version is stored forever
+
+<br>
+
+Git offers different tools, cutting the repository along different dimensions:
+
+| Tool | Cuts | Typical use |
+|---|---|---|
+| Shallow clone | *Old commits* | CI builds (seen in CI) |
+| Partial clone | *File contents*, downloaded on demand | Developers on big repos |
+| Sparse checkout | *Directories* in the working tree | Monorepos |
+| Git LFS | *Large files*, stored outside the repository | Binary assets |
+
+---
+
+## Partial clone and sparse checkout
+
+**Partial clone**: download commits and trees, fetch file contents (*blobs*) only when needed
+
+```bash
+git clone --filter=blob:none https://github.com/org/huge-repo.git   # blobless
+git clone --filter=tree:0 https://github.com/org/huge-repo.git      # treeless (CI-like)
+```
+
+* Full history available (`log`, `blame` work), contents downloaded *lazily*
+* Commands touching old contents (e.g., `blame`) may be slower: they need the network
+
+**Sparse checkout**: populate *only some directories* of the working tree
+
+```bash
+git clone --filter=blob:none --sparse https://github.com/org/monorepo.git
+cd monorepo
+git sparse-checkout set services/billing libs/common   # only these directories
+git sparse-checkout add services/payments              # one more
+git sparse-checkout disable                            # back to the full tree
+```
+
+* Combined with a partial clone, only the blobs of the selected directories are downloaded
+
+---
+
+## Git LFS (Large File Storage)
+
+An *extension* to git: large files are replaced in the repository by small **pointer files**,
+the actual contents are stored on a *separate server*
+
+```bash
+git lfs install                    # once per machine
+git lfs track "*.psd" "*.onnx"     # writes rules into .gitattributes
+git add .gitattributes model.onnx
+git commit -m "chore: add model"
+```
+
+```text
+version https://git-lfs.github.com/spec/v1
+oid sha256:4d7a214614ab2935c943f9e0ff69d22eadbb8f32b1258daaa5e2ca24d17e2393
+size 132735481
+```
+
+* *Clones stay small*: only the versions needed for the checkout are downloaded
+* Supported by all major hosting services, with *storage and bandwidth quotas*
+* Must be set up *before* adding the files: moving existing files to LFS *rewrites history*
+* Everyone (including CI) needs `git lfs` installed, otherwise they get the pointer files
 
 ---
 
