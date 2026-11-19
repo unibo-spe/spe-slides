@@ -1615,9 +1615,9 @@ size 132735481
 
 ## Git Hooks
 
-Scripts that execute when some events happen, stored in `.git/hooks`
+Scripts that execute when some events happen, stored by default in `.git/hooks`
 
-They are **not part of the repository code**, and hence **they cannot get committed and pushed**
+`.git/hooks` is **not part of the repository code**: hooks placed there *cannot get committed and pushed*
 
 Events also dictate the file names:
 * `applypatch-msg`
