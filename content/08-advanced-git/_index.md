@@ -1632,3 +1632,19 @@ Events also dictate the file names:
 * `push-to-checkout`
 * `update`
 
+---
+
+## Sharing hooks
+
+Git can be told to look for hooks in a *versioned* directory:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+* The configuration is *not versioned* either: it must be set *once per clone*
+* Hook installation is often automated by the *build*
+    * e.g., the Gradle plugin `org.danilopianini.gradle-pre-commit-git-hooks` generates and installs hooks from the build script
+* **Hook managers** (e.g., `pre-commit`, Husky, Lefthook): hooks declared in a versioned configuration file, installed with one command
+* Hooks run on *developer machines*, and can be skipped (`git commit --no-verify`)
+    * They give *fast feedback*: **enforcement** belongs to CI
