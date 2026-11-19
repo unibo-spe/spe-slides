@@ -1152,6 +1152,8 @@ flowchart RL
 * Every branch pointing *inside* the rebased range is *moved* along with its commits
 * `git config --global rebase.updateRefs true` to make it the default
 * Then, push all branches (`git push --force-with-lease origin feat/model feat/api feat/ui`)
+    * `--force-with-lease`: overwrite the remote branch *only if* it is still where we last saw it
+      (otherwise someone else pushed, and we would delete their commits)
 * Merge *bottom-up*: once `feat/model` is merged, `feat/api` is retargeted to `master`
 
 ---
